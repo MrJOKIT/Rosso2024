@@ -1,0 +1,28 @@
+Placeable objects in the scene are used as a demo only and are downloaded for free mostly from turbosquid. 
+You should not use these objects in your final projects unless checking you have the right to from the links. 
+
+The satellite dish is from https://www.turbosquid.com/Search/Artists/TSB3DModels
+
+The container is from 
+https://www.turbosquid.com/Search/Artists/nahdlc
+
+The pedastal is from 
+https://www.turbosquid.com/Search/Artists/Bill-Nguyen
+
+The generator is from
+https://www.turbosquid.com/Search/Artists/GameGeared
+
+The light is from 
+https://www.turbosquid.com/Search/Artists/mbaharoon
+
+The main building is from 
+https://www.turbosquid.com/Search/Artists/Constantinep
+
+The turret is from 
+https://www.turbosquid.com/Search/Artists/Ursanim
+
+The Log is from
+https://www.turbosquid.com/Search/Artists/Mr_Pibody
+
+All other objects are created by myself for demonstration. 
+Feel free to use these assets however you wish.

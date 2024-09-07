@@ -1,0 +1,5 @@
+DO NOT DELETE THIS FOLDER OR THE PLACEABLEOBJECTS FOLDER
+
+This is where the grid save system collects its objects back for use when loading. 
+
+Place your own game objects here in the 'PlaceableObjects' folder to be able to load them back.

@@ -1,0 +1,19 @@
+Your placeable objects can come in any shape, form and size. 
+
+With Grid Builder 2 almost any combination of shape can be handled assuming the correct setup is followed upon creation of your objects.
+
+Importing placeable objects:
+
+1. Your object must be clean, with seperate meshes per object. Preferably grouped under a parent. An example would be if you have a turret, with 
+a weapon barrel and a base. The barrel and base would be seperate objects with whatever pivots are desireable for the animation. 
+
+2. This parent object should have its pivot centered to the entire object with Y value on the base of the object for placement. 
+
+3. Sometimes it is easy to get confused with which way around your object is facing. If the placement of the object is weird, it is most likely 
+either you have the object backwards or you need to try a different combination on the SelectObject component. 
+
+4. This system does NOT scale objects. If your grid is set to 1 metre, and your object takes up 2 metres on the X axis, this will be reflected
+visually and will NOT block the other cells taken up if you did not set them via the SelectObject inspector. Work to scale, and it will work as intended.
+
+For more information on setting up your prefabs and models for placement, see here https://golemitegames.com/index.php/docs/setting-up-the-selectobject-button/
+

@@ -1,0 +1,15 @@
+Placeable objects in the scene are downloaded from turbosquid and used as a demonstration only. 
+
+The Excavator was a quick mockup by myself.
+
+The satellite dish is from https://www.turbosquid.com/Search/Artists/TSB3DModels
+
+The container box is from 
+https://www.turbosquid.com/Search/Artists/nahdlc
+
+The pedestal is from
+https://www.turbosquid.com/Search/Artists/Bill-Nguyen
+
+The generator is from 
+https://www.turbosquid.com/Search/Artists/GameGeared
+

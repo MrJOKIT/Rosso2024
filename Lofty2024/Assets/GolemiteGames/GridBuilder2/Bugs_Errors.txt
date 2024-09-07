@@ -1,0 +1,5 @@
+Although every care has been taken to ensure Grid Builder 2 is bug free, due to the size and varied user usage, you may find the odd bug.
+
+If you do find a bug or error, please submit an email to support@golemitegames.com.
+
+I will then resolve the issue asap and update the package. 
