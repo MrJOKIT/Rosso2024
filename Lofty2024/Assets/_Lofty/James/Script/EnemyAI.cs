@@ -14,11 +14,21 @@ public enum EnemyType
 }
 public class EnemyAI : MonoBehaviour
 {
+    public EnemyData enemyData;
     public EnemyType enemyType;
     public int enemyHealth = 1;
+    public float enemySpeed;
+    public bool onTurn;
+
+    private void Awake()
+    {
+        SetEnemyData();
+        
+    }
+
     private void Start()
     {
-        
+        TurnManager.Instance.AddUnit(false,transform,enemySpeed);
     }
 
     private void Update()
@@ -33,5 +43,11 @@ public class EnemyAI : MonoBehaviour
     {
         enemyHealth -= 1;
         Debug.Log("Test Enemy Damage");
+    }
+
+    private void SetEnemyData()
+    {
+        enemyHealth = enemyData.enemyHealth;
+        enemySpeed = enemyData.enemySpeed;
     }
 }

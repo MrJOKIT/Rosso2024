@@ -41,6 +41,11 @@ public class PlayerMovementGrid : MonoBehaviour
     public MoveType moveType;
 
     [Space(10)] 
+    [Header("Turn Setting")] 
+    public bool onTurn;
+    public float turnSpeed = 20f;
+    
+    [Space(10)] 
     [Header("Move Setting")] 
     public MovePattern movePattern;
     public MovementState currentState = MovementState.Idle;
@@ -64,10 +69,15 @@ public class PlayerMovementGrid : MonoBehaviour
     private void Start()
     {
         targetPosition = transform.position;
+        TurnManager.Instance.AddUnit(true,transform,turnSpeed);
     }
 
     private void Update()
     {
+        if (!onTurn)
+        {
+            return;
+        }
         MoveStateHandle();
         PatternHandle();
     }
@@ -77,6 +87,10 @@ public class PlayerMovementGrid : MonoBehaviour
         switch (currentState)
         {
             case MovementState.Idle:
+                if (TurnManager.Instance.onPlayerTurn)
+                {
+                    SetMover();
+                }
                 switch (moveType)
                 {
                     case MoveType.Keyboard:
@@ -190,6 +204,11 @@ public class PlayerMovementGrid : MonoBehaviour
                         SetTargetPosition(hit.point);
                         break;
                     case GridState.OnEnemy:
+                        if (hit.collider.GetComponent<GridMover>().enemyActive == false)
+                        {
+                            return;
+                        }
+                        CameraShake.Instance.TriggerShake();
                         hit.collider.GetComponent<GridMover>().enemyAI.TestDamage();
                         if (hit.collider.GetComponent<GridMover>().enemyAI.enemyHealth <= 0)
                         {
@@ -197,10 +216,12 @@ public class PlayerMovementGrid : MonoBehaviour
                         }
                         else
                         {
-                            GridSpawnManager.Instance.ClearMover();
+                            TurnManager.Instance.TurnSucces();
+                            onTurn = false;
                         }
                         break;
                 }
+                
             }
         }
     }
@@ -243,7 +264,9 @@ public class PlayerMovementGrid : MonoBehaviour
         if (transform.position == targetPosition)
         {
             GridSpawnManager.Instance.ClearMover();
+            TurnManager.Instance.TurnSucces();
             currentState = MovementState.Idle;
+            onTurn = false;
         }
     }
 
@@ -254,5 +277,6 @@ public class PlayerMovementGrid : MonoBehaviour
         {
             mc.SetMover();
         }
+        
     }
 }

@@ -21,6 +21,7 @@ public class GridMover : MonoBehaviour
     [Header("Checker")] 
     public GridState gridState;
     private GridState oldState;
+    public bool enemyActive;
 
     private void Awake()
     {
@@ -46,9 +47,12 @@ public class GridMover : MonoBehaviour
                 GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.movableMat;
                 oldState = gridState;
                 break;
+            case GridState.OnEnemy:
+                break;
             default:
                 GetComponent<MeshRenderer>().material = oldMat;
                 oldState = gridState;
+                enemyActive = false;
                 break;
         }
     }
@@ -62,6 +66,7 @@ public class GridMover : MonoBehaviour
     public void ActiveEnemy()
     {
         GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.attackMat;
+        enemyActive = true;
     }
     
     private void OnTriggerStay(Collider other)
@@ -98,6 +103,7 @@ public class GridMover : MonoBehaviour
         else if(other.CompareTag("Enemy"))
         {
             gridState = GridState.Empty;
+            
         }
         else if (other.CompareTag("Obstacle"))
         {
