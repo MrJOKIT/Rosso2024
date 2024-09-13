@@ -25,8 +25,16 @@ public class TurnData
 }
 public class TurnManager : Singeleton<TurnManager>
 {
+    [Header("AI Learn")]
+    public bool multipleTurn;
+    
+    [Space(10)]
+    [Header("Turn Data")]
     public List<TurnData> turnData;
+    [Space(10)]
     public bool onPlayerTurn;
+    [Space(10)] 
+    public bool autoSkipEnemy;
     public bool onEnemyTurn;
 
     [Space(10)] 
@@ -45,18 +53,31 @@ public class TurnManager : Singeleton<TurnManager>
         }
         else
         {
-            turnData.Add(new TurnData(
-                isPlayer,unitTransform,baseSpeed
-                ,Instantiate(turnSliderEnemyPrefab,turnSliderCanvas)));
+            TurnData data = new TurnData(
+                isPlayer, unitTransform, baseSpeed
+                , Instantiate(turnSliderEnemyPrefab, turnSliderCanvas));
+            
+            turnData.Add(data);
+
+            data.unitTransform.GetComponent<EnemyAI>().enemyTurnData = data;
         }
         
+    }
+    
+    public void RemoveUnit(TurnData turnDataUnit)
+    {
+        Destroy(turnData.Find(x=> x.unitTransform == turnDataUnit.unitTransform).turnSlider.gameObject);
+        turnData.Remove(turnDataUnit);
     }
 
     private void Update()
     {
-        if (onPlayerTurn || onEnemyTurn)
+        if (!multipleTurn)
         {
-            return;
+            if (onPlayerTurn || onEnemyTurn)
+            {
+                return;
+            }
         }
         TurnHandle();
         UpdateTurnSliderGUI();
@@ -67,7 +88,32 @@ public class TurnManager : Singeleton<TurnManager>
         foreach (TurnData td in turnData)
         {
             td.turnCounter += Time.deltaTime * 100f;
-            if (td.turnCounter >= 100f)
+            if (!multipleTurn)
+            {
+                if (td.turnCounter >= 100f)
+                {
+                    if (td.isPlayer)
+                    {
+                        td.unitTransform.GetComponent<PlayerMovementGrid>().onTurn = true;
+                        onPlayerTurn = true;
+                    }
+                    else
+                    {
+                        if (autoSkipEnemy)
+                        {
+                            TurnSucces(false);
+                        }
+                        else
+                        {
+                            td.unitTransform.GetComponent<EnemyAI>().onTurn = true;
+                            onEnemyTurn = true;
+                        }
+                        
+                    }
+                    break;
+                }
+            }
+            else
             {
                 if (td.isPlayer)
                 {
@@ -79,7 +125,6 @@ public class TurnManager : Singeleton<TurnManager>
                     td.unitTransform.GetComponent<EnemyAI>().onTurn = true;
                     onEnemyTurn = true;
                 }
-                break;
             }
         }
     }
@@ -93,28 +138,35 @@ public class TurnManager : Singeleton<TurnManager>
     }
 
     [Button("End Turn")]
-    public void TurnSucces()
+    public void TurnSucces(bool isPlayer)
     {
         foreach (TurnData td in turnData)
         {
             if (td.turnCounter >= 100f)
             {
                 td.turnCounter = td.baseSpeed;
+                if (td.isPlayer)
+                {
+                    td.unitTransform.GetComponent<PlayerMovementGrid>().onTurn = false;
+                }
+                else
+                {
+                    td.unitTransform.GetComponent<EnemyAI>().onTurn = false;
+                }
                 break;
-            }
-
-            if (td.isPlayer)
-            {
-                td.unitTransform.GetComponent<PlayerMovementGrid>().onTurn = false;
-            }
-            else
-            {
-                td.unitTransform.GetComponent<EnemyAI>().onTurn = false;
             }
         }
 
         GridSpawnManager.Instance.ClearMover();
-        onPlayerTurn = false;
-        onEnemyTurn = false;
+        if (isPlayer)
+        {
+            onPlayerTurn = false;
+        }
+        else
+        {
+            onEnemyTurn = false;
+        }
+        
+        
     }
 }

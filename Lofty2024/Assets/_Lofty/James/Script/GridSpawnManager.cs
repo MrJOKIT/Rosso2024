@@ -19,6 +19,7 @@ public class GridSpawnManager : Singeleton<GridSpawnManager>
     {
         foreach (GridMover grid in currentGrid)
         {
+            grid.enemyActive = false;
             grid.ClearGrid();
         }
     }

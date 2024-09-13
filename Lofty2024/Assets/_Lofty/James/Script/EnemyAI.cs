@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EditorAttributes;
 using UnityEngine;
 
 public enum EnemyType
@@ -14,6 +15,7 @@ public enum EnemyType
 }
 public class EnemyAI : MonoBehaviour
 {
+    [ReadOnly] public TurnData enemyTurnData;
     public EnemyData enemyData;
     public EnemyType enemyType;
     public int enemyHealth = 1;
@@ -23,7 +25,6 @@ public class EnemyAI : MonoBehaviour
     private void Awake()
     {
         SetEnemyData();
-        
     }
 
     private void Start()
@@ -35,8 +36,14 @@ public class EnemyAI : MonoBehaviour
     {
         if (enemyHealth <= 0)
         {
-            gameObject.SetActive(false);
+            EnemyDie();
         }
+    }
+
+    private void EnemyDie()
+    {
+        gameObject.SetActive(false);
+        TurnManager.Instance.RemoveUnit(enemyTurnData);
     }
 
     public void TestDamage()
@@ -46,7 +53,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     private void SetEnemyData()
-    {
+    { 
         enemyHealth = enemyData.enemyHealth;
         enemySpeed = enemyData.enemySpeed;
     }

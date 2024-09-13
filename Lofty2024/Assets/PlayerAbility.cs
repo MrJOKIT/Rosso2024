@@ -1,0 +1,35 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public enum AbilityType
+{
+    Empty,
+    Pawn,
+    Rook,
+    Knight,
+    Bishop,
+    Queen,
+    King,
+}
+public class PlayerAbility : MonoBehaviour
+{
+    [Header("Ability Setting")]
+    public AbilityType currentAbility;
+
+    [Space(10)] 
+    [Header("GUI")] 
+    public Image abilityImage;
+
+    private void Update()
+    {
+        
+    }
+
+    public void ChangeAbility(AbilityType abilityType)
+    {
+        currentAbility = abilityType;
+    }
+}

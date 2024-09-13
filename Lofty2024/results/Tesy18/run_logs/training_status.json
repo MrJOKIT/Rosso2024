@@ -1,0 +1,29 @@
+{
+    "MoveToPlayer": {
+        "checkpoints": [
+            {
+                "steps": 4844,
+                "file_path": "results\\Tesy18\\MoveToPlayer\\MoveToPlayer-4844.onnx",
+                "reward": -1.0,
+                "creation_time": 1726228501.1168528,
+                "auxillary_file_paths": [
+                    "results\\Tesy18\\MoveToPlayer\\MoveToPlayer-4844.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 4844,
+            "file_path": "results\\Tesy18\\MoveToPlayer.onnx",
+            "reward": -1.0,
+            "creation_time": 1726228501.1168528,
+            "auxillary_file_paths": [
+                "results\\Tesy18\\MoveToPlayer\\MoveToPlayer-4844.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.4.1+cpu"
+    }
+}
