@@ -9,6 +9,7 @@ public class GridSpawnManager : Singeleton<GridSpawnManager>
     [Header("Material")] 
     public Material attackMat;
     public Material movableMat;
+    public Material trapMat;
 
     [Header("Current Gird")] 
     public List<GridMover> currentGrid;

@@ -28,8 +28,14 @@ public class PlayerAbility : MonoBehaviour
         
     }
 
+    //ต้องกดใช้แล้วเปลื่ยน Pattern ของ Player
     public void ChangeAbility(AbilityType abilityType)
     {
         currentAbility = abilityType;
+    }
+
+    private void AbilityGUI()
+    {
+        
     }
 }

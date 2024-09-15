@@ -10,18 +10,28 @@ public enum GridState
     OnPlayer,
     OnEnemy,
     OnObstacle,
+    OnTrap,
 }
+
 public class GridMover : MonoBehaviour
 {
     [Header("Ref")] 
-    public EnemyAI enemyAI;
+    public Enemy enemy;
     public Material oldMat;
 
     [Space(10)] 
     [Header("Checker")] 
     public GridState gridState;
     private GridState oldState;
+    
+    [Space(10)]
+    [Header("Optional")]
     public bool enemyActive;
+    
+    [Header("Trap Setting")]
+    public bool isTrap;
+    public CurseType trapType;
+    public int trapTime;
 
     private void Awake()
     {
@@ -32,6 +42,11 @@ public class GridMover : MonoBehaviour
     private void Start()
     {
         GridSpawnManager.Instance.AddGridList(this);
+
+        if (isTrap)
+        {
+            gridState = GridState.OnTrap;
+        }
     }
 
     private void LateUpdate()
@@ -49,7 +64,16 @@ public class GridMover : MonoBehaviour
                 break;
             case GridState.OnEnemy:
                 break;
+            case GridState.OnObstacle:
+                GetComponent<MeshRenderer>().enabled = false;
+                oldState = gridState;
+                break;
+            case GridState.OnTrap:
+                GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.trapMat;
+                oldState = gridState;
+                break;
             default:
+                GetComponent<MeshRenderer>().enabled = true;
                 GetComponent<MeshRenderer>().material = oldMat;
                 oldState = gridState;
                 enemyActive = false;
@@ -59,6 +83,10 @@ public class GridMover : MonoBehaviour
 
     public void ClearGrid()
     {
+        if (gridState == GridState.Empty || gridState  == GridState.OnTrap)
+        {
+            return;
+        }
         gridState = GridState.Empty;
         GetComponent<MeshRenderer>().material = oldMat;
     }
@@ -68,8 +96,24 @@ public class GridMover : MonoBehaviour
         GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.attackMat;
         enemyActive = true;
     }
-    
-    private void OnTriggerStay(Collider other)
+
+    public void SetTrap(CurseType curseType)
+    {
+        if (gridState == GridState.Empty || gridState == GridState.OnMove)
+        {
+            isTrap = true;
+            gridState = GridState.OnTrap;
+            trapType = curseType;
+        }
+    }
+
+    private void TrapActive()
+    {
+        enemy.AddCurseStatus(trapType,trapTime);
+        gridState = GridState.OnEnemy;
+        GetComponent<MeshRenderer>().material = oldMat;
+    }
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -80,11 +124,15 @@ public class GridMover : MonoBehaviour
             gridState = GridState.OnEnemy;
             try
             {
-                enemyAI = other.GetComponent<EnemyAI>();
+                enemy = other.GetComponent<Enemy>();
+                if (isTrap)
+                {
+                    TrapActive();
+                }
             }
             catch (Exception a)
             {
-                Debug.Log($"No enemyAI in collider {a}");
+                Debug.Log($"No enemy script in collider {a}");
             }
             
         }

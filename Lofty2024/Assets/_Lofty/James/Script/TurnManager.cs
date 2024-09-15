@@ -34,7 +34,6 @@ public class TurnManager : Singeleton<TurnManager>
     [Space(10)]
     public bool onPlayerTurn;
     [Space(10)] 
-    public bool autoSkipEnemy;
     public bool onEnemyTurn;
 
     [Space(10)] 
@@ -99,16 +98,8 @@ public class TurnManager : Singeleton<TurnManager>
                     }
                     else
                     {
-                        if (autoSkipEnemy)
-                        {
-                            TurnSucces(false);
-                        }
-                        else
-                        {
-                            td.unitTransform.GetComponent<EnemyAI>().onTurn = true;
-                            onEnemyTurn = true;
-                        }
-                        
+                        td.unitTransform.GetComponent<Enemy>().StartTurn();
+                        onEnemyTurn = true;
                     }
                     break;
                 }
@@ -145,14 +136,6 @@ public class TurnManager : Singeleton<TurnManager>
             if (td.turnCounter >= 100f)
             {
                 td.turnCounter = td.baseSpeed;
-                if (td.isPlayer)
-                {
-                    td.unitTransform.GetComponent<PlayerMovementGrid>().onTurn = false;
-                }
-                else
-                {
-                    td.unitTransform.GetComponent<EnemyAI>().onTurn = false;
-                }
                 break;
             }
         }

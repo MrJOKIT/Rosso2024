@@ -19,7 +19,7 @@ public enum MoveType
     Both,
 }
 
-public class PlayerMovementGrid : MonoBehaviour
+public class PlayerMovementGrid : MonoBehaviour, IUnit
 {
     [Header("Player Input")]
     public MoveType moveType;
@@ -28,6 +28,7 @@ public class PlayerMovementGrid : MonoBehaviour
     [Header("Turn Setting")] 
     public bool onTurn;
     public float turnSpeed = 20f;
+    public int damage;
 
     [Space(10)] 
     [Header("Move Setting")] 
@@ -109,8 +110,7 @@ public class PlayerMovementGrid : MonoBehaviour
             case MovementState.Idle:
                 if (TurnManager.Instance.onPlayerTurn)
                 {
-                    SetMover();
-                    currentState = MovementState.Combat;
+                    StartTurn();
                 }
                 break;
             case MovementState.Combat:
@@ -137,45 +137,6 @@ public class PlayerMovementGrid : MonoBehaviour
                 break;
         }
     }
-    /*private void PatternHandle()
-    {
-        if (oldPattern == movePattern)
-        {
-            return;
-        }
-
-        ClearPattern();
-        switch (movePattern)
-        {
-            case AbilityType.Pawn:
-                ClearPattern();
-                playerPattern[(int)movePattern].pattern.SetActive(true);
-                break;
-            case AbilityType.Rook:
-                ClearPattern();
-                playerPattern[(int)movePattern].pattern.SetActive(true);
-                break;
-            case AbilityType.Knight:
-                ClearPattern();
-                playerPattern[(int)movePattern].pattern.SetActive(true);
-                break;
-            case AbilityType.Bishop:
-                ClearPattern();
-                playerPattern[(int)movePattern].pattern.SetActive(true);
-                break;
-            case AbilityType.Queen:
-                ClearPattern();
-                playerPattern[(int)movePattern].pattern.SetActive(true);
-                break;
-            case AbilityType.King:
-                ClearPattern();
-                playerPattern[(int)movePattern].pattern.SetActive(true);
-                break;
-        }
-        SetMover();
-        oldPattern = movePattern;
-    }*/
-    
 
     private void HandleInput()
     {
@@ -275,8 +236,8 @@ public class PlayerMovementGrid : MonoBehaviour
                             return;
                         }
                         CameraShake.Instance.TriggerShake();
-                        hit.collider.GetComponent<GridMover>().enemyAI.TestDamage();
-                        if (hit.collider.GetComponent<GridMover>().enemyAI.enemyHealth <= 0)
+                        hit.collider.GetComponent<GridMover>().enemy.TakeDamage(damage);
+                        if (hit.collider.GetComponent<GridMover>().enemy.enemyHealth <= 0)
                         {
                             SetTargetPosition(hit.point);
                         }
@@ -330,14 +291,7 @@ public class PlayerMovementGrid : MonoBehaviour
 
         if (transform.position == targetPosition)
         {
-            if (!moveRandom)
-            {
-                GridSpawnManager.Instance.ClearMover();
-            }
-            ClearPattern();
-            TurnManager.Instance.TurnSucces(true);
-            currentState = MovementState.Idle;
-            onTurn = false;
+            EndTurn();
         }
     }
     
@@ -367,5 +321,23 @@ public class PlayerMovementGrid : MonoBehaviour
         {
             MoveRandomKeyboard();
         }
+    }
+
+    public void StartTurn()
+    {
+        SetMover();
+        currentState = MovementState.Combat;
+    }
+
+    public void EndTurn()
+    {
+        if (!moveRandom)
+        {
+            GridSpawnManager.Instance.ClearMover();
+        }
+        ClearPattern();
+        TurnManager.Instance.TurnSucces(true);
+        currentState = MovementState.Idle;
+        onTurn = false;
     }
 }
