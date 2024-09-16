@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EditorAttributes;
 using UnityEngine;
 
 public enum GridState
@@ -33,23 +34,50 @@ public class GridMover : MonoBehaviour
     public CurseType trapType;
     public int trapTime;
 
+    private CurseType oldTrapType;
+
     private void Awake()
     {
         oldState = gridState;
+        oldTrapType = trapType;
         oldMat = GetComponent<MeshRenderer>().material;
     }
 
     private void Start()
     {
         GridSpawnManager.Instance.AddGridList(this);
-
         if (isTrap)
         {
             gridState = GridState.OnTrap;
         }
+        
     }
 
     private void LateUpdate()
+    {
+        if (enemy != null)
+        {
+            if (enemy.isDead)
+            {
+                enemy = null;
+                enemyActive = false;
+                gridState = GridState.Empty;
+            }
+        }
+        GridStateHandle();
+        TrapStateHandle();
+    }
+
+    private void TrapStateHandle()
+    {
+        if (trapType == oldTrapType)
+        {
+            return;
+        }
+
+        gridState = GridState.OnTrap;
+    }
+    private void GridStateHandle()
     {
         if (gridState == oldState)
         {
@@ -83,12 +111,21 @@ public class GridMover : MonoBehaviour
 
     public void ClearGrid()
     {
-        if (gridState == GridState.Empty || gridState  == GridState.OnTrap)
+        switch (gridState)
         {
-            return;
+            case GridState.OnTrap:
+                break;
+            case GridState.OnObstacle:
+                break;
+            case GridState.OnMove:
+                gridState = GridState.Empty;
+                GetComponent<MeshRenderer>().material = oldMat;
+                break;
+            default:
+                GetComponent<MeshRenderer>().material = oldMat;
+                break;
         }
-        gridState = GridState.Empty;
-        GetComponent<MeshRenderer>().material = oldMat;
+        
     }
 
     public void ActiveEnemy()
@@ -97,6 +134,7 @@ public class GridMover : MonoBehaviour
         enemyActive = true;
     }
 
+    [Button("Test Set Trap")]
     public void SetTrap(CurseType curseType)
     {
         if (gridState == GridState.Empty || gridState == GridState.OnMove)
@@ -105,6 +143,11 @@ public class GridMover : MonoBehaviour
             gridState = GridState.OnTrap;
             trapType = curseType;
         }
+        else if (gridState == GridState.OnEnemy)
+        {
+            enemy.AddCurseStatus(curseType,2);
+        }
+        
     }
 
     private void TrapActive()

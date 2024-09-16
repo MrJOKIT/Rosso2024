@@ -1,8 +1,132 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum KnockBackDirection
+{
+    Forward,
+    Backward,
+    Left,
+    Right,
+}
 public class EnemyMovementGrid : MonoBehaviour
 {
+   public MovementState currentState;
+   public float moveSpeed = 5;
+
+   public bool isKnockBack;
+   public KnockBackDirection knockBackDirection;
    
+   public Vector3 gridSize = new Vector3(1,1,1);
+   private Vector3 targetPosition;
+
+   private void Update()
+   {
+       MoveStateHandle();
+   }
+
+   public void KnockBack(Transform playerTrans,int gridDistance)
+   {
+      //ถอยกี่ช่อง
+      isKnockBack = true;
+      BackDirectionHandle(playerTrans);
+      switch (knockBackDirection)
+      {
+          case KnockBackDirection.Forward:
+              SetTargetPosition(new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z + gridDistance));
+              break;
+          case KnockBackDirection.Left:
+              SetTargetPosition(new Vector3(transform.localPosition.x  - gridDistance,transform.localPosition.y,transform.localPosition.z));
+              break;
+          case KnockBackDirection.Backward:
+              SetTargetPosition(new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z - gridDistance));
+              break;
+          case KnockBackDirection.Right:
+              SetTargetPosition(new Vector3(transform.localPosition.x + gridDistance,transform.localPosition.y,transform.localPosition.z));
+              break;
+      }
+   }
+   
+   private void BackDirectionHandle(Transform playerTransform)
+   {
+       if (playerTransform.position.x < transform.position.x)
+       {
+           // x + 1
+           knockBackDirection = KnockBackDirection.Right;
+       }
+       else if (playerTransform.position.x > transform.position.x)
+       {
+           // x - 1
+           knockBackDirection = KnockBackDirection.Left;
+       }
+       else if (playerTransform.position.z < transform.position.z)
+       {
+           // z + 1
+           knockBackDirection = KnockBackDirection.Forward;
+       }
+       else if (playerTransform.position.z > transform.position.z)
+       {
+           // z - 1
+           knockBackDirection = KnockBackDirection.Backward;
+       }
+   }
+   
+   private void MoveStateHandle()
+       {
+           switch (currentState)
+           {
+               case MovementState.Idle:
+                   break;
+               case MovementState.Moving:
+                   MoveToTarget();
+                   break;
+           }
+       }
+       private void SetTargetPosition(Vector3 direction)
+       {
+           Vector3 nextPosition;
+   
+           if (currentState == MovementState.Idle || direction != targetPosition - transform.localPosition)
+           {
+               if (direction == Vector3.forward || direction == Vector3.back || direction == Vector3.left || direction == Vector3.right)
+               {
+                   nextPosition = transform.localPosition + Vector3.Scale(direction, gridSize);
+               }
+               else
+               {
+                   // Handling grid snapping for mouse click input
+                   float gridX = Mathf.Round(direction.x / gridSize.x) * gridSize.x;
+                   float gridZ = Mathf.Round(direction.z / gridSize.z) * gridSize.z;
+                   nextPosition = new Vector3(gridX, transform.localPosition.y, gridZ);
+               }
+   
+               targetPosition = nextPosition;
+               currentState = MovementState.Moving;
+           }
+       }
+       
+   
+       private void MoveToTarget()
+       {
+           transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, moveSpeed * Time.deltaTime);
+
+           if (transform.localPosition == targetPosition)
+           {
+               if (isKnockBack)
+               {
+                   currentState = MovementState.Idle;
+                   isKnockBack = false;
+               } 
+               else
+               {
+                   GridSpawnManager.Instance.ClearMover();
+                   TurnManager.Instance.TurnSucces(false);
+                   currentState = MovementState.Idle;
+                   GetComponent<EnemyAI>().onTurn = false;
+               }
+                  
+           }
+           
+       }
 }

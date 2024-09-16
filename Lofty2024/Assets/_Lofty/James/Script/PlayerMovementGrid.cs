@@ -19,6 +19,14 @@ public enum MoveType
     Both,
 }
 
+public enum AttackType
+{
+    NormalAttack,
+    SpecialAttack,
+    KnockBackAttack,
+    EffectiveAttack,
+}
+
 public class PlayerMovementGrid : MonoBehaviour, IUnit
 {
     [Header("Player Input")]
@@ -31,7 +39,14 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public int damage;
 
     [Space(10)] 
-    [Header("Move Setting")] 
+    [Header("Combat Setting")] 
+    public AttackType attackType = AttackType.NormalAttack;
+    public CurseType effectiveType = CurseType.Empty;
+    public int effectiveTurnTime = 1;
+
+    [Space(10)] 
+    [Header("Move Setting")]
+    public bool moveSuccess;
     public bool autoSkip;
     public bool moveRandom;
     public AbilityType movePattern;
@@ -235,17 +250,36 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         {
                             return;
                         }
+
+                        Enemy enemy = hit.collider.GetComponent<GridMover>().enemy;
                         CameraShake.Instance.TriggerShake();
-                        hit.collider.GetComponent<GridMover>().enemy.TakeDamage(damage);
-                        if (hit.collider.GetComponent<GridMover>().enemy.enemyHealth <= 0)
+                        switch (attackType)
+                        {
+                            case AttackType.NormalAttack:
+                                enemy.TakeDamage(damage);
+                                break;
+                            case AttackType.SpecialAttack:
+                                enemy.TakeDamage(damage * 2); 
+                                break;
+                            case AttackType.KnockBackAttack:
+                                enemy.TakeDamage(damage);
+                                enemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,1);
+                                break;
+                            case AttackType.EffectiveAttack:
+                                enemy.TakeDamage(damage);
+                                enemy.AddCurseStatus(effectiveType,effectiveTurnTime);
+                                break;
+                        }
+                        
+                        if (enemy.enemyHealth <= 0)
                         {
                             SetTargetPosition(hit.point);
                         }
                         else
                         {
-                            TurnManager.Instance.TurnSucces(true);
-                            ClearPattern();
-                            onTurn = false;
+                            GridSpawnManager.Instance.ClearMover();
+                            currentState = MovementState.Idle;
+                            moveSuccess = true;
                         }
                         break;
                 }
@@ -291,7 +325,12 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         if (transform.position == targetPosition)
         {
-            EndTurn();
+            if (!moveRandom)
+            {
+                GridSpawnManager.Instance.ClearMover();
+            }
+            currentState = MovementState.Idle;
+            moveSuccess = true;
         }
     }
     
@@ -325,19 +364,20 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     public void StartTurn()
     {
+        if (moveSuccess)
+        {
+            return;
+        }
         SetMover();
         currentState = MovementState.Combat;
     }
 
+    [Button("End Turn")]
     public void EndTurn()
     {
-        if (!moveRandom)
-        {
-            GridSpawnManager.Instance.ClearMover();
-        }
         ClearPattern();
         TurnManager.Instance.TurnSucces(true);
-        currentState = MovementState.Idle;
         onTurn = false;
+        moveSuccess = false;
     }
 }

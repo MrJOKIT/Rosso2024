@@ -46,6 +46,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     [Header("Stats")]
     public int enemyHealth;
     public float enemySpeed;
+    public bool isDead;
 
     [Space(10)] 
     [Header("Curse Status")] 
@@ -84,19 +85,13 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         {
             EndTurn();
         }
-        CurseHandle();
+        
     }
 
     public void StartTurn()
     {
         onTurn = true;
-        if (curseHave != null)
-        {
-            foreach (CurseData curse in curseHave)
-            {
-                //deal damage with curse
-            }
-        }
+        CurseHandle();
     }
 
     public void EndTurn()
@@ -120,6 +115,8 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         
         TurnManager.Instance.TurnSucces(false);
     }
+
+    
     public void CurseHandle()
     {
         if (curseHave == null)
@@ -138,14 +135,15 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
                     EndTurn();
                     break;
                 case CurseType.Blood:
-                    //ลดช่องเดิน 1 ตามั้ง?
+                    //ลดเลือดไม่ติดเกราะ
                     enemyHealth -= 1;
                     break;
                 case CurseType.Burn:
+                    //ลดเลือดติดเกราะ
                     enemyHealth -= 1;
                     break;
                 case CurseType.Provoke:
-                    //คิดก่อน มีทำไม
+                    //เปลื่ยนเป้าหมายไปติดสิ่งยัวยุแทน
                     break;
             }
 
@@ -155,8 +153,13 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     private void EnemyDie()
     {
-        gameObject.SetActive(false);
         TurnManager.Instance.RemoveUnit(enemyTurnData);
+        isDead = true;
+        if (onTurn)
+        {
+            EndTurn();
+        }
+        gameObject.SetActive(false);
     }
     
     private void SetEnemyData()

@@ -42,6 +42,21 @@ public class TurnManager : Singeleton<TurnManager>
     public Slider turnSliderAllyPrefab;
     public Slider turnSliderEnemyPrefab;
 
+    private void Update()
+    {
+        if (!multipleTurn)
+        {
+            if (onPlayerTurn || onEnemyTurn)
+            {
+                return;
+            }
+        }
+        TurnHandle();
+        UpdateTurnSliderGUI();
+    }
+
+    #region In Game Unit
+
     public void AddUnit(bool isPlayer,Transform unitTransform,float baseSpeed)
     {
         if (isPlayer)
@@ -69,18 +84,9 @@ public class TurnManager : Singeleton<TurnManager>
         turnData.Remove(turnDataUnit);
     }
 
-    private void Update()
-    {
-        if (!multipleTurn)
-        {
-            if (onPlayerTurn || onEnemyTurn)
-            {
-                return;
-            }
-        }
-        TurnHandle();
-        UpdateTurnSliderGUI();
-    }
+    #endregion
+
+    #region TurnManager
 
     private void TurnHandle()
     {
@@ -152,4 +158,9 @@ public class TurnManager : Singeleton<TurnManager>
         
         
     }
+
+    #endregion
+    
+
+    
 }
