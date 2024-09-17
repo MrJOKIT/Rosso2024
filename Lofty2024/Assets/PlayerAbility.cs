@@ -16,9 +16,6 @@ public enum AbilityType
 }
 public class PlayerAbility : MonoBehaviour
 {
-    [Header("Ability Point")] 
-    [SerializeField] private int abilityPoint;
-    
     [Space(10)]
     [Header("Ability Setting")]
     public AbilityType currentAbility;
