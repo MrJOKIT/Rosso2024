@@ -68,9 +68,10 @@ public class PlayerAbility : MonoBehaviour
 
     public void SwapAbility()
     {
-        GetComponent<PlayerMovementGrid>().ChangePatternNow(swapAbility);
+        
         if (swapAbility != AbilityType.Empty)
         {
+            GetComponent<PlayerMovementGrid>().ChangePatternNow(swapAbility);
             if (currentAbility == AbilityType.King)
             {
                 currentAbility = swapAbility;
@@ -81,7 +82,6 @@ public class PlayerAbility : MonoBehaviour
                 swapAbility = currentAbility;
                 currentAbility = AbilityType.King;
             }
-            
         }
         
     }
