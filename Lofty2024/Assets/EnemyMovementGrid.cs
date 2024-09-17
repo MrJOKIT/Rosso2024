@@ -9,6 +9,10 @@ public enum KnockBackDirection
     Backward,
     Left,
     Right,
+    ForwardLeft,
+    ForwardRight,
+    BackwardLeft,
+    BackwardRight,
 }
 public class EnemyMovementGrid : MonoBehaviour
 {
@@ -45,12 +49,41 @@ public class EnemyMovementGrid : MonoBehaviour
           case KnockBackDirection.Right:
               SetTargetPosition(new Vector3(transform.localPosition.x + gridDistance,transform.localPosition.y,transform.localPosition.z));
               break;
+          case KnockBackDirection.ForwardLeft:
+              SetTargetPosition(new Vector3(transform.localPosition.x - gridDistance,transform.localPosition.y,transform.localPosition.z + gridDistance));
+              break;
+          case KnockBackDirection.ForwardRight:
+              SetTargetPosition(new Vector3(transform.localPosition.x + gridDistance,transform.localPosition.y,transform.localPosition.z + gridDistance));
+              break;
+          case KnockBackDirection.BackwardLeft:
+              SetTargetPosition(new Vector3(transform.localPosition.x - gridDistance,transform.localPosition.y,transform.localPosition.z - gridDistance));
+              break;
+          case KnockBackDirection.BackwardRight:
+              SetTargetPosition(new Vector3(transform.localPosition.x + gridDistance,transform.localPosition.y,transform.localPosition.z + gridDistance));
+              break;
       }
    }
    
    private void BackDirectionHandle(Transform playerTransform)
    {
-       if (playerTransform.position.x < transform.position.x)
+       
+       if (playerTransform.position.x < transform.position.x && playerTransform.position.z < transform.position.z)
+       {
+           knockBackDirection = KnockBackDirection.ForwardRight;
+       }
+       else if (playerTransform.position.x < transform.position.x && playerTransform.position.z > transform.position.z)
+       {
+           knockBackDirection = KnockBackDirection.BackwardRight;
+       }
+       else if (playerTransform.position.x > transform.position.x && playerTransform.position.z > transform.position.z)
+       {
+           knockBackDirection = KnockBackDirection.ForwardLeft;
+       }
+       else if (playerTransform.position.x > transform.position.x && playerTransform.position.z < transform.position.z)
+       {
+           knockBackDirection = KnockBackDirection.BackwardLeft;
+       }
+       else if (playerTransform.position.x < transform.position.x)
        {
            // x + 1
            knockBackDirection = KnockBackDirection.Right;

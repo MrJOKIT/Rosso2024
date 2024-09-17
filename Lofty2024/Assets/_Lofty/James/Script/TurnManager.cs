@@ -27,6 +27,10 @@ public class TurnManager : Singeleton<TurnManager>
 {
     [Header("AI Learn")]
     public bool multipleTurn;
+
+    [Space(10)] 
+    [Header("Stage Manage")] 
+    [ReadOnly] public bool stageClear;
     
     [Space(10)]
     [Header("Turn Data")]
@@ -44,6 +48,7 @@ public class TurnManager : Singeleton<TurnManager>
 
     private void Update()
     {
+        StageProgressCheckHandle();
         if (!multipleTurn)
         {
             if (onPlayerTurn || onEnemyTurn)
@@ -53,6 +58,29 @@ public class TurnManager : Singeleton<TurnManager>
         }
         TurnHandle();
         UpdateTurnSliderGUI();
+    }
+
+    private void StageProgressCheckHandle()
+    {
+        if (stageClear)
+        {
+            return;
+        }
+        bool stageComplete = true;
+        foreach (TurnData unitData in turnData)
+        {
+            if (unitData.isPlayer == false)
+            {
+                stageComplete = false;
+                break;
+            }
+        }
+
+        if (stageComplete)
+        {
+            stageClear = true;
+            Debug.Log("Stage Complete");
+        }
     }
 
     #region In Game Unit

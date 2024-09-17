@@ -6,6 +6,7 @@ using UnityEngine;
 public class MoveChecker : MonoBehaviour
 {
     public LayerMask gridLayer;
+    public GridState gridCheck;
     public void SetMover()
     {
         RaycastHit hit;
@@ -23,6 +24,8 @@ public class MoveChecker : MonoBehaviour
                         gm.ActiveEnemy();
                         break;
                 }
+
+                gridCheck = gm.gridState;
             }
         }
     }

@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: W
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -47,6 +47,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &2642058920095745012
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,7 +61,7 @@ GameObject:
   m_Layer: 0
   m_Name: E
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -94,6 +95,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &3619184553022233209
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +109,7 @@ GameObject:
   m_Layer: 0
   m_Name: Se
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -141,6 +143,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &3656914671386965700
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,15 +196,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c29ba1c66268af46bf4abc3c7203489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkerOwn:
-  - {fileID: 1544042166025342399}
-  - {fileID: 7560751601153609445}
-  - {fileID: 2017839079596635282}
-  - {fileID: 4624193195432447591}
-  - {fileID: 6544573514236345315}
-  - {fileID: 4214292636003625089}
-  - {fileID: 8247575070740951729}
-  - {fileID: 21342526856370996}
+  checkerData:
+  - dontStop: 1
+    checkSucces: 0
+    checkerOwn:
+    - {fileID: 1544042166025342399}
+    - {fileID: 7560751601153609445}
+    - {fileID: 2017839079596635282}
+    - {fileID: 4624193195432447591}
+    - {fileID: 6544573514236345315}
+    - {fileID: 4214292636003625089}
+    - {fileID: 8247575070740951729}
+    - {fileID: 21342526856370996}
 --- !u!1 &4217730520738791414
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +221,7 @@ GameObject:
   m_Layer: 0
   m_Name: N
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -249,6 +255,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &4517888123098674676
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,7 +269,7 @@ GameObject:
   m_Layer: 0
   m_Name: Nw
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -296,6 +303,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &5612750395461803007
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +317,7 @@ GameObject:
   m_Layer: 0
   m_Name: Sw
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -343,6 +351,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &6336262384029783603
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +365,7 @@ GameObject:
   m_Layer: 0
   m_Name: Ne
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -390,6 +399,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &8292404398331730110
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,7 +413,7 @@ GameObject:
   m_Layer: 0
   m_Name: S
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -437,3 +447,4 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0

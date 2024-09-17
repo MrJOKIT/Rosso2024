@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using UnityEngine.UI;
+using static AbilityType;
 using Random = UnityEngine.Random;
 
 public enum MovementState
@@ -32,11 +34,13 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Header("Player Input")]
     public MoveType moveType;
 
-    [Space(10)] 
+    [Space(10)]
     [Header("Turn Setting")] 
+    public bool autoSkip;
     public bool onTurn;
     public float turnSpeed = 20f;
     public int damage;
+    public List<Button> playerInteractButton;
 
     [Space(10)] 
     [Header("Combat Setting")] 
@@ -47,7 +51,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Space(10)] 
     [Header("Move Setting")]
     public bool moveSuccess;
-    public bool autoSkip;
+    public bool autoEndTurnAfterMove;
     public bool moveRandom;
     public AbilityType movePattern;
     public MovementState currentState = MovementState.Idle;
@@ -138,8 +142,12 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         HandleClickToMove();
                         break;
                     case MoveType.Both:
-                        HandleInput();
                         HandleClickToMove();
+                        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+                        {
+                            return;
+                        }
+                        HandleInput();
                         break;
                 }
                 break;
@@ -280,6 +288,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             GridSpawnManager.Instance.ClearMover();
                             currentState = MovementState.Idle;
                             moveSuccess = true;
+                            if (autoEndTurnAfterMove)
+                            {
+                                EndTurn();
+                            }
                         }
                         break;
                 }
@@ -313,7 +325,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     private void MoveToTarget()
     {
-        if (movePattern == AbilityType.Knight)
+        if (movePattern == Knight)
         {
             transform.position = targetPosition;
         }
@@ -331,6 +343,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             }
             currentState = MovementState.Idle;
             moveSuccess = true;
+            GetComponent<PlayerAbility>().CheckAbilityUse();
+            if (autoEndTurnAfterMove)
+            {
+                EndTurn();
+            }
         }
     }
     
@@ -351,7 +368,20 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         currentPattern = Instantiate(patternDatas[(int)movePattern - 1].patternPrefab, parentPattern);
         currentPattern.GetComponent<MoverCheckerHost>().CheckMove();
     }
-    
+
+
+    public void ChangePatternNow(AbilityType newPattern)
+    {
+        if (currentPattern != null)
+        {
+            Destroy(currentPattern.gameObject);
+            currentPattern = null;
+        }
+        GridSpawnManager.Instance.ClearMover();
+        movePattern = newPattern;
+        SetMover();
+        
+    }
     
 
     private void OnTriggerEnter(Collider other)
@@ -368,6 +398,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         {
             return;
         }
+
+        foreach (Button button in playerInteractButton)
+        {
+            button.interactable = true;
+        }
         SetMover();
         currentState = MovementState.Combat;
     }
@@ -375,6 +410,14 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Button("End Turn")]
     public void EndTurn()
     {
+        if (movePattern != King)
+        {
+            movePattern = King;
+        }
+        foreach (Button button in playerInteractButton)
+        {
+            button.interactable = false;
+        }
         ClearPattern();
         TurnManager.Instance.TurnSucces(true);
         onTurn = false;

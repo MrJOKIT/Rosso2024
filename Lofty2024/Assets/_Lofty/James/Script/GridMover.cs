@@ -74,7 +74,6 @@ public class GridMover : MonoBehaviour
         {
             return;
         }
-
         gridState = GridState.OnTrap;
     }
     private void GridStateHandle()
@@ -84,23 +83,32 @@ public class GridMover : MonoBehaviour
             return;
         }
 
+        CheckMoveType();
+    }
+
+    private void CheckMoveType()
+    {
         switch (gridState)
         {
             case GridState.OnMove:
+                GetComponent<MeshRenderer>().enabled = true;
                 GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.movableMat;
                 oldState = gridState;
                 break;
             case GridState.OnEnemy:
+                GetComponent<MeshRenderer>().enabled = true;
+                oldState = gridState;
                 break;
             case GridState.OnObstacle:
                 GetComponent<MeshRenderer>().enabled = false;
                 oldState = gridState;
                 break;
             case GridState.OnTrap:
+                GetComponent<MeshRenderer>().enabled = true;
                 GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.trapMat;
                 oldState = gridState;
                 break;
-            default:
+            case GridState.Empty:
                 GetComponent<MeshRenderer>().enabled = true;
                 GetComponent<MeshRenderer>().material = oldMat;
                 oldState = gridState;
@@ -118,14 +126,18 @@ public class GridMover : MonoBehaviour
             case GridState.OnObstacle:
                 break;
             case GridState.OnMove:
+                GetComponent<MeshRenderer>().material = oldMat;
                 gridState = GridState.Empty;
+                break;
+            case GridState.OnEnemy:
                 GetComponent<MeshRenderer>().material = oldMat;
                 break;
             default:
                 GetComponent<MeshRenderer>().material = oldMat;
+                gridState = GridState.Empty;
                 break;
         }
-        
+        CheckMoveType();
     }
 
     public void ActiveEnemy()

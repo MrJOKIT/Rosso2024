@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: N
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -47,6 +47,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &2273910503277266347
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,7 +61,7 @@ GameObject:
   m_Layer: 0
   m_Name: N (3)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -94,6 +95,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &2292446243663666926
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +109,7 @@ GameObject:
   m_Layer: 0
   m_Name: N (7)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -141,6 +143,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &3398017455646762409
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +157,7 @@ GameObject:
   m_Layer: 0
   m_Name: N (2)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -188,6 +191,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &4072623004291896361
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +205,7 @@ GameObject:
   m_Layer: 0
   m_Name: N (6)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -235,6 +239,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &4089852858680578657
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +253,7 @@ GameObject:
   m_Layer: 0
   m_Name: N (5)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -282,6 +287,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &8354645110651023832
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +301,7 @@ GameObject:
   m_Layer: 0
   m_Name: N (1)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -329,6 +335,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &8858797391834082132
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,7 +349,7 @@ GameObject:
   m_Layer: 0
   m_Name: N (4)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -376,6 +383,7 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
+  gridCheck: 0
 --- !u!1 &9220371098856442328
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,12 +436,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c29ba1c66268af46bf4abc3c7203489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkerOwn:
-  - {fileID: 609778210070979561}
-  - {fileID: 4626435274066401372}
-  - {fileID: 3839925133247946447}
-  - {fileID: 5338658716079578124}
-  - {fileID: 8693373164297012026}
-  - {fileID: 6036558373691468246}
-  - {fileID: 4798329677193578233}
-  - {fileID: 1746584809755803471}
+  checkerData:
+  - dontStop: 1
+    checkSucces: 0
+    checkerOwn:
+    - {fileID: 609778210070979561}
+    - {fileID: 4626435274066401372}
+    - {fileID: 3839925133247946447}
+    - {fileID: 5338658716079578124}
+    - {fileID: 8693373164297012026}
+    - {fileID: 6036558373691468246}
+    - {fileID: 4798329677193578233}
+    - {fileID: 1746584809755803471}
