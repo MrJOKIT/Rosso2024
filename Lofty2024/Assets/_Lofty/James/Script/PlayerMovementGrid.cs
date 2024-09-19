@@ -12,6 +12,7 @@ public enum MovementState
     Idle,
     Combat,
     Moving,
+    Freeze,
 }
 
 public enum MoveType
@@ -158,6 +159,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 }
                 MoveToTarget();
                 break;
+            case MovementState.Freeze:
+                break;
         }
     }
 
@@ -260,7 +263,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         }
 
                         Enemy enemy = hit.collider.GetComponent<GridMover>().enemy;
-                        CameraShake.Instance.TriggerShake();
                         switch (attackType)
                         {
                             case AttackType.NormalAttack:
@@ -281,6 +283,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         
                         if (enemy.enemyHealth <= 0)
                         {
+                            GetComponent<PlayerAbility>().swapAbility = enemy.abilityDrop;
                             SetTargetPosition(hit.point);
                         }
                         else

@@ -9,6 +9,8 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private bool haveShield;
     [SerializeField] private int playerHealth;
     [SerializeField] private List<CurseData> curseHave;
+    [SerializeField] private GameObject curseUiPrefab;
+    [SerializeField] private Transform curseUiParent;
     private bool isDead;
     private void Update()
     {
@@ -35,6 +37,7 @@ public class Player : MonoBehaviour, ITakeDamage
     
     public void TakeDamage(int damage)
     {
+        CameraShake.Instance.TriggerShake();
         if (haveShield)
         {
             haveShield = false;
@@ -45,7 +48,8 @@ public class Player : MonoBehaviour, ITakeDamage
     
     public void AddCurseStatus(CurseType curseType, int turnTime)
     {
-        curseHave.Add(new CurseData(curseType,turnTime));
+        GameObject curseGUI = Instantiate(curseUiPrefab, curseUiParent);
+        curseHave.Add(new CurseData(curseType,turnTime,curseGUI.GetComponent<CurseUI>()));
     }
     
     public void CurseHandle()
@@ -54,6 +58,7 @@ public class Player : MonoBehaviour, ITakeDamage
         {
             return;
         }
+        CurseUiUpdate();
         foreach (CurseData curse in curseHave)
         {
             if (curse.curseActivated)
@@ -78,6 +83,15 @@ public class Player : MonoBehaviour, ITakeDamage
             }
 
             curse.curseActivated = true;
+        }
+    }
+
+    public void CurseUiUpdate()
+    {
+        foreach (CurseData curse in curseHave)
+        {
+            curse.curseUI.curseType = curse.curseType;
+            curse.curseUI.turnCount.text = curse.curseTurn.ToString();
         }
     }
 }

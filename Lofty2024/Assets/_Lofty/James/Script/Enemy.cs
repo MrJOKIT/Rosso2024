@@ -29,11 +29,13 @@ public class CurseData
     [ReadOnly] public int curseIndex;
     [ReadOnly] public CurseType curseType;
     [ReadOnly] public int curseTurn;
+    [ReadOnly] public CurseUI curseUI;
     public bool curseActivated;
-    public CurseData(CurseType curseType,int curseTurn)
+    public CurseData(CurseType curseType,int curseTurn,CurseUI curseUI)
     {
         this.curseType = curseType;
         this.curseTurn = curseTurn;
+        this.curseUI = curseUI;
     }
 }
 public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
@@ -51,12 +53,18 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     [Space(10)] 
     [Header("Curse Status")] 
     public List<CurseData> curseHave;
+    public Transform curseCanvas;
+    public GameObject curseUiPrefab;
 
 
     [Space(10)] 
     [Header("Turn")] 
     public bool autoSkip;
     [ReadOnly] public bool onTurn;
+
+    [Space(10)] 
+    [Header("Reward")]
+    public AbilityType abilityDrop;
 
     private void Awake()
     {
@@ -104,10 +112,12 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
                 curse.curseTurn -= 1;
                 if (curse.curseTurn <= 0 )
                 {
+                    Destroy(curse.curseUI.gameObject);
                     curseHave.Remove(curse);
                 }
                 else
                 {
+                    CurseUiUpdate();
                     curse.curseActivated = false;
                 }
             }
@@ -151,6 +161,15 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         }
         
     }
+
+    public void CurseUiUpdate()
+    {
+        foreach (CurseData curse in curseHave.ToList())
+        {
+            curse.curseUI.curseType = curse.curseType;
+            curse.curseUI.turnCount.text = curse.curseTurn.ToString();
+        }
+    }
     private void EnemyDie()
     {
         TurnManager.Instance.RemoveUnit(enemyTurnData);
@@ -169,12 +188,24 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     public void TakeDamage(int damage)
     {
+        CameraShake.Instance.TriggerShake();
         enemyHealth -= damage;
     }
 
     public void AddCurseStatus(CurseType curseType,int turnTime)
     {
-        curseHave.Add(new CurseData(curseType,turnTime));
+        foreach (CurseData curse in curseHave)
+        {
+            if (curse.curseType == curseType)
+            {
+                curse.curseTurn = turnTime;
+                CurseUiUpdate();
+                return;
+            }
+        }
+        GameObject curseGUI = Instantiate(curseUiPrefab, curseCanvas);
+        curseHave.Add(new CurseData(curseType,turnTime,curseGUI.GetComponent<CurseUI>()));
+        CurseUiUpdate();
     }
     
 }
