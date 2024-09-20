@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EditorAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum EnemyType
 {
@@ -63,8 +64,18 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     [ReadOnly] public bool onTurn;
 
     [Space(10)] 
-    [Header("Reward")]
+    [Header("Reward")] public Image rewardImage;
     public AbilityType abilityDrop;
+    
+    [Space(10)] 
+    [Header("Skill Image")] 
+    public Sprite emptySkillImage;
+    public Sprite pawnSkillImage;
+    public Sprite rookSkillImage;
+    public Sprite knightSkillImage;
+    public Sprite bishopSkillImage;
+    public Sprite queenSkillImage;
+    public Sprite kingSkillImage;
 
     private void Awake()
     {
@@ -74,6 +85,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     private void Start()
     {
         TurnManager.Instance.AddUnit(false,transform,enemySpeed);
+        RewardUiHandle();
     }
 
     private void Update()
@@ -185,6 +197,40 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     { 
         enemyHealth = enemyData.enemyHealth;
         enemySpeed = enemyData.enemySpeed;
+    }
+
+    private void RewardUiHandle()
+    {
+        switch (abilityDrop)
+        {
+            case AbilityType.Empty:
+                rewardImage.gameObject.SetActive(false);
+                break;
+            case AbilityType.Pawn:
+                rewardImage.gameObject.SetActive(true);
+                rewardImage.sprite = pawnSkillImage;
+                break;
+            case AbilityType.Rook:
+                rewardImage.gameObject.SetActive(true);
+                rewardImage.sprite = rookSkillImage;
+                break;
+            case AbilityType.Knight:
+                rewardImage.gameObject.SetActive(true);
+                rewardImage.sprite = knightSkillImage;
+                break;
+            case AbilityType.Bishop:
+                rewardImage.gameObject.SetActive(true);
+                rewardImage.sprite = bishopSkillImage;
+                break;
+            case AbilityType.Queen:
+                rewardImage.gameObject.SetActive(true);
+                rewardImage.sprite = queenSkillImage;
+                break;
+            case AbilityType.King:
+                rewardImage.gameObject.SetActive(true);
+                rewardImage.sprite = kingSkillImage;
+                break;
+        }
     }
     public void TakeDamage(int damage)
     {
