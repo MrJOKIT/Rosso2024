@@ -110,7 +110,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         if (autoSkip) 
         {
-            TurnManager.Instance.TurnSucces(true);
+            TurnManager.Instance.TurnSucces();
             onTurn = false;
             return;
         }
@@ -397,6 +397,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     public void StartTurn()
     {
+        onTurn = true;
         if (moveSuccess)
         {
             return;
@@ -422,7 +423,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             button.interactable = false;
         }
         ClearPattern();
-        TurnManager.Instance.TurnSucces(true);
+        TurnManager.Instance.TurnSucces();
         onTurn = false;
         moveSuccess = false;
     }

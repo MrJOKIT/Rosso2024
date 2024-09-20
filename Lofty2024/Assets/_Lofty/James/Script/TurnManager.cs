@@ -127,13 +127,13 @@ public class TurnManager : Singeleton<TurnManager>
                 {
                     if (td.isPlayer)
                     {
-                        td.unitTransform.GetComponent<PlayerMovementGrid>().onTurn = true;
                         onPlayerTurn = true;
+                        td.unitTransform.GetComponent<PlayerMovementGrid>().StartTurn();
                     }
                     else
                     {
-                        td.unitTransform.GetComponent<Enemy>().StartTurn();
                         onEnemyTurn = true;
+                        td.unitTransform.GetComponent<Enemy>().StartTurn();
                     }
                     break;
                 }
@@ -142,13 +142,13 @@ public class TurnManager : Singeleton<TurnManager>
             {
                 if (td.isPlayer)
                 {
-                    td.unitTransform.GetComponent<PlayerMovementGrid>().onTurn = true;
                     onPlayerTurn = true;
+                    td.unitTransform.GetComponent<PlayerMovementGrid>().StartTurn();
                 }
                 else
                 {
-                    td.unitTransform.GetComponent<EnemyAI>().onTurn = true;
                     onEnemyTurn = true;
+                    td.unitTransform.GetComponent<Enemy>().StartTurn();
                 }
             }
         }
@@ -163,28 +163,20 @@ public class TurnManager : Singeleton<TurnManager>
     }
 
     [Button("End Turn")]
-    public void TurnSucces(bool isPlayer)
+    public void TurnSucces()
     {
         foreach (TurnData td in turnData)
         {
             if (td.turnCounter >= 100f)
             {
-                td.turnCounter = td.baseSpeed;
+                td.turnCounter = 0;
                 break;
             }
         }
 
         GridSpawnManager.Instance.ClearMover();
-        if (isPlayer)
-        {
-            onPlayerTurn = false;
-        }
-        else
-        {
-            onEnemyTurn = false;
-        }
-        
-        
+        onPlayerTurn = false;
+        onEnemyTurn = false;
     }
 
     #endregion

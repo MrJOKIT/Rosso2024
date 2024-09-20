@@ -100,23 +100,25 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         {
             return;
         }
-
-        if (autoSkip)
-        {
-            EndTurn();
-        }
-        
     }
 
     public void StartTurn()
     {
         onTurn = true;
-        CurseHandle();
+        if (autoSkip)
+        {
+            EndTurn();
+        }
+        else
+        {
+            CurseHandle();
+        }
     }
 
     public void EndTurn()
     {
         onTurn = false;
+        TurnManager.Instance.TurnSucces();
         if (curseHave != null)
         {
             foreach (CurseData curse in curseHave.ToList())
@@ -134,8 +136,6 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
                 }
             }
         }
-        
-        TurnManager.Instance.TurnSucces(false);
     }
 
     
@@ -234,6 +234,10 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     public void TakeDamage(int damage)
     {
+        if (enemyHealth <= 0)
+        {
+            return;
+        }
         CameraShake.Instance.TriggerShake();
         enemyHealth -= damage;
     }

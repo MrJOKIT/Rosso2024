@@ -145,7 +145,7 @@ public class MoveToPlayer : Agent
         if (transform.localPosition == targetPosition)
         {
             GridSpawnManager.Instance.ClearMover();
-            TurnManager.Instance.TurnSucces(false);
+            TurnManager.Instance.TurnSucces();
             currentState = MovementState.Idle;
             GetComponent<EnemyAI>().onTurn = false;
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum KnockBackDirection
 {
@@ -28,6 +29,31 @@ public class EnemyMovementGrid : MonoBehaviour
    private void Update()
    {
        MoveStateHandle();
+       if (GetComponent<Enemy>().autoSkip)
+       {
+           return;
+       }
+       if (GetComponent<Enemy>().onTurn)
+       {
+           int randomNumber = Random.Range(0, 3);
+           switch (randomNumber)
+           {
+               case 0:
+                   SetTargetPosition(Vector3.forward);
+                   break;
+               case 1:
+                   SetTargetPosition(Vector3.back);
+                   break;
+               case 2:
+                   SetTargetPosition(Vector3.left);
+                   break;
+               case 3:
+                   SetTargetPosition(Vector3.right);
+                   break;
+           }
+           
+           GetComponent<Enemy>().EndTurn();
+       }
    }
 
    public void KnockBack(Transform playerTrans,int gridDistance)
@@ -154,9 +180,8 @@ public class EnemyMovementGrid : MonoBehaviour
                else
                {
                    GridSpawnManager.Instance.ClearMover();
-                   TurnManager.Instance.TurnSucces(false);
+                   GetComponent<Enemy>().EndTurn();
                    currentState = MovementState.Idle;
-                   GetComponent<EnemyAI>().onTurn = false;
                }
                   
            }
