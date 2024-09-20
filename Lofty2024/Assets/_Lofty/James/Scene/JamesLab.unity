@@ -6443,8 +6443,8 @@ MonoBehaviour:
     type: 3}
   autoSkip: 1
   onTurn: 0
-  rewardImage: {fileID: 0}
-  abilityDrop: 0
+  rewardImage: {fileID: 683984497}
+  abilityDrop: 2
   emptySkillImage: {fileID: 21300000, guid: 86efc444537c14f47b95135a84777d9e, type: 3}
   pawnSkillImage: {fileID: 21300000, guid: ce670aaf245479344a273e0428f86e75, type: 3}
   rookSkillImage: {fileID: 21300000, guid: d082280619bf93a4abd5f5df245ce78e, type: 3}

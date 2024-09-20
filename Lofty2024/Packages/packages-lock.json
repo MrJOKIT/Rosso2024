@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.tripolygon.umodeler-x": {
+      "version": "file:com.tripolygon.umodeler-x-0.91.1-plus/com.tripolygon.umodeler-x-0.91.1-plus.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
