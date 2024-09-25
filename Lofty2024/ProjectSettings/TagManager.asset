@@ -7,6 +7,8 @@ TagManager:
   - GridSpawner
   - Enemy
   - Obstacle
+  - DeadZone
+  - CloseArea
   layers:
   - Default
   - TransparentFX
@@ -16,9 +18,9 @@ TagManager:
   - UI
   - Ground
   - Enemy
-  - 
-  - 
-  - 
+  - Obstacle
+  - Player
+  - DeadZone
   - 
   - 
   - 

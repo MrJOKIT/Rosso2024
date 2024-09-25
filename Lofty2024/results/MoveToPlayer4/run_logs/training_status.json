@@ -1,32 +1,32 @@
 {
-    "MoveToPlayer": {
+    "MoveToPoint": {
         "checkpoints": [
             {
-                "steps": 499997,
-                "file_path": "results\\MoveToPlayer4\\MoveToPlayer\\MoveToPlayer-499997.onnx",
-                "reward": 1.0,
-                "creation_time": 1726219177.2961047,
+                "steps": 499990,
+                "file_path": "results\\MoveToPlayer4\\MoveToPoint\\MoveToPoint-499990.onnx",
+                "reward": 0.9585714340209961,
+                "creation_time": 1727227760.1817286,
                 "auxillary_file_paths": [
-                    "results\\MoveToPlayer4\\MoveToPlayer\\MoveToPlayer-499997.pt"
+                    "results\\MoveToPlayer4\\MoveToPoint\\MoveToPoint-499990.pt"
                 ]
             },
             {
-                "steps": 500036,
-                "file_path": "results\\MoveToPlayer4\\MoveToPlayer\\MoveToPlayer-500036.onnx",
-                "reward": 1.0,
-                "creation_time": 1726219177.3228724,
+                "steps": 903360,
+                "file_path": "results\\MoveToPlayer4\\MoveToPoint\\MoveToPoint-903360.onnx",
+                "reward": 0.9566666682561239,
+                "creation_time": 1727247169.0801501,
                 "auxillary_file_paths": [
-                    "results\\MoveToPlayer4\\MoveToPlayer\\MoveToPlayer-500036.pt"
+                    "results\\MoveToPlayer4\\MoveToPoint\\MoveToPoint-903360.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 500036,
-            "file_path": "results\\MoveToPlayer4\\MoveToPlayer.onnx",
-            "reward": 1.0,
-            "creation_time": 1726219177.3228724,
+            "steps": 903360,
+            "file_path": "results\\MoveToPlayer4\\MoveToPoint.onnx",
+            "reward": 0.9566666682561239,
+            "creation_time": 1727247169.0801501,
             "auxillary_file_paths": [
-                "results\\MoveToPlayer4\\MoveToPlayer\\MoveToPlayer-500036.pt"
+                "results\\MoveToPlayer4\\MoveToPoint\\MoveToPoint-903360.pt"
             ]
         }
     },

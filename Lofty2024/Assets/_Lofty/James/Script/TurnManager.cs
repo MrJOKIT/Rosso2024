@@ -140,6 +140,7 @@ public class TurnManager : Singeleton<TurnManager>
             }
             else
             {
+                
                 if (td.isPlayer)
                 {
                     onPlayerTurn = true;
@@ -148,7 +149,10 @@ public class TurnManager : Singeleton<TurnManager>
                 else
                 {
                     onEnemyTurn = true;
-                    td.unitTransform.GetComponent<Enemy>().StartTurn();
+                    if (td.unitTransform.GetComponent<Enemy>().onTurn == false)
+                    {
+                        td.unitTransform.GetComponent<Enemy>().StartTurn();
+                    }
                 }
             }
         }
@@ -175,8 +179,11 @@ public class TurnManager : Singeleton<TurnManager>
         }
 
         GridSpawnManager.Instance.ClearMover();
-        onPlayerTurn = false;
-        onEnemyTurn = false;
+        if (!multipleTurn)
+        {
+            onPlayerTurn = false;
+            onEnemyTurn = false;
+        }
     }
 
     #endregion

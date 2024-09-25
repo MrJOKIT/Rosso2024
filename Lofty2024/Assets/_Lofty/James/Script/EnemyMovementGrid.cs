@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EditorAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public enum KnockBackDirection
+public enum EnemyMoveDirection
 {
     Forward,
     Backward,
@@ -16,44 +18,59 @@ public enum KnockBackDirection
     BackwardRight,
 }
 public class EnemyMovementGrid : MonoBehaviour
-{
+{  [Header("Move Setting")]
    public MovementState currentState;
    public float moveSpeed = 5;
-
-   public bool isKnockBack;
-   public KnockBackDirection knockBackDirection;
-   
    public Vector3 gridSize = new Vector3(1,1,1);
-   private Vector3 targetPosition;
+
+   [Space(10)]
+   [Header("KnockBack Properties")]
+   public bool isKnockBack;
+   public EnemyMoveDirection enemyMoveDirection;
+   public LayerMask obstacleLayer;
+
+   [Header("Check Obstacle")] 
+   [ReadOnly] public bool forwardBlock;
+   [ReadOnly] public bool forwardLeftBlock;
+   [ReadOnly] public bool forwardRightBlock;
+   [ReadOnly] public bool backwardBlock;
+   [ReadOnly] public bool backwardLeftBlock;
+   [ReadOnly] public bool backwardRightBlock;
+   [ReadOnly] public bool leftBlock;
+   [ReadOnly] public bool rightBlock;
+   
+   [ReadOnly] public Vector3 targetPosition;
+   
 
    private void Update()
    {
        MoveStateHandle();
+       CheckBlockHandle();
        if (GetComponent<Enemy>().autoSkip)
        {
-           return;
-       }
-       if (GetComponent<Enemy>().onTurn)
-       {
-           int randomNumber = Random.Range(0, 3);
-           switch (randomNumber)
+           if (GetComponent<Enemy>().onTurn)
            {
-               case 0:
-                   SetTargetPosition(Vector3.forward);
-                   break;
-               case 1:
-                   SetTargetPosition(Vector3.back);
-                   break;
-               case 2:
-                   SetTargetPosition(Vector3.left);
-                   break;
-               case 3:
-                   SetTargetPosition(Vector3.right);
-                   break;
-           }
+               int randomNumber = Random.Range(0, 3);
+               switch (randomNumber)
+               {
+                   case 0:
+                       SetTargetPosition(Vector3.forward);
+                       break;
+                   case 1:
+                       SetTargetPosition(Vector3.back);
+                       break;
+                   case 2:
+                       SetTargetPosition(Vector3.left);
+                       break;
+                   case 3:
+                       SetTargetPosition(Vector3.right);
+                       break;
+               }
            
-           GetComponent<Enemy>().EndTurn();
+               GetComponent<Enemy>().EndTurn();
+           }
        }
+       
    }
 
    public void KnockBack(Transform playerTrans,int gridDistance)
@@ -61,31 +78,63 @@ public class EnemyMovementGrid : MonoBehaviour
       //ถอยกี่ช่อง
       isKnockBack = true;
       BackDirectionHandle(playerTrans);
-      switch (knockBackDirection)
+      switch (enemyMoveDirection)
       {
-          case KnockBackDirection.Forward:
+          case EnemyMoveDirection.Forward:
+              if (forwardBlock)
+              {
+                  return;
+              }
               SetTargetPosition(new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z + gridDistance));
               break;
-          case KnockBackDirection.Left:
+          case EnemyMoveDirection.Left:
+              if (leftBlock)
+              {
+                  return;
+              }
               SetTargetPosition(new Vector3(transform.localPosition.x  - gridDistance,transform.localPosition.y,transform.localPosition.z));
               break;
-          case KnockBackDirection.Backward:
+          case EnemyMoveDirection.Backward:
+              if (backwardBlock)
+              {
+                  return;
+              }
               SetTargetPosition(new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z - gridDistance));
               break;
-          case KnockBackDirection.Right:
+          case EnemyMoveDirection.Right:
+              if (rightBlock)
+              {
+                  return;
+              }
               SetTargetPosition(new Vector3(transform.localPosition.x + gridDistance,transform.localPosition.y,transform.localPosition.z));
               break;
-          case KnockBackDirection.ForwardLeft:
+          case EnemyMoveDirection.ForwardLeft:
+              if (forwardLeftBlock)
+              {
+                  return;
+              }
               SetTargetPosition(new Vector3(transform.localPosition.x - gridDistance,transform.localPosition.y,transform.localPosition.z + gridDistance));
               break;
-          case KnockBackDirection.ForwardRight:
+          case EnemyMoveDirection.ForwardRight:
+              if (forwardRightBlock)
+              {
+                  return;
+              }
               SetTargetPosition(new Vector3(transform.localPosition.x + gridDistance,transform.localPosition.y,transform.localPosition.z + gridDistance));
               break;
-          case KnockBackDirection.BackwardLeft:
+          case EnemyMoveDirection.BackwardLeft:
+              if (backwardLeftBlock)
+              {
+                  return;
+              }
               SetTargetPosition(new Vector3(transform.localPosition.x - gridDistance,transform.localPosition.y,transform.localPosition.z - gridDistance));
               break;
-          case KnockBackDirection.BackwardRight:
-              SetTargetPosition(new Vector3(transform.localPosition.x + gridDistance,transform.localPosition.y,transform.localPosition.z + gridDistance));
+          case EnemyMoveDirection.BackwardRight:
+              if (backwardRightBlock)
+              {
+                  return;
+              }
+              SetTargetPosition(new Vector3(transform.localPosition.x + gridDistance,transform.localPosition.y,transform.localPosition.z - gridDistance));
               break;
       }
    }
@@ -95,40 +144,58 @@ public class EnemyMovementGrid : MonoBehaviour
        
        if (playerTransform.position.x < transform.position.x && playerTransform.position.z < transform.position.z)
        {
-           knockBackDirection = KnockBackDirection.ForwardRight;
+           enemyMoveDirection = EnemyMoveDirection.ForwardRight;
        }
        else if (playerTransform.position.x < transform.position.x && playerTransform.position.z > transform.position.z)
        {
-           knockBackDirection = KnockBackDirection.BackwardRight;
+           enemyMoveDirection = EnemyMoveDirection.BackwardRight;
        }
        else if (playerTransform.position.x > transform.position.x && playerTransform.position.z > transform.position.z)
        {
-           knockBackDirection = KnockBackDirection.ForwardLeft;
+           enemyMoveDirection = EnemyMoveDirection.BackwardLeft;
        }
        else if (playerTransform.position.x > transform.position.x && playerTransform.position.z < transform.position.z)
        {
-           knockBackDirection = KnockBackDirection.BackwardLeft;
+           enemyMoveDirection = EnemyMoveDirection.ForwardLeft;
        }
        else if (playerTransform.position.x < transform.position.x)
        {
            // x + 1
-           knockBackDirection = KnockBackDirection.Right;
+           enemyMoveDirection = EnemyMoveDirection.Right;
        }
        else if (playerTransform.position.x > transform.position.x)
        {
            // x - 1
-           knockBackDirection = KnockBackDirection.Left;
+           enemyMoveDirection = EnemyMoveDirection.Left;
        }
        else if (playerTransform.position.z < transform.position.z)
        {
            // z + 1
-           knockBackDirection = KnockBackDirection.Forward;
+           enemyMoveDirection = EnemyMoveDirection.Forward;
        }
        else if (playerTransform.position.z > transform.position.z)
        {
            // z - 1
-           knockBackDirection = KnockBackDirection.Backward;
+           enemyMoveDirection = EnemyMoveDirection.Backward;
        }
+   }
+
+   
+   private void CheckBlockHandle()
+   {
+       //Forward Check
+       forwardBlock = Physics.Raycast(transform.position, Vector3.forward, 1,obstacleLayer);
+       forwardLeftBlock = Physics.Raycast(transform.position, new Vector3(-1,0,1), 1,obstacleLayer);
+       forwardRightBlock = Physics.Raycast(transform.position, new Vector3(1, 0, 1), 1,obstacleLayer);
+       
+       //Backward Check
+       backwardBlock = Physics.Raycast(transform.position, Vector3.back, 1, obstacleLayer);
+       backwardLeftBlock = Physics.Raycast(transform.position, new Vector3(-1, 0, -1), 1, obstacleLayer);
+       backwardRightBlock = Physics.Raycast(transform.position, new Vector3(1, 0, -1), 1, obstacleLayer);
+       
+       //Left & Right
+       leftBlock = Physics.Raycast(transform.position, Vector3.left, 1, obstacleLayer);
+       rightBlock = Physics.Raycast(transform.position, Vector3.right, 1, obstacleLayer);
    }
    
    private void MoveStateHandle()
@@ -186,5 +253,53 @@ public class EnemyMovementGrid : MonoBehaviour
                   
            }
            
+       }
+
+       [Button("Move")]
+       public void MoveDirection(EnemyMoveDirection direction)
+       {
+           switch (direction)
+           { 
+               case EnemyMoveDirection.Forward: 
+                   SetTargetPosition(new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z + 1));
+                  break;
+               case EnemyMoveDirection.Left:
+                   SetTargetPosition(new Vector3(transform.localPosition.x  - 1,transform.localPosition.y,transform.localPosition.z));
+                  break;
+               case EnemyMoveDirection.Backward:
+                  SetTargetPosition(new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z - 1));
+                  break;
+               case EnemyMoveDirection.Right:
+                  SetTargetPosition(new Vector3(transform.localPosition.x + 1,transform.localPosition.y,transform.localPosition.z));
+                  break;
+               case EnemyMoveDirection.ForwardLeft:
+                  SetTargetPosition(new Vector3(transform.localPosition.x - 1,transform.localPosition.y,transform.localPosition.z + 1));
+                  break;
+               case EnemyMoveDirection.ForwardRight:
+                  SetTargetPosition(new Vector3(transform.localPosition.x + 1,transform.localPosition.y,transform.localPosition.z + 1));
+                  break;
+               case EnemyMoveDirection.BackwardLeft:
+                  SetTargetPosition(new Vector3(transform.localPosition.x - 1,transform.localPosition.y,transform.localPosition.z - 1));
+                  break;
+               case EnemyMoveDirection.BackwardRight:
+                  SetTargetPosition(new Vector3(transform.localPosition.x + 1,transform.localPosition.y,transform.localPosition.z - 1));
+                  break;
+               }
+       }
+       private void OnDrawGizmos()
+       {
+           //Forward Check
+           Debug.DrawRay(transform.position,Vector3.forward,Color.green);
+           Debug.DrawRay(transform.position,new Vector3(-1,0,1) * 1,Color.green);
+           Debug.DrawRay(transform.position,new Vector3(1,0,1) * 1,Color.green);
+           
+           //Backward Check
+           Debug.DrawRay(transform.position,Vector3.back,Color.green);
+           Debug.DrawRay(transform.position,new Vector3(-1,0,-1) * 1,Color.green);
+           Debug.DrawRay(transform.position,new Vector3(1,0,-1) * 1,Color.green);
+           
+           //Left & Right
+           Debug.DrawRay(transform.position,Vector3.left,Color.green);
+           Debug.DrawRay(transform.position,Vector3.right,Color.green);
        }
 }

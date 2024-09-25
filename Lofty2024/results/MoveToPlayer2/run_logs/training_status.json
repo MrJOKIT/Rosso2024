@@ -1,4 +1,26 @@
 {
+    "MoveToPoint": {
+        "checkpoints": [
+            {
+                "steps": 353749,
+                "file_path": "results\\MoveToPlayer2\\MoveToPoint\\MoveToPoint-353749.onnx",
+                "reward": -0.12292674489137603,
+                "creation_time": 1727163022.273706,
+                "auxillary_file_paths": [
+                    "results\\MoveToPlayer2\\MoveToPoint\\MoveToPoint-353749.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 353749,
+            "file_path": "results\\MoveToPlayer2\\MoveToPoint.onnx",
+            "reward": -0.12292674489137603,
+            "creation_time": 1727163022.273706,
+            "auxillary_file_paths": [
+                "results\\MoveToPlayer2\\MoveToPoint\\MoveToPoint-353749.pt"
+            ]
+        }
+    },
     "metadata": {
         "stats_format_version": "0.3.0",
         "mlagents_version": "0.30.0",

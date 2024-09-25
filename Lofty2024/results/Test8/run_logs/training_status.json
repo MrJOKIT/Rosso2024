@@ -1,23 +1,23 @@
 {
-    "MoveToPlayer": {
+    "MoveToPoint": {
         "checkpoints": [
             {
-                "steps": 37309,
-                "file_path": "results\\Test8\\MoveToPlayer\\MoveToPlayer-37309.onnx",
-                "reward": -1.0,
-                "creation_time": 1726224917.495813,
+                "steps": 17900,
+                "file_path": "results\\Test8\\MoveToPoint\\MoveToPoint-17900.onnx",
+                "reward": null,
+                "creation_time": 1727176128.3444424,
                 "auxillary_file_paths": [
-                    "results\\Test8\\MoveToPlayer\\MoveToPlayer-37309.pt"
+                    "results\\Test8\\MoveToPoint\\MoveToPoint-17900.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 37309,
-            "file_path": "results\\Test8\\MoveToPlayer.onnx",
-            "reward": -1.0,
-            "creation_time": 1726224917.495813,
+            "steps": 17900,
+            "file_path": "results\\Test8\\MoveToPoint.onnx",
+            "reward": null,
+            "creation_time": 1727176128.3444424,
             "auxillary_file_paths": [
-                "results\\Test8\\MoveToPlayer\\MoveToPlayer-37309.pt"
+                "results\\Test8\\MoveToPoint\\MoveToPoint-17900.pt"
             ]
         }
     },

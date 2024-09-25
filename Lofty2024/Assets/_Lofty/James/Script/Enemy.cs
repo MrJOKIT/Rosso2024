@@ -113,6 +113,15 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         {
             CurseHandle();
         }
+
+        try
+        {
+            GetComponent<EnemyBrainML>().actionSuccess = false;
+        }
+        catch (Exception a)
+        {
+            Debug.Log($"No EnemyBrainML in this object :{a}");
+        }
     }
 
     public void EndTurn()

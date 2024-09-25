@@ -170,12 +170,21 @@ public class GridMover : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.CompareTag("Player"))
         {
+            if (gridState == GridState.OnObstacle)
+            {
+                return;
+            }
             gridState = GridState.OnPlayer;
         }
         else if(other.CompareTag("Enemy"))
         {
+            if (gridState == GridState.OnObstacle)
+            {
+                return;
+            }
             gridState = GridState.OnEnemy;
             try
             {
@@ -192,6 +201,14 @@ public class GridMover : MonoBehaviour
             
         }
         else if (other.CompareTag("Obstacle"))
+        {
+            gridState = GridState.OnObstacle;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Obstacle"))
         {
             gridState = GridState.OnObstacle;
         }
