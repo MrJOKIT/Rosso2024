@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class GameManager : Singeleton<GameManager>
 {
-    [SerializeField] private Transform playerTransform;
-
-    public Transform GetPlayerTransform
-    {
-        get { return playerTransform; }
-    }
+    [Header("Clear Stage Setting")] 
+    [SerializeField] private string sceneName;
+    [SerializeField] private Transform spawnGatePosition;
+    [SerializeField] private GameObject gatePrefab;
     
-    public void AddPlayerTransform(Transform playerTransform)
+    public void StageClear()
     {
-        this.playerTransform = playerTransform;
+        Debug.Log("Stage is clear!!!");
+        GameObject gateObject = Instantiate(gatePrefab, spawnGatePosition.position, Quaternion.identity);
+        gateObject.GetComponent<GateToNextScene>().SetNextScene(sceneName);
     }
 }

@@ -48,6 +48,11 @@ public class TurnManager : Singeleton<TurnManager>
 
     private void Update()
     {
+        if (stageClear)
+        {
+            onPlayerTurn = true;
+            return;
+        }
         StageProgressCheckHandle();
         if (!multipleTurn)
         {
@@ -79,7 +84,8 @@ public class TurnManager : Singeleton<TurnManager>
         if (stageComplete)
         {
             stageClear = true;
-            Debug.Log("Stage Complete");
+            turnSliderCanvas.gameObject.SetActive(false);
+            GameManager.Instance.StageClear();
         }
     }
 

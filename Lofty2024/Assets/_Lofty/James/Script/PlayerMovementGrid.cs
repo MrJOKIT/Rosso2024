@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static AbilityType;
 using Random = UnityEngine.Random;
@@ -79,8 +80,15 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Space(5)]
     public bool canRight;
     public Transform rightChecker;
-    [Space(5)]
+    [Space(5)] 
+    [Header("Move Checker")] 
+    public LayerMask moveBlockLayer;
+    public bool moveForwardBlock;
+    public bool moveBackwardBlock;
+    public bool moveLeftBlock;
+    public bool moveRightBlock;
     
+    [Space(10)]
     [Header("Hide Condition")] 
     private AbilityType oldPattern;
     private Vector3 targetPosition;
@@ -103,11 +111,14 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     private void Update()
     {
-        if (!onTurn)
+        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
-            return;
+            if (!onTurn)
+            {
+                return;
+            }
         }
-
+        
         if (autoSkip) 
         {
             TurnManager.Instance.TurnSucces();
@@ -119,6 +130,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         canBackward = Physics.Raycast(backwardChecker.position, Vector3.down, 10f, gridLayerMask);
         canLeft = Physics.Raycast(leftChecker.position, Vector3.down, 10f, gridLayerMask);
         canRight = Physics.Raycast(rightChecker.position, Vector3.down, 10, gridLayerMask);
+        MoveChecker();
         
         MoveStateHandle();
     }
@@ -177,24 +189,32 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         }
         else
         {
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.W) && !moveRightBlock)
             {
                 SetTargetPosition(Vector3.right);
             }
-            else if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(KeyCode.S) && !moveLeftBlock)
             {
                 SetTargetPosition(Vector3.left);
             }
-            else if (Input.GetKey(KeyCode.A))
+            else if (Input.GetKey(KeyCode.A) && !moveForwardBlock)
             {
                 SetTargetPosition(Vector3.forward);
             }
-            else if (Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(KeyCode.D) && !moveBackwardBlock)
             {
                 SetTargetPosition(Vector3.back);
             }
         }
         
+    }
+
+    private void MoveChecker()
+    {
+        moveForwardBlock = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.forward, 1, moveBlockLayer);
+        moveBackwardBlock = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.back, 1, moveBlockLayer);
+        moveLeftBlock = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.left, 1, moveBlockLayer);
+        moveRightBlock = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.right, 1, moveBlockLayer);
     }
 
     private void MoveRandomKeyboard()
@@ -295,6 +315,13 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                                 EndTurn();
                             }
                         }
+                        break;
+                    case GridState.Empty:
+                        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+                        {
+                            return;
+                        }
+                        SetTargetPosition(hit.point);
                         break;
                 }
                 
@@ -406,7 +433,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         {
             button.interactable = true;
         }
-        SetMover();
+
+        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        {
+            SetMover();
+        }
         currentState = MovementState.Combat;
     }
 
