@@ -283,7 +283,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         
                         if (enemy.enemyHealth <= 0)
                         {
-                            GetComponent<PlayerAbility>().swapAbility = enemy.abilityDrop;
                             SetTargetPosition(hit.point);
                         }
                         else

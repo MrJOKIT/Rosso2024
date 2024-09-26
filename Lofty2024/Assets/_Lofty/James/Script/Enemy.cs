@@ -41,6 +41,9 @@ public class CurseData
 }
 public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
 {
+    [Header("Player")]
+    public Transform targetTransform;
+    
     [Header("Data")]
     [ReadOnly] public TurnData enemyTurnData;
     public EnemyData enemyData;
@@ -64,8 +67,10 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     [ReadOnly] public bool onTurn;
 
     [Space(10)] 
-    [Header("Reward")] public Image rewardImage;
+    [Header("Reward")] 
+    public Image rewardImage;
     public AbilityType abilityDrop;
+    public GameObject abilityOrbPrefab;
     
     [Space(10)] 
     [Header("Skill Image")] 
@@ -95,11 +100,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
             EnemyDie();
             return;
         }
-
-        if (!onTurn)
-        {
-            return;
-        }
+        
     }
 
     public void StartTurn()
@@ -199,6 +200,13 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         {
             EndTurn();
         }
+
+        if (abilityDrop != AbilityType.Empty)
+        {
+            GameObject abilityOrbItem =Instantiate(abilityOrbPrefab, transform.position, Quaternion.identity);
+            abilityOrbItem.GetComponent<AbilityOrb>().SetOrbAbility(abilityDrop);
+        }
+        
         gameObject.SetActive(false);
     }
     

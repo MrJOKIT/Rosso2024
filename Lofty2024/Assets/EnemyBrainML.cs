@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EditorAttributes;
 using Unity.Collections;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Sensors.Reflection;
 using UnityEngine;
 
 public class EnemyBrainML : Agent
@@ -16,8 +18,9 @@ public class EnemyBrainML : Agent
     
     [Space(20)]
     public Transform targetTransform;
-    
 
+    public bool onTurn;
+    public int stepCount;
     public bool actionSuccess;
     
     private const int enemy_NoAction = 0;  // do nothing!
@@ -31,17 +34,7 @@ public class EnemyBrainML : Agent
     private const int enemy_BackwardRight = 8;
     
     
-    [Header("Move Checker")]
-    public LayerMask moveBlockLayer;
-    [Space(10)]
-    [ReadOnly] public bool forwardMoveBlock;
-    [ReadOnly] public bool forwardLeftMoveBlock;
-    [ReadOnly] public bool forwardRightMoveBlock;
-    [ReadOnly] public bool backwardMoveBlock;
-    [ReadOnly] public bool backwardLeftMoveBlock;
-    [ReadOnly] public bool backwardRightMoveBlock;
-    [ReadOnly] public bool leftMoveBlock;
-    [ReadOnly] public bool rightMoveBlock;
+    
 
     private void Awake()
     {
@@ -49,29 +42,41 @@ public class EnemyBrainML : Agent
         {
             targetTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
-        Debug.Log(!forwardMoveBlock);
     }
 
     private void Update()
     {
-        CheckMoveHandle();
+        onTurn = GetComponent<Enemy>().onTurn;
     }
 
     public override void OnEpisodeBegin()
     {
         actionSuccess = false;
-        transform.localPosition = new Vector3(6, 0.5f, 3);
+        stepCount = 0;
+        transform.localPosition = new Vector3(3, 0.5f, 1);
         GetComponent<EnemyMovementGrid>().targetPosition = transform.localPosition;
     }
-
+    
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(transform.localPosition);
         sensor.AddObservation(targetTransform.localPosition);
+        
+        /*sensor.AddObservation(forwardMoveBlock);
+        sensor.AddObservation(backwardMoveBlock);
+        sensor.AddObservation(leftMoveBlock);
+        sensor.AddObservation(rightMoveBlock);
+        sensor.AddObservation(forwardLeftMoveBlock);
+        sensor.AddObservation(forwardRightMoveBlock);
+        sensor.AddObservation(backwardLeftMoveBlock);
+        sensor.AddObservation(backwardRightMoveBlock);*/
+        
+        sensor.AddObservation(onTurn);
+        sensor.AddObservation(stepCount);
     }
     public override void OnActionReceived(ActionBuffers actions)
     {
-        if (GetComponent<Enemy>().onTurn == false)
+        if (onTurn == false)
         {
             return;
         }
@@ -80,7 +85,6 @@ public class EnemyBrainML : Agent
             return;
         }
         
-        Debug.Log("Action Started");
         AddReward(-0.01f);
         var action = actions.DiscreteActions[0];
         switch (action)
@@ -89,42 +93,87 @@ public class EnemyBrainML : Agent
                 //do nothing
                 break;
             case enemy_Foward:
+                /*if (forwardMoveBlock)
+                {
+                    return;
+                }*/
                 GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Forward);
                 actionSuccess = true;
+                stepCount += 1;
                 break;
             case enemy_Backward:
+                /*if (backwardMoveBlock)
+                {
+                    return;
+                }*/
                 GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Backward);
                 actionSuccess = true;
+                stepCount += 1;
                 break;
             case enemy_Left:
+                /*if (leftMoveBlock)
+                {
+                    return;
+                }*/
                 GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Left);
                 actionSuccess = true;
+                stepCount += 1;
                 break;
             case enemy_Right:
+                /*if (rightMoveBlock)
+                {
+                    return;
+                }*/
                 GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Right);
                 actionSuccess = true;
+                stepCount += 1;
                 break;
             case enemy_ForwardLeft:
+                /*if (forwardLeftMoveBlock)
+                {
+                    return;
+                }*/
                 GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardLeft);
                 actionSuccess = true;
+                stepCount += 1;
                 break;
             case enemy_ForwardRight:
+                /*if (forwardRightMoveBlock)
+                {
+                    return;
+                }*/
                 GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardRight);
                 actionSuccess = true;
+                stepCount += 1;
                 break;
             case enemy_BackwardLeft:
+                /*if (backwardLeftMoveBlock)
+                {
+                    return;
+                }*/
                 GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardLeft);
                 actionSuccess = true;
+                stepCount += 1;
                 break;
             case enemy_BackwardRight:
+                /*if (backwardRightMoveBlock)
+                {
+                    return;
+                }*/
                 GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardRight);
                 actionSuccess = true;
+                stepCount += 1;
                 break;
             default:
                 throw new ArgumentException("Invalid action value");
         }
-
-        
+        Debug.Log("Action Started");
+        if (stepCount > 20)
+        {
+            AddReward(-0.1f);
+            meshRenderer.material = failMat;
+            EndEpisode();
+        }
     }
     
     public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
@@ -139,47 +188,63 @@ public class EnemyBrainML : Agent
         actionMask.SetActionEnabled(1,enemy_BackwardLeft,true);
         actionMask.SetActionEnabled(1,enemy_BackwardRight,true);*/
         
-        actionMask.SetActionEnabled(0,enemy_NoAction,false);
-        actionMask.SetActionEnabled(0,enemy_Foward,!forwardMoveBlock);
-        actionMask.SetActionEnabled(0,enemy_Backward,!backwardMoveBlock);
-        actionMask.SetActionEnabled(0,enemy_Left,!leftMoveBlock);
-        actionMask.SetActionEnabled(0,enemy_Right,!rightMoveBlock);
-        actionMask.SetActionEnabled(1,enemy_ForwardLeft,!forwardLeftMoveBlock);
-        actionMask.SetActionEnabled(1,enemy_ForwardRight,!forwardRightMoveBlock);
-        actionMask.SetActionEnabled(1,enemy_BackwardLeft,!backwardLeftMoveBlock);
-        actionMask.SetActionEnabled(1,enemy_BackwardRight,!backwardRightMoveBlock);
+        //actionMask.SetActionEnabled(0,enemy_NoAction,false);
+        /*if (!forwardMoveBlock)
+        {
+            actionMask.SetActionEnabled(0,enemy_Foward,false);
+        }
+
+        if (!backwardMoveBlock)
+        {
+            actionMask.SetActionEnabled(0,enemy_Backward,false);
+        }
+
+        if (!leftMoveBlock)
+        {
+            actionMask.SetActionEnabled(0,enemy_Left,false);
+        }
+
+        if (!rightMoveBlock)
+        {
+            actionMask.SetActionEnabled(0,enemy_Right,false);
+        }
+
+        if (!forwardLeftMoveBlock)
+        {
+            actionMask.SetActionEnabled(1,enemy_ForwardLeft,false);
+        }
+
+        if (!forwardRightMoveBlock)
+        {
+            actionMask.SetActionEnabled(1,enemy_ForwardRight,false);
+        }
+
+        if (!backwardLeftMoveBlock)
+        {
+            actionMask.SetActionEnabled(1,enemy_BackwardLeft,false);
+        }
+
+        if (!backwardRightMoveBlock)
+        {
+            actionMask.SetActionEnabled(1,enemy_BackwardRight,false);
+        }*/
     }
 
-    private void CheckMoveHandle()
-    {
-        //Forward Check
-        forwardMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(0,0,1), 1,moveBlockLayer);
-        forwardLeftMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(-1,0,1), 1,moveBlockLayer);
-        forwardRightMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(1, 0, 1), 1,moveBlockLayer);
-       
-        //Backward Check
-        backwardMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(0,0,-1), 1f, moveBlockLayer);
-        backwardLeftMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(-1, 0, -1), 1, moveBlockLayer);
-        backwardRightMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(1, 0, -1), 1, moveBlockLayer);
-       
-        //Left & Right
-        leftMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(-1,0,0), 1.1f, moveBlockLayer);
-        rightMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(1,0,0), 1.1f, moveBlockLayer);
-    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Obstacle"))
         {
             SetReward(-1);
             meshRenderer.material = failMat;
-            actionSuccess = true;
+            actionSuccess = false;
             EndEpisode();
         }
         else if (other.CompareTag("DeadZone"))
         {
             SetReward(-1);
             meshRenderer.material = failMat;
-            actionSuccess = true;
+            actionSuccess = false;
             EndEpisode();
         }
         else if (other.CompareTag("CloseArea"))

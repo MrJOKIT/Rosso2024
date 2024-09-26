@@ -12,6 +12,8 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private GameObject curseUiPrefab;
     [SerializeField] private Transform curseUiParent;
     private bool isDead;
+    
+
     private void Update()
     {
         if (isDead)
