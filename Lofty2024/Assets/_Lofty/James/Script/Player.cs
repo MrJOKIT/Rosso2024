@@ -35,6 +35,7 @@ public class Player : MonoBehaviour, ITakeDamage
     private void PlayerDie()
     {
         //ใช้ตอน Player ตาย
+        isDead = true;
     }
     
     public void TakeDamage(int damage)

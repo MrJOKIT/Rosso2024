@@ -18,7 +18,10 @@ public class EnemyAI : Enemy
     public bool leftMoveBlock;
     public bool rightMoveBlock;
 
-    public bool playerClose;
+    [Header("Combat Checker")]
+    public bool playerInRange;
+    public LayerMask gridLayer;
+    public List<Transform> combatChecker;
     private void FixedUpdate()
     {
         CheckMoveHandle();
@@ -26,17 +29,23 @@ public class EnemyAI : Enemy
         {
             return;
         }
-        EnemyMoveToPlayer();
-        if (playerClose)
+        EnemyCombatHandle();
+        if (playerInRange)
         {
             //Combat time
+            targetTransform.GetComponent<Player>().TakeDamage(1);
+            EndTurn();
         }
         else
         {
+            EnemyMoveToPlayer();
             EndTurn();
         }
     }
 
+
+    #region Enemy Move
+    
     private void EnemyMoveToPlayer()
     {
         if (transform.position.z < targetTransform.position.z && transform.position.x == targetTransform.position.x)
@@ -478,4 +487,32 @@ public class EnemyAI : Enemy
         leftMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(-1,0,0), 1.1f, moveBlockLayer);
         rightMoveBlock = Physics.Raycast(new Vector3(transform.position.x,transform.position.y + 0.2f,transform.position.z), new Vector3(1,0,0), 1.1f, moveBlockLayer);
     }
+    
+    #endregion
+
+    #region Enemy Combat
+
+    private void EnemyCombatHandle()
+    {
+        foreach (Transform combatCheck in combatChecker)
+        {
+            Ray ray = new Ray(combatCheck.position,Vector3.down);
+            RaycastHit hit;
+            if (Physics.Raycast(ray.origin,Vector3.down,out hit,gridLayer))
+            {
+                if (hit.collider.GetComponent<GridMover>() != null)
+                {
+                    GridMover gridMover = hit.collider.GetComponent<GridMover>();
+                    if (gridMover.gridState == GridState.OnPlayer)
+                    {
+                        playerInRange = true;
+                        break;
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    #endregion
 }
