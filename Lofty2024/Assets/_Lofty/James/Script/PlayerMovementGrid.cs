@@ -197,13 +197,14 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, gridLayerMask))
             {
-                if (hit.collider.GetComponent<GridMover>() == null)
+                if (hit.collider.GetComponent<GridMover>() == null || moveSuccess)
                 {
                     return;
                 }
                 switch (hit.collider.GetComponent<GridMover>().gridState)
                 {
                     case GridState.OnMove:
+                        moveSuccess = true;
                         SetTargetPosition(hit.point);
                         break;
                     case GridState.OnEnemy:
@@ -301,7 +302,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 GridSpawnManager.Instance.ClearMover();
             }
             currentState = MovementState.Idle;
-            moveSuccess = true;
             GetComponent<PlayerAbility>().CheckAbilityUse();
             if (autoEndTurnAfterMove)
             {
