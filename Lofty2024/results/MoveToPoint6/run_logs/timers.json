@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1727252648",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "D:\\University Project\\Rosso2024\\Lofty2024\\venv\\Scripts\\mlagents-learn config\\moveToPoint.yaml --run-id=MoveToPoint6",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.4.1+cpu",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1727252712"
+    },
+    "total": 64.7630394,
+    "count": 1,
+    "self": 0.003482700000006389,
+    "children": {
+        "run_training.setup": {
+            "total": 0.11397529999999989,
+            "count": 1,
+            "self": 0.11397529999999989
+        },
+        "TrainerController.start_learning": {
+            "total": 64.6455814,
+            "count": 1,
+            "self": 0.00011459999998919557,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 64.6454516,
+                    "count": 1,
+                    "self": 64.6454516
+                },
+                "TrainerController._save_models": {
+                    "total": 1.5200000007098424e-05,
+                    "count": 1,
+                    "self": 1.5200000007098424e-05
+                }
+            }
+        }
+    }
+}

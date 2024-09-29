@@ -24,6 +24,12 @@ public class PlayerGridBattle : MonoBehaviour
 
     private void LateUpdate()
     {
+        _playerMode = TurnManager.Instance.stageClear ? PlayerMode.Normal : PlayerMode.Combat;
+        
+        if (oldMode == _playerMode)
+        {
+            return;
+        }
         switch (_playerMode)
         {
             case PlayerMode.Normal:

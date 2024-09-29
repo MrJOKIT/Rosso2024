@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EditorAttributes;
 using UnityEngine;
 
 public enum GridState
@@ -10,82 +11,205 @@ public enum GridState
     OnPlayer,
     OnEnemy,
     OnObstacle,
+    OnTrap,
 }
+
 public class GridMover : MonoBehaviour
 {
     [Header("Ref")] 
-    public EnemyAI enemyAI;
+    public Enemy enemy;
     public Material oldMat;
 
     [Space(10)] 
     [Header("Checker")] 
     public GridState gridState;
     private GridState oldState;
+    
+    [Space(10)]
+    [Header("Optional")]
+    public bool enemyActive;
+    
+    [Header("Trap Setting")]
+    public bool isTrap;
+    public CurseType trapType;
+    public int trapTime;
+
+    private CurseType oldTrapType;
 
     private void Awake()
     {
         oldState = gridState;
+        oldTrapType = trapType;
         oldMat = GetComponent<MeshRenderer>().material;
     }
 
     private void Start()
     {
         GridSpawnManager.Instance.AddGridList(this);
+        if (isTrap)
+        {
+            gridState = GridState.OnTrap;
+        }
+        
     }
 
     private void LateUpdate()
+    {
+        if (enemy != null)
+        {
+            if (enemy.isDead)
+            {
+                enemy = null;
+                enemyActive = false;
+                gridState = GridState.Empty;
+            }
+        }
+        GridStateHandle();
+        TrapStateHandle();
+    }
+
+    private void TrapStateHandle()
+    {
+        if (trapType == oldTrapType)
+        {
+            return;
+        }
+        gridState = GridState.OnTrap;
+    }
+    private void GridStateHandle()
     {
         if (gridState == oldState)
         {
             return;
         }
 
+        CheckMoveType();
+    }
+
+    private void CheckMoveType()
+    {
         switch (gridState)
         {
             case GridState.OnMove:
+                GetComponent<MeshRenderer>().enabled = true;
                 GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.movableMat;
                 oldState = gridState;
                 break;
-            default:
+            case GridState.OnEnemy:
+                GetComponent<MeshRenderer>().enabled = true;
+                oldState = gridState;
+                break;
+            case GridState.OnObstacle:
+                GetComponent<MeshRenderer>().enabled = false;
+                oldState = gridState;
+                break;
+            case GridState.OnTrap:
+                GetComponent<MeshRenderer>().enabled = true;
+                GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.trapMat;
+                oldState = gridState;
+                break;
+            case GridState.Empty:
+                GetComponent<MeshRenderer>().enabled = true;
                 GetComponent<MeshRenderer>().material = oldMat;
                 oldState = gridState;
+                enemyActive = false;
                 break;
         }
     }
 
     public void ClearGrid()
     {
-        gridState = GridState.Empty;
-        GetComponent<MeshRenderer>().material = oldMat;
+        switch (gridState)
+        {
+            case GridState.OnTrap:
+                break;
+            case GridState.OnObstacle:
+                break;
+            case GridState.OnMove:
+                GetComponent<MeshRenderer>().material = oldMat;
+                gridState = GridState.Empty;
+                break;
+            case GridState.OnEnemy:
+                GetComponent<MeshRenderer>().material = oldMat;
+                break;
+            default:
+                GetComponent<MeshRenderer>().material = oldMat;
+                gridState = GridState.Empty;
+                break;
+        }
+        CheckMoveType();
     }
 
     public void ActiveEnemy()
     {
         GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.attackMat;
+        enemyActive = true;
     }
-    
-    private void OnTriggerStay(Collider other)
+
+    [Button("Test Set Trap")]
+    public void SetTrap(CurseType curseType)
     {
-        if (other.CompareTag("Player"))
+        if (gridState == GridState.Empty || gridState == GridState.OnMove)
         {
-            gridState = GridState.OnPlayer;
+            isTrap = true;
+            gridState = GridState.OnTrap;
+            trapType = curseType;
         }
-        else if(other.CompareTag("Enemy"))
+        else if (gridState == GridState.OnEnemy)
         {
+            enemy.AddCurseStatus(curseType,2);
+        }
+        
+    }
+
+    private void TrapActive()
+    {
+        enemy.AddCurseStatus(trapType,trapTime);
+        gridState = GridState.OnEnemy;
+        GetComponent<MeshRenderer>().material = oldMat;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Enemy"))
+        {
+            if (gridState == GridState.OnObstacle)
+            {
+                return;
+            }
             gridState = GridState.OnEnemy;
             try
             {
-                enemyAI = other.GetComponent<EnemyAI>();
+                enemy = other.GetComponent<Enemy>();
+                if (isTrap)
+                {
+                    TrapActive();
+                }
             }
             catch (Exception a)
             {
-                Debug.Log($"No enemyAI in collider {a}");
+                Debug.Log($"No enemy script in collider {a}");
             }
             
         }
         else if (other.CompareTag("Obstacle"))
         {
             gridState = GridState.OnObstacle;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Obstacle"))
+        {
+            gridState = GridState.OnObstacle;
+        }
+        else if (other.CompareTag("Enemy"))
+        {
+            gridState = GridState.OnEnemy;
+        }
+        else if (other.CompareTag("Player"))
+        {
+            gridState = GridState.OnPlayer;
         }
     }
 
@@ -98,6 +222,7 @@ public class GridMover : MonoBehaviour
         else if(other.CompareTag("Enemy"))
         {
             gridState = GridState.Empty;
+            
         }
         else if (other.CompareTag("Obstacle"))
         {

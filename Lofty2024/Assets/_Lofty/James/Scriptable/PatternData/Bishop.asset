@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb6dc2dec2db6f43a5906c3c196e528, type: 3}
+  m_Name: Bishop
+  m_EditorClassIdentifier: 
+  abilityType: 4
+  patternPrefab: {fileID: 7288065994145302662, guid: 63cb12e7f3a27284892b203d6cd96879,
+    type: 3}

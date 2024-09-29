@@ -9,6 +9,7 @@ public class GridSpawnManager : Singeleton<GridSpawnManager>
     [Header("Material")] 
     public Material attackMat;
     public Material movableMat;
+    public Material trapMat;
 
     [Header("Current Gird")] 
     public List<GridMover> currentGrid;
@@ -19,6 +20,7 @@ public class GridSpawnManager : Singeleton<GridSpawnManager>
     {
         foreach (GridMover grid in currentGrid)
         {
+            grid.enemyActive = false;
             grid.ClearGrid();
         }
     }

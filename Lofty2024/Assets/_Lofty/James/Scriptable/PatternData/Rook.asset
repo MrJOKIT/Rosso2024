@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb6dc2dec2db6f43a5906c3c196e528, type: 3}
+  m_Name: Rook
+  m_EditorClassIdentifier: 
+  abilityType: 2
+  patternPrefab: {fileID: 1443950971972692630, guid: 8f2f59ceb466ca6488f0bc9472249ef4,
+    type: 3}
