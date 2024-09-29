@@ -515,4 +515,10 @@ public class EnemyAI : Enemy
     }
     
     #endregion
+
+    protected override void EndTurnModify()
+    {
+        base.EndTurnModify();
+        playerInRange = false;
+    }
 }

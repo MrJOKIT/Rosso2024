@@ -203,6 +203,10 @@ public class GridMover : MonoBehaviour
         {
             gridState = GridState.OnObstacle;
         }
+        else if (other.CompareTag("Enemy"))
+        {
+            gridState = GridState.OnEnemy;
+        }
         else if (other.CompareTag("Player"))
         {
             gridState = GridState.OnPlayer;

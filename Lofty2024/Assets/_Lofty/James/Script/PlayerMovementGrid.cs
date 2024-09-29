@@ -31,6 +31,7 @@ public enum AttackType
     EffectiveAttack,
 }
 
+[RequireComponent(typeof(PlayerInputHandle))]
 public class PlayerMovementGrid : MonoBehaviour, IUnit
 {
     [Header("Player Input")]
@@ -149,7 +150,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 switch (moveType)
                 {
                     case MoveType.Keyboard:
-                        HandleInput();
+                        GetComponent<PlayerInputHandle>().HandleInput();
                         break; 
                     case MoveType.Mouse:
                         HandleClickToMove();
@@ -160,7 +161,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         {
                             return;
                         }
-                        HandleInput();
+                        GetComponent<PlayerInputHandle>().HandleInput();
                         break;
                 }
                 break;
@@ -176,38 +177,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         }
     }
 
-    private void HandleInput()
-    {
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode != PlayerMode.Normal)
-        {
-            return;
-        }
-
-        if (moveRandom)
-        {
-            MoveRandomKeyboard();
-        }
-        else
-        {
-            if (Input.GetKey(KeyCode.W) && !moveRightBlock)
-            {
-                SetTargetPosition(Vector3.right);
-            }
-            else if (Input.GetKey(KeyCode.S) && !moveLeftBlock)
-            {
-                SetTargetPosition(Vector3.left);
-            }
-            else if (Input.GetKey(KeyCode.A) && !moveForwardBlock)
-            {
-                SetTargetPosition(Vector3.forward);
-            }
-            else if (Input.GetKey(KeyCode.D) && !moveBackwardBlock)
-            {
-                SetTargetPosition(Vector3.back);
-            }
-        }
-        
-    }
+    
 
     private void MoveChecker()
     {
@@ -216,47 +186,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         moveLeftBlock = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.left, 1, moveBlockLayer);
         moveRightBlock = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.right, 1, moveBlockLayer);
     }
-
-    private void MoveRandomKeyboard()
-    {
-        bool onLoop = true;
-        do
-        {
-            int randomNumber = Random.Range(0, 40);
-            switch (randomNumber)
-            {
-                case < 10:
-                    if (canRight)
-                    {
-                        SetTargetPosition(Vector3.right);
-                        onLoop = false;
-                    }
-                    break;
-                case < 20:
-                    if (canLeft)
-                    {
-                        SetTargetPosition(Vector3.left);
-                        onLoop = false;
-                    }
-                    break;
-                case < 30:
-                    if (canForward)
-                    {
-                        SetTargetPosition(Vector3.forward);
-                        onLoop = false;
-                    }
-                    break;
-                case < 40:
-                    if (canBackward)
-                    {
-                        SetTargetPosition(Vector3.back);
-                        onLoop = false;
-                    }
-                    break;
-            }
-        } while (onLoop);
-        
-    }
+    
 
     private void HandleClickToMove()
     {
@@ -329,7 +259,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         }
     }
 
-    private void SetTargetPosition(Vector3 direction)
+    public void SetTargetPosition(Vector3 direction)
     {
         Vector3 nextPosition;
 
@@ -417,7 +347,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     {
         if (other.CompareTag("Enemy"))
         {
-            MoveRandomKeyboard();
+            GetComponent<PlayerInputHandle>().MoveRandomKeyboard();
         }
     }
 

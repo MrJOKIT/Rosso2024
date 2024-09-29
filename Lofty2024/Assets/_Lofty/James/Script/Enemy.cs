@@ -127,6 +127,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
 
     public void EndTurn()
     {
+        EndTurnModify();
         onTurn = false;
         TurnManager.Instance.TurnSucces();
         if (curseHave != null)
@@ -274,5 +275,9 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         curseHave.Add(new CurseData(curseType,turnTime,curseGUI.GetComponent<CurseUI>()));
         CurseUiUpdate();
     }
-    
+
+    protected virtual void EndTurnModify()
+    {
+        
+    }
 }
