@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1822721269801565935}
   - component: {fileID: 5063157927971331239}
   - component: {fileID: 1097663999102426585}
+  - component: {fileID: 8449471200399028855}
   m_Layer: 0
   m_Name: ArtfactData
   m_TagString: Untagged
@@ -91,6 +92,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   artifactName: 
   artifactImage: {fileID: 8601546327530608755}
+  toolTipText: {fileID: 8449471200399028855}
+--- !u!114 &8449471200399028855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358551283384167829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f99a9e0f405bff84884c4884261df263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipStyle: {fileID: 4114696245062061327, guid: 83db60f1a22cff74a99818950ad466c7,
+    type: 3}
+  parameterizedTextFields:
+  - name: BodyText
+    placeholder: '%BodyText%'
+    value: 
+  dynamicImageFields: []
+  dynamicSectionFields: []
+  isRemotelyActivated: 0
+  backgroundTint: {r: 1, g: 1, b: 1, a: 1}
+  shouldOverridePosition: 1
+  overridePositionType: 0
+  overridePositionVector: {x: 0, y: 0, z: 0}
+  overridePositionTransform: {fileID: 0}
+  tipPosition: 4
+  minTextWidth: 100
+  maxTextWidth: 200
+  staysOpen: 0
+  neverRotate: 0
+  isBlocking: 0
 --- !u!1 &3763956757463104190
 GameObject:
   m_ObjectHideFlags: 0
