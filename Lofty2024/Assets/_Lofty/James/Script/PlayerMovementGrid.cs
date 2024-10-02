@@ -6,6 +6,7 @@ using EditorAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using VInspector;
 using static AbilityType;
 using Random = UnityEngine.Random;
 
@@ -44,12 +45,11 @@ public enum PlayerMoveDirection
     Right,
 }
 
-[RequireComponent(typeof(PlayerInputHandle))]
 public class PlayerMovementGrid : MonoBehaviour, IUnit
 {
-    [Header("Player Input")]
-    public MoveType moveType;
+    
 
+    [Tab("Combat")]
     [Space(10)]
     [Header("Turn Setting")] 
     public bool autoSkip;
@@ -64,6 +64,9 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public CurseType effectiveType = CurseType.Empty;
     public int effectiveTurnTime = 1;
 
+    [Tab("Movement")]
+    [Header("Player Input")]
+    public MoveType moveType;
     [Space(10)] 
     [Header("Move Setting")]
     public bool moveSuccess;
@@ -827,7 +830,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         currentState = MovementState.Idle;
     }
 
-    [Button("Set Mover")]
+    [EditorAttributes.Button("Set Mover")]
     private void SetMover()
     {
         currentPattern = Instantiate(patternDatas[(int)movePattern - 1].patternPrefab, parentPattern);
@@ -877,7 +880,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         currentState = MovementState.Combat;
     }
 
-    [Button("End Turn")]
+    [EditorAttributes.Button("End Turn")]
     public void EndTurn()
     {
         if (movePattern != King)

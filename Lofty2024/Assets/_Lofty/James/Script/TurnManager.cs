@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 [Serializable]
@@ -30,7 +31,7 @@ public class TurnManager : Singeleton<TurnManager>
 
     [Space(10)] 
     [Header("Stage Manage")] 
-    [ReadOnly] public bool stageClear;
+    public bool currentRoomClear;
     
     [Space(10)]
     [Header("Turn Data")]
@@ -48,12 +49,14 @@ public class TurnManager : Singeleton<TurnManager>
 
     private void Update()
     {
-        if (stageClear)
+        if (currentRoomClear)
         {
             onPlayerTurn = true;
+            turnSliderCanvas.gameObject.SetActive(false);
             return;
         }
-        StageProgressCheckHandle();
+        
+        turnSliderCanvas.gameObject.SetActive(true);
         if (!multipleTurn)
         {
             if (onPlayerTurn || onEnemyTurn)
@@ -64,30 +67,7 @@ public class TurnManager : Singeleton<TurnManager>
         TurnHandle();
         UpdateTurnSliderGUI();
     }
-
-    private void StageProgressCheckHandle()
-    {
-        if (stageClear)
-        {
-            return;
-        }
-        bool stageComplete = true;
-        foreach (TurnData unitData in turnData)
-        {
-            if (unitData.isPlayer == false)
-            {
-                stageComplete = false;
-                break;
-            }
-        }
-
-        if (stageComplete)
-        {
-            stageClear = true;
-            turnSliderCanvas.gameObject.SetActive(false);
-            GameManager.Instance.StageClear();
-        }
-    }
+    
 
     #region In Game Unit
 

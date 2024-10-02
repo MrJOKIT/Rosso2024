@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using EditorAttributes;
 using UnityEngine;
 using UnityEngine.UI;
+using VInspector;
 
 public enum EnemyType
 {
@@ -27,10 +27,10 @@ public enum CurseType
 [Serializable]
 public class CurseData
 {
-    [ReadOnly] public int curseIndex;
-    [ReadOnly] public CurseType curseType;
-    [ReadOnly] public int curseTurn;
-    [ReadOnly] public CurseUI curseUI;
+    public int curseIndex;
+    public CurseType curseType;
+    public int curseTurn;
+    public CurseUI curseUI;
     public bool curseActivated;
     public CurseData(CurseType curseType,int curseTurn,CurseUI curseUI)
     {
@@ -45,7 +45,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public Transform targetTransform;
     
     [Header("Data")]
-    [ReadOnly] public TurnData enemyTurnData;
+    public TurnData enemyTurnData;
     public EnemyData enemyData;
     
     [Space(10)]
@@ -64,7 +64,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     [Space(10)] 
     [Header("Turn")] 
     public bool autoSkip;
-    [ReadOnly] public bool onTurn;
+    public bool onTurn;
 
     [Space(10)] 
     [Header("Reward")] 
@@ -73,7 +73,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public GameObject abilityOrbPrefab;
     
     [Space(10)] 
-    [Header("Skill Image")] 
+    [Foldout("Skill Image")] 
     public Sprite emptySkillImage;
     public Sprite pawnSkillImage;
     public Sprite rookSkillImage;
@@ -87,7 +87,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         SetEnemyData();
     }
 
-    private void Start()
+    public void ActiveUnit()
     {
         TurnManager.Instance.AddUnit(false,transform,enemySpeed);
         RewardUiHandle();

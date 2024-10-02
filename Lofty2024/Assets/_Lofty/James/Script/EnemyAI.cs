@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using VInspector;
 
 public class EnemyAI : Enemy
 {
-    [Header("Move Checker")]
+    [Foldout("Move Checker")]
     public LayerMask moveBlockLayer;
     [Space(10)]
     public bool forwardMoveBlock;

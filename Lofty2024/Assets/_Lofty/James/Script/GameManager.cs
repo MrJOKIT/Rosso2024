@@ -22,7 +22,7 @@ public class GameManager : Singeleton<GameManager>
         gateObject.GetComponent<GateToNextScene>().SetNextScene(sceneName);
     }
 
-    public void StageReward()
+    private void StageReward()
     {
         Instantiate(rewardVFX, new Vector3(3, 3,3), Quaternion.identity);
         GetComponent<GameCurrency>().IncreaseEricCoin(Random.Range(dropRate.x,dropRate.y));
