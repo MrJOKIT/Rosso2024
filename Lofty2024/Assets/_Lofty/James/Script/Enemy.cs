@@ -97,7 +97,6 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     {
         if (enemyHealth <= 0)
         {
-            EnemyDie();
             return;
         }
         
@@ -252,12 +251,13 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     public void TakeDamage(int damage)
     {
-        if (enemyHealth <= 0)
-        {
-            return;
-        }
+        
         CameraShake.Instance.TriggerShake();
         enemyHealth -= damage;
+        if (enemyHealth <= 0)
+        {
+            EnemyDie();
+        }
     }
 
     public void AddCurseStatus(CurseType curseType,int turnTime)

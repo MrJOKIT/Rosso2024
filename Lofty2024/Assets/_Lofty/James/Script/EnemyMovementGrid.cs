@@ -44,8 +44,8 @@ public class EnemyMovementGrid : MonoBehaviour
 
    private void Update()
    {
-       MoveStateHandle();
        CheckBlockHandle();
+       MoveStateHandle();
        if (GetComponent<Enemy>().autoSkip)
        {
            if (GetComponent<Enemy>().onTurn)

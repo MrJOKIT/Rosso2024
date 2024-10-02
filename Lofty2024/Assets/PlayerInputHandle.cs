@@ -36,19 +36,19 @@ public class PlayerInputHandle : MonoBehaviour
         }
         else
         {
-            if (Input.GetKey(KeyCode.W) && !_playerMovementGrid.moveRightBlock)
+            if (Input.GetKey(KeyCode.W) && !_playerMovementGrid.rightMoveBlock)
             {
                 _playerMovementGrid.SetTargetPosition(Vector3.right);
             }
-            else if (Input.GetKey(KeyCode.S) && !_playerMovementGrid.moveLeftBlock)
+            else if (Input.GetKey(KeyCode.S) && !_playerMovementGrid.leftMoveBlock)
             {
                 _playerMovementGrid.SetTargetPosition(Vector3.left);
             }
-            else if (Input.GetKey(KeyCode.A) && !_playerMovementGrid.moveForwardBlock)
+            else if (Input.GetKey(KeyCode.A) && !_playerMovementGrid.forwardMoveBlock)
             {
                 _playerMovementGrid.SetTargetPosition(Vector3.forward);
             }
-            else if (Input.GetKey(KeyCode.D) && !_playerMovementGrid.moveBackwardBlock)
+            else if (Input.GetKey(KeyCode.D) && !_playerMovementGrid.backwardMoveBlock)
             {
                 _playerMovementGrid.SetTargetPosition(Vector3.back);
             }
@@ -61,34 +61,62 @@ public class PlayerInputHandle : MonoBehaviour
         bool onLoop = true;
         do
         {
-            int randomNumber = Random.Range(0, 40);
+            int randomNumber = Random.Range(0, 60);
             switch (randomNumber)
             {
                 case < 10:
-                    if (_playerMovementGrid.canRight)
+                    if (!_playerMovementGrid.rightMoveBlock)
                     {
-                        _playerMovementGrid.SetTargetPosition(Vector3.right);
+                        _playerMovementGrid.SetPlayerMoveDirection(PlayerMoveDirection.Right);
                         onLoop = false;
                     }
                     break;
                 case < 20:
-                    if (_playerMovementGrid.canLeft)
+                    if (!_playerMovementGrid.leftMoveBlock)
                     {
-                        _playerMovementGrid.SetTargetPosition(Vector3.left);
+                        _playerMovementGrid.SetPlayerMoveDirection(PlayerMoveDirection.Left);
                         onLoop = false;
                     }
                     break;
                 case < 30:
-                    if (_playerMovementGrid.canForward)
+                    if (!_playerMovementGrid.forwardMoveBlock)
                     {
-                        _playerMovementGrid.SetTargetPosition(Vector3.forward);
+                        _playerMovementGrid.SetPlayerMoveDirection(PlayerMoveDirection.Forward);
                         onLoop = false;
                     }
                     break;
                 case < 40:
-                    if (_playerMovementGrid.canBackward)
+                    if (!_playerMovementGrid.backwardMoveBlock)
                     {
-                        _playerMovementGrid.SetTargetPosition(Vector3.back);
+                        _playerMovementGrid.SetPlayerMoveDirection(PlayerMoveDirection.Backward);
+                        onLoop = false;
+                    }
+                    break;
+                case < 50:
+                    if (!_playerMovementGrid.forwardLeftMoveBlock)
+                    {
+                        _playerMovementGrid.SetPlayerMoveDirection(PlayerMoveDirection.ForwardLeft);
+                        onLoop = false;
+                    }
+                    break;
+                case < 60:
+                    if (!_playerMovementGrid.forwardRightMoveBlock)
+                    {
+                        _playerMovementGrid.SetPlayerMoveDirection(PlayerMoveDirection.ForwardRight);
+                        onLoop = false;
+                    }
+                    break;
+                case < 70:
+                    if (!_playerMovementGrid.backwardLeftMoveBlock)
+                    {
+                        _playerMovementGrid.SetPlayerMoveDirection(PlayerMoveDirection.BackwardLeft);
+                        onLoop = false;
+                    }
+                    break;
+                case < 80:
+                    if (!_playerMovementGrid.backwardRightMoveBlock)
+                    {
+                        _playerMovementGrid.SetPlayerMoveDirection(PlayerMoveDirection.BackwardRight);
                         onLoop = false;
                     }
                     break;

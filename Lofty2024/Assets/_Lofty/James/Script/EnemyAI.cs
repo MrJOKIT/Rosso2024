@@ -22,7 +22,7 @@ public class EnemyAI : Enemy
     public bool playerInRange;
     public LayerMask gridLayer;
     public List<Transform> combatChecker;
-    private void FixedUpdate()
+    private void Update()
     {
         CheckMoveHandle();
         if (onTurn == false)
@@ -30,17 +30,25 @@ public class EnemyAI : Enemy
             return;
         }
         EnemyCombatHandle();
-        if (playerInRange)
+        switch (GetComponent<EnemyMovementGrid>().currentState)
         {
-            //Combat time
-            targetTransform.GetComponent<Player>().TakeDamage(1);
-            EndTurn();
+            case MovementState.Idle: 
+                if (playerInRange)
+                {
+                    //Combat time
+                    targetTransform.GetComponent<Player>().TakeDamage(1);
+                    EndTurn();
+                }
+                else
+                {
+                    EnemyMoveToPlayer();
+                }
+                break;
+            case MovementState.Moving:
+                break;
+                
         }
-        else
-        {
-            EnemyMoveToPlayer();
-            EndTurn();
-        }
+        
     }
 
 
