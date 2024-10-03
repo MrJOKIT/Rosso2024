@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DeadZone : MonoBehaviour
@@ -15,9 +16,10 @@ public class DeadZone : MonoBehaviour
             timeCounter += Time.deltaTime;
             if (timeCounter > 0.5f)
             {
-                foreach (Enemy enemy in enemyInZone)
+                foreach (Enemy enemy in enemyInZone.ToList())
                 {
                     enemy.TakeDamage(999);
+                    enemyInZone.Remove(enemy);
                 }
             }
         }
@@ -38,7 +40,6 @@ public class DeadZone : MonoBehaviour
         {
             onEnemy = false;
             timeCounter = 0;
-            enemyInZone.Remove(other.GetComponent<Enemy>());
         }
     }
 }

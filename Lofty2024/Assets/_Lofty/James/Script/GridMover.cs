@@ -45,7 +45,6 @@ public class GridMover : MonoBehaviour
 
     private void Start()
     {
-        GridSpawnManager.Instance.AddGridList(this);
         if (isTrap)
         {
             gridState = GridState.OnTrap;

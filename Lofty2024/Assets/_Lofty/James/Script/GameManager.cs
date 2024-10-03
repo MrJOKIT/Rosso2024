@@ -17,13 +17,13 @@ public class GameManager : Singeleton<GameManager>
     {
         Debug.Log("Stage is clear!!!");
         StageReward();
-        GameObject gateObject = Instantiate(gatePrefab, new Vector3(GetComponent<RandomStageManager>().currentRoomPos.x, 0.5f,GetComponent<RandomStageManager>().currentRoomPos.z), Quaternion.identity);
+        GameObject gateObject = Instantiate(gatePrefab, GetComponent<RandomStageManager>().currentRoomPos.GetComponent<RoomManager>().CheckSpawnPoint(), Quaternion.identity);
         gateObject.GetComponent<GateToNextScene>().SetNextScene(sceneName);
     }
 
     private void StageReward()
     {
-        Instantiate(rewardVFX, new Vector3(GetComponent<RandomStageManager>().currentRoomPos.x, 3,GetComponent<RandomStageManager>().currentRoomPos.z), Quaternion.identity);
+        Instantiate(rewardVFX, new Vector3(GetComponent<RandomStageManager>().currentRoomPos.position.x, 3,GetComponent<RandomStageManager>().currentRoomPos.position.z), Quaternion.identity);
         GetComponent<GameCurrency>().IncreaseEricCoin(Random.Range(dropRate.x,dropRate.y));
     }
 }

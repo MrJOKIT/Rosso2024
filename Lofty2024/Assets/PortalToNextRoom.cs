@@ -7,7 +7,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
 {
     [Header("Portal Setting")]
     public RoomType roomTypeConnect;
-    public Vector3 roomCenter;
+    public Transform roomCenter;
     public Vector3 warpPoint;
     public Transform playerTrans;
 
@@ -32,7 +32,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         }
     }
 
-    public void SetPortal(RoomType roomType,Vector3 warpPos,Vector3 roomCenter,Transform playerTransform)
+    public void SetPortal(RoomType roomType,Vector3 warpPos,Transform roomCenter,Transform playerTransform)
     {
         this.roomCenter = roomCenter;
         playerTrans = playerTransform;
@@ -57,7 +57,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
     {
         playerTrans.position = new Vector3(warpPoint.x,playerTrans.position.y,warpPoint.z);
         playerTrans.GetComponent<PlayerMovementGrid>().ResetPlayerTarget();
-        CameraManager.Instance.SetCameraTarget(roomCenter);
+        CameraManager.Instance.SetCameraTarget(roomCenter.position);
         GameManager.Instance.GetComponent<RandomStageManager>().UpdateCurrentRoom(roomCenter);
     }
 }
