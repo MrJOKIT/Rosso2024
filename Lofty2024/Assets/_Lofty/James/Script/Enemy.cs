@@ -252,7 +252,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public void TakeDamage(int damage)
     {
         
-        CameraShake.Instance.TriggerShake();
+        CameraManager.Instance.TriggerShake();
         enemyHealth -= damage;
         if (enemyHealth <= 0)
         {

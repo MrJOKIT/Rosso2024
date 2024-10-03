@@ -143,6 +143,13 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         MoveStateHandle();
     }
 
+    [VInspector.Button("Reset Target")]
+    public void ResetPlayerTarget()
+    {
+        targetTransform = transform.position;
+        lastPlayerTransform = transform.position;
+        supTargetTransform = transform.position;
+    }
     private void MoveStateHandle()
     {
         switch (currentState)
@@ -862,6 +869,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     public void StartTurn()
     {
+        ResetPlayerTarget();
         onTurn = true;
         if (moveSuccess)
         {

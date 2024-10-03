@@ -6,6 +6,7 @@ using UnityEngine;
 public class RandomStageManager : Singeleton<RandomStageManager>
 {
     public List<RoomManager> roomInStage;
+    public Vector3 currentRoomPos;
     public bool stageClear;
 
     private void LateUpdate()
@@ -39,5 +40,10 @@ public class RandomStageManager : Singeleton<RandomStageManager>
             stageClear = true;
             GetComponent<GameManager>().StageClear();
         }
+    }
+
+    public void UpdateCurrentRoom(Vector3 newCurrentRoom)
+    {
+        currentRoomPos = newCurrentRoom;
     }
 }

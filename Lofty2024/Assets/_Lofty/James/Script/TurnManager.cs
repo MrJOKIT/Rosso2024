@@ -56,7 +56,7 @@ public class TurnManager : Singeleton<TurnManager>
             return;
         }
         
-        turnSliderCanvas.gameObject.SetActive(true);
+        
         if (!multipleTurn)
         {
             if (onPlayerTurn || onEnemyTurn)
@@ -67,8 +67,20 @@ public class TurnManager : Singeleton<TurnManager>
         TurnHandle();
         UpdateTurnSliderGUI();
     }
-    
 
+    public void TurnStart()
+    {
+        currentRoomClear = false;
+        onPlayerTurn = false;
+        onEnemyTurn = false;
+        turnSliderCanvas.gameObject.SetActive(true);
+        foreach (TurnData td in turnData)
+        {
+            td.turnCounter = td.baseSpeed;
+        }
+        UpdateTurnSliderGUI();
+    }
+    
     #region In Game Unit
 
     public void AddUnit(bool isPlayer,Transform unitTransform,float baseSpeed)
@@ -152,7 +164,7 @@ public class TurnManager : Singeleton<TurnManager>
         }
     }
 
-    [Button("End Turn")]
+    [VInspector.Button("End Turn")]
     public void TurnSucces()
     {
         foreach (TurnData td in turnData)

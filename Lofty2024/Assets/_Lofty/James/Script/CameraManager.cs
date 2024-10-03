@@ -1,16 +1,14 @@
 using System.Collections;
 using UnityEngine;
+using VInspector;
 
-public class CameraShake : Singeleton<CameraShake>
+public class CameraManager : Singeleton<CameraManager>
 {
+    [Tab("Shake Setting")]
     public float shakeDuration = 0.5f;
-    
     public float shakeMagnitude = 0.2f;
-    
     public float dampingSpeed = 1.0f;
-    
     private Vector3 initialPosition;
-
     public bool onShake;
     
     void Start()
@@ -57,5 +55,11 @@ public class CameraShake : Singeleton<CameraShake>
         
         transform.localPosition = initialPosition;
         onShake = false;
+    }
+    
+    public void SetCameraTarget(Vector3 newTarget)
+    {
+        transform.position = new Vector3(newTarget.x,transform.position.y, newTarget.z);
+        initialPosition = transform.localPosition;
     }
 }
