@@ -2429,7 +2429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomInStage: []
-  currentRoomPos: {x: 0, y: 0, z: 0}
+  currentRoomPos: {fileID: 0}
   stageClear: 0
 --- !u!114 &161524031
 MonoBehaviour:
