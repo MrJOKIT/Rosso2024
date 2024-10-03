@@ -35,7 +35,10 @@ MonoBehaviour:
     - AttributesSamples
     - EditorAttributes
     - GridBuilder2_Core
+    - SimpleMinMaxSlider
     - TimersMadeEasyLite
+    - VInspector
+    - VTabs
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

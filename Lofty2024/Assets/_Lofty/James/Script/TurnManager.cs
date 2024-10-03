@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 [Serializable]
@@ -30,7 +31,7 @@ public class TurnManager : Singeleton<TurnManager>
 
     [Space(10)] 
     [Header("Stage Manage")] 
-    [ReadOnly] public bool stageClear;
+    public bool currentRoomClear;
     
     [Space(10)]
     [Header("Turn Data")]
@@ -48,12 +49,14 @@ public class TurnManager : Singeleton<TurnManager>
 
     private void Update()
     {
-        if (stageClear)
+        if (currentRoomClear)
         {
             onPlayerTurn = true;
+            turnSliderCanvas.gameObject.SetActive(false);
             return;
         }
-        StageProgressCheckHandle();
+        
+        
         if (!multipleTurn)
         {
             if (onPlayerTurn || onEnemyTurn)
@@ -65,30 +68,19 @@ public class TurnManager : Singeleton<TurnManager>
         UpdateTurnSliderGUI();
     }
 
-    private void StageProgressCheckHandle()
+    public void TurnStart()
     {
-        if (stageClear)
+        currentRoomClear = false;
+        onPlayerTurn = false;
+        onEnemyTurn = false;
+        turnSliderCanvas.gameObject.SetActive(true);
+        foreach (TurnData td in turnData)
         {
-            return;
+            td.turnCounter = td.baseSpeed;
         }
-        bool stageComplete = true;
-        foreach (TurnData unitData in turnData)
-        {
-            if (unitData.isPlayer == false)
-            {
-                stageComplete = false;
-                break;
-            }
-        }
-
-        if (stageComplete)
-        {
-            stageClear = true;
-            turnSliderCanvas.gameObject.SetActive(false);
-            GameManager.Instance.StageClear();
-        }
+        UpdateTurnSliderGUI();
     }
-
+    
     #region In Game Unit
 
     public void AddUnit(bool isPlayer,Transform unitTransform,float baseSpeed)
@@ -172,7 +164,7 @@ public class TurnManager : Singeleton<TurnManager>
         }
     }
 
-    [Button("End Turn")]
+    [VInspector.Button("End Turn")]
     public void TurnSucces()
     {
         foreach (TurnData td in turnData)

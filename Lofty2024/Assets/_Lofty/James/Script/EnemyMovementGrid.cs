@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using EditorAttributes;
+
 using UnityEngine;
 using UnityEngine.Serialization;
+using VInspector;
 using Random = UnityEngine.Random;
 
 public enum EnemyMoveDirection
@@ -30,22 +31,22 @@ public class EnemyMovementGrid : MonoBehaviour
    public LayerMask obstacleLayer;
 
    [Header("Check Obstacle")] 
-   [ReadOnly] public bool forwardBlock;
-   [ReadOnly] public bool forwardLeftBlock;
-   [ReadOnly] public bool forwardRightBlock;
-   [ReadOnly] public bool backwardBlock;
-   [ReadOnly] public bool backwardLeftBlock;
-   [ReadOnly] public bool backwardRightBlock;
-   [ReadOnly] public bool leftBlock;
-   [ReadOnly] public bool rightBlock;
+   public bool forwardBlock;
+   public bool forwardLeftBlock;
+   public bool forwardRightBlock;
+   public bool backwardBlock;
+   public bool backwardLeftBlock;
+   public bool backwardRightBlock;
+   public bool leftBlock;
+   public bool rightBlock;
    
-   [ReadOnly] public Vector3 targetPosition;
+   public Vector3 targetPosition;
    
 
    private void Update()
    {
-       MoveStateHandle();
        CheckBlockHandle();
+       MoveStateHandle();
        if (GetComponent<Enemy>().autoSkip)
        {
            if (GetComponent<Enemy>().onTurn)

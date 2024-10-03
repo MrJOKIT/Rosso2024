@@ -177,18 +177,7 @@ public class GridMover : MonoBehaviour
                 return;
             }
             gridState = GridState.OnEnemy;
-            try
-            {
-                enemy = other.GetComponent<Enemy>();
-                if (isTrap)
-                {
-                    TrapActive();
-                }
-            }
-            catch (Exception a)
-            {
-                Debug.Log($"No enemy script in collider {a}");
-            }
+           
             
         }
         else if (other.CompareTag("Obstacle"))
@@ -206,6 +195,18 @@ public class GridMover : MonoBehaviour
         else if (other.CompareTag("Enemy"))
         {
             gridState = GridState.OnEnemy;
+            try
+            {
+                enemy = other.GetComponent<Enemy>();
+                if (isTrap)
+                {
+                    TrapActive();
+                }
+            }
+            catch (Exception a)
+            {
+                Debug.Log($"No enemy script in collider {a}");
+            }
         }
         else if (other.CompareTag("Player"))
         {
@@ -222,7 +223,8 @@ public class GridMover : MonoBehaviour
         else if(other.CompareTag("Enemy"))
         {
             gridState = GridState.Empty;
-            
+            enemy = null;
+
         }
         else if (other.CompareTag("Obstacle"))
         {

@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using VInspector;
 
 public class EnemyAI : Enemy
 {
-    [Header("Move Checker")]
+    [Foldout("Move Checker")]
     public LayerMask moveBlockLayer;
     [Space(10)]
     public bool forwardMoveBlock;
@@ -22,7 +23,7 @@ public class EnemyAI : Enemy
     public bool playerInRange;
     public LayerMask gridLayer;
     public List<Transform> combatChecker;
-    private void FixedUpdate()
+    private void Update()
     {
         CheckMoveHandle();
         if (onTurn == false)
@@ -30,17 +31,25 @@ public class EnemyAI : Enemy
             return;
         }
         EnemyCombatHandle();
-        if (playerInRange)
+        switch (GetComponent<EnemyMovementGrid>().currentState)
         {
-            //Combat time
-            targetTransform.GetComponent<Player>().TakeDamage(1);
-            EndTurn();
+            case MovementState.Idle: 
+                if (playerInRange)
+                {
+                    //Combat time
+                    targetTransform.GetComponent<Player>().TakeDamage(1);
+                    EndTurn();
+                }
+                else
+                {
+                    EnemyMoveToPlayer();
+                }
+                break;
+            case MovementState.Moving:
+                break;
+                
         }
-        else
-        {
-            EnemyMoveToPlayer();
-            EndTurn();
-        }
+        
     }
 
 

@@ -40,7 +40,7 @@ public class Player : MonoBehaviour, ITakeDamage
     
     public void TakeDamage(int damage)
     {
-        CameraShake.Instance.TriggerShake();
+        CameraManager.Instance.TriggerShake();
         if (haveShield)
         {
             haveShield = false;

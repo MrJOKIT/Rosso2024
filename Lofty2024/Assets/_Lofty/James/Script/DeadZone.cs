@@ -13,7 +13,7 @@ public class DeadZone : MonoBehaviour
         if (onEnemy)
         {
             timeCounter += Time.deltaTime;
-            if (timeCounter > 5)
+            if (timeCounter > 0.5f)
             {
                 foreach (Enemy enemy in enemyInZone)
                 {
