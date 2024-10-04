@@ -9,6 +9,8 @@ TagManager:
   - Obstacle
   - DeadZone
   - CloseArea
+  - Portal
+  - RoomSpawner
   layers:
   - Default
   - TransparentFX
@@ -22,7 +24,7 @@ TagManager:
   - Player
   - DeadZone
   - Room
-  - 
+  - Portal
   - 
   - 
   - 

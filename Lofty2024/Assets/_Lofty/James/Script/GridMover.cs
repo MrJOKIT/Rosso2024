@@ -12,6 +12,7 @@ public enum GridState
     OnEnemy,
     OnObstacle,
     OnTrap,
+    OnPortal,
 }
 
 public class GridMover : MonoBehaviour
@@ -190,6 +191,10 @@ public class GridMover : MonoBehaviour
         if (other.CompareTag("Obstacle"))
         {
             gridState = GridState.OnObstacle;
+        }
+        else if (other.CompareTag("Portal"))
+        {
+            gridState = GridState.OnPortal;
         }
         else if (other.CompareTag("Enemy"))
         {

@@ -10,6 +10,9 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
     public Transform roomCenter;
     public Vector3 warpPoint;
     public Transform playerTrans;
+    public GameObject portalObject;
+    public bool portalActive;
+    public bool isConnect;
 
     [Space(10)] 
     [Header("Material")] 
@@ -21,7 +24,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
 
     private void Update()
     {
-        if (!onPlayer)
+        if (!onPlayer || !portalActive)
         {
             return;
         }
@@ -36,6 +39,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
     {
         this.roomCenter = roomCenter;
         playerTrans = playerTransform;
+        portalObject.SetActive(true);
         
         switch (roomType)
         {
@@ -51,6 +55,9 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         }
 
         warpPoint = warpPos;
+
+        portalActive = true;
+        isConnect = true;
     }
 
     private void WarpToPoint()

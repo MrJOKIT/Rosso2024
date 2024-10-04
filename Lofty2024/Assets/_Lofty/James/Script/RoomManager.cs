@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GD.MinMaxSlider;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VInspector;
 using Random = UnityEngine.Random;
 
@@ -15,34 +16,37 @@ public enum RoomType
 public class RoomManager : MonoBehaviour
 {
     [Tab("Room Setting")] 
+    public bool isStandbyRoom;
+    [Space(5)]
     public bool roomActive;
     public RoomType roomType;
     [Space(10)]
-    public GameObject portalPrefab;
     public LayerMask roomLayer;
-    public Transform centerTransform;
     public Transform playerTrans;
 
+    [Foldout("Room Direction")]
+    public Transform centerPoint;
+    
     [Header("Forward Portal")] 
-    public Transform spawnPointForward;
+    public PortalToNextRoom portalForward;
     public Vector3 forwardConnectPoint;
     public bool forwardPortal;
     RaycastHit hitForward;
     [Space(5)] 
     [Header("Backward Portal")] 
-    public Transform spawnPointBackward;
+    public PortalToNextRoom portalBackward;
     public Vector3 backwardConnectPoint;
     public bool backwardPortal;
     RaycastHit hitBackward;
     [Space(5)] 
     [Header("Left Portal")] 
-    public Transform spawnPointLeft;
+    public PortalToNextRoom portalLeft;
     public Vector3 leftConnectPoint;
     public bool leftPortal;
     RaycastHit hitLeft;
     [Space(5)] 
     [Header("Right Portal")] 
-    public Transform spawnPointRight;
+    public PortalToNextRoom portalRight;
     public Vector3 rightConnectPoint;
     public bool rightPortal;
     RaycastHit hitRight;
@@ -70,17 +74,27 @@ public class RoomManager : MonoBehaviour
 
     private void Start()
     {
-        RandomStageManager.Instance.AddRoom(this);
+        
         foreach (GridMover grid in currentGrid)
         {
             GridSpawnManager.Instance.AddGridList(grid);
         }
+
+        if (isStandbyRoom)
+        {
+            return;
+        }
+        RandomStageManager.Instance.AddRoom(this);
     }
 
     private void StartRoom()
     {
-        TurnManager.Instance.TurnStart();
-
+        
+        if (isStandbyRoom)
+        {
+            RoomClear();
+            return;
+        }
         spawnObstacleMax = Random.Range(spawnObstacleCount.x, spawnObstacleCount.y);
         spawnEnemyMax = Random.Range(spawnEnemyCount.x,spawnEnemyCount.y);
         for (int i = 0; i < spawnObstacleMax; i++)
@@ -92,7 +106,7 @@ public class RoomManager : MonoBehaviour
             StartCoroutine(SpawnEnemy());
         }
         
-        
+        TurnManager.Instance.TurnStart();
     }
 
     IEnumerator SpawnObstacle()
@@ -156,6 +170,10 @@ public class RoomManager : MonoBehaviour
     private void FixedUpdate()
     {
         PortalCheck();
+        if (isStandbyRoom)
+        {
+            SpawnPortal();
+        }
     }
 
     private void RoomProgressCheck()
@@ -202,24 +220,31 @@ public class RoomManager : MonoBehaviour
 
     private void PortalCheck()
     {
-        forwardPortal = Physics.Raycast(centerTransform.position, Vector3.forward,out hitForward, Mathf.Infinity, roomLayer);
+        forwardPortal = Physics.Raycast(centerPoint.position, Vector3.forward,out hitForward, Mathf.Infinity, roomLayer);
         
-        backwardPortal = Physics.Raycast(centerTransform.position, Vector3.back,out hitBackward,Mathf.Infinity, roomLayer);
+        backwardPortal = Physics.Raycast(centerPoint.position, Vector3.back,out hitBackward,Mathf.Infinity, roomLayer);
         
-        leftPortal = Physics.Raycast(centerTransform.position, Vector3.left,out hitLeft,Mathf.Infinity, roomLayer);
+        leftPortal = Physics.Raycast(centerPoint.position, Vector3.left,out hitLeft,Mathf.Infinity, roomLayer);
         
-        rightPortal = Physics.Raycast(centerTransform.position, Vector3.right,out hitRight,Mathf.Infinity, roomLayer);
+        rightPortal = Physics.Raycast(centerPoint.position, Vector3.right,out hitRight,Mathf.Infinity, roomLayer);
     }
 
     private void SpawnPortal()
     {
+        if (playerTrans == null)
+        {
+            return;
+        }
         if (forwardPortal)
         {
+            if (portalForward.isConnect)
+            {
+                return;
+            }
             try
             {
                 RoomManager roomManager = hitForward.collider.GetComponent<RoomManager>();
-                GameObject portal = Instantiate(portalPrefab, spawnPointForward);
-                portal.GetComponent<PortalToNextRoom>().SetPortal(roomManager.roomType,roomManager.spawnPointBackward.position,roomManager.transform,playerTrans);
+                portalForward.SetPortal(roomManager.roomType,roomManager.portalBackward.transform.position,roomManager.transform,playerTrans);
             }
             catch (Exception a)
             {
@@ -229,11 +254,14 @@ public class RoomManager : MonoBehaviour
         
         if (backwardPortal)
         {
+            if (portalBackward.isConnect)
+            {
+                return;
+            }
             try
             {
                 RoomManager roomManager = hitBackward.collider.GetComponent<RoomManager>();
-                GameObject portal = Instantiate(portalPrefab, spawnPointBackward);
-                portal.GetComponent<PortalToNextRoom>().SetPortal(roomManager.roomType,roomManager.spawnPointForward.position,roomManager.transform,playerTrans);
+                portalBackward.SetPortal(roomManager.roomType,roomManager.portalForward.transform.position,roomManager.transform,playerTrans);
             }
             catch (Exception a)
             {
@@ -243,11 +271,14 @@ public class RoomManager : MonoBehaviour
         
         if (leftPortal)
         {
+            if (portalLeft.isConnect)
+            {
+                return;
+            }
             try
             {
                 RoomManager roomManager = hitLeft.collider.GetComponent<RoomManager>();
-                GameObject portal = Instantiate(portalPrefab, spawnPointLeft);
-                portal.GetComponent<PortalToNextRoom>().SetPortal(roomManager.roomType,roomManager.spawnPointRight.position,roomManager.transform,playerTrans);
+                portalLeft.SetPortal(roomManager.roomType,roomManager.portalRight.transform.position,roomManager.transform,playerTrans);
             }
             catch (Exception a)
             {
@@ -257,11 +288,14 @@ public class RoomManager : MonoBehaviour
         
         if (rightPortal)
         {
+            if (portalRight.isConnect)
+            {
+                return;
+            }
             try
             {
                 RoomManager roomManager = hitRight.collider.GetComponent<RoomManager>();
-                GameObject portal = Instantiate(portalPrefab, spawnPointRight);
-                portal.GetComponent<PortalToNextRoom>().SetPortal(roomManager.roomType,roomManager.spawnPointLeft.position,roomManager.transform,playerTrans);
+                portalRight.SetPortal(roomManager.roomType,roomManager.portalLeft.transform.position,roomManager.transform,playerTrans);
             }
             catch (Exception a)
             {

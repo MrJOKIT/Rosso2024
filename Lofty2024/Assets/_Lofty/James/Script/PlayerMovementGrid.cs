@@ -230,6 +230,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         moveSuccess = true;
                         SetTargetPosition(hit.point);
                         break;
+                    case GridState.OnPortal:
+                        moveSuccess = true;
+                        SetTargetPosition(hit.point);
+                        break;
                     case GridState.OnEnemy:
                         if (hit.collider.GetComponent<GridMover>().enemyActive == false)
                         {
