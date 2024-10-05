@@ -12,12 +12,12 @@ public enum GridState
     OnEnemy,
     OnObstacle,
     OnTrap,
-    OnPortal,
 }
 
 public class GridMover : MonoBehaviour
 {
-    [Header("Ref")] 
+    [Header("Ref")]
+    public bool isPortal;
     public Enemy enemy;
     public Material oldMat;
 
@@ -25,6 +25,7 @@ public class GridMover : MonoBehaviour
     [Header("Checker")] 
     public GridState gridState;
     private GridState oldState;
+    public bool gridActive;
     
     [Space(10)]
     [Header("Optional")]
@@ -170,7 +171,13 @@ public class GridMover : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Enemy"))
+        if (other.CompareTag("Obstacle"))
+        {
+            gridState = GridState.OnObstacle;
+            GridSpawnManager.Instance.RemoveGrid(this);
+            Destroy(gameObject);
+        }
+        else if(other.CompareTag("Enemy"))
         {
             if (gridState == GridState.OnObstacle)
             {
@@ -180,21 +187,20 @@ public class GridMover : MonoBehaviour
            
             
         }
-        else if (other.CompareTag("Obstacle"))
-        {
-            gridState = GridState.OnObstacle;
-        }
+        
     }
 
     private void OnTriggerStay(Collider other)
     {
+        if (!gridActive)
+        {
+            return;
+        }
         if (other.CompareTag("Obstacle"))
         {
             gridState = GridState.OnObstacle;
-        }
-        else if (other.CompareTag("Portal"))
-        {
-            gridState = GridState.OnPortal;
+            GridSpawnManager.Instance.RemoveGrid(this);
+            Destroy(gameObject);
         }
         else if (other.CompareTag("Enemy"))
         {

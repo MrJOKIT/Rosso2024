@@ -12,22 +12,25 @@ public enum RoomType
     Combat,
     Bonus,
     Boss,
+    Clear,
 }
 public class RoomManager : MonoBehaviour
 {
     [Tab("Room Setting")] 
-    public bool isStandbyRoom;
-    [Space(5)]
+    [Space(5)] 
+    public bool isLastRoom;
     public bool roomActive;
     public RoomType roomType;
     [Space(10)]
     public LayerMask roomLayer;
     public Transform playerTrans;
 
-    [Foldout("Room Direction")]
-    public Transform centerPoint;
+    [Foldout("Room Direction")] 
+    public Transform startPoint;
+    public Transform leftPoint;
+    public Transform rightPoint;
     
-    [Header("Forward Portal")] 
+    /*[Header("Forward Portal")] 
     public PortalToNextRoom portalForward;
     public Vector3 forwardConnectPoint;
     public bool forwardPortal;
@@ -37,7 +40,7 @@ public class RoomManager : MonoBehaviour
     public PortalToNextRoom portalBackward;
     public Vector3 backwardConnectPoint;
     public bool backwardPortal;
-    RaycastHit hitBackward;
+    RaycastHit hitBackward;*/
     [Space(5)] 
     [Header("Left Portal")] 
     public PortalToNextRoom portalLeft;
@@ -71,6 +74,8 @@ public class RoomManager : MonoBehaviour
     public Transform obstacleParent;
     public List<GameObject> obstaclePrefab;
     public List<GridMover> currentGrid;
+    
+    [Tab("Spawn Room Setting")]
 
     private void Start()
     {
@@ -80,7 +85,7 @@ public class RoomManager : MonoBehaviour
             GridSpawnManager.Instance.AddGridList(grid);
         }
 
-        if (isStandbyRoom)
+        if (roomType == RoomType.Clear)
         {
             return;
         }
@@ -90,46 +95,44 @@ public class RoomManager : MonoBehaviour
     private void StartRoom()
     {
         
-        if (isStandbyRoom)
+        if (roomType == RoomType.Clear || roomType == RoomType.Bonus)
         {
             RoomClear();
             return;
         }
         spawnObstacleMax = Random.Range(spawnObstacleCount.x, spawnObstacleCount.y);
         spawnEnemyMax = Random.Range(spawnEnemyCount.x,spawnEnemyCount.y);
-        for (int i = 0; i < spawnObstacleMax; i++)
-        {
-            StartCoroutine(SpawnObstacle());
-        }
-        for (int i = 0; i < spawnEnemyMax; i++)
-        {
-            StartCoroutine(SpawnEnemy());
-        }
+        Invoke("SpawnObstacle",0.1f);
+        Invoke("SpawnEnemy",0.2f);
         
         TurnManager.Instance.TurnStart();
     }
 
-    IEnumerator SpawnObstacle()
+    private void SpawnObstacle()
     {
-        yield return new WaitForSeconds(0.1f);
-        Instantiate(obstaclePrefab[Random.Range(0, obstaclePrefab.Count - 1)], CheckSpawnPoint(), Quaternion.identity, obstacleParent);
-        spawnedObstacleCount += 1;
-        if (spawnedObstacleCount == spawnObstacleMax)
+        for (int i = 0; i < spawnObstacleMax; i++)
         {
-            obstacleSpawnComplete = true;
+            Instantiate(obstaclePrefab[Random.Range(0, obstaclePrefab.Count - 1)], CheckSpawnPoint(), Quaternion.identity, obstacleParent);
+            spawnedObstacleCount += 1;
+            if (spawnedObstacleCount == spawnObstacleMax)
+            {
+                obstacleSpawnComplete = true;
+            }
         }
     }
-    IEnumerator SpawnEnemy()
+    private void SpawnEnemy()
     {
-        yield return new WaitForSeconds(0.1f);
-        GameObject enemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count - 1)], CheckSpawnPoint(), Quaternion.identity,enemyParent);
-        enemyInRoom.Add(enemy.GetComponent<Enemy>());
-        enemy.GetComponent<Enemy>().targetTransform = playerTrans;
-        enemy.GetComponent<Enemy>().ActiveUnit();
-        spawnedEnemyCount += 1;
-        if (spawnedEnemyCount == spawnEnemyMax)
+        for (int i = 0; i < spawnEnemyMax; i++)
         {
-            enemySpawnComplete = true;
+            GameObject enemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count - 1)], CheckSpawnPoint(), Quaternion.identity,enemyParent);
+            enemyInRoom.Add(enemy.GetComponent<Enemy>());
+            enemy.GetComponent<Enemy>().targetTransform = playerTrans;
+            enemy.GetComponent<Enemy>().ActiveUnit();
+            spawnedEnemyCount += 1;
+            if (spawnedEnemyCount == spawnEnemyMax)
+            {
+                enemySpawnComplete = true;
+            }
         }
     }
 
@@ -157,7 +160,7 @@ public class RoomManager : MonoBehaviour
         do
         {
             int randomNumber = Random.Range(0, currentGrid.Count - 1);
-            if (currentGrid[randomNumber].gridState == GridState.Empty)
+            if (currentGrid[randomNumber].gridState == GridState.Empty && currentGrid[randomNumber].isPortal == false)
             {
                 spawnPoint = new Vector3(currentGrid[randomNumber].transform.position.x,0.5f,currentGrid[randomNumber].transform.position.z);
                 break;
@@ -170,7 +173,7 @@ public class RoomManager : MonoBehaviour
     private void FixedUpdate()
     {
         PortalCheck();
-        if (isStandbyRoom)
+        if (roomType == RoomType.Clear  && obstacleSpawnComplete)
         {
             SpawnPortal();
         }
@@ -201,14 +204,25 @@ public class RoomManager : MonoBehaviour
     private void RoomClear()
     {
         roomClear = true;
+        roomType = RoomType.Clear;
         TurnManager.Instance.currentRoomClear = true;
         SpawnPortal();
+        UpdatePortal();
+        if (isLastRoom)
+        {
+            RandomStageManager.Instance.stageClear = true;
+            GameManager.Instance.StageClear();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            foreach (GridMover grid in currentGrid)
+            {
+                grid.gridActive = true;
+            }
             if (roomClear)
             {
                 return;
@@ -218,15 +232,26 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            foreach (GridMover grid in currentGrid)
+            {
+                grid.gridActive = false;
+            }
+        }
+    }
+
     private void PortalCheck()
     {
-        forwardPortal = Physics.Raycast(centerPoint.position, Vector3.forward,out hitForward, Mathf.Infinity, roomLayer);
+        /*forwardPortal = Physics.Raycast(centerPoint.position, Vector3.forward,out hitForward, Mathf.Infinity, roomLayer);
         
-        backwardPortal = Physics.Raycast(centerPoint.position, Vector3.back,out hitBackward,Mathf.Infinity, roomLayer);
+        backwardPortal = Physics.Raycast(centerPoint.position, Vector3.back,out hitBackward,Mathf.Infinity, roomLayer);*/
         
-        leftPortal = Physics.Raycast(centerPoint.position, Vector3.left,out hitLeft,Mathf.Infinity, roomLayer);
+        leftPortal = Physics.Raycast(leftPoint.position, Vector3.right,out hitLeft,30f, roomLayer);
         
-        rightPortal = Physics.Raycast(centerPoint.position, Vector3.right,out hitRight,Mathf.Infinity, roomLayer);
+        rightPortal = Physics.Raycast(rightPoint.position, Vector3.right,out hitRight,30f, roomLayer);
     }
 
     private void SpawnPortal()
@@ -235,7 +260,7 @@ public class RoomManager : MonoBehaviour
         {
             return;
         }
-        if (forwardPortal)
+        /*if (forwardPortal)
         {
             if (portalForward.isConnect)
             {
@@ -267,7 +292,7 @@ public class RoomManager : MonoBehaviour
             {
                 Debug.Log($"Backward portal not found {a}");
             }
-        }
+        }*/
         
         if (leftPortal)
         {
@@ -278,7 +303,7 @@ public class RoomManager : MonoBehaviour
             try
             {
                 RoomManager roomManager = hitLeft.collider.GetComponent<RoomManager>();
-                portalLeft.SetPortal(roomManager.roomType,roomManager.portalRight.transform.position,roomManager.transform,playerTrans);
+                portalLeft.SetPortal(roomManager.roomType,roomManager.startPoint.position,roomManager.transform,playerTrans);
             }
             catch (Exception a)
             {
@@ -295,7 +320,7 @@ public class RoomManager : MonoBehaviour
             try
             {
                 RoomManager roomManager = hitRight.collider.GetComponent<RoomManager>();
-                portalRight.SetPortal(roomManager.roomType,roomManager.portalLeft.transform.position,roomManager.transform,playerTrans);
+                portalRight.SetPortal(roomManager.roomType,roomManager.startPoint.position,roomManager.transform,playerTrans);
             }
             catch (Exception a)
             {
@@ -303,4 +328,60 @@ public class RoomManager : MonoBehaviour
             }
         }
     }
+
+    private void UpdatePortal()
+    {
+        /*if (forwardPortal)
+        {
+            try
+            {
+                RoomManager roomManager = hitForward.collider.GetComponent<RoomManager>();
+                roomManager.portalBackward.UpdatePortal(roomManager.roomType);
+            }
+            catch (Exception a)
+            {
+                Debug.Log($"Forward portal not found {a}");
+            }
+        }
+        
+        if (backwardPortal)
+        {
+            try
+            {
+                RoomManager roomManager = hitBackward.collider.GetComponent<RoomManager>();
+                roomManager.portalForward.UpdatePortal(roomManager.roomType);
+            }
+            catch (Exception a)
+            {
+                Debug.Log($"Backward portal not found {a}");
+            }
+        }*/
+        
+        if (leftPortal)
+        {
+            try
+            {
+                RoomManager roomManager = hitLeft.collider.GetComponent<RoomManager>();
+                roomManager.portalRight.UpdatePortal(roomManager.roomType);
+            }
+            catch (Exception a)
+            {
+                Debug.Log($"Left portal not found {a}");
+            }
+        }
+        
+        if (rightPortal)
+        {
+            try
+            {
+                RoomManager roomManager = hitRight.collider.GetComponent<RoomManager>();
+                roomManager.portalLeft.UpdatePortal(roomManager.roomType);
+            }
+            catch (Exception a)
+            {
+                Debug.Log($"Right portal not found {a}");
+            }
+        }
+    }
+    
 }

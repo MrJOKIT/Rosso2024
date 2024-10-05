@@ -180,10 +180,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 }
                 break;
             case MovementState.Moving:
-                if (moveType == MoveType.Mouse || moveType == MoveType.Both )
+                /*if (moveType == MoveType.Mouse || moveType == MoveType.Both )
                 {
                     HandleClickToMove();
-                }
+                }*/
                 MoveToTarget();
                 break;
             case MovementState.Freeze:
@@ -227,10 +227,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 switch (hit.collider.GetComponent<GridMover>().gridState)
                 {
                     case GridState.OnMove:
-                        moveSuccess = true;
-                        SetTargetPosition(hit.point);
-                        break;
-                    case GridState.OnPortal:
                         moveSuccess = true;
                         SetTargetPosition(hit.point);
                         break;

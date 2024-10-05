@@ -56,10 +56,12 @@ MonoBehaviour:
   playerTrans: {fileID: 0}
   portalObject: {fileID: 6713714989777541014}
   portalActive: 0
+  isConnect: 0
   portalRenderer: {fileID: 4398477801878474827}
   combatMaterial: {fileID: 2100000, guid: d61620d08778d6b4c887197f7fe6bf0a, type: 2}
   bonusMaterial: {fileID: 2100000, guid: 39a03a73d8c26274a868b10b8eeb8c6c, type: 2}
   bossMaterial: {fileID: 2100000, guid: debdfb77ae5913f44b3095522d34373e, type: 2}
+  clearMat: {fileID: 2100000, guid: 6885d64e8021dda4ebe2643a3dab6a24, type: 2}
 --- !u!65 &145480375171011920
 BoxCollider:
   m_ObjectHideFlags: 0

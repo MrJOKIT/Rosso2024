@@ -29,4 +29,9 @@ public class GridSpawnManager : Singeleton<GridSpawnManager>
     {
         currentGrid.Add(gridObject);
     }
+
+    public void RemoveGrid(GridMover grid)
+    {
+        currentGrid.Remove(grid);
+    }
 }

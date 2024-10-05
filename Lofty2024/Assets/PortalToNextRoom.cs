@@ -21,6 +21,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
     public Material combatMaterial;
     public Material bonusMaterial;
     public Material bossMaterial;
+    public Material clearMat;
 
     private void Update()
     {
@@ -52,12 +53,34 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
             case RoomType.Boss:
                 portalRenderer.material = bossMaterial;
                 break;
+            case RoomType.Clear:
+                portalRenderer.material = clearMat;
+                break;
         }
 
         warpPoint = warpPos;
 
         portalActive = true;
         isConnect = true;
+    }
+
+    public void UpdatePortal(RoomType roomType)
+    {
+        switch (roomType)
+        {
+            case RoomType.Combat:
+                portalRenderer.material = combatMaterial;
+                break;
+            case RoomType.Bonus:
+                portalRenderer.material = bonusMaterial;
+                break;
+            case RoomType.Boss:
+                portalRenderer.material = bossMaterial;
+                break;
+            case RoomType.Clear:
+                portalRenderer.material = clearMat;
+                break;
+        }
     }
 
     private void WarpToPoint()

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EditorAttributes;
 using GD.MinMaxSlider;
+using UnityEditor;
 using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
@@ -15,17 +17,21 @@ public class RandomStageManager : Singeleton<RandomStageManager>
     public bool stageClear;
 
     [Tab("Random Room Setting")] 
-    [MinMaxSlider(1, 10)] public Vector2Int spawnCount;
+    [Range(1, 10)] public int spawnCount;
+    [Range(0,10)]public int battleRoomCount;
+    [Range(0,10)]public int bonusRoomCount;
     private int roomSpawnCount;
     public int RoomSpawnCount => roomSpawnCount;
-    public List<GameObject> roomModel;
-
+    public List<GameObject> battleRoomModel;
+    public List<GameObject> bonusRoomModel;
+    public List<GameObject> clearRoomModel;
     public override void Awake()
     {
-        roomSpawnCount = Random.Range(spawnCount.x, spawnCount.y);
+        roomSpawnCount = spawnCount;
+        Debug.Log(battleRoomModel.Count - 1);
         base.Awake();
     }
-
+    
     private void LateUpdate()
     {
         if (stageClear || roomInStage.Count == 0)
@@ -63,13 +69,50 @@ public class RandomStageManager : Singeleton<RandomStageManager>
     {
         currentRoomPos = newCurrentRoom;
     }
-
-    public void SpawnRoom(Transform spawnPoint)
+    
+    public void SpawnRoom(Transform spawnPoint,RoomType roomType)
     {
-        GameObject room = roomModel[Random.Range(0, roomModel.Count - 1)];
-        GameObject battleRoom = Instantiate(room,new Vector3(spawnPoint.position.x,0,spawnPoint.position.z),Quaternion.identity);
-        roomInStage.Add(battleRoom.GetComponent<RoomManager>());
-        roomModel.Remove(room);
         roomSpawnCount -= 1;
+        GameObject room;
+        switch (roomType)
+        {
+            case RoomType.Clear:
+                room = clearRoomModel[Random.Range(0, clearRoomModel.Count - 1)];
+                GameObject clearRoom = Instantiate(room,new Vector3(spawnPoint.position.x,0,spawnPoint.position.z),Quaternion.identity);
+                if (roomSpawnCount == 0)
+                {
+                    clearRoom.GetComponent<RoomManager>().isLastRoom = true;
+                }
+                roomInStage.Add(clearRoom.GetComponent<RoomManager>());
+                //bonusRoomModel.Remove(room);
+                break;
+            case RoomType.Bonus:
+                room = bonusRoomModel[Random.Range(0, bonusRoomModel.Count - 1)];
+                GameObject bonusRoom = Instantiate(room,new Vector3(spawnPoint.position.x,0,spawnPoint.position.z),Quaternion.identity);
+                if (roomSpawnCount == 0)
+                {
+                    bonusRoom.GetComponent<RoomManager>().isLastRoom = true;
+                }
+                roomInStage.Add(bonusRoom.GetComponent<RoomManager>());
+                //bonusRoomModel.Remove(room);
+                break;
+            case RoomType.Combat:
+                room = battleRoomModel[Random.Range(0, battleRoomModel.Count - 1)];
+                GameObject battleRoom = Instantiate(room,new Vector3(spawnPoint.position.x,0,spawnPoint.position.z),Quaternion.identity);
+                if (roomSpawnCount == 0)
+                {
+                    battleRoom.GetComponent<RoomManager>().isLastRoom = true;
+                }
+                roomInStage.Add(battleRoom.GetComponent<RoomManager>());
+                //battleRoomModel.Remove(room);
+                break;
+            case RoomType.Boss:
+                break;
+        }
+        
+        
+        
     }
+    
 }
+

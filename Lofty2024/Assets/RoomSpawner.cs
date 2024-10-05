@@ -6,17 +6,27 @@ using Random = UnityEngine.Random;
 
 public class RoomSpawner : MonoBehaviour
 {
+    public RoomType spawnType;
     private void Start()
     {
-        if (RandomStageManager.Instance.RoomSpawnCount <= 0)
+        if (spawnType == RoomType.Clear)
         {
-            return;
+            Invoke("SpawnRoom",0.5f); ;
         }
-        Invoke("SpawnRoom",Random.Range(0.1f,0.5f));
+        else
+        {
+            Invoke("SpawnRoom",0.1f); ;
+        }
+        
     }
 
     private void SpawnRoom()
     {
-        RandomStageManager.Instance.SpawnRoom(transform);
+        if (RandomStageManager.Instance.RoomSpawnCount <= 0)
+        {
+            return;
+        } 
+        RandomStageManager.Instance.SpawnRoom(transform,spawnType);
     }
+    
 }

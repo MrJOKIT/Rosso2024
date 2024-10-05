@@ -11,6 +11,7 @@ TagManager:
   - CloseArea
   - Portal
   - RoomSpawner
+  - Room
   layers:
   - Default
   - TransparentFX
