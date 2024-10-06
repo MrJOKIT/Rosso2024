@@ -57,6 +57,11 @@ public class EnemyAI : Enemy
     
     private void EnemyMoveToPlayer()
     {
+        if (forwardMoveBlock && forwardLeftMoveBlock && forwardRightMoveBlock && backwardMoveBlock && backwardLeftMoveBlock && backwardRightMoveBlock && leftMoveBlock && rightMoveBlock)
+        {
+            EndTurnModify();
+        }
+        
         if (transform.position.z < targetTransform.position.z && transform.position.x == targetTransform.position.x)
         {
             //Move Forward

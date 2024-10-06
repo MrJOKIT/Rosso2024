@@ -22,11 +22,11 @@ public class RoomSpawner : MonoBehaviour
 
     private void SpawnRoom()
     {
-        if (RandomStageManager.Instance.RoomSpawnCount <= 0)
+        /*if (RandomStageManager.Instance.RoomSpawnCount <= 0)
         {
             return;
-        } 
-        RandomStageManager.Instance.SpawnRoom(transform,spawnType);
+        } */
+        //RandomStageManager.Instance.SpawnRoom(transform,spawnType);
     }
     
 }
