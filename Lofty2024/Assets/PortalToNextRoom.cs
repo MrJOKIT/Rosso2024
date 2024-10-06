@@ -88,6 +88,6 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         playerTrans.position = new Vector3(warpPoint.x,playerTrans.position.y,warpPoint.z);
         playerTrans.GetComponent<PlayerMovementGrid>().ResetPlayerTarget();
         CameraManager.Instance.SetCameraTarget(roomCenter.position);
-        GameManager.Instance.GetComponent<RandomStageManager>().UpdateCurrentRoom(roomCenter);
+        GameManager.Instance.UpdateCurrentRoom(roomCenter);
     }
 }

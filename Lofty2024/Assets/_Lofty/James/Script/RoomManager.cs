@@ -178,11 +178,14 @@ public class RoomManager : MonoBehaviour
         {
             return;
         }
-        PortalManager.Instance.SetUpNextRoom(portalLeft,portalRight,playerTrans);
+        
         if (isLastRoom)
         {
-            RandomStageManager.Instance.stageClear = true;
             GameManager.Instance.StageClear();
+        }
+        else
+        {
+            PortalManager.Instance.SetUpNextRoom(portalLeft,portalRight,playerTrans);
         }
     }
 
@@ -207,10 +210,18 @@ public class RoomManager : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            foreach (GridMover grid in currentGrid)
+            try
             {
-                grid.gridActive = false;
+                foreach (GridMover grid in currentGrid)
+                {
+                    grid.gridActive = false;
+                }
             }
+            catch (Exception a)
+            {
+                Debug.Log($"Gird is gone {a}");
+            }
+            
         }
     }
     

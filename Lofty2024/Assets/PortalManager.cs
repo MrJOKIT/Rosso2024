@@ -5,6 +5,16 @@ using VInspector;
 
 public class PortalManager : Singeleton<PortalManager>
 {
+
+
+    [Header("Random Room Setting")] 
+    [SerializeField] private int roomCount;
+    [Space(10)]
+    public List<GameObject> battleRoomModel;
+    public List<GameObject> bonusRoomModel;
+    public List<GameObject> clearRoomModel;
+    
+    [Space(20)]
     [Header("Room One")]
     public PortalToNextRoom portalLeft;
     public GameObject leftRoom;
@@ -69,6 +79,7 @@ public class PortalManager : Singeleton<PortalManager>
     
     public void PrepareRoom()
     {
+        roomCount -= 1;
         if (leftRoom != null)
         {
             if (leftRoom.GetComponent<RoomManager>().playerTrans != null)
@@ -120,11 +131,17 @@ public class PortalManager : Singeleton<PortalManager>
         leftRoomType = RandomRoom();
         rightRoomType = RandomRoom();
         
-        leftRoom = Instantiate(GetComponent<RandomStageManager>().SpawnRoom(leftRoomType),GetSpawnPoint(),Quaternion.identity);
-        rightRoom = Instantiate(GetComponent<RandomStageManager>().SpawnRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
+        leftRoom = Instantiate(SpawnRoom(leftRoomType),GetSpawnPoint(),Quaternion.identity);
+        rightRoom = Instantiate(SpawnRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
 
         leftRoomWarpPoint = leftRoom.GetComponent<RoomManager>().startPoint.transform.position;
         rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
+
+        if (roomCount == 0)
+        {
+            leftRoom.GetComponent<RoomManager>().isLastRoom = true;
+            rightRoom.GetComponent<RoomManager>().isLastRoom = true;
+        }
     }
     
     public void SetUpNextRoom(Transform portalOnePos, Transform portalTwoPos,Transform playerTransform)
@@ -157,5 +174,29 @@ public class PortalManager : Singeleton<PortalManager>
         }
 
         return roomType;
+    }
+    
+    private GameObject SpawnRoom(RoomType roomType)
+    {
+        GameObject room = null;
+        switch (roomType)
+        {
+            case RoomType.Clear:
+                room = clearRoomModel[Random.Range(0, clearRoomModel.Count - 1)];
+                //clearRoomModel.Remove(room);
+                break;
+            case RoomType.Bonus:
+                room = bonusRoomModel[Random.Range(0, bonusRoomModel.Count - 1)];
+                //bonusRoomModel.Remove(room);
+                break;
+            case RoomType.Combat:
+                room = battleRoomModel[Random.Range(0, battleRoomModel.Count - 1)];
+                //battleRoomModel.Remove(room);
+                break;
+            case RoomType.Boss:
+                break;
+        }
+
+        return room;
     }
 }
