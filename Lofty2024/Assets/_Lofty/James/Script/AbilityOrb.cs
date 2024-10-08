@@ -36,10 +36,11 @@ public class AbilityOrb : MonoBehaviour
     private void TakeOrb()
     {
         _player.swapAbility = _abilityType;
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().itemInRoom.Remove(gameObject);
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) 
     {
         if (other.GetComponent<Player>() != null)
         {

@@ -175,6 +175,7 @@ public class GridMover : MonoBehaviour
         {
             gridState = GridState.OnObstacle;
             GridSpawnManager.Instance.RemoveGrid(this);
+            GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().currentGrid.Remove(this);
             Destroy(gameObject);
         }
         else if(other.CompareTag("Enemy"))
@@ -200,6 +201,7 @@ public class GridMover : MonoBehaviour
         {
             gridState = GridState.OnObstacle;
             GridSpawnManager.Instance.RemoveGrid(this);
+            GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().currentGrid.Remove(this);
             Destroy(gameObject);
         }
         else if (other.CompareTag("Enemy"))

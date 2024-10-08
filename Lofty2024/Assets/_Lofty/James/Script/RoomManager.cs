@@ -54,7 +54,8 @@ public class RoomManager : MonoBehaviour
     public Transform obstacleParent;
     public List<GameObject> obstaclePrefab;
     public List<GridMover> currentGrid;
-
+    public List<GridMover> emptyGrid;
+ 
     [Tab("Item In Room")] 
     public List<GameObject> itemInRoom;
 
@@ -64,6 +65,14 @@ public class RoomManager : MonoBehaviour
         foreach (GridMover grid in currentGrid)
         {
             GridSpawnManager.Instance.AddGridList(grid);
+        }
+
+        foreach (GridMover grid in currentGrid)
+        {
+            if (grid.gridState == GridState.Empty && grid.isPortal == false)
+            {
+                emptyGrid.Add(grid);
+            }
         }
     }
 
@@ -134,20 +143,10 @@ public class RoomManager : MonoBehaviour
 
     public Vector3 CheckSpawnPoint()
     {
-        Vector3 spawnPoint = default;
-        GridMover grid;
-        do
-        {
-            int randomNumber = Random.Range(0, currentGrid.Count - 1);
-            grid = currentGrid[randomNumber];
-            if (grid.gridState == GridState.Empty && grid.isPortal == false)
-            {
-                spawnPoint = new Vector3(currentGrid[randomNumber].transform.position.x,0.5f,currentGrid[randomNumber].transform.position.z);
-                break;
-            }
-            
-        } while (grid.gridState != GridState.Empty && grid.isPortal != false);
-
+        int randomNumber = Random.Range(0, emptyGrid.Count - 1);
+        GridMover grid = emptyGrid[randomNumber];
+        Vector3 spawnPoint = new Vector3(grid.transform.position.x,0.5f,grid.transform.position.z);
+        emptyGrid.Remove(grid);
         return spawnPoint;
     }
 
