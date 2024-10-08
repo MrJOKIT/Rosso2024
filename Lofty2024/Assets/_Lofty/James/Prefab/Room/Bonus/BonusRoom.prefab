@@ -534,6 +534,8 @@ MonoBehaviour:
   - {fileID: 5435122265812433154}
   - {fileID: 3979492222643215164}
   - {fileID: 3740103431028529302}
+  emptyGrid: []
+  itemInRoom: []
 --- !u!65 &103733626244978462
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -961,7 +963,7 @@ MonoBehaviour:
   - Packages/com.tripolygon.umodeler-x/Editor/Resources/Materials/UModelerX_Gray_URP.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_88b22fa8-57cd-459d-80a5-d59616ea36b3
+    name: UM_OperatedMesh_50bc3e1a-287a-4bc5-8645-d7fdbb0e2b57
     skinnedMesh: 0
     sharedMesh: {fileID: -4943758353868826497}
     buidVersion:
@@ -973,7 +975,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: 88b22fa8-57cd-459d-80a5-d59616ea36b3
+  sourceMeshRendererGUID: 50bc3e1a-287a-4bc5-8645-d7fdbb0e2b57
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0
@@ -2853,6 +2855,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026182282110750564, guid: 9b6ee86a3930d154a82e5ba1764b2eb5,
+        type: 3}
+      propertyPath: isPortal
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6127,6 +6134,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6026182282110750564, guid: 9b6ee86a3930d154a82e5ba1764b2eb5,
+        type: 3}
+      propertyPath: isPortal
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6389,6 +6401,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6026182282110750564, guid: 9b6ee86a3930d154a82e5ba1764b2eb5,
+        type: 3}
+      propertyPath: isPortal
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

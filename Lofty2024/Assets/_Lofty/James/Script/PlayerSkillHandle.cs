@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
+using GD.MinMaxSlider;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -25,8 +26,7 @@ public class PlayerSkillHandle : MonoBehaviour
 
     [Space(10)] 
     [Header("Skill Point")] 
-    [SerializeField] private int startSkillPoint = 3;
-    [SerializeField] private int maxSkillPoint = 10;
+    [GD.MinMaxSlider.MinMaxSlider(0,10)][SerializeField] private Vector2Int minMaxSkillPoint;
     [SerializeField] private int skillPoint;
 
     [Space(10)] 
@@ -64,17 +64,17 @@ public class PlayerSkillHandle : MonoBehaviour
 
     public void AddSkillPoint(int count)
     {
-        if (skillPoint >= maxSkillPoint)
+        if (skillPoint >= minMaxSkillPoint.y)
         {
             return;
         }
 
-        skillPoint += count;
+        skillPoint += count; 
     }
 
     public void ResetSkillPoint()
     {
-        skillPoint = startSkillPoint;
+        skillPoint = minMaxSkillPoint.x;
     }
     
     public void UseSkill(int slotSkillIndex)
