@@ -47,6 +47,7 @@ public class PlayerGridBattle : MonoBehaviour
                     return;
                 }
                 Debug.Log("Grid Start");
+                GetComponent<PlayerSkillHandle>().ResetSkillPoint();
                 oldMode = _playerMode;
                 break;
         }

@@ -22,9 +22,11 @@ public class PlayerSkillHandle : MonoBehaviour
     [Header("Skill Setting")] 
     [SerializeField] private Transform skillParent;
     public GameObject makeSureUI;
-    
-    [Space(10)]
+
+    [Space(10)] 
     [Header("Skill Point")] 
+    [SerializeField] private int startSkillPoint = 3;
+    [SerializeField] private int maxSkillPoint = 10;
     [SerializeField] private int skillPoint;
 
     [Space(10)] 
@@ -58,6 +60,21 @@ public class PlayerSkillHandle : MonoBehaviour
                 _skillDatas.Remove(randomSkill);
             }
         }
+    }
+
+    public void AddSkillPoint(int count)
+    {
+        if (skillPoint >= maxSkillPoint)
+        {
+            return;
+        }
+
+        skillPoint += count;
+    }
+
+    public void ResetSkillPoint()
+    {
+        skillPoint = startSkillPoint;
     }
     
     public void UseSkill(int slotSkillIndex)

@@ -883,6 +883,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
+            GetComponent<PlayerSkillHandle>().AddSkillPoint(1);
             SetMover();
         }
         currentState = MovementState.Combat;
