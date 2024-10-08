@@ -7,7 +7,8 @@ using UnityEngine;
 public class Player : MonoBehaviour, ITakeDamage
 {
     [SerializeField] private bool haveShield;
-    [SerializeField] private int playerHealth;
+    private const int maxHealth = 5;
+    [Range(0,maxHealth)][SerializeField] private int playerHealth;
     [SerializeField] private List<CurseData> curseHave;
     [SerializeField] private GameObject curseUiPrefab;
     [SerializeField] private Transform curseUiParent;
@@ -47,6 +48,16 @@ public class Player : MonoBehaviour, ITakeDamage
             return;
         }
         playerHealth -= damage;
+    }
+
+    public void TakeHealth(int health)
+    {
+        if (playerHealth >= maxHealth)
+        {
+            return;
+        }
+
+        playerHealth += health;
     }
     
     public void AddCurseStatus(CurseType curseType, int turnTime)
