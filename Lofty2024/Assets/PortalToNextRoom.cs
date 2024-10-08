@@ -38,9 +38,10 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
 
     public void SetPortal(RoomType roomType,Vector3 warpPos,Transform roomCenter,Transform playerTransform)
     {
+        this.roomTypeConnect = roomType;
         this.roomCenter = roomCenter;
         playerTrans = playerTransform;
-        portalObject.SetActive(true);
+        
         
         switch (roomType)
         {
@@ -59,14 +60,14 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         }
 
         warpPoint = warpPos;
-
-        portalActive = true;
+        ActivePortal();
+        
         isConnect = true;
     }
 
-    public void UpdatePortal(RoomType roomType)
+    public void UpdatePortal()
     {
-        switch (roomType)
+        switch (roomTypeConnect)
         {
             case RoomType.Combat:
                 portalRenderer.material = combatMaterial;
@@ -88,6 +89,17 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         playerTrans.position = new Vector3(warpPoint.x,playerTrans.position.y,warpPoint.z);
         playerTrans.GetComponent<PlayerMovementGrid>().ResetPlayerTarget();
         CameraManager.Instance.SetCameraTarget(roomCenter.position);
-        GameManager.Instance.UpdateCurrentRoom(roomCenter);
+    }
+
+    public void ActivePortal()
+    {
+        portalActive = true;
+        portalObject.SetActive(true);
+    }
+
+    public void DeActivePortal()
+    {
+        portalActive = false;
+        portalObject.SetActive(false);
     }
 }

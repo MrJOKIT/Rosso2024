@@ -1,36 +1,46 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VInspector;
+using Random = UnityEngine.Random;
 
 public class PortalManager : Singeleton<PortalManager>
 {
 
 
     [Header("Random Room Setting")] 
+    [SerializeField] private int gameLoopCount;
+    [Space(10)]
     [SerializeField] private int roomCount;
     [Space(10)]
     public List<GameObject> battleRoomModel;
     public List<GameObject> bonusRoomModel;
     public List<GameObject> clearRoomModel;
+    public Vector3 spawnPoint;
     
     [Space(20)]
     [Header("Room One")]
     public PortalToNextRoom portalLeft;
-    public GameObject leftRoom;
+    public RoomManager leftRoom;
     public RoomType leftRoomType;
     public Vector3 leftRoomWarpPoint;
     
     [Space(10)]
     [Header("Room Two")]
     public PortalToNextRoom portalRight;
-    public GameObject rightRoom;
+    public RoomManager rightRoom;
     public RoomType rightRoomType;
     public Vector3 rightRoomWarpPoint;
 
     [Space(20)] 
     [Header("Clear setting")] 
-    public GameObject currentRoom;
+    public RoomManager currentRoom;
+    public Transform playerTransform;
+    public Transform portalLeftPos;
+    public Transform portalRightPos;
+    private bool leftOrRight;
+    public bool isBossRoom;
 
     [Space(20)] 
     [Header("Room Checker")] 
@@ -48,16 +58,20 @@ public class PortalManager : Singeleton<PortalManager>
     public Transform checkRightRoomPos;
     public bool checkRightRoom;
     
-    private Vector3 GetSpawnPoint()
-    {
-        Vector3 spawnPoint = new Vector3(100,0,0);
 
+    private void Update()
+    {
         checkForwardRoom = Physics.Raycast(checkForwardRoomPos.position,Vector3.down, Mathf.Infinity, roomLayer);
         checkLeftRoom = Physics.Raycast(checkLeftRoomPos.position,Vector3.down, Mathf.Infinity, roomLayer);
         checkMiddleRoom = Physics.Raycast(checkMiddleRoomPos.position, Vector3.down, Mathf.Infinity, roomLayer);
         checkRightRoom = Physics.Raycast(checkRightRoomPos.position, Vector3.down, Mathf.Infinity, roomLayer);
+    }
 
-        if (!checkForwardRoomPos)
+    private Vector3 GetSpawnPoint()
+    {
+        
+
+        if (!checkForwardRoom)
         {
             spawnPoint = new Vector3(checkForwardRoomPos.position.x, 0, checkForwardRoomPos.position.z);
         }
@@ -77,12 +91,89 @@ public class PortalManager : Singeleton<PortalManager>
         return spawnPoint;
     }
     
-    public void PrepareRoom()
+    
+    public void SetUpNextRoom(Transform portalLeftPos,Transform portalRightPos,Transform playerTransform)
     {
+        if (roomCount <= 0)
+        {
+            portalLeft.DeActivePortal();;
+            portalRight.DeActivePortal();
+        }
+        
+        
         roomCount -= 1;
+
+        this.playerTransform = playerTransform;
+        this.portalLeftPos = portalLeftPos;
+        this.portalRightPos = portalRightPos;
+
+
+        if (isBossRoom)
+        {
+            Invoke("SpawnRoom",0.2f);
+        }
+        else
+        {
+            Invoke("SpawnRoom",0.2f);
+            Invoke("SpawnRoom",0.3f);
+        }
+        
+    }
+
+    private void SpawnRoom()
+    {
+        if (isBossRoom)
+        {
+            //show one portal
+        }
+        else
+        {
+            if (leftOrRight)
+            {
+                leftRoomType = RandomRoom();
+                GameObject leftRoomObject = Instantiate(GetRoom(leftRoomType),GetSpawnPoint(),Quaternion.identity);
+                leftRoom = leftRoomObject.GetComponent<RoomManager>();
+                leftRoomWarpPoint = leftRoom.GetComponent<RoomManager>().startPoint.transform.position;
+                portalLeft.SetPortal(leftRoomType,leftRoomWarpPoint,leftRoom.transform,playerTransform);
+                portalLeft.transform.position = portalLeftPos.position;
+                portalLeft.GetComponent<PortalToNextRoom>().ActivePortal();
+                if (roomCount == 0)
+                {
+                    leftRoom.isLastRoom = true;
+                }
+
+                leftOrRight = false;
+            }
+            else
+            {
+                rightRoomType = RandomRoom();
+                GameObject rightRoomObject = Instantiate(GetRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
+                rightRoom = rightRoomObject.GetComponent<RoomManager>();
+                rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
+                portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform);
+                portalRight.transform.position = portalRightPos.position;
+                portalRight.GetComponent<PortalToNextRoom>().ActivePortal();
+                if (roomCount == 0)
+                {
+                    rightRoom.isLastRoom = true;
+                }
+
+                leftOrRight = true;
+            }
+        }
+        
+    }
+    
+
+    public void StartClearRoom()
+    {
+        Invoke("ClearRoom",0.1f);
+    }
+    private void ClearRoom()
+    {
         if (leftRoom != null)
         {
-            if (leftRoom.GetComponent<RoomManager>().playerTrans != null)
+            if (leftRoom.playerTrans != null)
             {
                 if (currentRoom == null)
                 {
@@ -91,7 +182,7 @@ public class PortalManager : Singeleton<PortalManager>
                 }
                 else
                 {
-                    currentRoom.GetComponent<RoomManager>().DestroyRoom();
+                    currentRoom.DestroyRoom();
                     currentRoom = leftRoom;
                     leftRoom = null;
                 }
@@ -99,14 +190,14 @@ public class PortalManager : Singeleton<PortalManager>
             }
             else
             {
-                leftRoom.GetComponent<RoomManager>().DestroyRoom();
+                leftRoom.DestroyRoom();
                 leftRoom = null;
             }
         }
-
+         
         if (rightRoom != null)
         {
-            if (rightRoom.GetComponent<RoomManager>().playerTrans != null)
+            if (rightRoom.playerTrans != null)
             {
                 if (currentRoom == null)
                 {
@@ -115,44 +206,18 @@ public class PortalManager : Singeleton<PortalManager>
                 }
                 else
                 {
-                    currentRoom.GetComponent<RoomManager>().DestroyRoom();
-                    checkLeftRoom = rightRoom;
+                    currentRoom.DestroyRoom();
+                    currentRoom = rightRoom;
                     rightRoom = null;
                 }
                 
             }
             else
             {
-                rightRoom.GetComponent<RoomManager>().DestroyRoom();
+                rightRoom.DestroyRoom();
                 rightRoom = null;
             }
         }
-        
-        leftRoomType = RandomRoom();
-        rightRoomType = RandomRoom();
-        
-        leftRoom = Instantiate(SpawnRoom(leftRoomType),GetSpawnPoint(),Quaternion.identity);
-        rightRoom = Instantiate(SpawnRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
-
-        leftRoomWarpPoint = leftRoom.GetComponent<RoomManager>().startPoint.transform.position;
-        rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
-
-        if (roomCount == 0)
-        {
-            leftRoom.GetComponent<RoomManager>().isLastRoom = true;
-            rightRoom.GetComponent<RoomManager>().isLastRoom = true;
-        }
-    }
-    
-    public void SetUpNextRoom(Transform portalOnePos, Transform portalTwoPos,Transform playerTransform)
-    {
-        PrepareRoom();
-        
-        portalLeft.SetPortal(leftRoomType,leftRoomWarpPoint,leftRoom.transform,playerTransform);
-        portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform);
-        
-        portalLeft.transform.position = portalOnePos.position;
-        portalRight.transform.position = portalTwoPos.position;
     }
     
     
@@ -173,10 +238,22 @@ public class PortalManager : Singeleton<PortalManager>
                 break;
         }
 
+        if (roomCount == 0)
+        {
+            if (isBossRoom)
+            {
+                //fix type is boss
+            }
+            else
+            {
+                roomType = RoomType.Combat;
+            }
+        }
+
         return roomType;
     }
-    
-    private GameObject SpawnRoom(RoomType roomType)
+     
+    private GameObject GetRoom(RoomType roomType)
     {
         GameObject room = null;
         switch (roomType)
@@ -195,6 +272,18 @@ public class PortalManager : Singeleton<PortalManager>
                 break;
             case RoomType.Boss:
                 break;
+        }
+
+        if (roomCount == 0)
+        {
+            if (isBossRoom)
+            {
+                //random boss room
+            }
+            else
+            {
+                room = battleRoomModel[Random.Range(0, battleRoomModel.Count - 1)];
+            }
         }
 
         return room;

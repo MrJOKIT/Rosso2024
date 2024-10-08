@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GD.MinMaxSlider;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -53,8 +54,9 @@ public class RoomManager : MonoBehaviour
     public Transform obstacleParent;
     public List<GameObject> obstaclePrefab;
     public List<GridMover> currentGrid;
-    
-    [Tab("Spawn Room Setting")]
+
+    [Tab("Item In Room")] 
+    public List<GameObject> itemInRoom;
 
     private void Start()
     {
@@ -132,17 +134,19 @@ public class RoomManager : MonoBehaviour
 
     public Vector3 CheckSpawnPoint()
     {
-        Vector3 spawnPoint ;
+        Vector3 spawnPoint = default;
+        GridMover grid;
         do
         {
             int randomNumber = Random.Range(0, currentGrid.Count - 1);
-            if (currentGrid[randomNumber].gridState == GridState.Empty && currentGrid[randomNumber].isPortal == false)
+            grid = currentGrid[randomNumber];
+            if (grid.gridState == GridState.Empty && grid.isPortal == false)
             {
                 spawnPoint = new Vector3(currentGrid[randomNumber].transform.position.x,0.5f,currentGrid[randomNumber].transform.position.z);
                 break;
             }
             
-        } while (true);
+        } while (grid.gridState != GridState.Empty && grid.isPortal != false);
 
         return spawnPoint;
     }
@@ -167,7 +171,7 @@ public class RoomManager : MonoBehaviour
         {
             RoomClear();
         }
-    }
+    } 
 
     private void RoomClear()
     {
@@ -193,6 +197,9 @@ public class RoomManager : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            playerTrans = other.GetComponent<Transform>();
+            GameManager.Instance.UpdateCurrentRoom(transform);
+            PortalManager.Instance.StartClearRoom();
             foreach (GridMover grid in currentGrid)
             {
                 grid.gridActive = true;
@@ -201,12 +208,11 @@ public class RoomManager : MonoBehaviour
             {
                 return;
             }
-            playerTrans = other.GetComponent<Transform>();
             StartRoom();
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other) 
     {
         if (other.CompareTag("Player"))
         {
@@ -222,16 +228,28 @@ public class RoomManager : MonoBehaviour
                 Debug.Log($"Gird is gone {a}");
             }
             
+            playerTrans = null;
+            DestroyRoom();
         }
     }
-    
-    
 
+
+    public void AddItemInRoom(GameObject itemObject)
+    {
+        itemInRoom.Add(itemObject);
+    }
+    
     public void DestroyRoom()
     {
         foreach (GridMover grid in currentGrid)
         {
             GridSpawnManager.Instance.RemoveGrid(grid);
+        }
+
+        foreach (GameObject item in itemInRoom.ToList())
+        {
+            itemInRoom.Remove(item);
+            Destroy(item);
         }
         Destroy(gameObject,0.1f);
     }

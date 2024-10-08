@@ -9,7 +9,12 @@ public class AbilityOrb : MonoBehaviour
     [SerializeField] private GameObject uiCanvas;
     private bool onPlayer;
     private PlayerAbility _player;
-    
+
+    private void Start()
+    {
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().AddItemInRoom(gameObject);
+    }
+
     public void SetOrbAbility(AbilityType abilityType)
     {
         _abilityType = abilityType;
