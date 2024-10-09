@@ -175,7 +175,6 @@ public class TurnManager : Singeleton<TurnManager>
                 break;
             }
         }
-
         GridSpawnManager.Instance.ClearMover();
         if (!multipleTurn)
         {

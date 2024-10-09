@@ -118,6 +118,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     {
         targetTransform = transform.position;
         supTargetTransform = transform.position;
+
+        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Normal)
+        {
+            return;
+        }
         TurnManager.Instance.AddUnit(true,transform,turnSpeed);
         
     }
@@ -300,7 +305,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     public void SetTargetPosition(Vector3 direction)
     {
-        if (!moveRandom)
+        if (!moveRandom && GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
             GridSpawnManager.Instance.ClearMover();
         }
@@ -901,7 +906,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             button.interactable = false;
         }
         ClearPattern();
-        TurnManager.Instance.TurnSucces();
+        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        {
+            TurnManager.Instance.TurnSucces();
+        }
         onTurn = false;
         moveSuccess = false;
     }

@@ -180,18 +180,24 @@ public class GridMover : MonoBehaviour
         }
         else if(other.CompareTag("Enemy"))
         {
-            if (gridState == GridState.OnObstacle)
-            {
-                return;
-            }
             gridState = GridState.OnEnemy;
-           
-            
+            try
+            {
+                enemy = other.GetComponent<Enemy>();
+                if (isTrap)
+                {
+                    TrapActive();
+                }
+            }
+            catch (Exception a)
+            {
+                Debug.Log($"No enemy script in collider {a}");
+            }
         }
         
     }
 
-    private void OnTriggerStay(Collider other)
+    /*private void OnTriggerStay(Collider other)
     {
         if (!gridActive)
         {
@@ -224,7 +230,7 @@ public class GridMover : MonoBehaviour
         {
             gridState = GridState.OnPlayer;
         }
-    }
+    }*/
 
     private void OnTriggerExit(Collider other)
     {
