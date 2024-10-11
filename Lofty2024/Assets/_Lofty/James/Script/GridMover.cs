@@ -126,6 +126,8 @@ public class GridMover : MonoBehaviour
                 break;
             case GridState.OnObstacle:
                 break;
+            case GridState.OnPlayer:
+                break;
             case GridState.OnMove:
                 GetComponent<MeshRenderer>().material = oldMat;
                 gridState = GridState.Empty;
@@ -193,6 +195,10 @@ public class GridMover : MonoBehaviour
             {
                 Debug.Log($"No enemy script in collider {a}");
             }
+        }
+        else if (other.CompareTag("Player"))
+        {
+            gridState = GridState.OnPlayer;
         }
         
     }

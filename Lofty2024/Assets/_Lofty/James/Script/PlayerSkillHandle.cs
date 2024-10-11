@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using GD.MinMaxSlider;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -34,6 +35,10 @@ public class PlayerSkillHandle : MonoBehaviour
     [SerializeField] private List<SkillSlot> _skillSlots;
     [SerializeField] private List<SkillData> _skillDatas;
 
+    [Space(10)] [Header("Skill Point UI")] 
+    public TextMeshProUGUI skillPointText;
+    public TextMeshProUGUI maxSkillPointText;
+    
     [Space(10)] 
     [ReadOnly] public int slotSelect;
     [ReadOnly] public Transform currentSkill; 
@@ -69,12 +74,14 @@ public class PlayerSkillHandle : MonoBehaviour
             return;
         }
 
-        skillPoint += count; 
+        skillPoint += count;  
+        SkillPointUiUpdate();
     }
 
     public void ResetSkillPoint()
     {
         skillPoint = minMaxSkillPoint.x;
+        SkillPointUiUpdate();
     }
     
     public void UseSkill(int slotSkillIndex)
@@ -88,6 +95,13 @@ public class PlayerSkillHandle : MonoBehaviour
             currentSkill = Instantiate(_skillSlots[slotSkillIndex].skillData.skillPattern,skillParent);
         }
         makeSureUI.SetActive(true);
+        SkillPointUiUpdate();
+    }
+
+    private void SkillPointUiUpdate()
+    {
+        skillPointText.text = "" + skillPoint;
+        maxSkillPointText.text = "" + minMaxSkillPoint.y;
     }
 
     [Button("Confirm Skill")]

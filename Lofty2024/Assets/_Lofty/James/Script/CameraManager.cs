@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
+using EditorAttributes;
 using UnityEngine;
 using VInspector;
+using Random = UnityEngine.Random;
 
 public class CameraManager : Singeleton<CameraManager>
 {
@@ -10,6 +13,9 @@ public class CameraManager : Singeleton<CameraManager>
     public float dampingSpeed = 1.0f;
     private Vector3 initialPosition;
     public bool onShake;
+    [Space(20)]
+    public bool followTarget;
+    public Transform targetTransform;
     
     void Start()
     {
@@ -23,6 +29,15 @@ public class CameraManager : Singeleton<CameraManager>
             return;
         }
         StartCoroutine(Shake());
+    }
+
+    private void Update()
+    {
+        if (followTarget == false)
+        {
+            return;
+        }
+        
     }
 
     IEnumerator Shake()

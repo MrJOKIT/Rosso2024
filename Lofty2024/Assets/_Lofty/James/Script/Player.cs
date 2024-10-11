@@ -3,12 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using VInspector;
 
 public class Player : MonoBehaviour, ITakeDamage
 {
+    [Tab("Player")]
     [SerializeField] private bool haveShield;
-    private const int maxHealth = 5;
-    [Range(0,maxHealth)][SerializeField] private int playerHealth;
+    [SerializeField] private int maxHealth;
+    [SerializeField] private int playerHealth;
+    [Space(10)] 
+    public List<GameObject> healthUI;
+    [Tab("Curse")]
     [SerializeField] private List<CurseData> curseHave;
     [SerializeField] private GameObject curseUiPrefab;
     [SerializeField] private Transform curseUiParent;
@@ -27,7 +32,7 @@ public class Player : MonoBehaviour, ITakeDamage
 
     private void PlayerDeadHandle()
     {
-        if (playerHealth <= 0)
+        if (playerHealth <= 0) 
         {
             PlayerDie();
         }
@@ -35,19 +40,49 @@ public class Player : MonoBehaviour, ITakeDamage
 
     private void PlayerDie()
     {
-        //ใช้ตอน Player ตาย
+        //ใช้ตอน Player ตาย 
         isDead = true;
+    }
+
+    private void UpdateHealthUI()
+    {
+        switch (playerHealth)
+        {
+            case 0:
+                healthUI[0].SetActive(false);
+                healthUI[1].SetActive(false);
+                healthUI[2].SetActive(false);
+                break;
+            case 1:
+                healthUI[0].SetActive(true);
+                healthUI[1].SetActive(false);
+                healthUI[2].SetActive(false);
+                break;
+            case 2:
+                healthUI[0].SetActive(true); 
+                healthUI[1].SetActive(true);
+                healthUI[2].SetActive(false);
+                break;
+            case 3:
+                healthUI[0].SetActive(true);
+                healthUI[1].SetActive(true);
+                healthUI[2].SetActive(true);
+                break;
+        }
     }
     
     public void TakeDamage(int damage)
     {
         CameraManager.Instance.TriggerShake();
+        
         if (haveShield)
         {
             haveShield = false;
             return;
         }
         playerHealth -= damage;
+        
+        UpdateHealthUI();
     }
 
     public void TakeHealth(int health)
