@@ -11,6 +11,7 @@ public class GameManager : Singeleton<GameManager>
 
     [Space(10)] 
     [Header("Stage Reward Setting")]
+    public GameObject cardSelectCanvas;
     public Transform currentRoomPos;
     [SerializeField] private GameObject rewardVFX;
     [MinMaxSlider(0,100)][SerializeField] private Vector2Int dropRate;
@@ -20,6 +21,7 @@ public class GameManager : Singeleton<GameManager>
         StageReward();
         GameObject gateObject = Instantiate(gatePrefab, currentRoomPos.GetComponent<RoomManager>().CheckSpawnPoint(), Quaternion.identity);
         gateObject.GetComponent<GateToNextScene>().SetNextScene(sceneName);
+        cardSelectCanvas.SetActive(true);
     }
 
     private void StageReward()

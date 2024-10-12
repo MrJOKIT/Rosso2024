@@ -62,6 +62,7 @@ public class EnemyAI : Enemy
             {
                 if (hit.collider.GetComponent<GridMover>().gridState != GridState.OnEnemy)
                 {
+                    hit.collider.GetComponent<GridMover>().enemy = this; 
                     hit.collider.GetComponent<GridMover>().gridState = GridState.OnEnemy;
                 }
             }
