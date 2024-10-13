@@ -14,3 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   artifactName: Speed
   artifactImage: {fileID: 21300000, guid: 071c53064aae09c40a6475681530c51d, type: 3}
+  upgradeType: 0
+  addHealthPoint: 0
+  addSkillPoint: 0
+  addDamage: 0
+  addKnockBackRange: 0
+  addActionPoint: 0
+  abilityName: 0

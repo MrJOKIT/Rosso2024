@@ -63,6 +63,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public AttackType attackType = AttackType.NormalAttack;
     public CurseType effectiveType = CurseType.Empty;
     public int effectiveTurnTime = 1;
+    public int knockBackRange = 1;
 
     [Tab("Movement")] 
     [Header("Player Input")]
@@ -262,7 +263,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                                 break;
                             case AttackType.KnockBackAttack:
                                 enemy.TakeDamage(damage);
-                                enemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,1);
+                                enemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange);
                                 break;
                             case AttackType.EffectiveAttack:
                                 enemy.TakeDamage(damage);
