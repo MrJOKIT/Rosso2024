@@ -2,102 +2,36 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
-using VInspector;
-using static AbilityType;
-using Random = UnityEngine.Random;
 
-public enum MovementState
+public enum NavigationMoveState
 {
     Idle,
-    Combat,
     Moving,
-    Freeze,
 }
-
-public enum MoveType
+public class PlayerNavigation : MonoBehaviour
 {
-    Keyboard,
-    Mouse,
-    Both,
-}
+    public PlayerGridBattle player;
 
-public enum AttackType
-{
-    NormalAttack,
-    SpecialAttack, 
-    KnockBackAttack,
-    EffectiveAttack,
-}
-
-public enum PlayerMoveDirection
-{
-    Forward,
-    ForwardLeft,
-    ForwardRight,
-    Backward,
-    BackwardLeft,
-    BackwardRight,
-    Left,
-    Right,
-}
-
-public class PlayerMovementGrid : MonoBehaviour, IUnit
-{
-    
-
-    [Tab("Combat")]
+    [Space(10)] [Header("Navigation Setting")]
+    public bool navigationSuccess;
+    public NavigationMoveState currentState;
+    public LayerMask moveBlockLayer;
     [Space(10)]
-    [Header("Turn Setting")] 
-    public bool autoSkip;
-    public bool onTurn;
-    public float turnSpeed = 20f;
-    public int damage;
-    public List<Button> playerInteractButton;
-
-    [Space(10)] 
-    [Header("Combat Setting")] 
-    public AttackType attackType = AttackType.NormalAttack;
-    public CurseType effectiveType = CurseType.Empty;
-    public int effectiveTurnTime = 1;
-
-    [Tab("Movement")] 
-    [Header("Player Input")]
-    public MoveType moveType;
-
-    [Space(10)] 
-    [Header("Movement Point")] 
-    public int movePoint;
-    public int maxMovePoint;
-    public bool inBattle;
-    [Space(5)] 
-    public TextMeshProUGUI movePointText;
-    public TextMeshProUGUI maxMovePointText;
-    [Space(10)]
-    [Header("Move Setting")]
-    public bool moveSuccess;
-    public bool moveRandom;
-    public AbilityType movePattern;
-    public MovementState currentState = MovementState.Idle;
     public float moveSpeed = 5f;
     public Vector3 gridSize = new Vector3(1f, 1f, 1f);
-    public LayerMask gridLayerMask;
-    
-    [Space(10)] 
-    [Header("Move Pattern")] 
-    public List<PatternData> patternDatas;
-    public Transform parentPattern;
-    public Transform currentPattern;
-
-
-    [Header("Move Checker")]
-    public PlayerNavigation playerNavigation;
+    [Space(10)]
     public GameObject movePathPrefab;
     public List<GameObject> movePathList;
-    public LayerMask moveBlockLayer;
+
+    [Space(10)] 
+    [Header("Check Navigation")]
+    public GameObject finalPosPrefab;
+    public GameObject arrowPrefab;
+    public List<GameObject> moveArrow;
+    
+    [Space(10)]
+    [Header("Check Obstacle")] 
     public bool forwardMoveBlock;
     public bool forwardLeftMoveBlock;
     public bool forwardRightMoveBlock;
@@ -109,105 +43,39 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     
     [Space(10)]
     [Header("Hide Condition")] 
-    private AbilityType oldPattern;
     private Vector3 targetTransform;
     private Vector3 supTargetTransform;
     private Vector3 lastPlayerTransform;
 
     private void Awake()
     {
-        if (moveRandom)
-        {
-            moveType = MoveType.Keyboard;
-        }
-        oldPattern = movePattern;
-    }
-
-    private void Start()
-    {
+        transform.position = player.transform.position;
         targetTransform = transform.position;
         supTargetTransform = transform.position;
-        TurnManager.Instance.AddUnit(true,transform,turnSpeed);
-        
     }
 
     private void Update()
     {
-        MoveChecker();
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        if (player.GetPlayerMode == PlayerMode.Combat)
         {
-            if (!onTurn)
-            {
-                return;
-            }
-        }
-        
-        if (autoSkip) 
-        {
-            TurnManager.Instance.TurnSucces();
-            onTurn = false;
             return;
         }
-        
         MoveStateHandle();
+        MoveChecker();
     }
 
-    #region MovementGrid
-
-    [VInspector.Button("Reset Target")]
-    public void ResetPlayerTarget()
-    {
-        targetTransform = transform.position;
-        lastPlayerTransform = transform.position;
-        supTargetTransform = transform.position;
-    }
     private void MoveStateHandle()
     {
         switch (currentState)
         {
-            case MovementState.Idle:
-                if (TurnManager.Instance.onPlayerTurn)
-                {
-                    StartTurn();
-                }
+            case NavigationMoveState.Idle:
                 break;
-            case MovementState.Combat:
-                switch (moveType)
-                {
-                    case MoveType.Keyboard:
-                        GetComponent<PlayerInputHandle>().HandleInput();
-                        break; 
-                    case MoveType.Mouse:
-                        HandleClickToMove();
-                        break;
-                    case MoveType.Both:
-                        HandleClickToMove();
-                        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
-                        {
-                            return;
-                        }
-                        GetComponent<PlayerInputHandle>().HandleInput();
-                        break;
-                }
-                break;
-            case MovementState.Moving:
-                /*if (moveType == MoveType.Mouse || moveType == MoveType.Both )
-                {
-                    HandleClickToMove();
-                }*/
-                if (playerNavigation.navigationSuccess == false)
-                {
-                    return;
-                }
+            case NavigationMoveState.Moving:
                 MoveToTarget();
-                break;
-            case MovementState.Freeze:
                 break;
         }
     }
-
     
-
     private void MoveChecker() 
     {
         //Forward Check
@@ -225,78 +93,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         rightMoveBlock = Physics.Raycast(transform.position, Vector3.right, 1, moveBlockLayer);
     }
     
-
-    private void HandleClickToMove()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, gridLayerMask))
-            {
-                if (hit.collider.GetComponent<GridMover>() == null || moveSuccess)
-                {
-                    return;
-                }
-                switch (hit.collider.GetComponent<GridMover>().gridState)
-                {
-                    case GridState.OnMove:
-                        moveSuccess = true;
-                        SetTargetPosition(hit.point);
-                        break;
-                    case GridState.OnEnemy:
-                        if (hit.collider.GetComponent<GridMover>().enemyActive == false)
-                        {
-                            return;
-                        }
-
-                        Enemy enemy = hit.collider.GetComponent<GridMover>().enemy;
-                        switch (attackType)
-                        {
-                            case AttackType.NormalAttack:
-                                enemy.TakeDamage(damage);
-                                break;
-                            case AttackType.SpecialAttack:
-                                enemy.TakeDamage(damage * 2); 
-                                break;
-                            case AttackType.KnockBackAttack:
-                                enemy.TakeDamage(damage);
-                                enemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,1);
-                                break;
-                            case AttackType.EffectiveAttack:
-                                enemy.TakeDamage(damage);
-                                enemy.AddCurseStatus(effectiveType,effectiveTurnTime);
-                                break;
-                        }
-                        
-                        if (enemy.enemyHealth <= 0)
-                        {
-                            SetTargetPosition(hit.point);
-                        }
-                        else
-                        {
-                            GridSpawnManager.Instance.ClearMover();
-                            currentState = MovementState.Idle;
-                            moveSuccess = true;
-                            EndTurn();
-                        }
-                        break;
-                    case GridState.Empty:
-                        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
-                        {
-                            return;
-                        }
-                        playerNavigation.StartNavigation(hit.point);
-                        SetTargetPosition(hit.point);
-                        break;
-                }
-                
-            }
-        }
-    }
-
-    private void AddMovePath(Vector3 spawnPosition,PlayerMoveDirection direction)
+     private void AddMovePath(Vector3 spawnPosition,PlayerMoveDirection direction)
     {
         GameObject movePathManager = Instantiate(movePathPrefab,spawnPosition,Quaternion.identity);
         movePathManager.GetComponent<MovePathManager>().SetPath(direction);
@@ -311,15 +108,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         }
     }
 
-    public void SetTargetPosition(Vector3 direction)
+    private void SetTargetPosition(Vector3 direction)
     {
-        if (!moveRandom && GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
-        {
-            GridSpawnManager.Instance.ClearMover();
-        }
         Vector3 nextPosition;
 
-        if (currentState == MovementState.Idle || direction != targetTransform - transform.position)
+        if (currentState == NavigationMoveState.Idle || direction != targetTransform - transform.position)
         {
             if (direction == Vector3.forward || direction == Vector3.back || direction == Vector3.left || direction == Vector3.right)
             {
@@ -334,43 +127,37 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             }
 
             targetTransform = nextPosition;
-            currentState = MovementState.Moving;
+            currentState = NavigationMoveState.Moving;
         }
     }
 
     private void MoveToTarget()
     {
-        if (movePattern == Knight)
+        if (transform.position != supTargetTransform )
         {
-            transform.position = targetTransform;
+            transform.position =
+                Vector3.MoveTowards(transform.position, supTargetTransform, moveSpeed * Time.deltaTime);
+            if (forwardMoveBlock && forwardLeftMoveBlock && forwardRightMoveBlock && backwardMoveBlock && backwardLeftMoveBlock && backwardRightMoveBlock && leftMoveBlock && rightMoveBlock)
+            {
+                ClearMovePath();
+            }
         }
         else
         {
-            if (transform.position != supTargetTransform )
-            {
-                transform.position =
-                    Vector3.MoveTowards(transform.position, supTargetTransform, moveSpeed * Time.deltaTime);
-                if (forwardMoveBlock && forwardLeftMoveBlock && forwardRightMoveBlock && backwardMoveBlock && backwardLeftMoveBlock && backwardRightMoveBlock && leftMoveBlock && rightMoveBlock)
-                {
-                    ClearMovePath();
-                }
-            }
-            else
-            {
-                MoveHandle();
-            }
-            //transform.position = Vector3.MoveTowards(transform.position,targetTransform,moveSpeed * Time.deltaTime);
+            MoveHandle();
         }
         
         if (transform.position == targetTransform)
         {
+            GameObject finalArrow = Instantiate(finalPosPrefab, new Vector3(targetTransform.x,0.02f,targetTransform.z), Quaternion.identity);
+            moveArrow.Add(finalArrow);
+            
             ClearMovePath();
-            currentState = MovementState.Idle;
-            GetComponent<PlayerAbility>().CheckAbilityUse();
-            EndTurn();
+            currentState = NavigationMoveState.Idle;
+            ResetNavigation();
         }
     }
-
+    
     public void SetPlayerMoveDirection(PlayerMoveDirection direction)
     {
         lastPlayerTransform = transform.position;
@@ -409,6 +196,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 //transform.position = Vector3.MoveTowards(transform.position,supTargetTransform, moveSpeed * Time.deltaTime);
                 break;
         }
+
+        SpawnNavigationArrow(direction);
         AddMovePath(lastPlayerTransform,direction);
     }
     private void MoveHandle()
@@ -835,165 +624,70 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         
     }
-    
-    private void ClearPattern()
+
+    private void SpawnNavigationArrow(PlayerMoveDirection direction)
     {
-        if (currentPattern != null)
+        GameObject arrowNavi = Instantiate(arrowPrefab, new Vector3(lastPlayerTransform.x,0.02f,lastPlayerTransform.z), Quaternion.identity);
+        switch (direction) 
         {
-            Destroy(currentPattern.gameObject);
-            currentPattern = null;
+            case PlayerMoveDirection.Forward:
+                arrowNavi.transform.rotation = Quaternion.Euler(0,0,0);
+                break;
+            case PlayerMoveDirection.Backward:
+                arrowNavi.transform.rotation = Quaternion.Euler(0,180,0);
+                break;
+            case PlayerMoveDirection.Left:
+                arrowNavi.transform.rotation = Quaternion.Euler(0,-90,0);
+                break;
+            case PlayerMoveDirection.Right:
+                arrowNavi.transform.rotation = Quaternion.Euler(0,90,0);
+                break;
+            case PlayerMoveDirection.ForwardLeft:
+                arrowNavi.transform.rotation = Quaternion.Euler(0,-45,0);
+                break;
+            case PlayerMoveDirection.ForwardRight:
+                arrowNavi.transform.rotation = Quaternion.Euler(0,45,0);
+                break;
+            case PlayerMoveDirection.BackwardLeft:
+                arrowNavi.transform.rotation = Quaternion.Euler(0,-135,0);
+                break;
+            case PlayerMoveDirection.BackwardRight:
+                arrowNavi.transform.rotation = Quaternion.Euler(0,135,0);
+                break;
         }
-
-        currentState = MovementState.Idle;
-    }
-
-    [EditorAttributes.Button("Set Mover")]
-    private void SetMover()
-    {
-        currentPattern = Instantiate(patternDatas[(int)movePattern - 1].patternPrefab, parentPattern);
-        currentPattern.GetComponent<MoverCheckerHost>().CheckMove();
-    }
-
-
-    public void ChangePatternNow(AbilityType newPattern)
-    {
-        if (currentPattern != null)
-        {
-            Destroy(currentPattern.gameObject);
-            currentPattern = null;
-        }
-        GridSpawnManager.Instance.ClearMover();
-        movePattern = newPattern;
-        SetMover();
         
+        moveArrow.Add(arrowNavi);
     }
 
-    #endregion
-
-    #region TurnHandle
-
-    public void StartTurn()
+    public void StartNavigation(Vector3 point)
     {
-        ResetPlayerTarget();
-        onTurn = true;
-        if (moveSuccess)
-        {
-            return;
-        }
-
-        foreach (Button button in playerInteractButton)
-        {
-            button.interactable = true;
-        }
-
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
-        {
-            if (inBattle == false)
-            {
-                movePoint = maxMovePoint;
-                inBattle = true;
-                MovementPointInterfaceUpdate();
-            }
-            SetMover();
-        }
-        else
-        {
-            if (movePoint <= 0)
-            {
-                movePoint = maxMovePoint;
-                MovementPointInterfaceUpdate();
-            }
-        }
-        currentState = MovementState.Combat;
+        transform.position = player.transform.position;
+        targetTransform = player.transform.position;
+        lastPlayerTransform = player.transform.position;
+        supTargetTransform = player.transform.position;
+        SetTargetPosition(point);
+        navigationSuccess = false;
+    }
+    private void ResetNavigation()
+    {
+        transform.position = player.transform.position;
+        navigationSuccess = true;
     }
 
-    
-    public void EndTurn()
+    public void ClearNavigation() 
     {
-        if (movePattern != King)
+        foreach (GameObject arrow in moveArrow.ToList())
         {
-            movePattern = King;
-        }
-        foreach (Button button in playerInteractButton)
-        {
-            button.interactable = false;
-        }
-        ClearPattern();
-        onTurn = false;
-        moveSuccess = false;
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
-        {
-            movePoint -= 1;
-            ChaosManager.Instance.IncreaseChaosPoint(1);
-            MovementPointInterfaceUpdate();
-            if (movePoint <= 0)
+            if (arrow == null)
             {
-                GetComponent<PlayerSkillHandle>().AddSkillPoint(1);
-                TurnManager.Instance.TurnSucces();
-                inBattle = false;
+                moveArrow.Remove(arrow);
             }
             else
             {
-                StartTurn();
+                moveArrow.Remove(arrow);
+                Destroy(arrow);
             }
-            
-        }
-        else
-        {
-            playerNavigation.ClearNavigation();
-        }
-        
-    }
-
-    [Button("End Turn")]
-    public void EndTurnPermanent()
-    {
-        if (movePattern != King)
-        {
-            movePattern = King;
-        }
-        foreach (Button button in playerInteractButton)
-        {
-            button.interactable = false;
-        }
-        ClearPattern();
-        onTurn = false;
-        moveSuccess = false;
-        TurnManager.Instance.TurnSucces();
-        inBattle = false;
-    }
-
-    #endregion
-
-
-    #region MovementPoint
-
-    private void IncreaseMovementPoint()
-    {
-        movePoint += 1;
-        MovementPointInterfaceUpdate();
-    }
-
-    private void DecreaseMovementPoint()
-    {
-        movePoint -= 1;
-        MovementPointInterfaceUpdate();
-    }
-
-    private void MovementPointInterfaceUpdate()
-    {
-        movePointText.text = movePoint.ToString();
-        maxMovePointText.text = maxMovePoint.ToString();
-    }
-
-    #endregion
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            GetComponent<PlayerInputHandle>().MoveRandomKeyboard();
         }
     }
-
-   
+    
 }

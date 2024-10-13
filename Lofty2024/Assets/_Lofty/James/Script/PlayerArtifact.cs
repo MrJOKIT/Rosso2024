@@ -16,45 +16,12 @@ public class PlayerArtifact : MonoBehaviour
     public int maxArtifact;
     public List<ArtifactData> artifactHaves;
     public List<ArtifactUI> artifactSlots;
-    public ArtifactData testArtifactOne;
-    public ArtifactData testArtifactTwo;
-    public ArtifactData testArtifactThree;
 
     private void Awake()
     {
         maxArtifact = artifactSlots.Count;
     }
-
-    private void Update()
-    {
-        //Test add Artifact
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            AddNewArtifact(testArtifactOne);
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            AddNewArtifact(testArtifactTwo);
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            AddNewArtifact(testArtifactThree);
-        }
-
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            RemoveArtifact(testArtifactOne);
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            RemoveArtifact(testArtifactTwo);
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            RemoveArtifact(testArtifactThree);
-        }
-    }
-
+    
     public void AddNewArtifact(ArtifactData newArtifact)
     {
         if (artifactHaves.Count == maxArtifact)
@@ -68,7 +35,7 @@ public class PlayerArtifact : MonoBehaviour
         }
         
         artifactHaves.Add(newArtifact);
-        artifactSlots[artifactHaves.Count - 1].SetArtifactUI(newArtifact.artifactName,newArtifact.artifactImage);
+        artifactSlots[artifactHaves.Count - 1].SetArtifactUI(newArtifact,newArtifact.artifactName,newArtifact.artifactImage);
         //Destroy(newArtifact.GameObject());
     }
     
@@ -92,7 +59,7 @@ public class PlayerArtifact : MonoBehaviour
 
         foreach (ArtifactData artifact in artifactHaves)
         {
-            artifactSlots[artifactHaves.IndexOf(artifact)].SetArtifactUI(artifact.artifactName,artifact.artifactImage);
+            artifactSlots[artifactHaves.IndexOf(artifact)].SetArtifactUI(artifact,artifact.artifactName,artifact.artifactImage);
         }
     }
 
