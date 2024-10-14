@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d71822a0623704448bef5196b9eb410, type: 3}
+  m_Name: HeartOfFlamesII
+  m_EditorClassIdentifier: 
+  artifactGrade: 1
+  artifactName: Heart of flames II
+  artifactImage: {fileID: 0}
+  artifactDetail: Increase your HP +2
+  upgradeType: 0
+  addHealthPoint: 2
+  addHealthPointTemp: 0
+  addSkillPoint: 0
+  addHealMultiple: 0
+  addCoinMultiple: 0
+  addSoulMultiple: 0
+  addDamage: 0
+  addKnockBackRange: 0
+  addActionPoint: 0
+  addSkillDiscount: 0
+  abilityName: 0

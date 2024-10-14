@@ -10,14 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d71822a0623704448bef5196b9eb410, type: 3}
-  m_Name: ArtifactData
+  m_Name: PatienceControl
   m_EditorClassIdentifier: 
-  artifactName: Speed
-  artifactImage: {fileID: 21300000, guid: 071c53064aae09c40a6475681530c51d, type: 3}
-  upgradeType: 0
+  artifactGrade: 0
+  artifactName: PatienceControl
+  artifactImage: {fileID: 0}
+  artifactDetail: Reduce usage AP -1
+  upgradeType: 2
   addHealthPoint: 0
+  addHealthPointTemp: 0
   addSkillPoint: 0
+  addHealMultiple: 0
+  addCoinMultiple: 0
+  addSoulMultiple: 0
   addDamage: 0
   addKnockBackRange: 0
   addActionPoint: 0
+  addSkillDiscount: 1
   abilityName: 0

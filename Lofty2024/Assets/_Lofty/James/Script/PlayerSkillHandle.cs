@@ -69,7 +69,7 @@ public class PlayerSkillHandle : MonoBehaviour
 
     public void AddSkillPoint(int count)
     {
-        if (skillPoint >= minMaxSkillPoint.y)
+        if (skillPoint >= minMaxSkillPoint.y + GetComponent<PlayerArtifact>().SkillPoint)
         {
             return;
         }
@@ -88,9 +88,8 @@ public class PlayerSkillHandle : MonoBehaviour
     {
         GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
         slotSelect = slotSkillIndex;
-        if (skillPoint >= _skillSlots[slotSkillIndex].skillData.skillCost)
+        if (skillPoint >= _skillSlots[slotSkillIndex].skillData.skillCost - GetComponent<PlayerArtifact>().SkillDiscount)
         {
-            
             _skillSlots[slotSkillIndex].skillImage.GetComponent<Button>().interactable = false;
             currentSkill = Instantiate(_skillSlots[slotSkillIndex].skillData.skillPattern,skillParent);
         }
@@ -101,13 +100,13 @@ public class PlayerSkillHandle : MonoBehaviour
     private void SkillPointUiUpdate()
     {
         skillPointText.text = "" + skillPoint;
-        maxSkillPointText.text = "" + minMaxSkillPoint.y;
+        maxSkillPointText.text = "" + minMaxSkillPoint.y + GetComponent<PlayerArtifact>().SkillPoint;
     }
 
     [Button("Confirm Skill")]
     public void ConfirmSkill()
     {
-        skillPoint -= _skillSlots[slotSelect].skillData.skillCost;
+        skillPoint -= _skillSlots[slotSelect].skillData.skillCost - GetComponent<PlayerArtifact>().SkillDiscount;
         currentSkill.GetComponent<SkillAction>().ActiveSkill();
         currentSkill = null;
         ClearSlot(slotSelect);

@@ -55,7 +55,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public bool autoSkip;
     public bool onTurn;
     public float turnSpeed = 20f;
-    public int damage;
+    [SerializeField] private int defaultDamage;
+    [SerializeField] private int damage;
     public List<Button> playerInteractButton;
 
     [Space(10)] 
@@ -63,7 +64,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public AttackType attackType = AttackType.NormalAttack;
     public CurseType effectiveType = CurseType.Empty;
     public int effectiveTurnTime = 1;
-    public int knockBackRange = 1;
+    [SerializeField] private int knockBackRange = 1;
+    [SerializeField] private int defaultKnockBackRange = 1;
 
     [Tab("Movement")] 
     [Header("Player Input")]
@@ -71,8 +73,9 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     [Space(10)] 
     [Header("Movement Point")] 
-    public int movePoint;
-    public int maxMovePoint;
+    [SerializeField] private int defaultMovePoint = 2;
+    [SerializeField] private int movePoint;
+    [SerializeField] private int maxMovePoint;
     public bool inBattle;
     [Space(5)] 
     public TextMeshProUGUI movePointText;
@@ -122,6 +125,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             moveType = MoveType.Keyboard;
         }
         oldPattern = movePattern;
+        
+        SetStats();
     }
 
     private void Start()
@@ -996,5 +1001,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         }
     }
 
+    public void SetStats()
+    {
+        damage = defaultDamage + GetComponent<PlayerArtifact>().Damage;
+        maxMovePoint = defaultMovePoint + GetComponent<PlayerArtifact>().ActionPoint;
+        knockBackRange = defaultKnockBackRange + GetComponent<PlayerArtifact>().KnockBackRange;
+    }
    
 }

@@ -26,21 +26,63 @@ public class PlayerArtifact : MonoBehaviour
     [Tab("Upgrade Setting")]
     [Header("Stats")] 
     [SerializeField] private int addHealthPoint;
+    [SerializeField] private int addHealthPointTemp;
     [SerializeField] private int addSkillPoint;
-   
+    [SerializeField] private int addHealMultiple;
+    public int HealthPoint => addHealthPoint;
+    public int HealthPointTemp => addHealthPointTemp;
+    public int SkillPoint => addSkillPoint;
+    public int HealMultiple => addHealMultiple;
+
+    [Header("Currency")] 
+    [SerializeField] private float addSoulMultiple;
+    [SerializeField] private float addCoinMultiple;
+    public float SoulMultiple => addSoulMultiple;
+    public float CoinMultiple => addCoinMultiple;
+    
     [Space(10)] 
     [Header("Combat")] 
     [SerializeField] private int addDamage;
     [SerializeField] private int addKnockBackRange;
+    public int Damage => addDamage;
+    public int KnockBackRange => addKnockBackRange;
 
     [Space(10)] 
     [Header("Movement")] 
     [SerializeField] private int addActionPoint;
-
+    [SerializeField] private int addSkillDiscount;
+    public int ActionPoint => addActionPoint;
+    public int SkillDiscount => addSkillDiscount;
+    
     [Space(10)] 
     [Header("Ability")] 
-    public bool playerShield;
-    public bool moveAfterKill;
+    [SerializeField] private bool playerShield;
+    public bool PlayerShield => playerShield;
+    [SerializeField] private bool moveAfterKill;
+    public bool MoveAfterKill => moveAfterKill;
+    [SerializeField] private bool trapNotActiveSelf;
+    public bool TrapNotActiveSelf => trapNotActiveSelf;
+    [SerializeField] private bool godOfWar;
+    public bool GodOfWar => godOfWar;
+    [SerializeField] private bool eyeKing;
+    public bool EyeKing => eyeKing;
+    [SerializeField] private bool deathDoor;
+    public bool DeathDoor => deathDoor;
+    [SerializeField] private bool giftOfDeath;
+    public bool GiftOfDeath => giftOfDeath;
+    [SerializeField] private bool checkMate;
+    public bool CheckMate => checkMate;
+    [SerializeField] private bool creepingTerror;
+    public bool CreepingTerror => creepingTerror;
+    [SerializeField] private bool kamikaze;
+    public bool Kamikaze => kamikaze;
+    [SerializeField] private bool rabbitPaws;
+    public bool RabbitPaws => rabbitPaws;
+    [SerializeField] private bool ironBody;
+    public bool IronBody => ironBody;
+    [SerializeField] private bool lastChance;
+    public bool LastChance => lastChance;
+    
     private void Awake()
     {
         maxArtifact = artifactSlots.Count;
@@ -151,25 +193,70 @@ public class PlayerArtifact : MonoBehaviour
         SetDefault();
         foreach (ArtifactData artifact in artifactHaves)
         {
-            if (artifact.upgradeType != UpgradeType.PlayerAbility)
+            switch (artifact.upgradeType)
             {
-                addHealthPoint += artifact.addHealthPoint;
-                addSkillPoint += artifact.addSkillPoint;
-                addDamage += artifact.addDamage;
-                addKnockBackRange += artifact.addKnockBackRange;
-                addActionPoint += artifact.addActionPoint;
-            }
-            else
-            {
-                switch (artifact.abilityName)
-                {
-                    case AbilityName.Shield:
-                        playerShield = true;
-                        break;
-                    case AbilityName.FreeMoveWithKill:
-                        moveAfterKill = true;
-                        break;
-                }
+                case UpgradeType.PlayerCurrency:
+                    addSoulMultiple += artifact.addSoulMultiple;
+                    addCoinMultiple += artifact.addCoinMultiple;
+                    GameManager.Instance.GetComponent<GameCurrency>().UpgradeMultiple(addCoinMultiple,addSoulMultiple);
+                    break;
+                case UpgradeType.PlayerAbility:
+                    switch (artifact.abilityName)
+                    {
+                        case AbilityName.Shield:
+                            playerShield = true;
+                            break;
+                        case AbilityName.FreeMoveWithKill:
+                            moveAfterKill = true;
+                            break;
+                        case AbilityName.TrapNotActiveSelf:
+                            trapNotActiveSelf = true;
+                            break;
+                        case AbilityName.GodOfWar:
+                            godOfWar = true;
+                            break;
+                        case AbilityName.TheEyeKing:
+                            eyeKing = true;
+                            break;
+                        case AbilityName.DeathDoor:
+                            deathDoor = true;
+                            break;
+                        case AbilityName.GiftOfDeath:
+                            giftOfDeath = true;
+                            break;
+                        case AbilityName.CheckMate:
+                            checkMate = true;
+                            break;
+                        case AbilityName.CreepingTerror:
+                            creepingTerror = true;
+                            break;
+                        case AbilityName.Kamikaze:
+                            kamikaze = true;
+                            break;
+                        case AbilityName.RabbitPaws:
+                            rabbitPaws = true;
+                            break;
+                        case AbilityName.IronBody:
+                            ironBody = true;
+                            break;
+                        case AbilityName.LastChance:
+                            lastChance = true;
+                            break;
+                    }
+                    break;
+                default:
+                    addHealthPoint += artifact.addHealthPoint;
+                    addHealthPointTemp += artifact.addHealthPointTemp;
+                    addHealMultiple += artifact.addHealMultiple;
+                    addSkillPoint += artifact.addSkillPoint;
+                    addDamage += artifact.addDamage;
+                    addKnockBackRange += artifact.addKnockBackRange;
+                    addActionPoint += artifact.addActionPoint;
+                    addSkillDiscount += artifact.addSkillDiscount;
+                    
+                    GetComponent<Player>().SetStats();
+                    GetComponent<PlayerMovementGrid>().SetStats();
+                    break;
             }
         }
         
@@ -179,14 +266,30 @@ public class PlayerArtifact : MonoBehaviour
     {
         //State
         addHealthPoint = 0;
+        addHealthPointTemp = 0;
+        addHealMultiple = 0;
         addSkillPoint = 0;
         addDamage = 0;
         addKnockBackRange = 0;
         addActionPoint = 0;
+        addSkillDiscount = 0;
+        addCoinMultiple = 0;
+        addSoulMultiple = 0;
         
         //Ability
         playerShield = false;
         moveAfterKill = false;
+        trapNotActiveSelf = false;
+        godOfWar = false;
+        eyeKing = false;
+        deathDoor = false;
+        giftOfDeath = false;
+        checkMate = false;
+        creepingTerror = false;
+        kamikaze = false;
+        rabbitPaws = false;
+        ironBody = false;
+        lastChance = false;
     }
 
     public void ActiveStartRoom()

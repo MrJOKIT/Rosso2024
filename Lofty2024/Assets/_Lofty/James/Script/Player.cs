@@ -7,18 +7,30 @@ using VInspector;
 
 public class Player : MonoBehaviour, ITakeDamage
 {
-    [Tab("Player")]
+    [Tab("Player")] 
+    [Header("Default Stats")] 
+    [SerializeField] private int defaultMaxHealth;
+    [SerializeField] private int defaultHealthTemp;
+    [Space(10)]
+    [Header("Game Stats")]
     [SerializeField] private bool haveShield;
     [SerializeField] private int maxHealth;
+    [SerializeField] private int playerHealthTemp;
     [SerializeField] private int playerHealth;
+    
     [Space(10)] 
-    public List<GameObject> healthUI;
+    [Tab("Usage Item")] 
+    [SerializeField] private int healMultiple;
     [Tab("Curse")]
     [SerializeField] private List<CurseData> curseHave;
     [SerializeField] private GameObject curseUiPrefab;
     [SerializeField] private Transform curseUiParent;
     private bool isDead;
-    
+
+    private void Awake()
+    {
+        SetStats();
+    }
 
     private void Update()
     {
@@ -43,33 +55,6 @@ public class Player : MonoBehaviour, ITakeDamage
         //ใช้ตอน Player ตาย 
         isDead = true;
     }
-
-    private void UpdateHealthUI()
-    {
-        switch (playerHealth)
-        {
-            case 0:
-                healthUI[0].SetActive(false);
-                healthUI[1].SetActive(false);
-                healthUI[2].SetActive(false);
-                break;
-            case 1:
-                healthUI[0].SetActive(true);
-                healthUI[1].SetActive(false);
-                healthUI[2].SetActive(false);
-                break;
-            case 2:
-                healthUI[0].SetActive(true); 
-                healthUI[1].SetActive(true);
-                healthUI[2].SetActive(false);
-                break;
-            case 3:
-                healthUI[0].SetActive(true);
-                healthUI[1].SetActive(true);
-                healthUI[2].SetActive(true);
-                break;
-        }
-    }
     
     public void TakeDamage(int damage)
     {
@@ -80,19 +65,34 @@ public class Player : MonoBehaviour, ITakeDamage
             haveShield = false;
             return;
         }
-        playerHealth -= damage;
+
+        if (playerHealthTemp > 0)
+        {
+            int currentHealth = playerHealthTemp - damage;
+            if (currentHealth < 0)
+            {
+                playerHealth += currentHealth;
+            }
+        }
+        else
+        {
+            playerHealth -= damage;
+            if (playerHealth < 0)
+            {
+                playerHealth = 0;
+            }
+        }
         
-        UpdateHealthUI();
     }
 
     public void TakeHealth(int health)
     {
-        if (playerHealth >= maxHealth)
+        playerHealth += health + GetComponent<PlayerArtifact>().HealMultiple;
+        
+        if (playerHealth >= maxHealth + GetComponent<PlayerArtifact>().HealthPoint + playerHealthTemp)
         {
-            return;
+            playerHealth = maxHealth + GetComponent<PlayerArtifact>().HealthPoint;
         }
-
-        playerHealth += health;
     }
     
     public void AddCurseStatus(CurseType curseType, int turnTime)
@@ -142,5 +142,12 @@ public class Player : MonoBehaviour, ITakeDamage
             curse.curseUI.curseType = curse.curseType;
             curse.curseUI.turnCount.text = curse.curseTurn.ToString();
         }
+    }
+
+    public void SetStats()
+    {
+        playerHealthTemp += defaultHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp;
+        maxHealth += defaultMaxHealth + GetComponent<PlayerArtifact>().HealthPoint;
+        
     }
 }
