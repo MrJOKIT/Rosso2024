@@ -458,7 +458,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e002bae6c537e444a4d9e017ca3dad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveDirection: 0
   forwardPath: {fileID: 3190248379557179588}
   forwardLeftPath: {fileID: 6784530998226576825}
   forwardRightPath: {fileID: 7179097554245353693}

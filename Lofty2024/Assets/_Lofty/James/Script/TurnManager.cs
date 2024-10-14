@@ -43,6 +43,7 @@ public class TurnManager : Singeleton<TurnManager>
 
     [Space(10)] 
     [Header("Prefab")] 
+    public GameObject turnCanvas;
     public Transform turnSliderCanvas;
     public Slider turnSliderAllyPrefab;
     public Slider turnSliderEnemyPrefab;
@@ -52,7 +53,7 @@ public class TurnManager : Singeleton<TurnManager>
         if (currentRoomClear)
         {
             onPlayerTurn = true;
-            turnSliderCanvas.gameObject.SetActive(false);
+            turnCanvas.SetActive(false);
             return;
         }
         
@@ -73,7 +74,7 @@ public class TurnManager : Singeleton<TurnManager>
         currentRoomClear = false;
         onPlayerTurn = false;
         onEnemyTurn = false;
-        turnSliderCanvas.gameObject.SetActive(true);
+        turnCanvas.SetActive(true);
         foreach (TurnData td in turnData)
         {
             td.turnCounter = td.baseSpeed;
@@ -175,13 +176,17 @@ public class TurnManager : Singeleton<TurnManager>
                 break;
             }
         }
-
         GridSpawnManager.Instance.ClearMover();
         if (!multipleTurn)
         {
             onPlayerTurn = false;
             onEnemyTurn = false;
         }
+    }
+
+    public void TurnContinue()
+    {
+        GridSpawnManager.Instance.ClearMover();
     }
 
     #endregion

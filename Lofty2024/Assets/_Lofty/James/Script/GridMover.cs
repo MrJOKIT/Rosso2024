@@ -16,7 +16,8 @@ public enum GridState
 
 public class GridMover : MonoBehaviour
 {
-    [Header("Ref")] 
+    [Header("Ref")]
+    public bool isPortal;
     public Enemy enemy;
     public Material oldMat;
 
@@ -24,6 +25,7 @@ public class GridMover : MonoBehaviour
     [Header("Checker")] 
     public GridState gridState;
     private GridState oldState;
+    public bool gridActive;
     
     [Space(10)]
     [Header("Optional")]
@@ -45,7 +47,6 @@ public class GridMover : MonoBehaviour
 
     private void Start()
     {
-        GridSpawnManager.Instance.AddGridList(this);
         if (isTrap)
         {
             gridState = GridState.OnTrap;
@@ -125,6 +126,8 @@ public class GridMover : MonoBehaviour
                 break;
             case GridState.OnObstacle:
                 break;
+            case GridState.OnPlayer:
+                break;
             case GridState.OnMove:
                 GetComponent<MeshRenderer>().material = oldMat;
                 gridState = GridState.Empty;
@@ -170,27 +173,48 @@ public class GridMover : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Enemy"))
-        {
-            if (gridState == GridState.OnObstacle)
-            {
-                return;
-            }
-            gridState = GridState.OnEnemy;
-           
-            
-        }
-        else if (other.CompareTag("Obstacle"))
-        {
-            gridState = GridState.OnObstacle;
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
         if (other.CompareTag("Obstacle"))
         {
             gridState = GridState.OnObstacle;
+            GridSpawnManager.Instance.RemoveGrid(this);
+            GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().currentGrid.Remove(this);
+            Destroy(gameObject);
+        }
+        else if(other.CompareTag("Enemy"))
+        {
+            gridState = GridState.OnEnemy;
+            try
+            {
+                enemy = other.GetComponent<Enemy>();
+                if (isTrap)
+                {
+                    TrapActive();
+                }
+            }
+            catch (Exception a)
+            {
+                Debug.Log($"No enemy script in collider {a}");
+            }
+        }
+        else if (other.CompareTag("Player"))
+        {
+            gridState = GridState.OnPlayer;
+        }
+        
+    }
+
+    /*private void OnTriggerStay(Collider other)
+    {
+        if (!gridActive)
+        {
+            return;
+        }
+        if (other.CompareTag("Obstacle"))
+        {
+            gridState = GridState.OnObstacle;
+            GridSpawnManager.Instance.RemoveGrid(this);
+            GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().currentGrid.Remove(this);
+            Destroy(gameObject);
         }
         else if (other.CompareTag("Enemy"))
         {
@@ -212,7 +236,7 @@ public class GridMover : MonoBehaviour
         {
             gridState = GridState.OnPlayer;
         }
-    }
+    }*/
 
     private void OnTriggerExit(Collider other)
     {

@@ -25,6 +25,7 @@ public class EnemyAI : Enemy
     public List<Transform> combatChecker;
     private void Update()
     {
+        ChangeGridMoverUnder();
         CheckMoveHandle();
         if (onTurn == false)
         {
@@ -49,7 +50,23 @@ public class EnemyAI : Enemy
                 break;
                 
         }
-        
+    }
+
+    private void ChangeGridMoverUnder()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray.origin,Vector3.down,out hit,10,gridLayer))
+        {
+            if (hit.collider.GetComponent<GridMover>() != null)
+            {
+                if (hit.collider.GetComponent<GridMover>().gridState != GridState.OnEnemy)
+                {
+                    hit.collider.GetComponent<GridMover>().enemy = this; 
+                    hit.collider.GetComponent<GridMover>().gridState = GridState.OnEnemy;
+                }
+            }
+        }
     }
 
 
@@ -57,6 +74,11 @@ public class EnemyAI : Enemy
     
     private void EnemyMoveToPlayer()
     {
+        if (forwardMoveBlock && forwardLeftMoveBlock && forwardRightMoveBlock && backwardMoveBlock && backwardLeftMoveBlock && backwardRightMoveBlock && leftMoveBlock && rightMoveBlock)
+        {
+            EndTurnModify();
+        }
+        
         if (transform.position.z < targetTransform.position.z && transform.position.x == targetTransform.position.x)
         {
             //Move Forward

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 3360131035953138767}
   - component: {fileID: 145480375171011920}
   - component: {fileID: 2523819555072442222}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Portal
-  m_TagString: Untagged
+  m_TagString: Portal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,11 +51,17 @@ MonoBehaviour:
   popUpCanvas: {fileID: 3161751588238605166}
   onPlayer: 0
   roomTypeConnect: 0
+  roomCenter: {fileID: 0}
   warpPoint: {x: 0, y: 0, z: 0}
+  playerTrans: {fileID: 0}
+  portalObject: {fileID: 6713714989777541014}
+  portalActive: 0
+  isConnect: 0
   portalRenderer: {fileID: 4398477801878474827}
   combatMaterial: {fileID: 2100000, guid: d61620d08778d6b4c887197f7fe6bf0a, type: 2}
   bonusMaterial: {fileID: 2100000, guid: 39a03a73d8c26274a868b10b8eeb8c6c, type: 2}
   bossMaterial: {fileID: 2100000, guid: debdfb77ae5913f44b3095522d34373e, type: 2}
+  clearMat: {fileID: 2100000, guid: 6885d64e8021dda4ebe2643a3dab6a24, type: 2}
 --- !u!65 &145480375171011920
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -75,7 +81,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.8, y: 1, z: 0.8}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2523819555072442222
 Rigidbody:
@@ -284,7 +290,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: HERE
+  m_text: E
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -371,7 +377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8085625415114605982
 Transform:
   m_ObjectHideFlags: 0

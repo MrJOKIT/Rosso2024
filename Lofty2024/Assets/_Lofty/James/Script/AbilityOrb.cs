@@ -9,7 +9,12 @@ public class AbilityOrb : MonoBehaviour
     [SerializeField] private GameObject uiCanvas;
     private bool onPlayer;
     private PlayerAbility _player;
-    
+
+    private void Start()
+    {
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().AddItemInRoom(gameObject);
+    }
+
     public void SetOrbAbility(AbilityType abilityType)
     {
         _abilityType = abilityType;
@@ -31,10 +36,11 @@ public class AbilityOrb : MonoBehaviour
     private void TakeOrb()
     {
         _player.swapAbility = _abilityType;
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().itemInRoom.Remove(gameObject);
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) 
     {
         if (other.GetComponent<Player>() != null)
         {

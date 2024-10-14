@@ -16,8 +16,10 @@ public class GameCurrency : MonoBehaviour
     [Space(10)]
     [Header("Currency")]
     [SerializeField] private int maxFlameSoul;
+    [SerializeField] private float flameSoulMultiple;
     private float flameSoul;
     [SerializeField] private int maxEricCoin;
+    [SerializeField] private float ericCoinMultiple;
     private float ericCoin;
     
     public int FlameSoul => maxFlameSoul;
@@ -125,5 +127,11 @@ public class GameCurrency : MonoBehaviour
         {
             maxFlameSoul = 0;
         }
+    }
+
+    public void UpgradeMultiple(float ericCoinMultiple,float flameSoulMultiple)
+    {
+        this.ericCoinMultiple = ericCoinMultiple;
+        this.flameSoulMultiple = flameSoulMultiple;
     }
 }

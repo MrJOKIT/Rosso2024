@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using EditorAttributes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -28,7 +28,7 @@ public enum MoveType
 public enum AttackType
 {
     NormalAttack,
-    SpecialAttack,
+    SpecialAttack, 
     KnockBackAttack,
     EffectiveAttack,
 }
@@ -55,7 +55,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public bool autoSkip;
     public bool onTurn;
     public float turnSpeed = 20f;
-    public int damage;
+    [SerializeField] private int defaultDamage;
+    [SerializeField] private int damage;
     public List<Button> playerInteractButton;
 
     [Space(10)] 
@@ -63,14 +64,25 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public AttackType attackType = AttackType.NormalAttack;
     public CurseType effectiveType = CurseType.Empty;
     public int effectiveTurnTime = 1;
+    [SerializeField] private int knockBackRange = 1;
+    [SerializeField] private int defaultKnockBackRange = 1;
 
-    [Tab("Movement")]
+    [Tab("Movement")] 
     [Header("Player Input")]
     public MoveType moveType;
+
     [Space(10)] 
+    [Header("Movement Point")] 
+    [SerializeField] private int defaultMovePoint = 2;
+    [SerializeField] private int movePoint;
+    [SerializeField] private int maxMovePoint;
+    public bool inBattle;
+    [Space(5)] 
+    public TextMeshProUGUI movePointText;
+    public TextMeshProUGUI maxMovePointText;
+    [Space(10)]
     [Header("Move Setting")]
     public bool moveSuccess;
-    public bool autoEndTurnAfterMove;
     public bool moveRandom;
     public AbilityType movePattern;
     public MovementState currentState = MovementState.Idle;
@@ -82,10 +94,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Header("Move Pattern")] 
     public List<PatternData> patternDatas;
     public Transform parentPattern;
-    [ReadOnly] public Transform currentPattern;
+    public Transform currentPattern;
 
 
-    [Header("Move Checker")] 
+    [Header("Move Checker")]
+    public PlayerNavigation playerNavigation;
     public GameObject movePathPrefab;
     public List<GameObject> movePathList;
     public LayerMask moveBlockLayer;
@@ -112,6 +125,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             moveType = MoveType.Keyboard;
         }
         oldPattern = movePattern;
+        
+        SetStats();
     }
 
     private void Start()
@@ -142,6 +157,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         
         MoveStateHandle();
     }
+
+    #region MovementGrid
 
     [VInspector.Button("Reset Target")]
     public void ResetPlayerTarget()
@@ -180,9 +197,13 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 }
                 break;
             case MovementState.Moving:
-                if (moveType == MoveType.Mouse || moveType == MoveType.Both )
+                /*if (moveType == MoveType.Mouse || moveType == MoveType.Both )
                 {
                     HandleClickToMove();
+                }*/
+                if (playerNavigation.navigationSuccess == false)
+                {
+                    return;
                 }
                 MoveToTarget();
                 break;
@@ -247,7 +268,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                                 break;
                             case AttackType.KnockBackAttack:
                                 enemy.TakeDamage(damage);
-                                enemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,1);
+                                enemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange);
                                 break;
                             case AttackType.EffectiveAttack:
                                 enemy.TakeDamage(damage);
@@ -264,10 +285,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             GridSpawnManager.Instance.ClearMover();
                             currentState = MovementState.Idle;
                             moveSuccess = true;
-                            if (autoEndTurnAfterMove)
-                            {
-                                EndTurn();
-                            }
+                            EndTurn();
                         }
                         break;
                     case GridState.Empty:
@@ -275,6 +293,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         {
                             return;
                         }
+                        playerNavigation.StartNavigation(hit.point);
                         SetTargetPosition(hit.point);
                         break;
                 }
@@ -300,7 +319,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     public void SetTargetPosition(Vector3 direction)
     {
-        if (!moveRandom)
+        if (!moveRandom && GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
             GridSpawnManager.Instance.ClearMover();
         }
@@ -354,10 +373,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             ClearMovePath();
             currentState = MovementState.Idle;
             GetComponent<PlayerAbility>().CheckAbilityUse();
-            if (autoEndTurnAfterMove)
-            {
-                EndTurn();
-            }
+            EndTurn();
         }
     }
 
@@ -857,15 +873,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         SetMover();
         
     }
-    
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            GetComponent<PlayerInputHandle>().MoveRandomKeyboard();
-        }
-    }
+    #endregion
+
+    #region TurnHandle
 
     public void StartTurn()
     {
@@ -883,12 +894,26 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
+            if (inBattle == false)
+            {
+                movePoint = maxMovePoint;
+                inBattle = true;
+                MovementPointInterfaceUpdate();
+            }
             SetMover();
+        }
+        else
+        {
+            if (movePoint <= 0)
+            {
+                movePoint = maxMovePoint;
+                MovementPointInterfaceUpdate();
+            }
         }
         currentState = MovementState.Combat;
     }
 
-    [EditorAttributes.Button("End Turn")]
+    
     public void EndTurn()
     {
         if (movePattern != King)
@@ -900,8 +925,87 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             button.interactable = false;
         }
         ClearPattern();
-        TurnManager.Instance.TurnSucces();
         onTurn = false;
         moveSuccess = false;
+        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        {
+            movePoint -= 1;
+            ChaosManager.Instance.IncreaseChaosPoint(1);
+            MovementPointInterfaceUpdate();
+            if (movePoint <= 0)
+            {
+                GetComponent<PlayerSkillHandle>().AddSkillPoint(1);
+                TurnManager.Instance.TurnSucces();
+                inBattle = false;
+            }
+            else
+            {
+                StartTurn();
+            }
+            
+        }
+        else
+        {
+            playerNavigation.ClearNavigation();
+        }
+        
     }
+
+    [Button("End Turn")]
+    public void EndTurnPermanent()
+    {
+        if (movePattern != King)
+        {
+            movePattern = King;
+        }
+        foreach (Button button in playerInteractButton)
+        {
+            button.interactable = false;
+        }
+        ClearPattern();
+        onTurn = false;
+        moveSuccess = false;
+        TurnManager.Instance.TurnSucces();
+        inBattle = false;
+    }
+
+    #endregion
+
+
+    #region MovementPoint
+
+    private void IncreaseMovementPoint()
+    {
+        movePoint += 1;
+        MovementPointInterfaceUpdate();
+    }
+
+    private void DecreaseMovementPoint()
+    {
+        movePoint -= 1;
+        MovementPointInterfaceUpdate();
+    }
+
+    private void MovementPointInterfaceUpdate()
+    {
+        movePointText.text = movePoint.ToString();
+        maxMovePointText.text = maxMovePoint.ToString();
+    }
+
+    #endregion
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            GetComponent<PlayerInputHandle>().MoveRandomKeyboard();
+        }
+    }
+
+    public void SetStats()
+    {
+        damage = defaultDamage + GetComponent<PlayerArtifact>().Damage;
+        maxMovePoint = defaultMovePoint + GetComponent<PlayerArtifact>().ActionPoint;
+        knockBackRange = defaultKnockBackRange + GetComponent<PlayerArtifact>().KnockBackRange;
+    }
+   
 }
