@@ -33,6 +33,7 @@ MonoBehaviour:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     - AttributesSamples
+    - Beardy.BeardsGridLayoutGroup.Runtime
     - EditorAttributes
     - GridBuilder2_Core
     - SimpleMinMaxSlider
