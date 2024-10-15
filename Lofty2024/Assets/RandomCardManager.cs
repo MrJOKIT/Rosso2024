@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VInspector;
+using Random = UnityEngine.Random;
 
 public class RandomCardManager : MonoBehaviour
 {
@@ -23,6 +26,8 @@ public class RandomCardManager : MonoBehaviour
     [Range(1,4)]public int randomCount;
     [Space(10)]
     public int randomCost;
+    public int currentCost;
+    public TextMeshProUGUI costText;
 
     [Space(20)] 
     [Header("UI")] 
@@ -30,10 +35,17 @@ public class RandomCardManager : MonoBehaviour
     public bool haveArtifact;
     public Button randomAgainButton;
     public Button randomAgainWithArtifactButton;
+
     
+    private void Awake()
+    {
+        currentCost = randomCost / 2;
+    }
     [Button("RandomCard")]
     public void StartRandomCard()
     {
+        player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
+        currentCost *= 2; 
         cardRandomCanvas.SetActive(true);
         for (int a = 0; a < randomCount; a++)
         {
@@ -63,7 +75,7 @@ public class RandomCardManager : MonoBehaviour
         }
         else
         {
-            GetComponent<GameCurrency>().DecreaseEricCoin(randomCost);
+            GetComponent<GameCurrency>().DecreaseEricCoin(currentCost);
             StartRandomCard();
         }
     }
@@ -91,7 +103,8 @@ public class RandomCardManager : MonoBehaviour
 
     private void UpdateButton()
     {
-        randomAgainButton.interactable = GetComponent<GameCurrency>().EricCoin >= randomCost;
+        costText.text = "COST: " + currentCost;
+        randomAgainButton.interactable = GetComponent<GameCurrency>().EricCoin >= currentCost;
 
         if (haveArtifact)
         {
@@ -114,11 +127,13 @@ public class RandomCardManager : MonoBehaviour
 
     private void RandomEnd()
     {
+        currentCost = randomCost / 2;
         if (artifactUsed)
         {
             artifactUsed = false;
         }
         ClearSlots();
         cardRandomCanvas.SetActive(false);
+        player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
     }
 }
