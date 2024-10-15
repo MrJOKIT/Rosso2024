@@ -8,7 +8,7 @@ public class ImagePopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     public GameObject imageToShow; 
     public TMP_Text buttonText; 
-//
+
     void Start()
     {
       

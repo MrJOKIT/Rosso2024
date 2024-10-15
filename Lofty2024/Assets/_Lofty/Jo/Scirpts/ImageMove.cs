@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class ImageMove : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Image[] targetImages; // อาเรย์ของ Images ที่ต้องการขยับ
+    public Image[] targetImages; 
     private bool isMouseOver = false;
 
     void Update()

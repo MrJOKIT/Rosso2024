@@ -13,13 +13,13 @@ public class AnimationController : MonoBehaviour
 
     private IEnumerator PlayAnimationAndRemove()
     {
-        // เริ่มเล่น Animation
-        animator.SetTrigger("PlayAnimation"); // เปลี่ยนให้ตรงกับ Trigger ที่คุณตั้งไว้
+        
+        animator.SetTrigger("PlayAnimation"); 
 
-        // รอจนกว่า Animation จะเล่นเสร็จ
+       
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
-        // ลบ Animation Component
+       
         Destroy(animator);
     }
 }

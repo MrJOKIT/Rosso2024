@@ -5,14 +5,14 @@ using UnityEngine.EventSystems;
 
 public class Wallpaper : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Image backgroundImage; // ลาก Image ของพื้นหลังเข้ามาที่นี่ใน Inspector
-    public Sprite[] backgroundSprites; // ลากภาพที่ต้องการเปลี่ยนเข้ามาที่นี่ใน Inspector
+    public Image backgroundImage; 
+    public Sprite[] backgroundSprites; 
     private int currentIndex = 0;
     private bool isMouseOver = false;
 
     void Start()
     {
-        backgroundImage.sprite = backgroundSprites[currentIndex]; // ตั้งค่าให้ backgroundImage เป็นภาพแรก
+        backgroundImage.sprite = backgroundSprites[currentIndex]; 
         StartCoroutine(ChangeBackground());
     }
 

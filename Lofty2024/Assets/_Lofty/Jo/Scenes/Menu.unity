@@ -546,8 +546,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameObjects:
-  - {fileID: 2091274691}
   - {fileID: 1902911318}
+  - {fileID: 2091274691}
 --- !u!1 &187102640
 GameObject:
   m_ObjectHideFlags: 0
@@ -2664,7 +2664,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetImages:
   - {fileID: 913820626}
-  isMouseOver: 0
 --- !u!95 &913820629
 Animator:
   serializedVersion: 5
@@ -2698,7 +2697,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667b1a1e65818294bb0922c177425503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -3914,7 +3912,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667b1a1e65818294bb0922c177425503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
 --- !u!1 &1422393310
 GameObject:
   m_ObjectHideFlags: 0
@@ -4619,8 +4616,13 @@ MonoBehaviour:
   soundClips:
   - sound: 0
     clip: {fileID: 8300000, guid: d53de259b9c985544ade156728cc5382, type: 3}
+    isBackground: 0
   - sound: 1
     clip: {fileID: 8300000, guid: 482e88fe631c6ce4a92c68061a1930bf, type: 3}
+    isBackground: 0
+  - sound: 2
+    clip: {fileID: 8300000, guid: 1ad3fa5df7fd1bf4eb2f7afaafb1ac84, type: 3}
+    isBackground: 0
   bgVolume: 0.1
   effectVolume: 1
 --- !u!4 &1701988002
@@ -5002,8 +5004,6 @@ MonoBehaviour:
   backgroundSprites:
   - {fileID: 21300000, guid: 217403ed6785ac246964d4f7a655624a, type: 3}
   - {fileID: 21300000, guid: fea7b53785f6a3347a96506556d4ac34, type: 3}
-  currentIndex: 0
-  isMouseOver: 0
 --- !u!1 &2028427904
 GameObject:
   m_ObjectHideFlags: 0
