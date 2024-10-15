@@ -13,15 +13,16 @@ public class RandomCardManager : MonoBehaviour
 {
     public PlayerArtifact player;
     public GameObject cardRandomCanvas;
-    [Header("Random Card")]
+    [Header("Random Card")] 
+    public bool cardOutOfStock;
     public GameObject cardSlotPrefab;
     public Transform cardSlotParent;
-    [Space(10)] 
-    public List<CardSlot> cardSlots;
     [Space(10)]
     public List<ArtifactData> cardList;
     [Space(10)] 
     public List<ArtifactData> currentCardRandom;
+    [Space(10)] 
+    public List<CardSlot> cardSlots;
     [Space(10)] 
     [Range(1,4)]public int randomCount;
     [Space(10)]
@@ -39,20 +40,40 @@ public class RandomCardManager : MonoBehaviour
     
     private void Awake()
     {
+        Debug.Log(cardList.Count);
         currentCost = randomCost / 2;
     }
     [Button("RandomCard")]
     public void StartRandomCard()
     {
+        if (cardOutOfStock)
+        {
+            AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+            return;
+        }
         player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
         currentCost *= 2; 
         cardRandomCanvas.SetActive(true);
-        for (int a = 0; a < randomCount; a++)
+        if (cardList.Count > 1)
+        {
+            for (int a = 0; a < randomCount; a++)
+            {
+                if (a > cardList.Count + 1)
+                { 
+                    continue;
+                }
+                GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
+                card.GetComponent<CardSlot>().SetCard(a,RandomCardInList());
+                cardSlots.Add(card.GetComponent<CardSlot>());
+            }
+        }
+        else
         {
             GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
-            card.GetComponent<CardSlot>().SetCard(a,RandomCardInList());
+            card.GetComponent<CardSlot>().SetCard(0,RandomCardInList());
             cardSlots.Add(card.GetComponent<CardSlot>());
         }
+        
         UpdateButton();
     }
 
@@ -134,6 +155,11 @@ public class RandomCardManager : MonoBehaviour
         }
         ClearSlots();
         cardRandomCanvas.SetActive(false);
+
+        if (cardList.Count <= 0)
+        {
+            cardOutOfStock = true;
+        }
         player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
     }
 }

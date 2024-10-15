@@ -15,7 +15,7 @@ MonoBehaviour:
   artifactGrade: 0
   artifactName: Last Chance
   artifactImage: {fileID: 0}
-  artifactDetail: If  you start random card to have a chace to random agian
+  artifactDetail: If  you start random card to have a chace to random agian 1 time
   upgradeType: 3
   addHealthPoint: 0
   addHealthPointTemp: 0

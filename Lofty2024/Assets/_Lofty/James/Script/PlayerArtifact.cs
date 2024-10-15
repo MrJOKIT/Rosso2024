@@ -80,8 +80,6 @@ public class PlayerArtifact : MonoBehaviour
     public bool RabbitPaws => rabbitPaws;
     [SerializeField] private bool ironBody;
     public bool IronBody => ironBody;
-    [SerializeField] private bool lastChance;
-    public bool LastChance => lastChance;
     
     private void Awake()
     {
@@ -240,7 +238,7 @@ public class PlayerArtifact : MonoBehaviour
                             ironBody = true;
                             break;
                         case AbilityName.LastChance:
-                            lastChance = true;
+                            GameManager.Instance.GetComponent<RandomCardManager>().haveArtifact = true;
                             break;
                     }
                     break;
@@ -264,7 +262,7 @@ public class PlayerArtifact : MonoBehaviour
 
     private void SetDefault()
     {
-        //State
+        //State 
         addHealthPoint = 0;
         addHealthPointTemp = 0;
         addHealMultiple = 0;
@@ -289,7 +287,7 @@ public class PlayerArtifact : MonoBehaviour
         kamikaze = false;
         rabbitPaws = false;
         ironBody = false;
-        lastChance = false;
+        GameManager.Instance.GetComponent<RandomCardManager>().haveArtifact = false;
     }
 
     public void ActiveStartRoom()
