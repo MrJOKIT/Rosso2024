@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d71822a0623704448bef5196b9eb410, type: 3}
   m_Name: TheEyeKing
   m_EditorClassIdentifier: 
-  artifactGrade: 2
+  artifactGrade: 1
   artifactName: TheEyeKing
   artifactImage: {fileID: 0}
-  artifactDetail: Chose card in game 1ea
+  artifactDetail: Random epic card 1 card
   upgradeType: 3
   addHealthPoint: 0
   addHealthPointTemp: 0

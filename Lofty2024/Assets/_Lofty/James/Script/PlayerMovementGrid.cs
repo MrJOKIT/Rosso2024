@@ -131,8 +131,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     private void Start()
     {
-        targetTransform = transform.position;
-        supTargetTransform = transform.position;
+        ResetPlayerTarget();
         TurnManager.Instance.AddUnit(true,transform,turnSpeed);
         
     }

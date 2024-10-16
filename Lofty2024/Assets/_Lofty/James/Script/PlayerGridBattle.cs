@@ -24,12 +24,10 @@ public class PlayerGridBattle : MonoBehaviour
         switch (_playerMode)
         {
             case PlayerMode.Normal:
-                Debug.Log("Normal");
                 oldMode = _playerMode;
                 AppearUI(false);
                 break;
-            case PlayerMode.Combat:
-                Debug.Log("Grid Start");
+            case PlayerMode.Combat: 
                 GetComponent<PlayerSkillHandle>().ResetSkillPoint();
                 oldMode = _playerMode;
                 AppearUI(true);

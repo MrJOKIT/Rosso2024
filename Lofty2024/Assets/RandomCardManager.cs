@@ -16,6 +16,9 @@ public class RandomCardManager : MonoBehaviour
     public GameObject cardRandomCanvas;
     [Header("Random Card")] 
     public bool cardOutOfStock;
+    public bool commonOutOfStock;
+    public bool rareOutOfStock;
+    public bool epicOutOfStock;
     public GameObject cardSlotPrefab;
     public Transform cardSlotParent;
     [Space(10)]
@@ -50,7 +53,6 @@ public class RandomCardManager : MonoBehaviour
     
     private void Awake()
     {
-        Debug.Log(cardList.Count);
         currentCost = randomCost / 2;
         SortingCardGrade();
     }
@@ -74,18 +76,125 @@ public class RandomCardManager : MonoBehaviour
                     continue;
                 }
                 GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
-                card.GetComponent<CardSlot>().SetCard(a,RandomCardInList());
+                card.GetComponent<CardSlot>().SetCard(a,RandomCardInList(ArtifactGrade.All));
                 cardSlots.Add(card.GetComponent<CardSlot>());
             }
         }
         else
         {
             GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
-            card.GetComponent<CardSlot>().SetCard(0,RandomCardInList());
+            card.GetComponent<CardSlot>().SetCard(0,RandomCardInList(ArtifactGrade.All));
             cardSlots.Add(card.GetComponent<CardSlot>());
         }
         
         UpdateButton();
+    }
+
+    
+    public void StartRandomCardFixGrade(ArtifactGrade cardGrade,int count)
+    {
+        switch (cardGrade)
+        {
+            case ArtifactGrade.Common:
+                if (commonOutOfStock)
+                {
+                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    return;
+                }
+                break;
+            case ArtifactGrade.Rare:
+                if (rareOutOfStock)
+                {
+                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    return;
+                }
+                break;
+            case ArtifactGrade.Epic:
+                if (epicOutOfStock)
+                {
+                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    return;
+                }
+                break;
+            default:
+                if (cardOutOfStock)
+                {
+                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    return;
+                }
+                break;
+        }
+        
+        player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
+        cardRandomCanvas.SetActive(true);
+        switch (cardGrade)
+        {
+            case ArtifactGrade.Common:
+                if (cardCommon.Count > 1)
+                {
+                    for (int a = 0; a < count; a++)
+                    {
+                        if (a > cardCommon.Count + 1)
+                        { 
+                            continue;
+                        }
+                        GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
+                        card.GetComponent<CardSlot>().SetCard(a,RandomCardInList(ArtifactGrade.Common));
+                        cardSlots.Add(card.GetComponent<CardSlot>());
+                    }
+                }
+                else
+                {
+                    GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
+                    card.GetComponent<CardSlot>().SetCard(0,RandomCardInList(ArtifactGrade.Common));
+                    cardSlots.Add(card.GetComponent<CardSlot>());
+                }
+                break;
+            case ArtifactGrade.Rare:
+                if (cardRare.Count > 1)
+                {
+                    for (int a = 0; a < count; a++)
+                    {
+                        if (a > cardRare.Count + 1)
+                        { 
+                            continue;
+                        }
+                        GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
+                        card.GetComponent<CardSlot>().SetCard(a,RandomCardInList(ArtifactGrade.Rare));
+                        cardSlots.Add(card.GetComponent<CardSlot>());
+                    }
+                }
+                else
+                {
+                    GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
+                    card.GetComponent<CardSlot>().SetCard(0,RandomCardInList(ArtifactGrade.Rare));
+                    cardSlots.Add(card.GetComponent<CardSlot>());
+                }
+                break;
+            case ArtifactGrade.Epic:
+                if (cardEpic.Count > 1)
+                {
+                    for (int a = 0; a < count; a++)
+                    {
+                        if (a > cardEpic.Count + 1)
+                        { 
+                            continue;
+                        }
+                        GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
+                        card.GetComponent<CardSlot>().SetCard(a,RandomCardInList(ArtifactGrade.Epic));
+                        cardSlots.Add(card.GetComponent<CardSlot>());
+                    }
+                }
+                else
+                {
+                    GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
+                    card.GetComponent<CardSlot>().SetCard(0,RandomCardInList(ArtifactGrade.Epic));
+                    cardSlots.Add(card.GetComponent<CardSlot>());
+                }
+                break;
+        }
+        
+        CloseButton();
     }
 
     private void SortingCardGrade()
@@ -107,35 +216,129 @@ public class RandomCardManager : MonoBehaviour
         }
     }
 
-    private ArtifactData RandomCardInList()
+    private ArtifactData RandomCardInList(ArtifactGrade gradeToRandom)
     {
         ArtifactData cardData = null;
         float randomGradeNumber = Random.Range(0f, 1f);
-        if (randomGradeNumber < commonRate)
+        switch (gradeToRandom)
         {
-            int randomNumber = Random.Range(0, cardCommon.Count - 1);
-            cardData = cardCommon[randomNumber];
-            currentCardRandom.Add(cardCommon[randomNumber]);
-            cardList.Remove(cardCommon[randomNumber]);
-            cardCommon.Remove(cardCommon[randomNumber]);
+            case ArtifactGrade.Common:
+                int randomNumberCommon = Random.Range(0, cardCommon.Count - 1);
+                cardData = cardCommon[randomNumberCommon];
+                currentCardRandom.Add(cardCommon[randomNumberCommon]);
+                cardList.Remove(cardCommon[randomNumberCommon]);
+                cardCommon.Remove(cardCommon[randomNumberCommon]);
+                break;
+            case ArtifactGrade.Rare:
+                int randomNumberRare = Random.Range(0, cardRare.Count - 1);
+                cardData = cardRare[randomNumberRare];
+                currentCardRandom.Add(cardRare[randomNumberRare]);
+                cardList.Remove(cardRare[randomNumberRare]);
+                cardRare.Remove(cardRare[randomNumberRare]);
+                break;
+            case ArtifactGrade.Epic:
+                int randomNumberEpic = Random.Range(0, cardEpic.Count - 1);
+                cardData = cardEpic[randomNumberEpic];
+                currentCardRandom.Add(cardEpic[randomNumberEpic]);
+                cardList.Remove(cardEpic[randomNumberEpic]);
+                cardEpic.Remove(cardEpic[randomNumberEpic]);
+                break;
+            default:
+                if (randomGradeNumber < commonRate)
+                {
+                    if (cardCommon.Count > 0)
+                    {
+                        int randomNumber = Random.Range(0, cardCommon.Count - 1);
+                        cardData = cardCommon[randomNumber];
+                        currentCardRandom.Add(cardCommon[randomNumber]);
+                        cardList.Remove(cardCommon[randomNumber]);
+                        cardCommon.Remove(cardCommon[randomNumber]);
+                    }
+                    else
+                    {
+                        if (cardRare.Count > 0)
+                        {
+                            int randomNumber = Random.Range(0, cardRare.Count - 1);
+                            cardData = cardRare[randomNumber];
+                            currentCardRandom.Add(cardRare[randomNumber]);
+                            cardList.Remove(cardRare[randomNumber]);
+                            cardRare.Remove(cardRare[randomNumber]);
+                        }
+                        else
+                        {
+                            int randomNumber = Random.Range(0, cardEpic.Count - 1);
+                            cardData = cardEpic[randomNumber];
+                            currentCardRandom.Add(cardEpic[randomNumber]);
+                            cardList.Remove(cardEpic[randomNumber]);
+                            cardEpic.Remove(cardEpic[randomNumber]);
+                        }
+                    }
+                    
+                }
+                else if (randomGradeNumber < rareRate)
+                {
+                    if (cardRare.Count > 0)
+                    {
+                        int randomNumber = Random.Range(0, cardRare.Count - 1);
+                        cardData = cardRare[randomNumber];
+                        currentCardRandom.Add(cardRare[randomNumber]);
+                        cardList.Remove(cardRare[randomNumber]);
+                        cardRare.Remove(cardRare[randomNumber]);
+                    }
+                    else
+                    {
+                        if (cardEpic.Count > 0)
+                        {
+                            int randomNumber = Random.Range(0, cardEpic.Count - 1);
+                            cardData = cardEpic[randomNumber];
+                            currentCardRandom.Add(cardEpic[randomNumber]);
+                            cardList.Remove(cardEpic[randomNumber]);
+                            cardEpic.Remove(cardEpic[randomNumber]);
+                        }
+                        else
+                        {
+                            int randomNumber = Random.Range(0, cardCommon.Count - 1);
+                            cardData = cardCommon[randomNumber];
+                            currentCardRandom.Add(cardCommon[randomNumber]);
+                            cardList.Remove(cardCommon[randomNumber]);
+                            cardCommon.Remove(cardCommon[randomNumber]);
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    if (cardEpic.Count > 0)
+                    {
+                        int randomNumber = Random.Range(0, cardEpic.Count - 1);
+                        cardData = cardEpic[randomNumber];
+                        currentCardRandom.Add(cardEpic[randomNumber]);
+                        cardList.Remove(cardEpic[randomNumber]);
+                        cardEpic.Remove(cardEpic[randomNumber]);
+                    } 
+                    else
+                    {
+                        if (cardCommon.Count > 0)
+                        {
+                            int randomNumber = Random.Range(0, cardCommon.Count - 1);
+                            cardData = cardCommon[randomNumber];
+                            currentCardRandom.Add(cardCommon[randomNumber]);
+                            cardList.Remove(cardCommon[randomNumber]);
+                            cardCommon.Remove(cardCommon[randomNumber]);
+                        }
+                        else
+                        {
+                            int randomNumber = Random.Range(0, cardRare.Count - 1);
+                            cardData = cardRare[randomNumber];
+                            currentCardRandom.Add(cardRare[randomNumber]);
+                            cardList.Remove(cardRare[randomNumber]);
+                            cardRare.Remove(cardRare[randomNumber]);
+                        }
+                    }
+                    
+                }
+                break;
         }
-        else if (randomGradeNumber < rareRate)
-        {
-            int randomNumber = Random.Range(0, cardRare.Count - 1);
-            cardData = cardRare[randomNumber];
-            currentCardRandom.Add(cardRare[randomNumber]);
-            cardList.Remove(cardRare[randomNumber]);
-            cardRare.Remove(cardRare[randomNumber]);
-        }
-        else
-        {
-            int randomNumber = Random.Range(0, cardEpic.Count - 1);
-            cardData = cardEpic[randomNumber];
-            currentCardRandom.Add(cardEpic[randomNumber]);
-            cardList.Remove(cardEpic[randomNumber]);
-            cardEpic.Remove(cardEpic[randomNumber]);
-        }
-            
         
         return cardData;
     }
@@ -212,8 +415,18 @@ public class RandomCardManager : MonoBehaviour
         }
     }
 
+    private void CloseButton()
+    {
+        randomAgainButton.interactable = false;
+        randomAgainWithArtifactButton.interactable = false;
+        
+        randomAgainButton.gameObject.SetActive(false);
+        randomAgainWithArtifactButton.gameObject.SetActive(false);
+    }
+
     private void RandomEnd()
     {
+        
         currentCost = randomCost / 2;
         if (artifactUsed)
         {
@@ -221,11 +434,26 @@ public class RandomCardManager : MonoBehaviour
         }
         ClearSlots();
         cardRandomCanvas.SetActive(false);
-
-        if (cardList.Count <= 0)
+        if (cardList.Count <= 0) 
         {
             cardOutOfStock = true;
         }
+
+        if (cardCommon.Count <= 0)
+        {
+            commonOutOfStock = true;
+        }
+        
+        if (cardRare.Count <= 0)
+        {
+            rareOutOfStock = true;
+        }
+
+        if (cardEpic.Count <= 0)
+        {
+            epicOutOfStock = true;
+        }
         player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
+        player.GetComponent<PlayerArtifact>().ResultArtifact();
     }
 }

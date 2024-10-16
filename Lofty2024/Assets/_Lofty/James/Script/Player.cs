@@ -17,6 +17,7 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private int maxHealth;
     [SerializeField] private int playerHealthTemp;
     [SerializeField] private int playerHealth;
+    public bool isDead;
     
     [Space(10)] 
     [Tab("Usage Item")] 
@@ -25,7 +26,7 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private List<CurseData> curseHave;
     [SerializeField] private GameObject curseUiPrefab;
     [SerializeField] private Transform curseUiParent;
-    private bool isDead;
+    
 
     private void Awake()
     {
@@ -46,7 +47,16 @@ public class Player : MonoBehaviour, ITakeDamage
     {
         if (playerHealth <= 0) 
         {
-            PlayerDie();
+            if (GetComponent<PlayerArtifact>().DeathDoor)
+            {
+                playerHealth = 1;
+                GetComponent<PlayerArtifact>().RemoveArtifact(GetComponent<PlayerArtifact>().artifactHaves.Find(x=> x.abilityName == AbilityName.DeathDoor)); 
+            }
+            else
+            {
+                PlayerDie();
+            }
+            
         }
     }
 
@@ -148,8 +158,8 @@ public class Player : MonoBehaviour, ITakeDamage
     {
         playerHealthTemp += defaultHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp; 
         maxHealth += defaultMaxHealth + GetComponent<PlayerArtifact>().HealthPoint;
-
         
+        LoadData();
     }
 
     private void SaveData()

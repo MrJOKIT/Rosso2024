@@ -102,9 +102,9 @@ public class PlayerArtifact : MonoBehaviour
             .SetArtifactUI(newArtifact, newArtifact.artifactName, newArtifact.artifactImage);
         //Destroy(newArtifact.GameObject());
         SortingArtifactType(newArtifact);
-        ResultArtifact();
+        
     }
-
+    
     public void RemoveArtifact(ArtifactData removeArtifact)
     {
         if (!artifactHaves.Contains(removeArtifact))
@@ -116,7 +116,6 @@ public class PlayerArtifact : MonoBehaviour
         artifactHaves.Remove(removeArtifact);
         RemoveByType(removeArtifact);
         SortingSlot();
-        ResultArtifact();
     }
 
     private void SortingSlot()
@@ -185,7 +184,8 @@ public class PlayerArtifact : MonoBehaviour
         }
     }
 
-    private void ResultArtifact()
+    [Button("Result Artifact")]
+    public void ResultArtifact()
     {
         SetDefault();
         foreach (ArtifactData artifact in artifactHaves)
@@ -213,6 +213,12 @@ public class PlayerArtifact : MonoBehaviour
                             godOfWar = true;
                             break;
                         case AbilityName.TheEyeKing:
+                            if (eyeKing)
+                            {
+                                return;
+                            }
+                            Debug.Log("Eye King");
+                            GameManager.Instance.GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.Epic,1);
                             eyeKing = true;
                             break;
                         case AbilityName.DeathDoor:
@@ -278,7 +284,6 @@ public class PlayerArtifact : MonoBehaviour
         moveAfterKill = false;
         trapNotActiveSelf = false;
         godOfWar = false;
-        eyeKing = false;
         deathDoor = false;
         giftOfDeath = false;
         checkMate = false;
