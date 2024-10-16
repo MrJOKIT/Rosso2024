@@ -99,8 +99,8 @@ public class TurnManager : Singeleton<TurnManager>
             turnData.Add(data);
             data.unitTransform.GetComponent<EnemyAI>().enemyTurnData = data;
         }
-        
-        //turnData.Sort();
+
+        turnData.Sort(((data, data1) => data1.baseSpeed.CompareTo(data.baseSpeed)));
     }
     
     public void RemoveUnit(TurnData turnDataUnit)
