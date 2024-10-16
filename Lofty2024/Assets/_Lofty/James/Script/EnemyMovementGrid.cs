@@ -22,6 +22,7 @@ public class EnemyMovementGrid : MonoBehaviour
 {  [Header("Move Setting")]
    public MovementState currentState;
    public float moveSpeed = 5;
+   public float knockBackSpeed = 100f;
    public Vector3 gridSize = new Vector3(1,1,1);
 
    [Space(10)]
@@ -236,7 +237,15 @@ public class EnemyMovementGrid : MonoBehaviour
    
        private void MoveToTarget()
        {
-           transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, moveSpeed * Time.deltaTime);
+           if (isKnockBack)
+           {
+               transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, knockBackSpeed * Time.deltaTime);
+           }
+           else
+           {
+               transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, moveSpeed * Time.deltaTime);
+           }
+           
 
            if (transform.localPosition == targetPosition)
            {

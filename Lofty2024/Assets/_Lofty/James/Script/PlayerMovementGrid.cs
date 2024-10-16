@@ -871,9 +871,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         currentState = MovementState.Idle;
     }
 
-    [EditorAttributes.Button("Set Mover")]
-    private void SetMover()
+    
+    IEnumerator SetMover()
     {
+        yield return new WaitForSeconds(0.35f);
         currentPattern = Instantiate(patternDatas[(int)movePattern - 1].patternPrefab, parentPattern);
         currentPattern.GetComponent<MoverCheckerHost>().CheckMove();
     }
@@ -888,7 +889,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         }
         GridSpawnManager.Instance.ClearMover();
         movePattern = newPattern;
-        SetMover();
+        StartCoroutine(SetMover());
         
     }
 
@@ -918,7 +919,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 inBattle = true;
                 MovementPointInterfaceUpdate();
             }
-            SetMover();
+            StartCoroutine(SetMover());
         }
         else
         {
