@@ -146,8 +146,23 @@ public class Player : MonoBehaviour, ITakeDamage
 
     public void SetStats()
     {
-        playerHealthTemp += defaultHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp;
+        playerHealthTemp += defaultHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp; 
         maxHealth += defaultMaxHealth + GetComponent<PlayerArtifact>().HealthPoint;
+
         
+    }
+
+    private void SaveData()
+    {
+        ES3.Save<int>("PlayerHealth", playerHealth);
+    }
+    private void LoadData()
+    {
+        playerHealth = ES3.Load<int>("PlayerHealth",maxHealth);
+    }
+
+    private void ClearData()
+    {
+        ES3.DeleteKey("PlayerHealth");
     }
 }

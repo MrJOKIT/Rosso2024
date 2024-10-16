@@ -36,7 +36,6 @@ MonoBehaviour:
     - Beardy.BeardsGridLayoutGroup.Runtime
     - EditorAttributes
     - GridBuilder2_Core
-    - SimpleMinMaxSlider
     - TimersMadeEasyLite
     - VInspector
     - VTabs

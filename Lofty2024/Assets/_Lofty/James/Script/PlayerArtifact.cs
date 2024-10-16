@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using VInspector;
-using VInspector.Libs;
 
 
 public class PlayerArtifact : MonoBehaviour

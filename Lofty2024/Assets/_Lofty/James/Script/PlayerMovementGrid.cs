@@ -139,6 +139,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     private void Update()
     {
+        if (GameManager.Instance.GetComponent<SceneLoading>().loadSucces == false)
+        {
+            return;
+        }
         MoveChecker();
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
@@ -261,7 +265,22 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         switch (attackType)
                         {
                             case AttackType.NormalAttack:
-                                enemy.TakeDamage(damage);
+                                if (GetComponent<PlayerArtifact>().GodOfWar)
+                                {
+                                    float randomNumber = Random.Range(0, 1f);
+                                    if (randomNumber <= 0.2f)
+                                    {
+                                        enemy.TakeDamage(damage + 5);
+                                    }
+                                    else
+                                    {
+                                        enemy.TakeDamage(damage);
+                                    }
+                                }
+                                else
+                                {
+                                    enemy.TakeDamage(damage);
+                                }
                                 break;
                             case AttackType.SpecialAttack:
                                 enemy.TakeDamage(damage * 2); 

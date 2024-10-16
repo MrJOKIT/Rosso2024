@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using EditorAttributes;
-using GD.MinMaxSlider;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +25,7 @@ public class PlayerSkillHandle : MonoBehaviour
 
     [Space(10)] 
     [Header("Skill Point")] 
-    [GD.MinMaxSlider.MinMaxSlider(0,10)][SerializeField] private Vector2Int minMaxSkillPoint;
+    [SerializeField] private Vector2Int minMaxSkillPoint;
     [SerializeField] private int skillPoint;
 
     [Space(10)] 
@@ -40,8 +38,8 @@ public class PlayerSkillHandle : MonoBehaviour
     public TextMeshProUGUI maxSkillPointText;
     
     [Space(10)] 
-    [ReadOnly] public int slotSelect;
-    [ReadOnly] public Transform currentSkill; 
+    public int slotSelect;
+    public Transform currentSkill; 
 
     private void Awake()
     {
@@ -102,8 +100,7 @@ public class PlayerSkillHandle : MonoBehaviour
         skillPointText.text = "" + skillPoint;
         maxSkillPointText.text = "" + minMaxSkillPoint.y + GetComponent<PlayerArtifact>().SkillPoint;
     }
-
-    [Button("Confirm Skill")]
+    
     public void ConfirmSkill()
     {
         skillPoint -= _skillSlots[slotSelect].skillData.skillCost - GetComponent<PlayerArtifact>().SkillDiscount;
@@ -113,8 +110,7 @@ public class PlayerSkillHandle : MonoBehaviour
         GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
         GetComponent<PlayerMovementGrid>().EndTurn();
     }
-
-    [Button("Cancel Skill")]
+    
     public void CancelSkill()
     {
         GetComponent<PlayerMovementGrid>().currentState = MovementState.Combat;

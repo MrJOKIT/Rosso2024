@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using GD.MinMaxSlider;
+using EditorAttributes;
 using UnityEngine;
 
 public class GameManager : Singeleton<GameManager>
@@ -14,7 +14,7 @@ public class GameManager : Singeleton<GameManager>
     public GameObject cardSelectCanvas;
     public Transform currentRoomPos;
     [SerializeField] private GameObject rewardVFX;
-    [MinMaxSlider(0,100)][SerializeField] private Vector2Int dropRate;
+    [SerializeField] private Vector2Int dropRate;
     public void StageClear()
     {
         Debug.Log("Stage is clear!!!");
@@ -22,8 +22,13 @@ public class GameManager : Singeleton<GameManager>
         GameObject gateObject = Instantiate(gatePrefab, currentRoomPos.GetComponent<RoomManager>().CheckSpawnPoint(), Quaternion.identity);
         gateObject.GetComponent<GateToNextScene>().SetNextScene(sceneName);
         cardSelectCanvas.SetActive(true);
+        GetComponent<RandomCardManager>().StartRandomCard();
     }
 
+    public void RoomClear()
+    {
+        StageReward();
+    }
     private void StageReward()
     {
         Instantiate(rewardVFX, new Vector3(currentRoomPos.position.x, 3,currentRoomPos.position.z), Quaternion.identity);

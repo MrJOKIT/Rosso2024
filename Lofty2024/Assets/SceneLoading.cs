@@ -20,6 +20,7 @@ public class SceneLoading : MonoBehaviour
         if (loadTime <= 0)
         {
             loadingScene.SetActive(false);
+            loadTime = 0;
             loadSucces = true;
         }
         else

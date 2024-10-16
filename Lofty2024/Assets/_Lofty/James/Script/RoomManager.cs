@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GD.MinMaxSlider;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VInspector;
@@ -36,7 +35,7 @@ public class RoomManager : MonoBehaviour
     
     [Tab("Enemy Generator")] 
     public bool enemySpawnComplete;
-    [MinMaxSlider(1,10)] public Vector2Int spawnEnemyCount;
+    public Vector2Int spawnEnemyCount;
     private int spawnedEnemyCount;
     private int spawnEnemyMax;
     
@@ -47,7 +46,7 @@ public class RoomManager : MonoBehaviour
 
     [Tab("Room Generator")] 
     public bool obstacleSpawnComplete;
-    [MinMaxSlider(5,20)] public Vector2Int spawnObstacleCount;
+    public Vector2Int spawnObstacleCount;
     private int spawnedObstacleCount;
     private int spawnObstacleMax;
     

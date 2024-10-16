@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 
 public class RandomCardManager : MonoBehaviour
 {
+    [Tab("Random Setting")]
     public PlayerArtifact player;
     public GameObject cardRandomCanvas;
     [Header("Random Card")] 
@@ -37,11 +38,21 @@ public class RandomCardManager : MonoBehaviour
     public Button randomAgainButton;
     public Button randomAgainWithArtifactButton;
 
+    [Tab("Drop Rate")] 
+    [Header("Drop Rate Setting")] 
+    [Range(0,1f)][SerializeField] private float commonRate;
+    [Range(0,1f)][SerializeField] private float rareRate;
+    [Space(10)]
+    public List<ArtifactData> cardCommon;
+    public List<ArtifactData> cardRare;
+    public List<ArtifactData> cardEpic;
+
     
     private void Awake()
     {
         Debug.Log(cardList.Count);
         currentCost = randomCost / 2;
+        SortingCardGrade();
     }
     [Button("RandomCard")]
     public void StartRandomCard()
@@ -77,12 +88,55 @@ public class RandomCardManager : MonoBehaviour
         UpdateButton();
     }
 
+    private void SortingCardGrade()
+    {
+        foreach (ArtifactData card in cardList)
+        {
+            switch (card.artifactGrade)
+            {
+                case ArtifactGrade.Common:
+                    cardCommon.Add(card);
+                    break;
+                case ArtifactGrade.Rare:
+                    cardRare.Add(card);
+                    break;
+                case ArtifactGrade.Epic:
+                    cardEpic.Add(card);
+                    break;
+            }
+        }
+    }
+
     private ArtifactData RandomCardInList()
     {
-        int randomNumber = Random.Range(0, cardList.Count - 1);
-        ArtifactData cardData = cardList[randomNumber];
-        currentCardRandom.Add(cardList[randomNumber]);
-        cardList.Remove(cardList[randomNumber]);
+        ArtifactData cardData = null;
+        float randomGradeNumber = Random.Range(0f, 1f);
+        if (randomGradeNumber < commonRate)
+        {
+            int randomNumber = Random.Range(0, cardCommon.Count - 1);
+            cardData = cardCommon[randomNumber];
+            currentCardRandom.Add(cardCommon[randomNumber]);
+            cardList.Remove(cardCommon[randomNumber]);
+            cardCommon.Remove(cardCommon[randomNumber]);
+        }
+        else if (randomGradeNumber < rareRate)
+        {
+            int randomNumber = Random.Range(0, cardRare.Count - 1);
+            cardData = cardRare[randomNumber];
+            currentCardRandom.Add(cardRare[randomNumber]);
+            cardList.Remove(cardRare[randomNumber]);
+            cardRare.Remove(cardRare[randomNumber]);
+        }
+        else
+        {
+            int randomNumber = Random.Range(0, cardEpic.Count - 1);
+            cardData = cardEpic[randomNumber];
+            currentCardRandom.Add(cardEpic[randomNumber]);
+            cardList.Remove(cardEpic[randomNumber]);
+            cardEpic.Remove(cardEpic[randomNumber]);
+        }
+            
+        
         return cardData;
     }
 
@@ -113,6 +167,18 @@ public class RandomCardManager : MonoBehaviour
         foreach (ArtifactData card in currentCardRandom.ToList())
         {
             cardList.Add(card);
+            switch (card.artifactGrade)
+            {
+                case ArtifactGrade.Common:
+                    cardCommon.Add(card);
+                    break;
+                case ArtifactGrade.Rare:
+                    cardRare.Add(card);
+                    break;
+                case ArtifactGrade.Epic:
+                    cardEpic.Add(card);
+                    break;
+            }
             currentCardRandom.Remove(card);
         }
         foreach (CardSlot slot in cardSlots.ToList())
