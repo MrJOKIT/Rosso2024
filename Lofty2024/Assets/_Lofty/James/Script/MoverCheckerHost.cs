@@ -30,7 +30,7 @@ public class MoverCheckerHost : MonoBehaviour
                 mc.SetMover();
                 if (checker.dontStop == false)
                 {
-                    if (mc.gridCheck == GridState.OnEnemy || mc.gridCheck == GridState.OnObstacle)
+                    if (mc.gridCheck == GridState.OnEnemy || mc.gridCheck == GridState.OnObstacle || mc.gridCheck == GridState.Empty)
                     {
                         checker.checkSucces = true;
                         break;

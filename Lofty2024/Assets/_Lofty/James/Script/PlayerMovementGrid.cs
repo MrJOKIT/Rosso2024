@@ -261,38 +261,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         }
 
                         Enemy enemy = hit.collider.GetComponent<GridMover>().enemy;
-                        switch (attackType)
-                        {
-                            case AttackType.NormalAttack:
-                                if (GetComponent<PlayerArtifact>().GodOfWar)
-                                {
-                                    float randomNumber = Random.Range(0, 1f);
-                                    if (randomNumber <= 0.2f)
-                                    {
-                                        enemy.TakeDamage(damage + 5);
-                                    }
-                                    else
-                                    {
-                                        enemy.TakeDamage(damage);
-                                    }
-                                }
-                                else
-                                {
-                                    enemy.TakeDamage(damage);
-                                }
-                                break;
-                            case AttackType.SpecialAttack:
-                                enemy.TakeDamage(damage * 2); 
-                                break;
-                            case AttackType.KnockBackAttack:
-                                enemy.TakeDamage(damage);
-                                enemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange);
-                                break;
-                            case AttackType.EffectiveAttack:
-                                enemy.TakeDamage(damage);
-                                enemy.AddCurseStatus(effectiveType,effectiveTurnTime);
-                                break;
-                        }
+                        
+                        hit.collider.GetComponent<GridMover>().AttackEnemy(attackType,damage,effectiveType,effectiveTurnTime,knockBackRange,transform);
                         
                         if (enemy.enemyHealth <= 0)
                         {
@@ -870,13 +840,16 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         currentState = MovementState.Idle;
     }
-
+ 
     
-    IEnumerator SetMover()
+    public IEnumerator SetMover()
     {
-        yield return new WaitForSeconds(0.35f);
-        currentPattern = Instantiate(patternDatas[(int)movePattern - 1].patternPrefab, parentPattern);
-        currentPattern.GetComponent<MoverCheckerHost>().CheckMove();
+        yield return new WaitForSeconds(0.15f);
+        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        {
+            currentPattern = Instantiate(patternDatas[(int)movePattern - 1].patternPrefab, parentPattern);
+            currentPattern.GetComponent<MoverCheckerHost>().CheckMove();
+        }
     }
 
 
@@ -890,7 +863,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         GridSpawnManager.Instance.ClearMover();
         movePattern = newPattern;
         StartCoroutine(SetMover());
-        
     }
 
     #endregion

@@ -121,11 +121,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1a57b26e1e93b4babf29d7bf39ea11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPortal: 0
+  enemy: {fileID: 0}
   oldMat: {fileID: 0}
-  onPlayer: 0
-  onEnemy: 0
-  onObject: 0
-  canMove: 0
+  gridState: 0
+  gridActive: 0
+  enemyActive: 0
+  isTrap: 0
+  trapType: 0
+  trapTime: 0
 --- !u!65 &3044099800971135174
 BoxCollider:
   m_ObjectHideFlags: 0

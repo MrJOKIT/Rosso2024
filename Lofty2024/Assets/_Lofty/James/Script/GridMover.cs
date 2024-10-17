@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum GridState
 {
@@ -147,6 +148,71 @@ public class GridMover : MonoBehaviour
     {
         GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.attackMat;
         enemyActive = true;
+    }
+
+    public void AttackEnemy(AttackType attackType,int damage,CurseType effectiveType,int effectiveTurnTime,int knockBackRange,Transform playerTrans)
+    {
+        try
+        {
+            switch (attackType)
+            {
+                case AttackType.NormalAttack:
+                    if (GetComponent<PlayerArtifact>().GodOfWar)
+                    {
+                        float randomNumber = Random.Range(0, 1f);
+                        if (randomNumber <= 0.2f)
+                        {
+                            enemy.TakeDamage(damage + 5);
+                        }
+                        else
+                        {
+                            enemy.TakeDamage(damage);
+                        }
+                    }
+                    else
+                    {
+                        enemy.TakeDamage(damage);
+                    }
+                    if (enemy.enemyHealth <= 0)
+                    {
+                        gridState = GridState.Empty;
+                        enemy = null;
+                    }
+                    break;
+                case AttackType.SpecialAttack:
+                    enemy.TakeDamage(damage * 2); 
+                    if (enemy.enemyHealth <= 0)
+                    {
+                        gridState = GridState.Empty;
+                        enemy = null;
+                    }
+                    break;
+                case AttackType.KnockBackAttack:
+                    enemy.TakeDamage(damage);
+                    enemy.GetComponent<EnemyMovementGrid>().KnockBack(playerTrans,knockBackRange);
+                    if (enemy.enemyHealth <= 0)
+                    {
+                        gridState = GridState.Empty;
+                        enemy = null;
+                    }
+                    break;
+                case AttackType.EffectiveAttack:
+                    enemy.TakeDamage(damage);
+                    enemy.AddCurseStatus(effectiveType,effectiveTurnTime);
+                    if (enemy.enemyHealth <= 0)
+                    {
+                        gridState = GridState.Empty;
+                        enemy = null;
+                    }
+                    break;
+            }
+
+            
+        }
+        catch (Exception a)
+        {
+            Debug.Log($"No enemy script in gird {a}");
+        }
     }
 
     [Button("Test Set Trap")]

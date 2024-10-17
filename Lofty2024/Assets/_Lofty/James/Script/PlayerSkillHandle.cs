@@ -84,13 +84,15 @@ public class PlayerSkillHandle : MonoBehaviour
     
     public void UseSkill(int slotSkillIndex)
     {
-        GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
-        slotSelect = slotSkillIndex;
-        if (skillPoint >= _skillSlots[slotSkillIndex].skillData.skillCost - GetComponent<PlayerArtifact>().SkillDiscount)
+        if (skillPoint < _skillSlots[slotSkillIndex].skillData.skillCost - GetComponent<PlayerArtifact>().SkillDiscount)
         {
-            _skillSlots[slotSkillIndex].skillImage.GetComponent<Button>().interactable = false;
-            currentSkill = Instantiate(_skillSlots[slotSkillIndex].skillData.skillPattern,skillParent);
+           return;
         }
+        GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
+        GridSpawnManager.Instance.ClearMover();
+        slotSelect = slotSkillIndex;
+        _skillSlots[slotSkillIndex].skillImage.GetComponent<Button>().interactable = false;
+        currentSkill = Instantiate(_skillSlots[slotSkillIndex].skillData.skillPattern,skillParent);
         makeSureUI.SetActive(true);
         SkillPointUiUpdate();
     }
@@ -98,7 +100,7 @@ public class PlayerSkillHandle : MonoBehaviour
     private void SkillPointUiUpdate()
     {
         skillPointText.text = "" + skillPoint;
-        maxSkillPointText.text = "" + minMaxSkillPoint.y + GetComponent<PlayerArtifact>().SkillPoint;
+        maxSkillPointText.text = $"{minMaxSkillPoint.y + GetComponent<PlayerArtifact>().SkillPoint}";
     }
     
     public void ConfirmSkill()
@@ -115,6 +117,7 @@ public class PlayerSkillHandle : MonoBehaviour
     {
         GetComponent<PlayerMovementGrid>().currentState = MovementState.Combat;
         Destroy(currentSkill.gameObject);
+        StartCoroutine(GetComponent<PlayerMovementGrid>().SetMover());
         currentSkill = null;
         _skillSlots[slotSelect].skillImage.GetComponent<Button>().interactable = true;
     }

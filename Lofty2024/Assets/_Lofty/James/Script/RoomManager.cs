@@ -175,7 +175,7 @@ public class RoomManager : MonoBehaviour
     {
         roomClear = true;
         roomType = RoomType.Clear;
-        TurnManager.Instance.currentRoomClear = true;
+        TurnManager.Instance.CurrentRoomClear(); 
         if (isStandbyRoom)
         {
             return;

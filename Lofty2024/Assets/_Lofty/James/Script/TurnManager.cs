@@ -106,7 +106,7 @@ public class TurnManager : Singeleton<TurnManager>
     public void RemoveUnit(TurnData turnDataUnit)
     {
         turnDataUnit.turnSlot.ClearSlot();
-        Destroy(turnData.Find(x=> x.unitTransform == turnDataUnit.unitTransform).unitTransform.gameObject);
+        Destroy(turnData.Find(x=> x.unitTransform == turnDataUnit.unitTransform).turnSlot.gameObject);
         turnData.Remove(turnDataUnit);
         Destroy(queueTransform[queueTransform.Count - 1]);
         queueTransform.Remove(queueTransform[queueTransform.Count - 1]);   
@@ -158,7 +158,7 @@ public class TurnManager : Singeleton<TurnManager>
             onEnemyTurn = true;
         }
         
-    }
+    } 
 
     private void UpdateTurnGUI() 
     { 
@@ -197,6 +197,11 @@ public class TurnManager : Singeleton<TurnManager>
 
     public void TurnContinue()
     {
+        GridSpawnManager.Instance.ClearMover();
+    }
+    public void CurrentRoomClear()
+    {
+        currentRoomClear = true;
         GridSpawnManager.Instance.ClearMover();
     }
 
