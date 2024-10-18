@@ -36,7 +36,7 @@ public enum AttackType
 public enum PlayerMoveDirection
 {
     Forward,
-    ForwardLeft,
+    ForwardLeft, 
     ForwardRight,
     Backward,
     BackwardLeft,
@@ -76,6 +76,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [SerializeField] private int defaultMovePoint = 2;
     [SerializeField] private int movePoint;
     [SerializeField] private int maxMovePoint;
+    public bool rabbitPaws;
     public bool inBattle;
     [Space(5)] 
     public TextMeshProUGUI movePointText;
@@ -258,14 +259,22 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         if (hit.collider.GetComponent<GridMover>().enemyActive == false)
                         {
                             return;
-                        }
+                        } 
 
                         Enemy enemy = hit.collider.GetComponent<GridMover>().enemy;
                         
-                        hit.collider.GetComponent<GridMover>().AttackEnemy(attackType,damage,effectiveType,effectiveTurnTime,knockBackRange,transform);
+                        hit.collider.GetComponent<GridMover>().AttackEnemy(attackType,damage,effectiveType,effectiveTurnTime,knockBackRange,transform,GetComponent<PlayerArtifact>().Kamikaze,GetComponent<PlayerArtifact>().GodOfWar);
                         
-                        if (enemy.enemyHealth <= 0)
+                        if (enemy.enemyHealth <= 0) 
                         {
+                            if (GetComponent<PlayerArtifact>().GiftOfDeath)
+                            {
+                                float randomNumber = Random.Range(0, 1f);
+                                if (randomNumber < 0.2)
+                                {
+                                    GetComponent<Player>().TakeHealth(1);
+                                }
+                            }
                             SetTargetPosition(hit.point);
                         }
                         else
@@ -407,6 +416,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     }
     private void MoveHandle()
     {
+        if (forwardMoveBlock && forwardLeftMoveBlock && forwardRightMoveBlock && backwardMoveBlock && backwardLeftMoveBlock && backwardRightMoveBlock && leftMoveBlock && rightMoveBlock)
+        {
+            ClearMovePath();
+        }
         if (transform.position.z < targetTransform.z && transform.position.x == targetTransform.x)
         {
             //Move Forward
@@ -885,13 +898,30 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
+            
             if (inBattle == false)
             {
                 movePoint = maxMovePoint;
                 inBattle = true;
                 MovementPointInterfaceUpdate();
             }
-            StartCoroutine(SetMover());
+            if (GetComponent<PlayerArtifact>().CheckMate)
+            {
+                if (GridSpawnManager.Instance.useWarp == false)
+                {
+                    StartCoroutine(GridSpawnManager.Instance.WarpSelector());
+                    movePattern = Knight;
+                }
+                else
+                {
+                    StartCoroutine(SetMover());
+                }
+            }
+            else
+            {
+                StartCoroutine(SetMover());
+            }
+            
         }
         else
         {
@@ -920,7 +950,14 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         moveSuccess = false;
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
-            movePoint -= 1;
+            if (rabbitPaws)
+            {
+                rabbitPaws = false;
+            }
+            else
+            {
+                movePoint -= 1;
+            }
             ChaosManager.Instance.IncreaseChaosPoint(1);
             MovementPointInterfaceUpdate();
             if (movePoint <= 0)
@@ -928,6 +965,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 GetComponent<PlayerSkillHandle>().AddSkillPoint(1);
                 TurnManager.Instance.TurnSucces();
                 inBattle = false;
+                if (GetComponent<PlayerArtifact>().RabbitPaws)
+                {
+                    rabbitPaws = true;
+                }
             }
             else
             {

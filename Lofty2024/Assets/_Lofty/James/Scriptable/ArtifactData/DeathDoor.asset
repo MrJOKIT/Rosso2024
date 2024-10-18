@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   artifactGrade: 2
   artifactName: Death's Door
-  artifactImage: {fileID: 0}
+  artifactImage: {fileID: 21300000, guid: 69642b99640a07342a33bd685276d610, type: 3}
   artifactDetail: If you die you will revive yourself with 1HP
   upgradeType: 3
   addHealthPoint: 0

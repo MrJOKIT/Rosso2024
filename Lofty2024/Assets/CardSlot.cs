@@ -19,6 +19,12 @@ public class CardSlot : MonoBehaviour
         this.cardDetail.text = artifactData.artifactDetail;
     }
 
+    public void Reveal()
+    {
+        cardDetail.GetComponent<TextRevealer>().RevealTime = 0.5f;
+        cardDetail.GetComponent<TextRevealer>().Reveal();
+    }
+
     public void SelectedCard()
     {
         GameManager.Instance.GetComponent<RandomCardManager>().SelectedCard(cardIndex);

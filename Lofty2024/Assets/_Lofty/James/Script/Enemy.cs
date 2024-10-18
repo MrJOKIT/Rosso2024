@@ -59,6 +59,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public List<CurseData> curseHave;
     public Transform curseCanvas;
     public GameObject curseUiPrefab;
+    public Transform bombPrefab;
 
 
     [Space(10)] 
@@ -67,7 +68,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public bool onTurn;
 
     [Space(10)] 
-    [Header("Reward")] 
+    [Header("Reward")]
     public Image rewardImage;
     public AbilityType abilityDrop;
     public GameObject abilityOrbPrefab;
@@ -92,16 +93,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         TurnManager.Instance.AddUnit(false,transform,enemySpeed);
         RewardUiHandle();
     }
-
-    private void Update()
-    {
-        if (enemyHealth <= 0)
-        {
-            return;
-        }
-        
-    }
-
+    
     public void StartTurn()
     {
         onTurn = true;
@@ -120,7 +112,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         EndTurnModify();
         onTurn = false;
         TurnManager.Instance.TurnSucces();
-        if (curseHave != null)
+        if (curseHave.Count != 0)
         {
             foreach (CurseData curse in curseHave.ToList())
             {
@@ -142,7 +134,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     
     public void CurseHandle()
     {
-        if (curseHave == null)
+        if (curseHave.Count == 0)
         {
             return;
         }
@@ -155,7 +147,9 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
             switch (curse.curseType)
             {
                 case CurseType.Stun:
+                    GridSpawnManager.Instance.ClearMover();
                     EndTurn();
+                    GetComponent<EnemyMovementGrid>().currentState = MovementState.Idle;
                     break;
                 case CurseType.Blood:
                     //ลดเลือดไม่ติดเกราะ
@@ -242,13 +236,18 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     public void TakeDamage(int damage)
     {
-        
         CameraManager.Instance.TriggerShake();
         enemyHealth -= damage;
         if (enemyHealth <= 0)
         {
             EnemyDie();
         }
+    }
+
+    public void BombEnemy()
+    {
+        GameObject bomb = Instantiate(bombPrefab.gameObject, transform);
+        bomb.GetComponent<SkillAction>().ActiveSkill();
     }
 
     public void AddCurseStatus(CurseType curseType,int turnTime)

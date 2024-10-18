@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using EditorAttributes;
 using UnityEngine;
 using VInspector;
@@ -18,6 +19,11 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private int playerHealthTemp;
     [SerializeField] private int playerHealth;
     public bool isDead;
+
+    [Space(5)] [Header("GUI")] 
+    [SerializeField] private Transform healthPrefabUI;
+    [SerializeField] private Transform healthParentUI;
+    [SerializeField] private List<GameObject> healthUI;
     
     [Space(10)] 
     [Tab("Usage Item")] 
@@ -120,7 +126,7 @@ public class Player : MonoBehaviour, ITakeDamage
         CurseUiUpdate();
         foreach (CurseData curse in curseHave)
         {
-            if (curse.curseActivated)
+            if (curse.curseActivated || GetComponent<PlayerArtifact>().IronBody)
             {
                 continue;
             }
@@ -160,6 +166,34 @@ public class Player : MonoBehaviour, ITakeDamage
         maxHealth += defaultMaxHealth + GetComponent<PlayerArtifact>().HealthPoint;
         
         LoadData();
+    }
+
+    private void CreateHealthUI()
+    {
+        foreach (GameObject ui in healthUI.ToList())
+        {
+            healthUI.Remove(ui);
+            Destroy(ui.gameObject);
+        }
+        for (int a = 0; a < maxHealth; a++)
+        {
+            Instantiate(healthPrefabUI.gameObject, healthParentUI);
+        }
+    }
+
+    private void UpdateHealthUI()
+    {
+        for (int a = 0; a < maxHealth; a++)
+        {
+            if (a <= playerHealth)
+            {
+                continue;
+            }
+            else
+            {
+                healthUI[a].gameObject.SetActive(false);
+            }
+        }
     }
 
     private void SaveData()

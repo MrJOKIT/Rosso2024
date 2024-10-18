@@ -238,6 +238,7 @@ public class PlayerArtifact : MonoBehaviour
                             break;
                         case AbilityName.RabbitPaws:
                             rabbitPaws = true;
+                            GetComponent<PlayerMovementGrid>().rabbitPaws = true;
                             break;
                         case AbilityName.IronBody:
                             ironBody = true;

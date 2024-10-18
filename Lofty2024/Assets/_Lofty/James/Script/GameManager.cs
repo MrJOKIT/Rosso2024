@@ -22,7 +22,7 @@ public class GameManager : Singeleton<GameManager>
         GameObject gateObject = Instantiate(gatePrefab, currentRoomPos.GetComponent<RoomManager>().CheckSpawnPoint(), Quaternion.identity);
         gateObject.GetComponent<GateToNextScene>().SetNextScene(sceneName);
         cardSelectCanvas.SetActive(true);
-        GetComponent<RandomCardManager>().StartRandomCard();
+        GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.All,4);
     }
 
     public void RoomClear()

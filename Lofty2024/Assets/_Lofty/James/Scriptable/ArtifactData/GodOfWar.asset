@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   artifactGrade: 2
   artifactName: God of war
-  artifactImage: {fileID: 0}
+  artifactImage: {fileID: 21300000, guid: 69642b99640a07342a33bd685276d610, type: 3}
   artifactDetail: Have a chance 20% increse 5 damage when attack
   upgradeType: 3
   addHealthPoint: 0

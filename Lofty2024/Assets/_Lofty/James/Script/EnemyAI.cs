@@ -23,7 +23,7 @@ public class EnemyAI : Enemy
     public bool playerInRange;
     public LayerMask gridLayer;
     public List<Transform> combatChecker;
-    private void Update()
+    private void FixedUpdate()
     {
         ChangeGridMoverUnder();
         CheckMoveHandle();

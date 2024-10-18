@@ -3729,7 +3729,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 15440bd092466184f99478bf33e69e25, type: 2}
+  - {fileID: 2100000, guid: 40e900416623cf0408af1569f4a8305d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5745,6 +5745,8 @@ MonoBehaviour:
   curseCanvas: {fileID: 448169777976912810}
   curseUiPrefab: {fileID: 3857760036129689616, guid: 3546fb8c5723e5446842ee4e515ea1e4,
     type: 3}
+  bombPrefab: {fileID: 4288998330290304896, guid: ac6df1eda54350c4994ee04131aea854,
+    type: 3}
   autoSkip: 0
   onTurn: 0
   rewardImage: {fileID: 6600111439020129563}
@@ -5796,6 +5798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   moveSpeed: 5
+  knockBackSpeed: 100
   gridSize: {x: 1, y: 1, z: 1}
   isKnockBack: 0
   enemyMoveDirection: 0

@@ -35,6 +35,7 @@ public class RoomManager : MonoBehaviour
     
     [Tab("Enemy Generator")] 
     public bool enemySpawnComplete;
+    public bool stunAll;
     public Vector2Int spawnEnemyCount;
     private int spawnedEnemyCount;
     private int spawnEnemyMax;
@@ -79,7 +80,7 @@ public class RoomManager : MonoBehaviour
     {
         if (roomType == RoomType.Clear || roomType == RoomType.Bonus)
         {
-            RoomClear();
+            RoomClearWithNoReward(); 
             return;
         }
         
@@ -114,6 +115,10 @@ public class RoomManager : MonoBehaviour
             enemyInRoom.Add(enemy.GetComponent<Enemy>());
             enemy.GetComponent<Enemy>().targetTransform = playerTrans;
             enemy.GetComponent<Enemy>().ActiveUnit();
+            if (stunAll)
+            {
+                enemy.GetComponent<Enemy>().AddCurseStatus(CurseType.Stun,1); 
+            }
             spawnedEnemyCount += 1;
             if (spawnedEnemyCount == spawnEnemyMax)
             {
@@ -173,7 +178,7 @@ public class RoomManager : MonoBehaviour
 
     private void RoomClear()
     {
-        roomClear = true;
+        roomClear = true; 
         roomType = RoomType.Clear;
         TurnManager.Instance.CurrentRoomClear(); 
         if (isStandbyRoom)
@@ -187,8 +192,21 @@ public class RoomManager : MonoBehaviour
         }
         else
         {
+            GameManager.Instance.RoomClear();
             PortalManager.Instance.SetUpNextRoom(portalLeft,portalRight,playerTrans);
         }
+    }
+    private void RoomClearWithNoReward()
+    {
+        roomClear = true; 
+        roomType = RoomType.Clear;
+        TurnManager.Instance.CurrentRoomClear(); 
+        if (isStandbyRoom)
+        {
+            return;
+        }
+        
+        PortalManager.Instance.SetUpNextRoom(portalLeft,portalRight,playerTrans);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -196,6 +214,7 @@ public class RoomManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerTrans = other.GetComponent<Transform>();
+            stunAll = other.GetComponent<PlayerArtifact>().CreepingTerror;
             GameManager.Instance.UpdateCurrentRoom(transform);
             PortalManager.Instance.StartClearRoom();
             foreach (GridMover grid in currentGrid)

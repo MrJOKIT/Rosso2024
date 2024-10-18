@@ -44,7 +44,7 @@ public class EnemyMovementGrid : MonoBehaviour
    public Vector3 targetPosition;
    
 
-   private void Update()
+   private void FixedUpdate()
    {
        CheckBlockHandle();
        MoveStateHandle();

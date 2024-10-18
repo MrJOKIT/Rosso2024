@@ -150,14 +150,14 @@ public class GridMover : MonoBehaviour
         enemyActive = true;
     }
 
-    public void AttackEnemy(AttackType attackType,int damage,CurseType effectiveType,int effectiveTurnTime,int knockBackRange,Transform playerTrans)
+    public void AttackEnemy(AttackType attackType,int damage,CurseType effectiveType,int effectiveTurnTime,int knockBackRange,Transform playerTrans,bool bomb,bool godOfWar)
     {
         try
         {
             switch (attackType)
             {
                 case AttackType.NormalAttack:
-                    if (GetComponent<PlayerArtifact>().GodOfWar)
+                    if (godOfWar)
                     {
                         float randomNumber = Random.Range(0, 1f);
                         if (randomNumber <= 0.2f)
@@ -173,42 +173,36 @@ public class GridMover : MonoBehaviour
                     {
                         enemy.TakeDamage(damage);
                     }
-                    if (enemy.enemyHealth <= 0)
-                    {
-                        gridState = GridState.Empty;
-                        enemy = null;
-                    }
                     break;
                 case AttackType.SpecialAttack:
                     enemy.TakeDamage(damage * 2); 
-                    if (enemy.enemyHealth <= 0)
-                    {
-                        gridState = GridState.Empty;
-                        enemy = null;
-                    }
                     break;
                 case AttackType.KnockBackAttack:
                     enemy.TakeDamage(damage);
                     enemy.GetComponent<EnemyMovementGrid>().KnockBack(playerTrans,knockBackRange);
-                    if (enemy.enemyHealth <= 0)
-                    {
-                        gridState = GridState.Empty;
-                        enemy = null;
-                    }
                     break;
                 case AttackType.EffectiveAttack:
                     enemy.TakeDamage(damage);
                     enemy.AddCurseStatus(effectiveType,effectiveTurnTime);
-                    if (enemy.enemyHealth <= 0)
-                    {
-                        gridState = GridState.Empty;
-                        enemy = null;
-                    }
                     break;
             }
 
-            
+            if (enemy.enemyHealth <= 0)
+            {
+                if (bomb)
+                {
+                    float randomNumber = Random.Range(0, 1f);
+                    if (randomNumber < 0.5f)
+                    {
+                        enemy.BombEnemy();
+                    }
+                }
+                
+                gridState = GridState.Empty;
+                enemy = null;
+            }
         }
+        
         catch (Exception a)
         {
             Debug.Log($"No enemy script in gird {a}");

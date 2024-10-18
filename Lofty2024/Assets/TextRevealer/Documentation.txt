@@ -1,0 +1,66 @@
+Text Revealer Pro
+===================
+Text Revealer Pro is a system for reveal and hide text in your game using configurable animations. It works great for Storytelling, escape room,
+puzzle games, or any game that requires showing text content to the player. It can also be used to show notes to guide the player through the game.
+
+
+Features
+===================
+> Compatible with Text Mesh Pro.
+> Compatible with Text Mesh Pro UGUI.
+> Compatible with the basic Text Component.
+> Preview Reveal/Unreveal inside editor for easy adjustments.
+> Easy to setup, just attach the script to your text game object.
+> Lots of settings to define random/fixed movements, directions, smoothness and speed.
+> UnityEvents for integrating with your game logic.
+> Random Rotations.
+> Reveal/Unreveal in reverse direction.
+> Including Scene with examples (Not the one in the video).
+
+
+How to use
+===================
+Please follow the following steps:
+1- Attach TextRevealer script to the gameobject containing your text component.
+2- Make sure the "Target Text" field is pointing to that text component on the game object.
+3- Change Reveal and Unreveal settings as desired.
+4- Test how it will look like in the editor without having to run the game, by clicking "Preview Reveal" or "Preview Unreveal".
+5- Make sure your gameobject and the text component are enabled when the game starts, the script will automatically hide them when the game starts.
+6- Check the included Demo scene for various configurations.
+
+Settings
+==================
+The following is a discription of each setting you'll find under the configuration section:
+
+Auto Unreveal: Makes the text unreveal automatically after x seconds after the reveal has completed.
+Reveal On Enabled: Automatically reveal text when object is enabled (Supports timeline ingegration with Activation Track to enable and disable the text gameobject (resulting in reveal / unreveal)). Also if the game starts while the objet is enabled, the text will reveal on start.
+Unreveal On Disabled: Opposite of the previous option
+Unreveal After (seconds): If Auto Unreveal is enabled, this is the amount of seconds it will wait before unrevealing the text after revealing is done.
+Smooth Overlap: Enables smooth overlap feature, which makes the letters reveal/unreveal smoothly instead of each character waiting for the previous one to fully complete.
+Smooth Overlap smoothness: Sets the degree of smoothness, NOTE: if you set this to maximum, characters will all start at the same time, which will enable the Scattered animation effect.
+Animation Direction: The direction of movement each character takes, Horizontal/Vertical/Both.
+Horizontal Direction: If Horizontal/Both are selected, this will let you set LeftToRight/RightToLeft/Randomize which will further let you control the direction of the character on the horizontal axis.
+Min Horizontal Starting Distance: Minimum distance the character will travel.
+Max Horizontal Starting Distance: Maximum distance the character will travel (the distance will be a random value between min and max UNLESS both min and max are the same value).
+Horizontal Starting Distance Range: This is a slider control that lets you control the 2 values above, but you can set that in the 2 previous fields without having to move the sliders.
+Vertical Direction: SAME AS BEFORE, but for Vertical axis.
+Min Vertical Starting Distance: SAME AS BEFORE, but for Vertical axis.
+Max Vertical Starting Distance: SAME AS BEFORE, but for Vertical axis.
+Vertical Starting Distance Range: SAME AS BEFORE, but for Vertical axis.
+Reveal Duration (Seconds): The total amount of time it takes to fully reveal the text.
+Initial Opacity: The initial Opacity of the text (0 means the text will start invisible).
+Final Opacity: The final opacity of the text (1 means the test will end up fully visible).
+Apply Random Rotation: If enabled, the characters will appear to rotate randomly while moving to their destination.
+Reverse: If enabled, the text will start revealing backwards (last character appears first).
+OnRevealStarted(): A UnityEvent that lets you trigger custom logic when reveal is started, example: play a sound.
+OnRevealComplete(): A UnityEvent that lets you trigger custom logic when reveal is competed.
+
+The same above settings are repeated again but for the Unreveal Options.
+
+Notes:
+==================
+The tool is compatible with Text, TextMeshPro, and TextMeshProUGUI. For TextMeshPro, you will have to install the TextMeshPro official unity package. (Demo scene only works if TextMeshPro is installed)
+
+Support:
+==================
+Please contact mkaramdev@gmail.com if you have any questions or custom requests

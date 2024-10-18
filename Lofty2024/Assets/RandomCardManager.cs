@@ -11,7 +11,8 @@ using Random = UnityEngine.Random;
 
 public class RandomCardManager : MonoBehaviour
 {
-    [Tab("Random Setting")]
+    [Tab("Random Setting")] 
+    public bool isRandom;
     public PlayerArtifact player;
     public GameObject cardRandomCanvas;
     [Header("Random Card")] 
@@ -59,6 +60,7 @@ public class RandomCardManager : MonoBehaviour
     [Button("RandomCard")]
     public void StartRandomCard()
     {
+        isRandom = true;
         if (cardOutOfStock)
         {
             AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
@@ -93,6 +95,7 @@ public class RandomCardManager : MonoBehaviour
     
     public void StartRandomCardFixGrade(ArtifactGrade cardGrade,int count)
     {
+        isRandom = true;
         switch (cardGrade)
         {
             case ArtifactGrade.Common:
@@ -189,6 +192,27 @@ public class RandomCardManager : MonoBehaviour
                 {
                     GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
                     card.GetComponent<CardSlot>().SetCard(0,RandomCardInList(ArtifactGrade.Epic));
+                    cardSlots.Add(card.GetComponent<CardSlot>());
+                }
+                break;
+            case ArtifactGrade.All:
+                if (cardList.Count > 1)
+                {
+                    for (int a = 0; a < randomCount; a++)
+                    {
+                        if (a > cardList.Count + 1)
+                        { 
+                            continue;
+                        }
+                        GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
+                        card.GetComponent<CardSlot>().SetCard(a,RandomCardInList(ArtifactGrade.All));
+                        cardSlots.Add(card.GetComponent<CardSlot>());
+                    }
+                }
+                else 
+                {
+                    GameObject card = Instantiate(cardSlotPrefab, cardSlotParent);
+                    card.GetComponent<CardSlot>().SetCard(0,RandomCardInList(ArtifactGrade.All));
                     cardSlots.Add(card.GetComponent<CardSlot>());
                 }
                 break;
@@ -455,5 +479,6 @@ public class RandomCardManager : MonoBehaviour
         }
         player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
         player.GetComponent<PlayerArtifact>().ResultArtifact();
+        isRandom = false;
     }
 }

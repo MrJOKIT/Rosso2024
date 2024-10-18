@@ -202,6 +202,7 @@ public class TurnManager : Singeleton<TurnManager>
     public void CurrentRoomClear()
     {
         currentRoomClear = true;
+        GridSpawnManager.Instance.useWarp = false;
         GridSpawnManager.Instance.ClearMover();
     }
 

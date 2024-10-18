@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   artifactGrade: 0
   artifactName: Last Chance
-  artifactImage: {fileID: 0}
+  artifactImage: {fileID: 21300000, guid: 4fb370f5af0826b4a86214efc4896b1e, type: 3}
   artifactDetail: If  you start random card to have a chace to random agian 1 time
   upgradeType: 3
   addHealthPoint: 0

@@ -25,7 +25,8 @@ public class PlayerInputHandle : MonoBehaviour
 
     public void HandleInput()
     {
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode != PlayerMode.Normal)
+        if (GetComponent<PlayerGridBattle>().GetPlayerMode != PlayerMode.Normal ||
+            GameManager.Instance.GetComponent<SceneLoading>().loadSucces == false)
         {
             return;
         }

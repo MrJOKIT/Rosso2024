@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   artifactGrade: 2
   artifactName: The gift of death
-  artifactImage: {fileID: 0}
+  artifactImage: {fileID: 21300000, guid: 69642b99640a07342a33bd685276d610, type: 3}
   artifactDetail: When kill enemy have a chance 20% heal yourself +1
   upgradeType: 3
   addHealthPoint: 0

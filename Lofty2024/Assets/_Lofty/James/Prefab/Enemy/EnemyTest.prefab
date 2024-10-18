@@ -5736,8 +5736,7 @@ MonoBehaviour:
     isPlayer: 0
     unitTransform: {fileID: 0}
     baseSpeed: 0
-    turnCounter: 0
-    turnSlider: {fileID: 0}
+    turnSlot: {fileID: 0}
   enemyData: {fileID: 11400000, guid: 08a05c9babdc4764aa30b1193c1f2392, type: 2}
   enemyHealth: 5
   enemySpeed: 25
@@ -5745,6 +5744,8 @@ MonoBehaviour:
   curseHave: []
   curseCanvas: {fileID: 448169777976912810}
   curseUiPrefab: {fileID: 3857760036129689616, guid: 3546fb8c5723e5446842ee4e515ea1e4,
+    type: 3}
+  bombPrefab: {fileID: 4288998330290304896, guid: ac6df1eda54350c4994ee04131aea854,
     type: 3}
   autoSkip: 0
   onTurn: 0
@@ -5797,6 +5798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   moveSpeed: 5
+  knockBackSpeed: 100
   gridSize: {x: 1, y: 1, z: 1}
   isKnockBack: 0
   enemyMoveDirection: 0
