@@ -213,13 +213,12 @@ public class PlayerArtifact : MonoBehaviour
                             godOfWar = true;
                             break;
                         case AbilityName.TheEyeKing:
-                            if (eyeKing)
+                            if (!eyeKing)
                             {
-                                return;
+                                Debug.Log("Eye King");
+                                GameManager.Instance.GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.Epic,1);
+                                eyeKing = true;
                             }
-                            Debug.Log("Eye King");
-                            GameManager.Instance.GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.Epic,1);
-                            eyeKing = true;
                             break;
                         case AbilityName.DeathDoor:
                             deathDoor = true;
