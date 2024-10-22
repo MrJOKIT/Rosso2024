@@ -25,6 +25,7 @@ public class ToggleSetting : MonoBehaviour
 
     private Vector2Int previewResolution;
     private bool isFPSLimited = false; 
+    private bool isVSyncEnabled = false; 
     private int limitedFPS = 60; 
     private float deltaTime = 0.0f;
 
@@ -35,15 +36,13 @@ public class ToggleSetting : MonoBehaviour
         InitializeFPSLimitGameObjects();
         previewResolution = resolutions[resolutionIndex];
 
-        // ตั้งค่าเริ่มต้นสำหรับ Slider และ FPS
         fpsSlider.minValue = 30; 
         fpsSlider.maxValue = 240; 
         fpsSlider.value = limitedFPS; 
         fpsValueText.text = limitedFPS.ToString(); 
 
-       
         isFPSLimited = false; 
-        fpsSlider.gameObject.SetActive(false); // ปิด Slider
+        fpsSlider.gameObject.SetActive(false); 
         ApplySettings();
     }
 
@@ -114,8 +113,8 @@ public class ToggleSetting : MonoBehaviour
         isFPSLimited = !isFPSLimited; 
         UpdateFPSLimitGameObject();
 
-      
-        fpsSlider.gameObject.SetActive(isFPSLimited); 
+        // Show or hide the FPS slider based on V-Sync state
+        fpsSlider.gameObject.SetActive(isFPSLimited && !isVSyncEnabled); 
         fpsValueText.text = ((int)fpsSlider.value).ToString();
 
         Debug.Log("FPS Limit toggled to: " + (isFPSLimited ? limitedFPS.ToString() : "Uncapped"));
@@ -125,7 +124,8 @@ public class ToggleSetting : MonoBehaviour
     {
         for (int i = 0; i < fpsLimitGameObjects.Count; i++)
         {
-            fpsLimitGameObjects[i].SetActive(i == (isFPSLimited ? 1 : 0));
+            // Show FPS limit objects only if V-Sync is disabled
+            fpsLimitGameObjects[i].SetActive(!isVSyncEnabled && (i == (isFPSLimited ? 1 : 0)));
         }
     }
 
@@ -134,15 +134,22 @@ public class ToggleSetting : MonoBehaviour
         Screen.SetResolution(previewResolution.x, previewResolution.y, Screen.fullScreen);
         ToggleFullScreen(); 
 
-        
-        if (isFPSLimited)
+        // Check if V-Sync is enabled
+        if (isVSyncEnabled)
+        {
+            QualitySettings.vSyncCount = 1; // Enable V-Sync
+            Application.targetFrameRate = -1; // Disable FPS limit
+            Debug.Log("V-Sync is enabled, FPS limit is disabled.");
+        }
+        else if (isFPSLimited)
         {
             limitedFPS = (int)fpsSlider.value; 
             Application.targetFrameRate = limitedFPS; 
+            Debug.Log($"FPS limit set to: {limitedFPS}");
         }
         else
         {
-            Application.targetFrameRate = -1; 
+            Application.targetFrameRate = -1; // No FPS limit
         }
 
         Debug.Log($"Settings applied. Full Screen: {Screen.fullScreen}, Current GameObject: {gameObjects[currentIndex].name}, Resolution: {previewResolution.x}x{previewResolution.y}, FPS Limit: {(isFPSLimited ? limitedFPS.ToString() : "Uncapped")}");
@@ -180,6 +187,25 @@ public class ToggleSetting : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit(); 
-
+        Debug.Log("Game is exiting...");
     }
+
+    public void ToggleVSync()
+    {
+        isVSyncEnabled = !isVSyncEnabled;
+
+        // Enable or disable V-Sync
+        QualitySettings.vSyncCount = isVSyncEnabled ? 1 : 0;
+
+        // Update the FPS slider based on V-Sync state
+        fpsSlider.gameObject.SetActive(isFPSLimited && !isVSyncEnabled);
+
+        // Hide FPS limit objects if V-Sync is enabled
+        UpdateFPSLimitGameObject();
+
+        ApplySettings(); // Reapply settings to update FPS limit if needed
+        Debug.Log($"V-Sync is now {(isVSyncEnabled ? "enabled" : "disabled")}");
+    }
+
+
 }
