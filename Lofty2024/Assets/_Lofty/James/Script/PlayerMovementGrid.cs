@@ -904,6 +904,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 movePoint = maxMovePoint;
                 inBattle = true;
                 MovementPointInterfaceUpdate();
+                if (GetComponent<PlayerArtifact>().RabbitPaws)
+                {
+                    rabbitPaws = true;
+                }
             }
             if (GetComponent<PlayerArtifact>().CheckMate)
             {
@@ -965,10 +969,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 GetComponent<PlayerSkillHandle>().AddSkillPoint(1);
                 TurnManager.Instance.TurnSucces();
                 inBattle = false;
-                if (GetComponent<PlayerArtifact>().RabbitPaws)
-                {
-                    rabbitPaws = true;
-                }
             }
             else
             {

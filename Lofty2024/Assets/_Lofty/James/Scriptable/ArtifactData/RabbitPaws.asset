@@ -15,7 +15,7 @@ MonoBehaviour:
   artifactGrade: 0
   artifactName: Rabbit Paws
   artifactImage: {fileID: 21300000, guid: 4fb370f5af0826b4a86214efc4896b1e, type: 3}
-  artifactDetail: When start the battle you gain free action 1 time
+  artifactDetail: When start your turn you gain free action 1 time
   upgradeType: 3
   addHealthPoint: 0
   addHealthPointTemp: 0

@@ -61,7 +61,7 @@ public class PlayerArtifact : MonoBehaviour
     public bool MoveAfterKill => moveAfterKill;
     [SerializeField] private bool trapNotActiveSelf;
     public bool TrapNotActiveSelf => trapNotActiveSelf;
-    [SerializeField] private bool godOfWar;
+    [SerializeField] private bool godOfWar; 
     public bool GodOfWar => godOfWar;
     [SerializeField] private bool eyeKing;
     public bool EyeKing => eyeKing;

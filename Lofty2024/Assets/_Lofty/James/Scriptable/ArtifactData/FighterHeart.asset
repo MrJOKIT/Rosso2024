@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d71822a0623704448bef5196b9eb410, type: 3}
   m_Name: FighterHeart
   m_EditorClassIdentifier: 
-  artifactGrade: 1
+  artifactGrade: 2
   artifactName: A Fighter Heart
   artifactImage: {fileID: 21300000, guid: 624f25227598f8b49968ea38496ec096, type: 3}
-  artifactDetail: When start the battle you have more tempory life +1
+  artifactDetail: When start the battle you have more tempory life +3
   upgradeType: 0
   addHealthPoint: 0
-  addHealthPointTemp: 1
+  addHealthPointTemp: 3
   addSkillPoint: 0
   addHealMultiple: 0
   addCoinMultiple: 0
