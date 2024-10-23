@@ -64,6 +64,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
 
     [Space(10)] 
     [Header("Turn")] 
+    public bool skipTurn;
     public bool autoSkip;
     public bool onTurn;
 
@@ -97,14 +98,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public void StartTurn()
     {
         onTurn = true;
-        if (autoSkip)
-        {
-            EndTurn();
-        }
-        else
-        {
-            CurseHandle();
-        }
+        
     }
 
     public void EndTurn()
@@ -148,7 +142,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
             {
                 case CurseType.Stun:
                     GridSpawnManager.Instance.ClearMover();
-                    EndTurn();
+                    skipTurn = true;
                     GetComponent<EnemyMovementGrid>().currentState = MovementState.Idle;
                     break;
                 case CurseType.Blood:

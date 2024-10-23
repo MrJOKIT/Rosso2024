@@ -35,16 +35,27 @@ public class EnemyAI : Enemy
         switch (GetComponent<EnemyMovementGrid>().currentState)
         {
             case MovementState.Idle: 
-                if (playerInRange)
+                CurseHandle();
+                 
+                if (autoSkip || skipTurn)
                 {
-                    //Combat time
-                    targetTransform.GetComponent<Player>().TakeDamage(1);
                     EndTurn();
+                    skipTurn = false;
                 }
                 else
                 {
-                    EnemyMoveToPlayer();
+                    if (playerInRange)
+                    {
+                        //Combat time
+                        targetTransform.GetComponent<Player>().TakeDamage(1);
+                        EndTurn();
+                    }
+                    else
+                    {
+                        EnemyMoveToPlayer();
+                    }
                 }
+                
                 break;
             case MovementState.Moving:
                 break;
