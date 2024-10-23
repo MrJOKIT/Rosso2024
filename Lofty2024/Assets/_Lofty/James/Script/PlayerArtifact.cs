@@ -16,11 +16,11 @@ public class PlayerArtifact : MonoBehaviour
     public List<ArtifactData> artifactHaves;
     public List<ArtifactUI> artifactSlots;
 
-    [Space(20)]
-    public List<ArtifactData> statsType;
-    public List<ArtifactData> combatType;
-    public List<ArtifactData> movementType;
-    public List<ArtifactData> abilityType;
+    [Space(20)] 
+    public List<ArtifactData> normalType;
+    public List<ArtifactData> swordKnightType;
+    public List<ArtifactData> bladeMasterType;
+    public List<ArtifactData> shootCasterType;
 
     [Tab("Upgrade Setting")]
     [Header("Stats")] 
@@ -79,6 +79,21 @@ public class PlayerArtifact : MonoBehaviour
     public bool RabbitPaws => rabbitPaws;
     [SerializeField] private bool ironBody;
     public bool IronBody => ironBody;
+
+    [Space(20)] 
+    [Tab("Mode Active")] 
+    [Space(10)] 
+    [Header("Sword Knight")] 
+    public bool swordKnightPassiveOne;
+    public bool swordKnightPassiveTwo;
+    [Space(10)]
+    [Header("Blade Master")]
+    public bool bladeMasterPassiveOne;
+    public bool bladeMasterPassiveTwo;
+    [Space(10)]
+    [Header("Shoot Caster")]
+    public bool shootCasterPassiveOne;
+    public bool shootCasterPassiveTwo;
     
     private void Awake()
     {
@@ -148,38 +163,38 @@ public class PlayerArtifact : MonoBehaviour
 
     private void SortingArtifactType(ArtifactData artifactData)
     {
-        switch (artifactData.upgradeType)
+        switch (artifactData.artifactClass)
         {
-            case UpgradeType.PlayerStats:
-                statsType.Add(artifactData);
+            case CardClass.Normal:
+                normalType.Add(artifactData);
                 break;
-            case UpgradeType.PlayerCombat:
-                combatType.Add(artifactData);
+            case CardClass.SwordKnight:
+                swordKnightType.Add(artifactData);
                 break;
-            case UpgradeType.PlayerMovement:
-                movementType.Add(artifactData);
+            case CardClass.BladeMaster:
+                bladeMasterType.Add(artifactData);
                 break;
-            case UpgradeType.PlayerAbility:
-                abilityType.Add(artifactData);
+            case CardClass.ShootingCaster:
+                shootCasterType.Add(artifactData);
                 break;
         }
     }
 
     private void RemoveByType(ArtifactData removeArtifact)
     {
-        switch (removeArtifact.upgradeType)
+        switch (removeArtifact.artifactClass)
         {
-            case UpgradeType.PlayerStats:
-                statsType.Remove(removeArtifact);
+            case CardClass.Normal:
+                normalType.Remove(removeArtifact);
                 break;
-            case UpgradeType.PlayerCombat:
-                combatType.Remove(removeArtifact);
+            case CardClass.SwordKnight:
+                swordKnightType.Remove(removeArtifact);
                 break;
-            case UpgradeType.PlayerMovement:
-                movementType.Remove(removeArtifact);
+            case CardClass.BladeMaster:
+                bladeMasterType.Remove(removeArtifact);
                 break;
-            case UpgradeType.PlayerAbility:
-                abilityType.Remove(removeArtifact);
+            case CardClass.ShootingCaster:
+                shootCasterType.Remove(removeArtifact);
                 break;
         }
     }

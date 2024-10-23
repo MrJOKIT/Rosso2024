@@ -15512,10 +15512,10 @@ MonoBehaviour:
   - {fileID: 1398426310}
   - {fileID: 677677456}
   - {fileID: 1074911948}
-  statsType: []
-  combatType: []
-  movementType: []
-  abilityType: []
+  normalType: []
+  swordKnightType: []
+  bladeMasterType: []
+  shootCasterType: []
   addHealthPoint: 0
   addHealthPointTemp: 0
   addSkillPoint: 0
@@ -15538,6 +15538,12 @@ MonoBehaviour:
   kamikaze: 0
   rabbitPaws: 0
   ironBody: 0
+  swordKnightPassiveOne: 0
+  swordKnightPassiveTwo: 0
+  bladeMasterPassiveOne: 0
+  bladeMasterPassiveTwo: 0
+  shootCasterPassiveOne: 0
+  shootCasterPassiveTwo: 0
 --- !u!114 &1756157895
 MonoBehaviour:
   m_ObjectHideFlags: 0
