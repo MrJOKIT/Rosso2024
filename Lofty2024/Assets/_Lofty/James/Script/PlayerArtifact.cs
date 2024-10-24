@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using VInspector;
@@ -18,9 +19,15 @@ public class PlayerArtifact : MonoBehaviour
 
     [Space(20)] 
     public List<ArtifactData> normalType;
+    [Space(10)]
     public List<ArtifactData> swordKnightType;
+    public List<ArtifactUI> swordKnightSlots;
+    [Space(10)]
     public List<ArtifactData> bladeMasterType;
+    public List<ArtifactUI> bladeMasterSlots;
+    [Space(10)]
     public List<ArtifactData> shootCasterType;
+    public List<ArtifactUI> shootCasterSlots;
 
     [Tab("Upgrade Setting")]
     [Header("Stats")] 
@@ -80,14 +87,23 @@ public class PlayerArtifact : MonoBehaviour
     [SerializeField] private bool ironBody;
     public bool IronBody => ironBody;
 
-    [Space(20)] 
-    [Tab("Mode Active")] 
+    [Space(20)] [Tab("Mode Active")] [Space(10)] 
+    [Header("Link UI")]
+    public TextMeshProUGUI swordKnightTier1; 
+    public TextMeshProUGUI swordKnightTier2;
+    public TextMeshProUGUI bladeMasterTier1;
+    public TextMeshProUGUI bladeMasterTier2;
+    public TextMeshProUGUI shootCasterTier1;
+    public TextMeshProUGUI shootCasterTier2;
+    [Space(10)]
+    public Color deActiveColor;
+    public Color activeColor;
     [Space(10)] 
     [Header("Sword Knight")] 
     public bool swordKnightPassiveOne;
     public bool swordKnightPassiveTwo;
     [Space(10)]
-    [Header("Blade Master")]
+    [Header("Blade Master")] 
     public bool bladeMasterPassiveOne;
     public bool bladeMasterPassiveTwo;
     [Space(10)]
@@ -114,10 +130,10 @@ public class PlayerArtifact : MonoBehaviour
 
         artifactHaves.Add(newArtifact);
         artifactSlots[artifactHaves.Count - 1]
-            .SetArtifactUI(newArtifact, newArtifact.artifactName, newArtifact.artifactImage);
+            .SetArtifactUI( newArtifact.artifactName, newArtifact.artifactImage);
         //Destroy(newArtifact.GameObject());
         SortingArtifactType(newArtifact);
-        
+        CardLinkUpdate();
     }
     
     public void RemoveArtifact(ArtifactData removeArtifact)
@@ -131,6 +147,7 @@ public class PlayerArtifact : MonoBehaviour
         artifactHaves.Remove(removeArtifact);
         RemoveByType(removeArtifact);
         SortingSlot();
+        CardLinkUpdate();
     }
 
     private void SortingSlot()
@@ -139,25 +156,59 @@ public class PlayerArtifact : MonoBehaviour
         {
             slots.ClearArtifactSlot();
         }
+        foreach (ArtifactUI slots in swordKnightSlots)
+        {
+            slots.ClearArtifactSlot();
+        }
+        foreach (ArtifactUI slots in bladeMasterSlots)
+        {
+            slots.ClearArtifactSlot();
+        }
+        foreach (ArtifactUI slots in shootCasterSlots)
+        {
+            slots.ClearArtifactSlot();
+        }
 
         foreach (ArtifactData artifact in artifactHaves)
         {
             artifactSlots[artifactHaves.IndexOf(artifact)]
-                .SetArtifactUI(artifact, artifact.artifactName, artifact.artifactImage);
+                .SetArtifactUI(artifact.artifactName, artifact.artifactImage);
+        }
+        
+        foreach (ArtifactData artifact in swordKnightType)
+        {
+            swordKnightSlots[swordKnightType.IndexOf(artifact)]
+                .SetArtifactUI(artifact.artifactName, artifact.artifactImage);
+        }
+        foreach (ArtifactData artifact in bladeMasterType)
+        {
+            bladeMasterSlots[bladeMasterType.IndexOf(artifact)]
+                .SetArtifactUI(artifact.artifactName, artifact.artifactImage);
+        }
+        foreach (ArtifactData artifact in shootCasterType)
+        {
+            shootCasterSlots[shootCasterType.IndexOf(artifact)]
+                .SetArtifactUI(artifact.artifactName, artifact.artifactImage);
         }
     }
 
     public void InventoryAppear()
     {
+        if (GetComponent<PlayerMovementGrid>().currentState == MovementState.Moving)
+        {
+            return;
+        }
         if (inventoryActive)
         {
             artifactInventory.SetActive(false);
             inventoryActive = false;
+            GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
         }
         else
         {
-            artifactInventory.SetActive(true);
+            artifactInventory.SetActive(true); 
             inventoryActive = true;
+            GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
         }
     }
 
@@ -167,15 +218,18 @@ public class PlayerArtifact : MonoBehaviour
         {
             case CardClass.Normal:
                 normalType.Add(artifactData);
-                break;
+                break; 
             case CardClass.SwordKnight:
                 swordKnightType.Add(artifactData);
+                swordKnightSlots[swordKnightType.Count - 1].SetArtifactUI(artifactData.artifactName,artifactData.artifactImage);
                 break;
             case CardClass.BladeMaster:
                 bladeMasterType.Add(artifactData);
+                bladeMasterSlots[bladeMasterType.Count - 1].SetArtifactUI(artifactData.artifactName,artifactData.artifactImage);
                 break;
             case CardClass.ShootingCaster:
                 shootCasterType.Add(artifactData);
+                shootCasterSlots[shootCasterType.Count - 1].SetArtifactUI(artifactData.artifactName,artifactData.artifactImage);
                 break;
         }
     }
@@ -278,6 +332,88 @@ public class PlayerArtifact : MonoBehaviour
             }
         }
         
+    }
+
+    private void CardLinkUpdate()
+    {
+        //Sword knight
+        if (swordKnightType.Count >= 3)
+        {
+            swordKnightPassiveOne = true;
+            swordKnightTier1.color = activeColor;
+        }
+        else if (swordKnightType.Count >= 5)
+        {
+            swordKnightPassiveOne = true;
+            swordKnightPassiveTwo = true;
+            swordKnightTier1.color = activeColor;
+            swordKnightTier2.color = activeColor;
+        }
+
+        if (swordKnightType.Count < 5)
+        {
+            swordKnightPassiveTwo = false;
+            swordKnightTier2.color = deActiveColor;
+        }
+        else if (swordKnightType.Count < 3)
+        {
+            swordKnightPassiveOne = false;
+            swordKnightPassiveTwo = false;
+            swordKnightTier1.color = deActiveColor;
+            swordKnightTier2.color = deActiveColor;
+        }
+        //Blade Master
+        if (bladeMasterType.Count >= 3)
+        {
+            bladeMasterPassiveOne = true;
+            bladeMasterTier1.color = activeColor;
+        }
+        else if (bladeMasterType.Count >= 5)
+        {
+            bladeMasterPassiveOne = true;
+            bladeMasterPassiveTwo = true;
+            bladeMasterTier1.color = activeColor;
+            bladeMasterTier2.color = activeColor;
+        }
+
+        if (bladeMasterType.Count < 5)
+        {
+            bladeMasterPassiveTwo = false;
+            bladeMasterTier2.color = deActiveColor;
+        }
+        else if (bladeMasterType.Count < 3)
+        {
+            bladeMasterPassiveOne = false;
+            bladeMasterPassiveTwo = false;
+            bladeMasterTier1.color = deActiveColor;
+            bladeMasterTier2.color = deActiveColor;
+        }
+        //Shoot Caster
+        if (shootCasterType.Count >= 3)
+        {
+            shootCasterPassiveTwo = true;
+            shootCasterTier1.color = activeColor;
+        }
+        else if (shootCasterType.Count >= 5)
+        {
+            shootCasterPassiveOne = true;
+            shootCasterPassiveTwo = true;
+            shootCasterTier1.color = activeColor;
+            shootCasterTier2.color = activeColor;
+        }
+
+        if (shootCasterType.Count < 5)
+        {
+            shootCasterPassiveTwo = false;
+            shootCasterTier2.color = deActiveColor;
+        }
+        else if (shootCasterType.Count < 3)
+        {
+            shootCasterPassiveOne = false;
+            shootCasterPassiveTwo = false;
+            shootCasterTier1.color = deActiveColor;
+            shootCasterTier2.color = deActiveColor;
+        }
     }
 
     private void SetDefault()

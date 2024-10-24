@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ModelShark;
@@ -7,22 +8,20 @@ using UnityEngine.UI;
 
 public class ArtifactUI : MonoBehaviour
 {
-    public ArtifactData currenData;
-    public string artifactName;
+    public TextMeshProUGUI artifactName;
     public Image artifactImage;
-    public TooltipTrigger toolTipText;
+    public Sprite defaultImage;
 
-    public void SetArtifactUI(ArtifactData artifactData,string artifactName,Sprite artifactSprite)
+    public void SetArtifactUI(string artifactName,Sprite artifactSprite)
     {
-        this.currenData = artifactData;
-        this.artifactName = artifactName;
+        this.artifactName.text = artifactName;
         artifactImage.sprite = artifactSprite;
     }
 
     public void ClearArtifactSlot()
     {
-        artifactName = null;
-        artifactImage.sprite = null;
+        artifactName.text = "Empty";
+        artifactImage.sprite = defaultImage;
     }
     
     

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: TheCreepingTerror
   m_EditorClassIdentifier: 
   artifactGrade: 2
+  artifactClass: 3
   artifactName: TheCreepingTerror
   artifactImage: {fileID: 21300000, guid: 69642b99640a07342a33bd685276d610, type: 3}
   artifactDetail: When start the battle enemy can't action 1 turn

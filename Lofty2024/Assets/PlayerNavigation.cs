@@ -186,7 +186,7 @@ public class PlayerNavigation : MonoBehaviour
             case PlayerMoveDirection.BackwardRight:
                 supTargetTransform = new Vector3(transform.position.x + 1, transform.position.y, transform.position.z - 1);
                 //transform.position = Vector3.MoveTowards(transform.position,supTargetTransform, moveSpeed * Time.deltaTime);
-                break;
+                break; 
             case PlayerMoveDirection.Left:
                 supTargetTransform = new Vector3(transform.position.x - 1, transform.position.y, transform.position.z);
                 //transform.position = Vector3.MoveTowards(transform.position,supTargetTransform, moveSpeed * Time.deltaTime);
@@ -249,6 +249,7 @@ public class PlayerNavigation : MonoBehaviour
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -301,6 +302,7 @@ public class PlayerNavigation : MonoBehaviour
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -352,6 +354,7 @@ public class PlayerNavigation : MonoBehaviour
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -405,6 +408,7 @@ public class PlayerNavigation : MonoBehaviour
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -458,6 +462,7 @@ public class PlayerNavigation : MonoBehaviour
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -509,6 +514,7 @@ public class PlayerNavigation : MonoBehaviour
                                 else
                                 {
                                     Debug.Log("Can't move");
+                                    ClearMovePath();
                                 }
                         }
                     }
@@ -562,6 +568,7 @@ public class PlayerNavigation : MonoBehaviour
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -615,6 +622,7 @@ public class PlayerNavigation : MonoBehaviour
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }

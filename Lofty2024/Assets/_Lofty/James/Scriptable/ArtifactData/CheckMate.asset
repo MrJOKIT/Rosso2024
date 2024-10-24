@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CheckMate
   m_EditorClassIdentifier: 
   artifactGrade: 0
+  artifactClass: 2
   artifactName: Checkmate!!
   artifactImage: {fileID: 21300000, guid: 4fb370f5af0826b4a86214efc4896b1e, type: 3}
   artifactDetail: Select start point when start battle

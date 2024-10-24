@@ -63,7 +63,7 @@ public class RandomCardManager : MonoBehaviour
         isRandom = true;
         if (cardOutOfStock)
         {
-            AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+            GetComponent<AnnouncementManager>().ShowTextTimer("Out of cards",1.5f);
             return;
         }
         player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
