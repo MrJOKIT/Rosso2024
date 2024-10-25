@@ -337,81 +337,81 @@ public class PlayerArtifact : MonoBehaviour
     private void CardLinkUpdate()
     {
         //Sword knight
-        if (swordKnightType.Count >= 3)
-        {
-            swordKnightPassiveOne = true;
-            swordKnightTier1.color = activeColor;
-        }
-        else if (swordKnightType.Count >= 5)
+        if (swordKnightType.Count >= 5)
         {
             swordKnightPassiveOne = true;
             swordKnightPassiveTwo = true;
             swordKnightTier1.color = activeColor;
             swordKnightTier2.color = activeColor;
         }
-
-        if (swordKnightType.Count < 5)
+        else if (swordKnightType.Count >= 3)
         {
-            swordKnightPassiveTwo = false;
-            swordKnightTier2.color = deActiveColor;
+            swordKnightPassiveOne = true;
+            swordKnightTier1.color = activeColor;
         }
-        else if (swordKnightType.Count < 3)
+
+        if (swordKnightType.Count < 3)
         {
             swordKnightPassiveOne = false;
             swordKnightPassiveTwo = false;
             swordKnightTier1.color = deActiveColor;
             swordKnightTier2.color = deActiveColor;
         }
-        //Blade Master
-        if (bladeMasterType.Count >= 3)
+        else if (swordKnightType.Count < 5)
         {
-            bladeMasterPassiveOne = true;
-            bladeMasterTier1.color = activeColor;
+            swordKnightPassiveTwo = false;
+            swordKnightTier2.color = deActiveColor;
         }
-        else if (bladeMasterType.Count >= 5)
+        //Blade Master
+        if (bladeMasterType.Count >= 5)
         {
             bladeMasterPassiveOne = true;
             bladeMasterPassiveTwo = true;
             bladeMasterTier1.color = activeColor;
             bladeMasterTier2.color = activeColor;
         }
-
-        if (bladeMasterType.Count < 5)
+        else if (bladeMasterType.Count >= 3)
         {
-            bladeMasterPassiveTwo = false;
-            bladeMasterTier2.color = deActiveColor;
+            bladeMasterPassiveOne = true;
+            bladeMasterTier1.color = activeColor;
         }
-        else if (bladeMasterType.Count < 3)
+
+        if (bladeMasterType.Count < 3)
         {
             bladeMasterPassiveOne = false;
             bladeMasterPassiveTwo = false;
             bladeMasterTier1.color = deActiveColor;
+            bladeMasterTier2.color = deActiveColor; 
+        }
+        else if (bladeMasterType.Count < 5)
+        {
+            bladeMasterPassiveTwo = false;
             bladeMasterTier2.color = deActiveColor;
         }
         //Shoot Caster
-        if (shootCasterType.Count >= 3)
-        {
-            shootCasterPassiveTwo = true;
-            shootCasterTier1.color = activeColor;
-        }
-        else if (shootCasterType.Count >= 5)
+        if (shootCasterType.Count >= 5)
         {
             shootCasterPassiveOne = true;
             shootCasterPassiveTwo = true;
             shootCasterTier1.color = activeColor;
             shootCasterTier2.color = activeColor;
         }
-
-        if (shootCasterType.Count < 5)
+        else if (shootCasterType.Count >= 3)
         {
-            shootCasterPassiveTwo = false;
-            shootCasterTier2.color = deActiveColor;
+            shootCasterPassiveTwo = true;
+            shootCasterTier1.color = activeColor;
         }
-        else if (shootCasterType.Count < 3)
+
+        if (shootCasterType.Count < 3)
         {
             shootCasterPassiveOne = false;
             shootCasterPassiveTwo = false;
             shootCasterTier1.color = deActiveColor;
+            shootCasterTier2.color = deActiveColor;
+        }
+        else if (shootCasterType.Count < 5)
+        {
+            shootCasterPassiveTwo = false;
             shootCasterTier2.color = deActiveColor;
         }
     }

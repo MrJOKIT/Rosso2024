@@ -467,6 +467,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -519,6 +520,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -570,6 +572,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -623,6 +626,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -676,6 +680,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -727,6 +732,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                                 else
                                 {
                                     Debug.Log("Can't move");
+                                    ClearMovePath();
                                 }
                         }
                     }
@@ -780,6 +786,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -833,6 +840,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
