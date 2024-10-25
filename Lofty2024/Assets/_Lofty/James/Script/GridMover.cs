@@ -149,64 +149,16 @@ public class GridMover : MonoBehaviour
         GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.attackMat;
         enemyActive = true;
     }
-
-    public void AttackEnemy(AttackType attackType,int damage,CurseType effectiveType,int effectiveTurnTime,int knockBackRange,Transform playerTrans,bool bomb,bool godOfWar)
+    
+    public void BombEnemy()
     {
-        try
+        float randomNumber = Random.Range(0, 1f);
+        if (randomNumber < 0.5f)
         {
-            switch (attackType)
-            {
-                case AttackType.NormalAttack:
-                    if (godOfWar)
-                    {
-                        float randomNumber = Random.Range(0, 1f);
-                        if (randomNumber <= 0.2f)
-                        {
-                            enemy.TakeDamage(damage + 5);
-                        }
-                        else
-                        {
-                            enemy.TakeDamage(damage);
-                        }
-                    }
-                    else
-                    {
-                        enemy.TakeDamage(damage);
-                    }
-                    break;
-                case AttackType.SpecialAttack:
-                    enemy.TakeDamage(damage * 2); 
-                    break;
-                case AttackType.KnockBackAttack:
-                    enemy.TakeDamage(damage);
-                    enemy.GetComponent<EnemyMovementGrid>().KnockBack(playerTrans,knockBackRange);
-                    break;
-                case AttackType.EffectiveAttack:
-                    enemy.TakeDamage(damage);
-                    enemy.AddCurseStatus(effectiveType,effectiveTurnTime);
-                    break;
-            }
-
-            if (enemy.enemyHealth <= 0)
-            {
-                if (bomb)
-                {
-                    float randomNumber = Random.Range(0, 1f);
-                    if (randomNumber < 0.5f)
-                    {
-                        enemy.BombEnemy();
-                    }
-                }
-                
-                gridState = GridState.Empty;
-                enemy = null;
-            }
+            enemy.BombEnemy();
         }
-        
-        catch (Exception a)
-        {
-            Debug.Log($"No enemy script in gird {a}");
-        }
+        gridState = GridState.Empty;
+        enemy = null;
     }
 
     [Button("Test Set Trap")]

@@ -262,18 +262,63 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         } 
 
                         Enemy enemy = hit.collider.GetComponent<GridMover>().enemy;
-                        
-                        hit.collider.GetComponent<GridMover>().AttackEnemy(attackType,damage,effectiveType,effectiveTurnTime,knockBackRange,transform,GetComponent<PlayerArtifact>().Kamikaze,GetComponent<PlayerArtifact>().GodOfWar);
+                        PlayerArtifact artifact = GetComponent<PlayerArtifact>();
+                        switch (attackType)
+                        {
+                            case AttackType.NormalAttack:
+                                if (artifact.GodOfWar)
+                                {
+                                    float randomNumber = Random.Range(0, 1f);
+                                    if (randomNumber <= 0.2f)
+                                    {
+                                        enemy.TakeDamage(damage + 5);
+                                    }
+                                    else
+                                    {
+                                        enemy.TakeDamage(damage);
+                                    }
+                                }
+                                else
+                                {
+                                    enemy.TakeDamage(damage);
+                                }
+                                break;
+                            case AttackType.SpecialAttack:
+                                enemy.TakeDamage(damage * 2); 
+                                break;
+                            case AttackType.KnockBackAttack:
+                                enemy.TakeDamage(damage);
+                                enemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange);
+                                break;
+                            case AttackType.EffectiveAttack:
+                                enemy.TakeDamage(damage);
+                                enemy.AddCurseStatus(effectiveType,effectiveTurnTime);
+                                break;
+                        }
                         
                         if (enemy.enemyHealth <= 0) 
                         {
-                            if (GetComponent<PlayerArtifact>().GiftOfDeath)
+                            if (artifact.GiftOfDeath)
                             {
                                 float randomNumber = Random.Range(0, 1f);
                                 if (randomNumber < 0.2)
                                 {
                                     GetComponent<Player>().TakeHealth(1);
                                 }
+                            }
+
+                            if (artifact.bladeMasterPassiveOne)
+                            {
+                                float randomNumber = Random.Range(0, 1f);
+                                if (randomNumber < 0.15)
+                                {
+                                    GetComponent<Player>().TakeHealth(1);
+                                }
+                            }
+
+                            if (artifact.Kamikaze)
+                            {
+                                enemy.BombEnemy();
                             }
                             SetTargetPosition(hit.point);
                         }

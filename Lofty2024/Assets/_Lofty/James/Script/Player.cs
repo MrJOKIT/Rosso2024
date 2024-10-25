@@ -5,6 +5,7 @@ using System.Linq;
 using EditorAttributes;
 using UnityEngine;
 using VInspector;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour, ITakeDamage
 {
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private int maxHealth;
     [SerializeField] private int playerHealthTemp;
     [SerializeField] private int playerHealth;
+    [SerializeField] private int takeDamageCount = 0;
     public bool isDead;
 
     [Space(5)] [Header("GUI")] 
@@ -82,23 +84,74 @@ public class Player : MonoBehaviour, ITakeDamage
             return;
         }
 
-        if (playerHealthTemp > 0)
+        if (GetComponent<PlayerArtifact>().swordKnightPassiveOne)
         {
-            int currentHealth = playerHealthTemp - damage;
-            if (currentHealth < 0)
+            damage -= 1;
+            if (damage < 0)
             {
-                playerHealth += currentHealth;
+                damage = 0;
+            }
+        }
+
+        if (GetComponent<PlayerArtifact>().bladeMasterPassiveTwo)
+        {
+            float randomNumber = Random.Range(0f, 1f);
+            if (randomNumber > 0.25f)
+            {
+                if (playerHealthTemp > 0)
+                {
+                    int currentHealth = playerHealthTemp - damage;
+                    if (currentHealth < 0)
+                    {
+                        playerHealth += currentHealth;
+                    }
+                }
+                else
+                {
+                    playerHealth -= damage;
+                    if (playerHealth < 0)
+                    {
+                        playerHealth = 0;
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Miss");
             }
         }
         else
         {
-            playerHealth -= damage;
-            if (playerHealth < 0)
+            if (playerHealthTemp > 0)
             {
-                playerHealth = 0;
+                int currentHealth = playerHealthTemp - damage;
+                if (currentHealth < 0)
+                {
+                    playerHealth += currentHealth;
+                }
+            }
+            else
+            {
+                playerHealth -= damage;
+                if (playerHealth < 0)
+                {
+                    playerHealth = 0;
+                }
             }
         }
         
+
+        if (GetComponent<PlayerArtifact>().swordKnightPassiveTwo)
+        {
+            if (takeDamageCount < 6)
+            {
+                takeDamageCount += 1;
+            }
+            else
+            {
+                Debug.LogWarning("Don't forgot create stun around");
+            }
+        }
     }
 
     public void TakeHealth(int health)
