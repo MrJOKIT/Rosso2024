@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using EditorAttributes;
 using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
@@ -25,7 +24,7 @@ public class Player : MonoBehaviour, ITakeDamage
     [Space(5)] [Header("GUI")] 
     [SerializeField] private Transform healthPrefabUI;
     [SerializeField] private Transform healthParentUI;
-    [SerializeField] private List<GameObject> healthUI;
+    [SerializeField] private List<HealthUI> healthUI;
     
     [Space(10)] 
     [Tab("Usage Item")] 
@@ -39,6 +38,7 @@ public class Player : MonoBehaviour, ITakeDamage
     private void Awake()
     {
         SetStats();
+        CreateHealthUI();
     }
 
     private void Update()
@@ -72,6 +72,17 @@ public class Player : MonoBehaviour, ITakeDamage
     {
         //ใช้ตอน Player ตาย 
         isDead = true;
+    }
+
+    [Button("Test Damage")]
+    private void TestTakeDamage()
+    {
+        playerHealth -= 1;
+        if (playerHealth < 0)
+        {
+            playerHealth = 0;
+        }
+        UpdateHealthUI();
     }
     
     public void TakeDamage(int damage)
@@ -152,6 +163,8 @@ public class Player : MonoBehaviour, ITakeDamage
                 Debug.LogWarning("Don't forgot create stun around");
             }
         }
+        
+        UpdateHealthUI();
     }
 
     public void TakeHealth(int health)
@@ -223,14 +236,10 @@ public class Player : MonoBehaviour, ITakeDamage
 
     private void CreateHealthUI()
     {
-        foreach (GameObject ui in healthUI.ToList())
-        {
-            healthUI.Remove(ui);
-            Destroy(ui.gameObject);
-        }
         for (int a = 0; a < maxHealth; a++)
         {
-            Instantiate(healthPrefabUI.gameObject, healthParentUI);
+            GameObject health = Instantiate(healthPrefabUI.gameObject, healthParentUI);
+            healthUI.Add(health.GetComponent<HealthUI>());
         }
     }
 
@@ -238,14 +247,7 @@ public class Player : MonoBehaviour, ITakeDamage
     {
         for (int a = 0; a < maxHealth; a++)
         {
-            if (a <= playerHealth)
-            {
-                continue;
-            }
-            else
-            {
-                healthUI[a].gameObject.SetActive(false);
-            }
+            healthUI[a].ActiveHearth(a < playerHealth);
         }
     }
 
