@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3144135381647980828}
   - component: {fileID: 9015708477427849719}
   - component: {fileID: 8159228447900689833}
+  - component: {fileID: 8437149446785486186}
   m_Layer: 0
   m_Name: Box
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 3757993815896619578}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -55,7 +56,7 @@ MonoBehaviour:
   - Packages/com.tripolygon.umodeler-x/Editor/Resources/Materials/UModelerX_Gray_URP.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_aae369b4-77a7-43d9-a23a-413ed5c30dae
+    name: UM_OperatedMesh_f67d1f8d-bc88-4c76-aa42-40339fdd37d5
     skinnedMesh: 0
     sharedMesh: {fileID: -4144100635084082374}
     buidVersion:
@@ -67,7 +68,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: aae369b4-77a7-43d9-a23a-413ed5c30dae
+  sourceMeshRendererGUID: f67d1f8d-bc88-4c76-aa42-40339fdd37d5
   guid: f64f2d3d-293d-4a9a-b01e-117498f02929
   localOptions:
     RecalculateTangents: 0
@@ -133,6 +134,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &8437149446785486186
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3757993815896619578}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6a2ff8dfd59e4644d93386ad69528993, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6344253970654772230
 GameObject:
   m_ObjectHideFlags: 0
