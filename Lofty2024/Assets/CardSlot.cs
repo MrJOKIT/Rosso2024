@@ -10,6 +10,11 @@ public class CardSlot : MonoBehaviour
     public Image cardImage;
     public TextMeshProUGUI cardName;
     public TextMeshProUGUI cardDetail;
+    [Space(10)] 
+    public Image cardClassIcon;
+    public Sprite swordIcon;
+    public Sprite bladeIcon;
+    public Sprite shootIcon;
 
     public void SetCard(int cardIndex,ArtifactData artifactData)
     {
@@ -17,6 +22,21 @@ public class CardSlot : MonoBehaviour
         this.cardImage.sprite = artifactData.artifactImage;
         this.cardName.text = artifactData.artifactName;
         this.cardDetail.text = artifactData.artifactDetail;
+        switch (artifactData.artifactClass)
+        {
+            case CardClass.SwordKnight:
+                cardClassIcon.sprite = swordIcon;
+                break;
+            case CardClass.BladeMaster:
+                cardClassIcon.sprite = bladeIcon;
+                break;
+            case CardClass.ShootingCaster:
+                cardClassIcon.sprite = shootIcon;
+                break;
+            default:
+                cardClassIcon.gameObject.SetActive(false);
+                break;
+        }
     }
 
     public void Reveal()

@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hearthUI: {fileID: 6539081567535479525}
+  tempHealthMaterial: {fileID: 2100000, guid: d82f8db03b2602a46975377822cee579, type: 2}
 --- !u!1 &6539081567535479525
 GameObject:
   m_ObjectHideFlags: 0

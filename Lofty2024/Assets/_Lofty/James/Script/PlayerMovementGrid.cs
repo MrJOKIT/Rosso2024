@@ -151,6 +151,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 return;
             }
         }
+        else
+        {
+            inBattle = false;
+        }
         
         if (autoSkip) 
         {

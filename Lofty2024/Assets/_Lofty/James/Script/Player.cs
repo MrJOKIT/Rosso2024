@@ -74,14 +74,27 @@ public class Player : MonoBehaviour, ITakeDamage
         isDead = true;
     }
 
+    [Button("Test Health Up")]
+    private void TestAddMaxHealth()
+    {
+        AddMaxHealth(1);
+    }
+    private void AddMaxHealth(int count)
+    {
+        maxHealth += count;
+        CreateHealthUI();
+    }
     [Button("Test Damage")]
     private void TestTakeDamage()
     {
-        playerHealth -= 1;
-        if (playerHealth < 0)
-        {
-            playerHealth = 0;
-        }
+        TakeDamage(1);
+        UpdateHealthUI();
+    }
+
+    [Button("Test Heal")]
+    private void TestHeal()
+    {
+        TakeHealth(1);
         UpdateHealthUI();
     }
     
@@ -136,10 +149,18 @@ public class Player : MonoBehaviour, ITakeDamage
             if (playerHealthTemp > 0)
             {
                 int currentHealth = playerHealthTemp - damage;
+                
                 if (currentHealth < 0)
                 {
+                    playerHealthTemp = 0;
                     playerHealth += currentHealth;
                 }
+                else
+                {
+                    playerHealthTemp -= damage;
+                }
+                Destroy(healthUI[^1].gameObject);
+                healthUI.Remove(healthUI[^1]);
             }
             else
             {
@@ -163,8 +184,12 @@ public class Player : MonoBehaviour, ITakeDamage
                 Debug.LogWarning("Don't forgot create stun around");
             }
         }
+
+        if (playerHealthTemp <= 0)
+        {
+            UpdateHealthUI();
+        }
         
-        UpdateHealthUI();
     }
 
     public void TakeHealth(int health)
@@ -175,6 +200,7 @@ public class Player : MonoBehaviour, ITakeDamage
         {
             playerHealth = maxHealth + GetComponent<PlayerArtifact>().HealthPoint;
         }
+        UpdateHealthUI();
     }
     
     public void AddCurseStatus(CurseType curseType, int turnTime)
@@ -236,16 +262,25 @@ public class Player : MonoBehaviour, ITakeDamage
 
     private void CreateHealthUI()
     {
-        for (int a = 0; a < maxHealth; a++)
+        foreach (HealthUI health in healthUI.ToList())
+        {
+            Destroy(health.gameObject);
+            healthUI.Remove(health);
+        }
+        for (int a = 0; a < maxHealth + playerHealthTemp; a++)
         {
             GameObject health = Instantiate(healthPrefabUI.gameObject, healthParentUI);
             healthUI.Add(health.GetComponent<HealthUI>());
+            if (a >= maxHealth)
+            {
+                health.GetComponent<HealthUI>().ChangeToTemp();
+            }
         }
     }
 
     private void UpdateHealthUI()
     {
-        for (int a = 0; a < maxHealth; a++)
+        for (int a = 0; a < maxHealth; a++) 
         {
             healthUI[a].ActiveHearth(a < playerHealth);
         }
