@@ -47,6 +47,7 @@ public class EnemyAI : Enemy
                     if (playerInRange)
                     {
                         //Combat time
+                        enemyAnimator.SetTrigger("Attack");
                         targetTransform.GetComponent<Player>().TakeDamage(1);
                         EndTurn();
                     }

@@ -47,9 +47,10 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     [Header("Data")]
     public TurnData enemyTurnData;
     public EnemyData enemyData;
-    
-    [Space(10)]
-    [Header("Stats")]
+
+    [Space(10)] 
+    [Header("Stats")] 
+    public Animator enemyAnimator;
     public int enemyHealth;
     public float enemySpeed;
     public bool isDead;
@@ -230,6 +231,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     public void TakeDamage(int damage)
     {
+        enemyAnimator.SetTrigger("TakeDamage");
         CameraManager.Instance.TriggerShake();
         enemyHealth -= damage;
         if (enemyHealth <= 0)
