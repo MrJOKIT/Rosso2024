@@ -24,6 +24,9 @@ public class GridMover : MonoBehaviour
 
     [Space(10)] 
     [Header("Checker")] 
+    public bool onHover;
+    public GameObject selectedObject;
+    [Space(10)]
     public GridState gridState;
     private GridState oldState;
     public bool gridActive;
@@ -57,6 +60,7 @@ public class GridMover : MonoBehaviour
 
     private void LateUpdate()
     {
+        selectedObject.SetActive(onHover);
         if (enemy != null)
         {
             if (enemy.isDead)

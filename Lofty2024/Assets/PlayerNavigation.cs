@@ -56,6 +56,13 @@ public class PlayerNavigation : MonoBehaviour
 
     private void Update()
     {
+        if (moveArrow.Count > 100)
+        {
+            Debug.Log("Error Navigation");   
+            ClearMovePath();
+            currentState = NavigationMoveState.Idle;
+            ResetNavigation();
+        }
         if (player.GetPlayerMode == PlayerMode.Combat)
         {
             return;

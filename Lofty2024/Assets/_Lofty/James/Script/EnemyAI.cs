@@ -59,6 +59,10 @@ public class EnemyAI : Enemy
                 
                 break;
             case MovementState.Moving:
+                if (forwardMoveBlock && backwardMoveBlock && leftMoveBlock && rightMoveBlock && forwardLeftMoveBlock && forwardRightMoveBlock && backwardLeftMoveBlock && backwardRightMoveBlock)
+                {
+                    EndTurnModify();
+                }
                 break;
                 
         }

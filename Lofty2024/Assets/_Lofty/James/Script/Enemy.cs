@@ -51,6 +51,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     [Space(10)] 
     [Header("Stats")] 
     public Animator enemyAnimator;
+    public int enemyMaxHealth;
     public int enemyHealth;
     public float enemySpeed;
     public bool isDead;
@@ -174,6 +175,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     private void EnemyDie()
     {
+        MouseSelectorManager.Instance.ClearSelector(this);
         TurnManager.Instance.RemoveUnit(enemyTurnData);
         isDead = true;
         if (onTurn)
@@ -191,7 +193,8 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     
     private void SetEnemyData()
-    { 
+    {
+        enemyMaxHealth = enemyData.enemyMaxHealth;
         enemyHealth = enemyData.enemyHealth;
         enemySpeed = enemyData.enemySpeed;
     }
@@ -260,6 +263,11 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         GameObject curseGUI = Instantiate(curseUiPrefab, curseCanvas);
         curseHave.Add(new CurseData(curseType,turnTime,curseGUI.GetComponent<CurseUI>()));
         CurseUiUpdate();
+    }
+
+    private void OnMouseOver()
+    {
+        Debug.Log("See Data");
     }
 
     protected virtual void EndTurnModify()

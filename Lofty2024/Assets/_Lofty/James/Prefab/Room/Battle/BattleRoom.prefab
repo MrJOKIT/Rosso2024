@@ -426,14 +426,14 @@ MonoBehaviour:
   startPoint: {fileID: 8121135055242244604}
   portalLeft: {fileID: 3159139652278219953}
   portalRight: {fileID: 8920197843785730585}
+  randomRate: {fileID: 11400000, guid: 27f99e4cad9e0e54eb05f5198d755798, type: 2}
   enemySpawnComplete: 0
+  stunAll: 0
   spawnEnemyCount: {x: 4, y: 6}
   enemyParent: {fileID: 3347568995621606985}
   enemyPrefab:
-  - {fileID: 9134819534939182666, guid: 90d08ac1b398b5e49831f62a2f525172, type: 3}
-  - {fileID: 9134819534939182666, guid: 1710e89f4374da94db710ded2870d93f, type: 3}
-  - {fileID: 9134819534939182666, guid: c0bdc19fe6b484d49ab690f4f4a9d14f, type: 3}
-  - {fileID: 9134819534939182666, guid: 4ec599f154c953a45a2da73d58eb90cc, type: 3}
+  - {fileID: 9134819534939182666, guid: cf2144912ad9e7b4a8835f4869d99ebb, type: 3}
+  - {fileID: 9134819534939182666, guid: 0adc65148a5a5b842866b7fa1a46b55c, type: 3}
   enemyInRoom: []
   roomClear: 0
   obstacleSpawnComplete: 0
@@ -997,7 +997,7 @@ MonoBehaviour:
   - Packages/com.tripolygon.umodeler-x/Editor/Resources/Materials/UModelerX_Gray_URP.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_0a6c4ab8-be74-4e69-aea4-94c462f87c57
+    name: UM_OperatedMesh_299cd849-1ffd-4a8d-9932-a31262b47474
     skinnedMesh: 0
     sharedMesh: {fileID: -4943758353868826497}
     buidVersion:
@@ -1009,7 +1009,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: 0a6c4ab8-be74-4e69-aea4-94c462f87c57
+  sourceMeshRendererGUID: 299cd849-1ffd-4a8d-9932-a31262b47474
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0

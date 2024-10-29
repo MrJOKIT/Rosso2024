@@ -32,8 +32,9 @@ public class RoomManager : MonoBehaviour
     [Header("Portal Position")] 
     public Transform portalLeft;
     public Transform portalRight;
-    
+
     [Tab("Enemy Generator")] 
+    public RandomRateProfile randomRate;
     public bool enemySpawnComplete;
     public bool stunAll;
     public Vector2Int spawnEnemyCount;
@@ -111,7 +112,7 @@ public class RoomManager : MonoBehaviour
     {
         for (int i = 0; i < spawnEnemyMax; i++)
         {
-            GameObject enemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count - 1)], CheckSpawnPoint(), Quaternion.identity,enemyParent);
+            GameObject enemy = Instantiate(enemyPrefab[RandomMonsterNumber()], CheckSpawnPoint(), Quaternion.identity,enemyParent);
             enemyInRoom.Add(enemy.GetComponent<Enemy>());
             enemy.GetComponent<Enemy>().targetTransform = playerTrans;
             enemy.GetComponent<Enemy>().ActiveUnit();
@@ -125,6 +126,38 @@ public class RoomManager : MonoBehaviour
                 enemySpawnComplete = true;
             }
         }
+    }
+
+    private int RandomMonsterNumber()
+    {
+        int monsterNumber = 0;
+        float randomNumber = Random.Range(0f, 1f);
+        if (randomNumber < randomRate.pawnRate)
+        {
+            monsterNumber = 0;
+        }
+        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate)
+        {
+            monsterNumber = 1;
+        }
+        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate + randomRate.knightRate)
+        {
+            monsterNumber = 2;
+        }
+        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate + randomRate.knightRate + randomRate.bishopRate)
+        {
+            monsterNumber = 3;
+        }
+        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate + randomRate.knightRate + randomRate.bishopRate + randomRate.queenRate)
+        {
+            monsterNumber = 4;
+        }
+        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate + randomRate.knightRate + randomRate.bishopRate + randomRate.queenRate + randomRate.kingRate)
+        {
+            monsterNumber = 5;
+        }
+
+        return monsterNumber;
     }
 
     private void Update()
@@ -269,5 +302,13 @@ public class RoomManager : MonoBehaviour
             Destroy(item);
         }
         Destroy(gameObject,0.1f);
+    }
+
+    public void ClearSelectedGird()
+    {
+        foreach (GridMover grid in currentGrid)
+        {
+            grid.onHover = false;
+        }
     }
 }

@@ -264,7 +264,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         {
                             return;
                         } 
-
                         Enemy enemy = hit.collider.GetComponent<GridMover>().enemy;
                         PlayerArtifact artifact = GetComponent<PlayerArtifact>();
                         switch (attackType)
@@ -328,6 +327,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         }
                         else
                         {
+                            MouseSelectorManager.Instance.UpdateHearthUI(); 
                             GridSpawnManager.Instance.ClearMover();
                             currentState = MovementState.Idle;
                             moveSuccess = true;

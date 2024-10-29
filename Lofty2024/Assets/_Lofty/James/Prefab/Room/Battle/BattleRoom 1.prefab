@@ -426,11 +426,14 @@ MonoBehaviour:
   startPoint: {fileID: 8121135055242244604}
   portalLeft: {fileID: 6662999295506224644}
   portalRight: {fileID: 3064861950234383191}
+  randomRate: {fileID: 11400000, guid: 27f99e4cad9e0e54eb05f5198d755798, type: 2}
   enemySpawnComplete: 0
+  stunAll: 0
   spawnEnemyCount: {x: 4, y: 6}
   enemyParent: {fileID: 3347568995621606985}
   enemyPrefab:
-  - {fileID: 9134819534939182666, guid: 90d08ac1b398b5e49831f62a2f525172, type: 3}
+  - {fileID: 9134819534939182666, guid: 0adc65148a5a5b842866b7fa1a46b55c, type: 3}
+  - {fileID: 9134819534939182666, guid: cf2144912ad9e7b4a8835f4869d99ebb, type: 3}
   enemyInRoom: []
   roomClear: 0
   obstacleSpawnComplete: 0
@@ -500,6 +503,8 @@ MonoBehaviour:
   - {fileID: 5435122265812433154}
   - {fileID: 3979492222643215164}
   - {fileID: 3740103431028529302}
+  emptyGrid: []
+  itemInRoom: []
 --- !u!65 &103733626244978462
 BoxCollider:
   m_ObjectHideFlags: 0
