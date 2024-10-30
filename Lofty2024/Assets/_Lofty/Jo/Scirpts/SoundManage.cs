@@ -19,8 +19,11 @@ public class SoundClip
 public class SoundManage : MonoBehaviour
 {
     public static SoundManage Instance;  
-    public AudioSource audioSource;  
+    public AudioSource BGaudioSource;  
+    public AudioSource EffectAudioSource;
     public List<SoundClip> soundClips; 
+    
+   
 
     [Range(0f, 1f)]
     public float bgVolume = 0.5f;  
@@ -61,10 +64,10 @@ public class SoundManage : MonoBehaviour
     {
         if (soundDictionary.TryGetValue(Sound.Music1, out AudioClip clip))
         {
-            audioSource.clip = clip;
-            audioSource.volume = bgVolume;
-            audioSource.loop = true;
-            audioSource.Play();
+            BGaudioSource.clip = clip;
+            BGaudioSource.volume = bgVolume;
+            BGaudioSource.loop = true;
+            BGaudioSource.Play();
         }
         else
         {
@@ -76,11 +79,16 @@ public class SoundManage : MonoBehaviour
     {
         if (soundDictionary.TryGetValue(sound, out AudioClip clip))
         {
-            audioSource.PlayOneShot(clip, effectVolume);
+            EffectAudioSource.PlayOneShot(clip, effectVolume);  // Use effectAudioSource here
         }
         else
         {
             Debug.LogWarning($"Sound {sound} not found!");
         }
+    }
+    public void UpdateVolumes()
+    {
+        BGaudioSource.volume = bgVolume; // for background music
+        EffectAudioSource.volume = effectVolume; // for sound effects
     }
 }
