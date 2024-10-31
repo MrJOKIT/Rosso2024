@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DamageNumbersPro;
 using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
@@ -22,8 +23,12 @@ public class Player : MonoBehaviour, ITakeDamage
     public bool isDead;
 
     [Space(5)] [Header("GUI")] 
+    [Header("Damage Number")] 
+    [SerializeField] private DamageNumber damageNumbers;
+    [Header("Health")]
     [SerializeField] private Transform healthPrefabUI;
     [SerializeField] private Transform healthParentUI;
+    [SerializeField] private Transform healthTempParentUI;
     [SerializeField] private List<HealthUI> healthUI;
     
     [Space(10)] 
@@ -164,12 +169,15 @@ public class Player : MonoBehaviour, ITakeDamage
             }
             else
             {
+                
                 playerHealth -= damage;
                 if (playerHealth < 0)
                 {
                     playerHealth = 0;
                 }
             }
+
+            
         }
         
 
@@ -189,7 +197,6 @@ public class Player : MonoBehaviour, ITakeDamage
         {
             UpdateHealthUI();
         }
-        
     }
 
     public void TakeHealth(int health)
@@ -269,11 +276,16 @@ public class Player : MonoBehaviour, ITakeDamage
         }
         for (int a = 0; a < maxHealth + playerHealthTemp; a++)
         {
-            GameObject health = Instantiate(healthPrefabUI.gameObject, healthParentUI);
-            healthUI.Add(health.GetComponent<HealthUI>());
             if (a >= maxHealth)
             {
+                GameObject health = Instantiate(healthPrefabUI.gameObject, healthTempParentUI);
+                healthUI.Add(health.GetComponent<HealthUI>());
                 health.GetComponent<HealthUI>().ChangeToTemp();
+            }
+            else
+            {
+                GameObject health = Instantiate(healthPrefabUI.gameObject, healthParentUI);
+                healthUI.Add(health.GetComponent<HealthUI>());
             }
         }
     }

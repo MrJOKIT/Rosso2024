@@ -132,6 +132,7 @@ public class RoomManager : MonoBehaviour
     {
         int monsterNumber = 0;
         float randomNumber = Random.Range(0f, 1f);
+        Debug.Log(randomNumber);
         if (randomNumber < randomRate.pawnRate)
         {
             monsterNumber = 0;

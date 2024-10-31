@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caae6e2a3c9e3754eb940aca4d2b2112, type: 3}
   m_Name: Rook
   m_EditorClassIdentifier: 
+  enemyName: 002
+  enemySprite: {fileID: 50947352, guid: c054d8ab1de1cb242abe602ec1d77497, type: 3}
   enemyMaxHealth: 3
   enemyHealth: 3
   enemySpeed: 25

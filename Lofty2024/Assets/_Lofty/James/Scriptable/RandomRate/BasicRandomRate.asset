@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6ef86986ac7cab40b7e59b7c760f1ee, type: 3}
   m_Name: BasicRandomRate
   m_EditorClassIdentifier: 
-  pawnRate: 0.7
-  rookRate: 0.3
+  pawnRate: 0.75
+  rookRate: 0.25
   knightRate: 0
   bishopRate: 0
   queenRate: 0

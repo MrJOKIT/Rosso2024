@@ -35,6 +35,7 @@ MonoBehaviour:
     - Assembly-CSharp-firstpass
     - AttributesSamples
     - Beardy.BeardsGridLayoutGroup.Runtime
+    - DamageNumbersPro
     - EditorAttributes
     - GridBuilder2_Core
     - TimersMadeEasyLite

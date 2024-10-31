@@ -205,7 +205,7 @@ public class PlayerNavigation : MonoBehaviour
         }
 
         SpawnNavigationArrow(direction);
-        //AddMovePath(lastPlayerTransform,direction);
+        AddMovePath(lastPlayerTransform,direction);
     }
     private void MoveHandle()
     {

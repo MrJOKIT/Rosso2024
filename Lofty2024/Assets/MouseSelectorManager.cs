@@ -45,6 +45,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
                     {
                         uiCanvas.SetActive(true);
                         selectedEnemy = hit.transform.GetComponent<GridMover>().enemy;
+                        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(selectedEnemy.enemyData.name,selectedEnemy.enemyData.enemySprite);
                         CreateHearth();
                     }
                     else

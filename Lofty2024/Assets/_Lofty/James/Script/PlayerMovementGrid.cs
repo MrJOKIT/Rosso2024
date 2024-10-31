@@ -461,7 +461,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 //transform.position = Vector3.MoveTowards(transform.position,supTargetTransform, moveSpeed * Time.deltaTime);
                 break;
         }
-        //AddMovePath(lastPlayerTransform,direction);
+        AddMovePath(lastPlayerTransform,direction);
     }
     private void MoveHandle()
     {
