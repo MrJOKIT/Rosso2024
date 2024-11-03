@@ -7,7 +7,7 @@ using VInspector;
 
 public class EnemyAI : Enemy
 {
-    [Foldout("Move Checker")]
+    [Tab("Move Checker")]
     public LayerMask moveBlockLayer;
     [Space(10)]
     public bool forwardMoveBlock;
@@ -19,11 +19,12 @@ public class EnemyAI : Enemy
     public bool leftMoveBlock;
     public bool rightMoveBlock;
 
+    [Tab("Combat")]
     [Header("Combat Checker")]
     public bool playerInRange;
     public LayerMask gridLayer;
     public List<Transform> combatChecker;
-    private void FixedUpdate()
+    private void Update()
     {
         ChangeGridMoverUnder();
         CheckMoveHandle();
@@ -48,7 +49,7 @@ public class EnemyAI : Enemy
                     {
                         //Combat time
                         enemyAnimator.SetTrigger("Attack");
-                        targetTransform.GetComponent<Player>().TakeDamage(1);
+                        targetTransform.GetComponent<Player>().TakeDamage(enemyData.damage);
                         EndTurn();
                     }
                     else

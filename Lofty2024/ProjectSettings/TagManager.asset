@@ -12,6 +12,7 @@ TagManager:
   - Portal
   - RoomSpawner
   - Room
+  - Boss
   layers:
   - Default
   - TransparentFX

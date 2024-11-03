@@ -41,6 +41,7 @@ public class CurseData
 }
 public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
 {
+    [Tab("Enemy Host")]
     [Header("Player")]
     public Transform targetTransform;
     

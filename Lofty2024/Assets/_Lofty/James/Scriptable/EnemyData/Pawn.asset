@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Labigon
   enemySprite: {fileID: -2095233154, guid: 0ae12e22e3a555346bdad3028eebe122, type: 3}
+  isBoss: 0
   enemyMaxHealth: 1
   enemyHealth: 1
+  damage: 1
   enemySpeed: 10

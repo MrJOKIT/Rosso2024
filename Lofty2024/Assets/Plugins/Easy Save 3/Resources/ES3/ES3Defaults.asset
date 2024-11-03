@@ -38,6 +38,8 @@ MonoBehaviour:
     - DamageNumbersPro
     - EditorAttributes
     - GridBuilder2_Core
+    - ProCamera2D.Examples
+    - ProCamera2D.Runtime
     - TimersMadeEasyLite
     - VInspector
     - VTabs

@@ -35,6 +35,9 @@ public class RoomManager : MonoBehaviour
 
     [Tab("Enemy Generator")] 
     public RandomRateProfile randomRate;
+    public bool isBossRoom;
+    public Transform bossSpawnPoint;
+    [Space(10)]
     public bool enemySpawnComplete;
     public bool stunAll;
     public Vector2Int spawnEnemyCount;
@@ -98,6 +101,11 @@ public class RoomManager : MonoBehaviour
 
     private void SpawnObstacle()
     {
+        if (isBossRoom)
+        {
+            obstacleSpawnComplete = true;
+            return;
+        }
         for (int i = 0; i < spawnObstacleMax; i++)
         {
             Instantiate(obstaclePrefab[Random.Range(0, obstaclePrefab.Count - 1)], CheckSpawnPoint(), Quaternion.identity, obstacleParent);
@@ -110,6 +118,19 @@ public class RoomManager : MonoBehaviour
     }
     private void SpawnEnemy()
     {
+        if (isBossRoom)
+        {
+            GameObject enemy = Instantiate(enemyPrefab[RandomMonsterNumber()], new Vector3(bossSpawnPoint.position.x,0.5f,bossSpawnPoint.position.z), Quaternion.identity,enemyParent);
+            enemyInRoom.Add(enemy.GetComponent<Enemy>());
+            enemy.GetComponent<Enemy>().targetTransform = playerTrans;
+            enemy.GetComponent<Enemy>().ActiveUnit();
+            if (stunAll)
+            {
+                enemy.GetComponent<Enemy>().AddCurseStatus(CurseType.Stun,1); 
+            }
+            enemySpawnComplete = true;
+            return;
+        }
         for (int i = 0; i < spawnEnemyMax; i++)
         {
             GameObject enemy = Instantiate(enemyPrefab[RandomMonsterNumber()], CheckSpawnPoint(), Quaternion.identity,enemyParent);
@@ -132,7 +153,7 @@ public class RoomManager : MonoBehaviour
     {
         int monsterNumber = 0;
         float randomNumber = Random.Range(0f, 1f);
-        Debug.Log(randomNumber);
+        //Debug.Log(randomNumber);
         if (randomNumber < randomRate.pawnRate)
         {
             monsterNumber = 0;
@@ -186,6 +207,15 @@ public class RoomManager : MonoBehaviour
         Vector3 spawnPoint = new Vector3(grid.transform.position.x,0.5f,grid.transform.position.z);
         emptyGrid.Remove(grid);
         return spawnPoint;
+    }
+
+    public void AddNewEnemyInRoom(GameObject newEnemyPrefab)
+    {
+        GameObject enemy = Instantiate(newEnemyPrefab, CheckSpawnPoint(), Quaternion.identity,enemyParent);
+        enemyInRoom.Add(enemy.GetComponent<Enemy>());
+        enemy.GetComponent<Enemy>().targetTransform = playerTrans;
+        enemy.GetComponent<Enemy>().ActiveUnit();
+        TurnManager.Instance.AddNewQueue(enemy.transform);
     }
 
     private void RoomProgressCheck()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using EditorAttributes;
+using TransitionsPlus;
 using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
@@ -76,5 +77,10 @@ public class CameraManager : Singeleton<CameraManager>
     {
         transform.position = new Vector3(newTarget.x,transform.position.y, newTarget.z);
         initialPosition = transform.localPosition;
+    }
+
+    public void ChangeCamera()
+    {
+        TransitionAnimator transitionAnimator = TransitionAnimator.Start(TransitionType.Smear);
     }
 }

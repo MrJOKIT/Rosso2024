@@ -24,6 +24,7 @@ public class Player : MonoBehaviour, ITakeDamage
 
     [Space(5)] [Header("GUI")] 
     [Header("Damage Number")] 
+    [SerializeField] private Transform damageParent;
     [SerializeField] private DamageNumber damageNumbers;
     [Header("Health")]
     [SerializeField] private Transform healthPrefabUI;
@@ -197,6 +198,7 @@ public class Player : MonoBehaviour, ITakeDamage
         {
             UpdateHealthUI();
         }
+        
     }
 
     public void TakeHealth(int health)

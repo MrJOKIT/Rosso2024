@@ -66,7 +66,6 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
         }
         else
         {
-            Debug.Log("Nothing");
             GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().ClearSelectedGird();
             selectedGrid = null;
             selectedEnemy = null;

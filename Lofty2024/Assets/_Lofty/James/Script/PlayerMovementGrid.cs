@@ -71,8 +71,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Header("Player Input")]
     public MoveType moveType;
 
-    [Space(10)] 
-    [Header("Movement Point")] 
+    [Space(10)] [Header("Movement Point")] 
+    public int moveCount;
     [SerializeField] private int defaultMovePoint = 2;
     [SerializeField] private int movePoint;
     [SerializeField] private int maxMovePoint;
@@ -413,13 +413,14 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             }
             //transform.position = Vector3.MoveTowards(transform.position,targetTransform,moveSpeed * Time.deltaTime);
         }
-        
-        if (transform.position == targetTransform)
+         
+        if (transform.position == targetTransform || moveCount > 15)
         {
             ClearMovePath();
             currentState = MovementState.Idle;
             GetComponent<PlayerAbility>().CheckAbilityUse();
             EndTurn();
+            moveCount = 0;
         }
     }
 
@@ -462,6 +463,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 break;
         }
         AddMovePath(lastPlayerTransform,direction);
+        moveCount += 1;
     }
     private void MoveHandle()
     {

@@ -97,7 +97,7 @@ public class TurnManager : Singeleton<TurnManager>
         {
             TurnData data = new TurnData(isPlayer, unitTransform, baseSpeed, null);
             turnData.Add(data);
-            data.unitTransform.GetComponent<EnemyAI>().enemyTurnData = data;
+            data.unitTransform.GetComponent<Enemy>().enemyTurnData = data;
         }
 
         turnData.Sort(((data, data1) => data1.baseSpeed.CompareTo(data.baseSpeed)));
@@ -181,7 +181,7 @@ public class TurnManager : Singeleton<TurnManager>
         }
         else
         {
-            turnData[0].unitTransform.GetComponent<EnemyAI>().onTurn = false;
+            turnData[0].unitTransform.GetComponent<Enemy>().onTurn = false;
         }
         
         UpdateTurnGUI();
@@ -207,7 +207,14 @@ public class TurnManager : Singeleton<TurnManager>
     }
 
     #endregion
-    
 
+
+    public void AddNewQueue(Transform transform)
+    {
+        GameObject queue = Instantiate(queuePrefab, turnSlotCanvas);
+        queueTransform.Add(queue);
+        GameObject turnSlot =Instantiate(turnSlotEnemyPrefab, queue.transform); 
+        turnData.Find(x => x.unitTransform == transform).turnSlot = turnSlot.GetComponent<TurnSlot>();;
+    }
     
 }

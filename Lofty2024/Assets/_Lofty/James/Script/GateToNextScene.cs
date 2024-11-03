@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TransitionsPlus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,7 +18,7 @@ public class GateToNextScene : InterfacePopUp<GateToNextScene>
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            LoadNextScene();
+            TransitionAnimator animator = TransitionAnimator.Start(TransitionType.Smear,2f,sceneNameToLoad:sceneName);
         }
     }
 
