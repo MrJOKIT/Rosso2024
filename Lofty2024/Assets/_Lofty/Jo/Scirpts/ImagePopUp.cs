@@ -29,7 +29,7 @@ public class ImagePopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         
         if (buttonText != null)
         {
-            buttonText.color = Color.gray; 
+            buttonText.color = Color.yellow; 
             buttonText.fontSize = originalFontSize * 1.1f; // Increase font size by 10%
         }
     }
