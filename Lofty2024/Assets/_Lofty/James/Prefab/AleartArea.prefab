@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3614401335691598580}
+  - component: {fileID: 2800837746800209339}
   m_Layer: 0
   m_Name: AleartArea
   m_TagString: Untagged
@@ -40,6 +41,41 @@ Transform:
   - {fileID: 7907014801795300911}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2800837746800209339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4337748188902312033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a42056e954ed1c47bbddb688b80413b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillAttackType: 2
+  curseType: 0
+  damageCount: 1
+  knockBackRange: 1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  checkPosition:
+  - {fileID: 4964490869878296056}
+  - {fileID: 309011908724249436}
+  - {fileID: 5030610152485303374}
+  - {fileID: 4336670974766057770}
+  - {fileID: 2982754042307902047}
+  - {fileID: 8337416318215019508}
+  - {fileID: 8685361184927699633}
+  - {fileID: 7907014801795300911}
+  optional: 1
+  optionalAttackType: 2
+  optionalCurseType: 0
+  optionalDamageCount: 99
+  optionalKnockBackRange: 2
+  optionalChecker:
+  - {fileID: 9213734496609411282}
 --- !u!1001 &317951077540321564
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -201,6 +237,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AleartMark
       objectReference: {fileID: 0}
+    - target: {fileID: 372100568210319857, guid: 331d68f9c2bdc32489bdaf88bc22a831,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 457e287dc17566c479299f28a38369d3, type: 2}
     - target: {fileID: 7625380060752373555, guid: 331d68f9c2bdc32489bdaf88bc22a831,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -251,6 +292,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7966441599982306725, guid: 331d68f9c2bdc32489bdaf88bc22a831,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: adf1be26878d1e247a8be82c11b26d39, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

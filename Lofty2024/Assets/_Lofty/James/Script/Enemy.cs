@@ -107,6 +107,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public void EndTurn()
     {
         EndTurnModify();
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().UpdateEmptyGrid();
         onTurn = false;
         TurnManager.Instance.TurnSucces();
         if (curseHave.Count != 0)

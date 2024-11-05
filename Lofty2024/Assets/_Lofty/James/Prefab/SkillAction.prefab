@@ -779,9 +779,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a42056e954ed1c47bbddb688b80413b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageTo: 1
   skillAttackType: 2
   curseType: 0
   damageCount: 3
+  knockBackRange: 1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -794,6 +796,12 @@ MonoBehaviour:
   - {fileID: 216670059327303844}
   - {fileID: 7073319029037860414}
   - {fileID: 6203793467383186464}
+  optional: 0
+  optionalAttackType: 0
+  optionalCurseType: 0
+  optionalDamageCount: 0
+  optionalKnockBackRange: 0
+  optionalChecker: []
 --- !u!1 &6043085970279607740
 GameObject:
   m_ObjectHideFlags: 0

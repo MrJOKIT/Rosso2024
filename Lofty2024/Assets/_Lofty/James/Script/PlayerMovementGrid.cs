@@ -901,7 +901,47 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         
     }
-    
+
+    public void KnockBack(Transform startTransform,int range)
+    {
+        for (int a = 0; a < range; a++)
+        {
+            if (startTransform.position.x > transform.position.x && startTransform.position.z ==  transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.Right);
+            }
+            else if (startTransform.position.x > transform.position.x && startTransform.position.z > transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.BackwardRight);
+            }
+            else if (startTransform.position.x > transform.position.x && startTransform.position.z < transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.ForwardRight);
+            }
+            
+            if (startTransform.position.x < transform.position.x && startTransform.position.z ==  transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.Left);
+            }
+            else if (startTransform.position.x < transform.position.x && startTransform.position.z > transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.BackwardLeft);
+            }
+            else if (startTransform.position.x < transform.position.x && startTransform.position.z < transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.ForwardLeft);
+            }
+
+            if (startTransform.position.x == transform.position.x && startTransform.position.z < transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.Forward);
+            }
+            else if (startTransform.position.x == transform.position.x && startTransform.position.z > transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.Backward);
+            }
+        }
+    }
     private void ClearPattern()
     {
         if (currentPattern != null)

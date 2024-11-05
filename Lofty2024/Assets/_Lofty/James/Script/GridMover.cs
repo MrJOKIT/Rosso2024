@@ -19,6 +19,7 @@ public class GridMover : MonoBehaviour
 {
     [Header("Ref")]
     public bool isPortal;
+    public bool isAlert;
     public Enemy enemy;
     public Material oldMat;
 
@@ -125,6 +126,7 @@ public class GridMover : MonoBehaviour
 
     public void ClearGrid()
     {
+        isAlert = false;
         switch (gridState)
         {
             case GridState.OnTrap:
@@ -174,7 +176,7 @@ public class GridMover : MonoBehaviour
             gridState = GridState.OnTrap;
             trapType = curseType;
         }
-        else if (gridState == GridState.OnEnemy)
+        else if (gridState == GridState.OnEnemy )
         {
             enemy.AddCurseStatus(curseType,2);
         }
@@ -196,7 +198,7 @@ public class GridMover : MonoBehaviour
             GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().currentGrid.Remove(this);
             Destroy(gameObject);
         }
-        else if(other.CompareTag("Enemy"))
+        else if(other.CompareTag("Enemy") || other.CompareTag("Boss"))
         {
             gridState = GridState.OnEnemy;
             try
@@ -260,7 +262,7 @@ public class GridMover : MonoBehaviour
         {
             gridState = GridState.Empty;
         }
-        else if(other.CompareTag("Enemy"))
+        else if(other.CompareTag("Enemy") || other.CompareTag("Boss"))
         {
             gridState = GridState.Empty;
             enemy = null;

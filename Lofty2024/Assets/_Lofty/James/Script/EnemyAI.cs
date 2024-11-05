@@ -28,11 +28,11 @@ public class EnemyAI : Enemy
     {
         ChangeGridMoverUnder();
         CheckMoveHandle();
+        EnemyCombatHandle();
         if (onTurn == false)
         {
             return;
         }
-        EnemyCombatHandle();
         switch (GetComponent<EnemyMovementGrid>().currentState)
         {
             case MovementState.Idle: 
@@ -553,8 +553,14 @@ public class EnemyAI : Enemy
                     GridMover gridMover = hit.collider.GetComponent<GridMover>();
                     if (gridMover.gridState == GridState.OnPlayer)
                     {
+                        gridMover.isAlert = true;
                         playerInRange = true;
                         break;
+                    }
+                    else
+                    {
+                        gridMover.isAlert = false;
+                        playerInRange = false;
                     }
                 }
             }

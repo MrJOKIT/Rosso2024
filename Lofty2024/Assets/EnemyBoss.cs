@@ -19,6 +19,7 @@ public class EnemyBoss : Enemy
     public int phaseNumber;
     public bool firstBattle;
     [Tab("Jump Setting")] 
+    public Vector3 jumpPosition;
     public GameObject alertMark;
     public GameObject currentAlert;
     [Space(10)] 
@@ -62,7 +63,7 @@ public class EnemyBoss : Enemy
                 }
                 else
                 {
-                    if (_bossRadiusChecker.playerOnRadius)
+                    if (_bossRadiusChecker.playerOnRadius == false || jumpPrepare)
                     {
                         currentPhase = CombatPhase.JumpPhase;
                         EnemyMoveToPlayer();
@@ -78,7 +79,6 @@ public class EnemyBoss : Enemy
                         {
                             currentPhase = CombatPhase.SummonPhase;
                             EnemyMoveToPlayer();
-                            GetComponent<EnemyMovementGrid>().currentState = MovementState.Moving;
                         }
                     }
                 } 
@@ -92,6 +92,7 @@ public class EnemyBoss : Enemy
                 break;
                 
         }
+        
     }
 
     private void EnemyMoveToPlayer()
@@ -101,7 +102,6 @@ public class EnemyBoss : Enemy
         {
             case CombatPhase.NormalPhase:
                 NormalMoveToPlayer();
-                EndTurn();
                 break;
             case CombatPhase.JumpPhase:
                 JumpMoveToPlayer();
@@ -546,7 +546,6 @@ public class EnemyBoss : Enemy
                 }
             }
         }
-        
     }
 
     private void JumpMoveToPlayer()
@@ -554,11 +553,15 @@ public class EnemyBoss : Enemy
         if (jumpPrepare == false)
         {
             currentAlert = Instantiate(alertMark, new Vector3(targetTransform.position.x,alertMark.transform.position.y,targetTransform.position.z),alertMark.transform.rotation);
+            jumpPosition = targetTransform.position;
             jumpPrepare = true;
         }
         else
         {
             //Jump
+            currentAlert.GetComponent<SkillAction>().ActiveSkill();
+            currentAlert = null;
+            transform.position = new Vector3(jumpPosition.x,transform.position.y,jumpPosition.z);
             Debug.Log("Jump");
             jumpPrepare = false;
         }

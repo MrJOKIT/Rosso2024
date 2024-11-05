@@ -71,6 +71,12 @@ public class RoomManager : MonoBehaviour
             GridSpawnManager.Instance.AddGridList(grid);
         }
 
+        UpdateEmptyGrid();
+    }
+
+    public void UpdateEmptyGrid()
+    {
+        emptyGrid.Clear();
         foreach (GridMover grid in currentGrid)
         {
             if (grid.gridState == GridState.Empty && grid.isPortal == false)

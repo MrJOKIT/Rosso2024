@@ -13,8 +13,8 @@ public class Player : MonoBehaviour, ITakeDamage
     [Header("Default Stats")] 
     [SerializeField] private int defaultMaxHealth;
     [SerializeField] private int defaultHealthTemp;
-    [Space(10)]
-    [Header("Game Stats")]
+
+    [Space(10)] [Header("Game Stats")] 
     [SerializeField] private bool haveShield;
     [SerializeField] private int maxHealth;
     [SerializeField] private int playerHealthTemp;
@@ -31,6 +31,10 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private Transform healthParentUI;
     [SerializeField] private Transform healthTempParentUI;
     [SerializeField] private List<HealthUI> healthUI;
+    [SerializeField] private List<HealthUI> healthTempUI;
+    [Header("Alert")] 
+    [SerializeField] private LayerMask gridMoverLayer;
+    [SerializeField] private GameObject alertObject;
     
     [Space(10)] 
     [Tab("Usage Item")] 
@@ -49,12 +53,26 @@ public class Player : MonoBehaviour, ITakeDamage
 
     private void Update()
     {
+        AlertChecker();
         if (isDead)
         {
             return;
         }
         PlayerDeadHandle();
         CurseHandle();
+    }
+
+    private void AlertChecker()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, gridMoverLayer))
+        {
+            if (hit.transform.GetComponent<GridMover>() != null)
+            {
+                alertObject.SetActive(hit.transform.GetComponent<GridMover>().isAlert);
+            }
+        }
     }
 
     private void PlayerDeadHandle()
@@ -79,6 +97,7 @@ public class Player : MonoBehaviour, ITakeDamage
         //ใช้ตอน Player ตาย 
         isDead = true;
     }
+    
 
     [Button("Test Health Up")]
     private void TestAddMaxHealth()
@@ -156,17 +175,23 @@ public class Player : MonoBehaviour, ITakeDamage
             {
                 int currentHealth = playerHealthTemp - damage;
                 
-                if (currentHealth < 0)
+                if (currentHealth <= 0)
                 {
+                    foreach (HealthUI health in healthTempUI.ToList())
+                    {
+                        Destroy(health.gameObject);
+                        healthTempUI.Remove(health);
+                    }
                     playerHealthTemp = 0;
                     playerHealth += currentHealth;
                 }
                 else
                 {
+                    Destroy(healthTempUI[^1].gameObject);
+                    healthTempUI.Remove(healthTempUI[^1]);
                     playerHealthTemp -= damage;
                 }
-                Destroy(healthUI[^1].gameObject);
-                healthUI.Remove(healthUI[^1]);
+                
             }
             else
             {
@@ -194,10 +219,7 @@ public class Player : MonoBehaviour, ITakeDamage
             }
         }
 
-        if (playerHealthTemp <= 0)
-        {
-            UpdateHealthUI();
-        }
+        UpdateHealthUI();
         
     }
 
@@ -281,7 +303,7 @@ public class Player : MonoBehaviour, ITakeDamage
             if (a >= maxHealth)
             {
                 GameObject health = Instantiate(healthPrefabUI.gameObject, healthTempParentUI);
-                healthUI.Add(health.GetComponent<HealthUI>());
+                healthTempUI.Add(health.GetComponent<HealthUI>());
                 health.GetComponent<HealthUI>().ChangeToTemp();
             }
             else
@@ -294,10 +316,27 @@ public class Player : MonoBehaviour, ITakeDamage
 
     private void UpdateHealthUI()
     {
-        for (int a = 0; a < maxHealth; a++) 
+        if (playerHealth <= 0)
         {
-            healthUI[a].ActiveHearth(a < playerHealth);
+            foreach (HealthUI health in healthUI)
+            {
+                health.ActiveHearth(false);
+            }
+
+            foreach (HealthUI health in healthTempUI.ToList())
+            {
+                Destroy(health.gameObject);
+                healthTempUI.Remove(health);
+            }
         }
+        else
+        {
+            for (int a = 0; a < maxHealth; a++) 
+            {
+                healthUI[a].ActiveHearth(a < playerHealth);
+            }
+        }
+        
     }
 
     private void SaveData()
