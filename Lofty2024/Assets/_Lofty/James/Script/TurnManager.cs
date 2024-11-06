@@ -165,7 +165,8 @@ public class TurnManager : Singeleton<TurnManager>
         for (int a = 0; a < turnData.Count; a++)
         {
             turnData[a].turnSlot.transform.SetParent(queueTransform[a].transform);
-            turnData[a].turnSlot.transform.position = queueTransform[a].transform.position; 
+            turnData[a].turnSlot.transform.position = queueTransform[a].transform.position;
+            turnData[a].turnSlot.enemyOwner = turnData[a].unitTransform.GetComponent<Enemy>();
         }
     }
 

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8dca84db09f95144d802bcfa13a0adad
+guid: fcfe37c6c5f43124aa61ef8f968054d6
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rosso_idle-Sheet_0
+      name: "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_0"
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1796ed1739eaf52468daede883fde345
-      internalID: -173094616
+      spriteID: 625a479230e1c9440827f8e5ceabc2d6
+      internalID: 1242619161
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rosso_idle-Sheet_1
+      name: "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_1"
       rect:
         serializedVersion: 2
         x: 128
@@ -132,14 +132,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9e9a0d8dbbbb55d4b9f5b2a6336973f9
-      internalID: 1421850010
+      spriteID: 8b9d54a9a15dd9540b8d2d22078fe299
+      internalID: -1002764398
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rosso_idle-Sheet_2
+      name: "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_2"
       rect:
         serializedVersion: 2
         x: 256
@@ -153,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7f000d8bd1a0a9b42a241c9eed91f79a
-      internalID: 226056530
+      spriteID: a142205fd1933f14a8eab50fbd381410
+      internalID: -2102239954
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rosso_idle-Sheet_3
+      name: "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_3"
       rect:
         serializedVersion: 2
         x: 384
@@ -174,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f672ec2bb11f8b4fb256eceb534daae
-      internalID: -772485949
+      spriteID: 1478539468e0513459410af73c116225
+      internalID: 410739409
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rosso_idle-Sheet_4
+      name: "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_4"
       rect:
         serializedVersion: 2
         x: 512
@@ -195,14 +195,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9290494fc90cfb34d8b586e6c4b93718
-      internalID: -1132247212
+      spriteID: 5250ca9ad3220f144bb39646e457aba7
+      internalID: -1731048586
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rosso_idle-Sheet_5
+      name: "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_5"
       rect:
         serializedVersion: 2
         x: 640
@@ -216,14 +216,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: af7987ef0eba2ca49b274e7448a90533
-      internalID: -123996301
+      spriteID: 6e4b8e993fddd1f42a29364b35ebc669
+      internalID: -260867828
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rosso_idle-Sheet_6
+      name: "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_6"
       rect:
         serializedVersion: 2
         x: 768
@@ -237,14 +237,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43b2eeff1323d28458415cb63c8390a1
-      internalID: 1889263943
+      spriteID: cf241f8a58369294588ed8dbd4dae514
+      internalID: -150114883
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rosso_idle-Sheet_7
+      name: "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_7"
       rect:
         serializedVersion: 2
         x: 896
@@ -258,8 +258,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: da2de8d8dd0abde4088c517ccc67f537
-      internalID: 2098635768
+      spriteID: cf9fe10c7eb6c964495dd46c018dcc8b
+      internalID: -1601757585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_8"
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 128
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf257f7deb3c51245b81790b7aef2f04
+      internalID: 1886660948
       vertices: []
       indices: 
       edges: []
@@ -267,7 +288,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 279891a5e1a0b294e8db41f9b41e02a2
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -275,14 +296,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Rosso_idle-Sheet_0: -173094616
-      Rosso_idle-Sheet_1: 1421850010
-      Rosso_idle-Sheet_2: 226056530
-      Rosso_idle-Sheet_3: -772485949
-      Rosso_idle-Sheet_4: -1132247212
-      Rosso_idle-Sheet_5: -123996301
-      Rosso_idle-Sheet_6: 1889263943
-      Rosso_idle-Sheet_7: 2098635768
+      "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_0": 1242619161
+      "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_1": -1002764398
+      "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_2": -2102239954
+      "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_3": 410739409
+      "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_4": -1731048586
+      "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_5": -260867828
+      "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_6": -150114883
+      "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_7": -1601757585
+      "Rosso_\u0E0A\u0E31\u0E48\u0E27\u0E04\u0E23\u0E32\u0E27-Sheet_8": 1886660948
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -124,3 +124,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db0b757ca38c314b89167a58c98dd51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAllySlot: 1
+  enemyOwner: {fileID: 0}

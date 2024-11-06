@@ -70,6 +70,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Tab("Movement")] 
     [Header("Player Input")]
     public MoveType moveType;
+    public Animator playerAnimator;
 
     [Space(10)] [Header("Movement Point")] 
     public int moveCount;
@@ -139,6 +140,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     private void Update()
     {
+        if (GetComponent<Player>().isDead)
+        {
+            return;
+        }
         if (GameManager.Instance.GetComponent<SceneLoading>().loadSucces == false)
         {
             return;
@@ -263,7 +268,19 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         if (hit.collider.GetComponent<GridMover>().enemyActive == false)
                         {
                             return;
-                        } 
+                        }
+
+                        float distance = Vector3.Distance(transform.position, hit.transform.position);
+                        Debug.Log($"Player and Enemy distance = {distance}");
+                        if (distance <= 1.5f)
+                        {
+                            playerAnimator.SetTrigger("CloseAttack");
+                        }
+                        else
+                        {
+                            playerAnimator.SetTrigger("RangeAttack");
+                        }
+                        
                         Enemy enemy = hit.collider.GetComponent<GridMover>().enemy;
                         PlayerArtifact artifact = GetComponent<PlayerArtifact>();
                         switch (attackType)
@@ -327,7 +344,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         }
                         else
                         {
-                            MouseSelectorManager.Instance.UpdateHearthUI(); 
+                            MouseSelectorManager.Instance.UpdateHearthUI(enemy); 
                             GridSpawnManager.Instance.ClearMover();
                             currentState = MovementState.Idle;
                             moveSuccess = true;

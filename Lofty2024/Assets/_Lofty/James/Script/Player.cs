@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DamageNumbersPro;
+using TransitionsPlus;
 using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
@@ -96,6 +97,8 @@ public class Player : MonoBehaviour, ITakeDamage
     {
         //ใช้ตอน Player ตาย 
         isDead = true;
+        TransitionAnimator transitionAnimator = TransitionAnimator.Start(TransitionType.Burn,2f);
+        transitionAnimator.onTransitionEnd.AddListener(GameManager.Instance.GameOver);
     }
     
 
@@ -285,8 +288,8 @@ public class Player : MonoBehaviour, ITakeDamage
 
     public void SetStats()
     {
-        playerHealthTemp += defaultHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp; 
-        maxHealth += defaultMaxHealth + GetComponent<PlayerArtifact>().HealthPoint;
+        playerHealthTemp = defaultHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp; 
+        maxHealth = defaultMaxHealth + GetComponent<PlayerArtifact>().HealthPoint;
         
         LoadData();
     }

@@ -51,6 +51,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
 
     [Space(10)] 
     [Header("Stats")] 
+    public GameObject focusArrow;
     public Animator enemyAnimator;
     public int enemyMaxHealth;
     public int enemyHealth;

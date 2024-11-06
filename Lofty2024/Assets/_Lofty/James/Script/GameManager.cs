@@ -15,6 +15,10 @@ public class GameManager : Singeleton<GameManager>
     public Transform currentRoomPos;
     [SerializeField] private GameObject rewardVFX;
     [SerializeField] private Vector2Int dropRate;
+
+    [Space(10)] 
+    [Header("Game Over Setting")] 
+    public GameObject deadCanvas;
     public void StageClear()
     {
         Debug.Log("Stage is clear!!!");
@@ -38,5 +42,11 @@ public class GameManager : Singeleton<GameManager>
     public void UpdateCurrentRoom(Transform newCurrentRoom)
     {
         currentRoomPos = newCurrentRoom;
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("Game Over");
+        deadCanvas.SetActive(true);
     }
 }

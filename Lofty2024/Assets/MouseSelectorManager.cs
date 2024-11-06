@@ -8,7 +8,8 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
 {
     
     public LayerMask layerToHit;
-
+    public bool permanentActive;
+    
     [Header("Enemy Data UI")] 
     public GridMover selectedGrid;
     public Enemy selectedEnemy;
@@ -20,8 +21,11 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
     
     void Update()
     {
+        if (permanentActive)
+        {
+            return;
+        }
         MouseRay();
-        
     }
 
     private void MouseRay()
@@ -46,7 +50,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
                         uiCanvas.SetActive(true);
                         selectedEnemy = hit.transform.GetComponent<GridMover>().enemy;
                         uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(selectedEnemy.enemyData.name,selectedEnemy.enemyData.enemySprite);
-                        CreateHearth();
+                        CreateHearth(selectedEnemy);
                     }
                     else
                     {
@@ -72,7 +76,14 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
             uiCanvas.SetActive(false);
         }
     }
-    private void CreateHearth()
+
+    public void ShowEnemyData(Enemy enemy)
+    {
+        uiCanvas.SetActive(true);
+        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(enemy.enemyData.name,enemy.enemyData.enemySprite);
+        CreateHearth(enemy);
+    }
+    private void CreateHearth(Enemy enemy)
     {
         foreach (HealthUI health in healthUI.ToList())
         {
@@ -80,21 +91,21 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
             healthUI.Remove(health);
         }
 
-        for (int a = 0; a < selectedEnemy.enemyData.enemyMaxHealth; a++)
+        for (int a = 0; a < enemy.enemyData.enemyMaxHealth; a++)
         { 
             GameObject health = Instantiate(hearthPrefabUI, healthUiParent);
             healthUI.Add(health.GetComponent<HealthUI>());
         }
 
-        UpdateHearthUI();
+        UpdateHearthUI(enemy);
         
     }
 
-    public void UpdateHearthUI()
+    public void UpdateHearthUI(Enemy enemy)
     {
-        for (int a = 0; a < selectedEnemy.enemyMaxHealth; a++)
+        for (int a = 0; a < enemy.enemyMaxHealth; a++)
         {
-            healthUI[a].ActiveHearth(a < selectedEnemy.enemyHealth);
+            healthUI[a].ActiveHearth(a < enemy.enemyHealth);
         }
     }
 
