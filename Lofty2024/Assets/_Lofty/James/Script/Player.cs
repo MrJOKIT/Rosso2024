@@ -294,6 +294,12 @@ public class Player : MonoBehaviour, ITakeDamage
         LoadData();
     }
 
+    public void UpgradeStats()
+    {
+        defaultHealthTemp += GetComponent<PlayerArtifact>().HealthPointTemp;
+        defaultMaxHealth += GetComponent<PlayerArtifact>().HealthPoint;
+    }
+
     private void CreateHealthUI()
     {
         foreach (HealthUI health in healthUI.ToList())

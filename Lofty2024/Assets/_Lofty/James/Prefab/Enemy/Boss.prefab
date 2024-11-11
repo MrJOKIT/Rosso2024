@@ -937,7 +937,7 @@ MonoBehaviour:
   currentAlert: {fileID: 0}
   _bossRadiusChecker: {fileID: 4639124650009307854}
   jumpPrepare: 0
-  monsterPrefab: {fileID: 9134819534939182666, guid: 0adc65148a5a5b842866b7fa1a46b55c,
+  monsterPrefab: {fileID: 9134819534939182666, guid: d1bbcf898b76739479e56552022ca3d9,
     type: 3}
   maxSummon: 7
 --- !u!114 &7957445349075815389

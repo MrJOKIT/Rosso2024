@@ -9,12 +9,12 @@ public class SceneLoading : MonoBehaviour
     public GameObject loadingScene;
     public float loadTime;
     public bool loadSucces;
-
+    public bool startLoad;
     public TransitionProfile loadSuccesProfile;
     
     private void Update()
     {
-        if (loadSucces)
+        if (loadSucces || startLoad)
         {
             return;
         }
@@ -22,6 +22,7 @@ public class SceneLoading : MonoBehaviour
         loadTime -= Time.deltaTime;
         if (loadTime <= 0)
         {
+            startLoad = true;
             loadingScene.SetActive(false);
             TransitionAnimator animator = TransitionAnimator.Start(loadSuccesProfile);
             animator.onTransitionEnd.AddListener(LoadSucces);
@@ -36,6 +37,7 @@ public class SceneLoading : MonoBehaviour
     {
         loadTime = 0;
         loadSucces = true;
+        GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().StartRoom();
     }
     
 }

@@ -86,7 +86,7 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    private void StartRoom()
+    public void StartRoom()
     {
         if (roomType == RoomType.Clear || roomType == RoomType.Bonus)
         {
@@ -295,7 +295,8 @@ public class RoomManager : MonoBehaviour
             {
                 return;
             }
-            StartRoom();
+
+            Invoke("StartRoom",2f);
         }
     }
 

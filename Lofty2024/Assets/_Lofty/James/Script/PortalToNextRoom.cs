@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TransitionsPlus;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
 {
@@ -10,19 +12,15 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
     public Transform roomCenter;
     public Vector3 warpPoint;
     public Transform playerTrans;
-    public GameObject portalObject;
     public bool portalActive;
     public bool isConnect;
-
+    public bool pressActive;
     [Space(10)] 
-    [Header("Material")] 
-    public MeshRenderer portalRenderer;
-    [Space(5)]
-    public Material combatMaterial;
-    public Material bonusMaterial;
-    public Material bossMaterial;
-    public Material clearMat;
-
+    [Header("Portal Object")] 
+    public GameObject combatPortal;
+    public GameObject bonusPortal;
+    public GameObject bossPortal;
+    public GameObject clearPortal;
     private void Update()
     {
         if (!onPlayer || !portalActive)
@@ -30,9 +28,11 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && pressActive == false)
         {
-            WarpToPoint();
+            TransitionAnimator animator = TransitionAnimator.Start(TransitionType.Fade,0.75f,autoDestroy:true);
+            animator.onTransitionEnd.AddListener(WarpToPoint);
+            pressActive = true;
         }
     }
 
@@ -46,16 +46,20 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         switch (roomType)
         {
             case RoomType.Combat:
-                portalRenderer.material = combatMaterial;
+                SetDeActivePortal();
+                combatPortal.SetActive(true);
                 break;
             case RoomType.Bonus:
-                portalRenderer.material = bonusMaterial;
+                SetDeActivePortal();
+                bonusPortal.SetActive(true);
                 break;
             case RoomType.Boss:
-                portalRenderer.material = bossMaterial;
+                SetDeActivePortal();
+                bossPortal.SetActive(true);
                 break;
             case RoomType.Clear:
-                portalRenderer.material = clearMat;
+                SetDeActivePortal();
+                clearPortal.SetActive(true);
                 break;
         }
 
@@ -65,41 +69,54 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         isConnect = true;
     }
 
+    private void SetDeActivePortal()
+    {
+        combatPortal.SetActive(false);
+        bonusPortal.SetActive(false);
+        bossPortal.SetActive(false);
+        clearPortal.SetActive(false);
+    }
+
     public void UpdatePortal()
     {
         switch (roomTypeConnect)
         {
             case RoomType.Combat:
-                portalRenderer.material = combatMaterial;
+                SetDeActivePortal();
+                combatPortal.SetActive(true);
                 break;
             case RoomType.Bonus:
-                portalRenderer.material = bonusMaterial;
+                SetDeActivePortal();
+                bonusPortal.SetActive(true);
                 break;
             case RoomType.Boss:
-                portalRenderer.material = bossMaterial;
+                SetDeActivePortal();
+                bossPortal.SetActive(true);
                 break;
             case RoomType.Clear:
-                portalRenderer.material = clearMat;
+                SetDeActivePortal();
+                clearPortal.SetActive(true);
                 break;
         }
     }
-
     private void WarpToPoint()
     {
         playerTrans.position = new Vector3(warpPoint.x,playerTrans.position.y,warpPoint.z);
         playerTrans.GetComponent<PlayerMovementGrid>().ResetPlayerTarget();
         CameraManager.Instance.SetCameraTarget(roomCenter.position);
+        GameManager.Instance.GetComponent<PortalManager>().ShowStageNumber();
+        TransitionAnimator animatorTwo = TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true,playDelay:2f);
+        //animatorTwo.onTransitionEnd.AddListener(GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().StartRoom);
     }
-
+    
     public void ActivePortal()
     {
+        pressActive = false;
         portalActive = true;
-        portalObject.SetActive(true);
     }
 
     public void DeActivePortal()
     {
         portalActive = false;
-        portalObject.SetActive(false);
     }
 }

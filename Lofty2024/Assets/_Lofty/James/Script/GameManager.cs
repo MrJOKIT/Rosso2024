@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singeleton<GameManager>
 {
@@ -48,5 +49,10 @@ public class GameManager : Singeleton<GameManager>
     {
         Debug.Log("Game Over");
         deadCanvas.SetActive(true);
+    }
+
+    public void TryAgain()
+    {
+        SceneManager.LoadSceneAsync(sceneName);
     }
 }

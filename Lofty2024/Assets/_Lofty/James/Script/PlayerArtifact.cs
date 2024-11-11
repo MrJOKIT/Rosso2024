@@ -326,8 +326,8 @@ public class PlayerArtifact : MonoBehaviour
                     addActionPoint += artifact.addActionPoint;
                     addSkillDiscount += artifact.addSkillDiscount;
                     
-                    GetComponent<Player>().SetStats();
-                    GetComponent<PlayerMovementGrid>().SetStats();
+                    GetComponent<Player>().UpgradeStats();
+                    GetComponent<PlayerMovementGrid>().UpgradeStats();
                     break;
             }
         }

@@ -415,6 +415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38ca3476d3ddc148a3fbdad2eb7c215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enterRoomProfile: {fileID: 11400000, guid: ef32bc3decf655146836412669898a76, type: 2}
   isStandbyRoom: 0
   isLastRoom: 0
   roomActive: 0
@@ -427,6 +428,8 @@ MonoBehaviour:
   portalLeft: {fileID: 6662999295506224644}
   portalRight: {fileID: 3064861950234383191}
   randomRate: {fileID: 11400000, guid: 27f99e4cad9e0e54eb05f5198d755798, type: 2}
+  isBossRoom: 0
+  bossSpawnPoint: {fileID: 0}
   enemySpawnComplete: 0
   stunAll: 0
   spawnEnemyCount: {x: 4, y: 6}
@@ -964,7 +967,7 @@ MonoBehaviour:
   - Packages/com.tripolygon.umodeler-x/Editor/Resources/Materials/UModelerX_Gray_URP.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_e92f211f-4823-4b0b-8ddc-834f8092f030
+    name: UM_OperatedMesh_16ef6678-a212-4012-9949-967707e5e7e5
     skinnedMesh: 0
     sharedMesh: {fileID: -4943758353868826497}
     buidVersion:
@@ -976,7 +979,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: e92f211f-4823-4b0b-8ddc-834f8092f030
+  sourceMeshRendererGUID: 16ef6678-a212-4012-9949-967707e5e7e5
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0

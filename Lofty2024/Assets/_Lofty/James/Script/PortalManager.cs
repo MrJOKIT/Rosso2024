@@ -11,6 +11,8 @@ public class PortalManager : Singeleton<PortalManager>
 
     [Header("Random Room Setting")] 
     [SerializeField] private int gameLoopCount;
+    public int firstStageNumber = 1;
+    public int secondStageNumber = 1;
     [Space(10)]
     [SerializeField] private int roomCount;
     [Space(10)]
@@ -58,7 +60,6 @@ public class PortalManager : Singeleton<PortalManager>
     public Transform checkRightRoomPos;
     public bool checkRightRoom;
     
-
     private void Update()
     {
         checkForwardRoom = Physics.Raycast(checkForwardRoomPos.position,Vector3.down, Mathf.Infinity, roomLayer);
@@ -67,6 +68,19 @@ public class PortalManager : Singeleton<PortalManager>
         checkRightRoom = Physics.Raycast(checkRightRoomPos.position, Vector3.down, Mathf.Infinity, roomLayer);
     }
 
+    public void ShowStageNumber()
+    {
+        GetComponent<AnnouncementManager>().ShowTextTimer($"Stage {firstStageNumber} - {secondStageNumber}",5f);
+        if (secondStageNumber < 3)
+        {
+            secondStageNumber += 1;
+        }
+        else
+        {
+            firstStageNumber += 1;
+            secondStageNumber = 1;
+        }
+    }
     private Vector3 GetSpawnPoint()
     {
         
