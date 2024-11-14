@@ -22,6 +22,7 @@ public class PlayerSkillHandle : MonoBehaviour
     [Header("Skill Setting")] 
     [SerializeField] private Transform skillParent;
     public GameObject makeSureUI;
+    public bool onPrepareSkill;
 
     [Space(10)] 
     [Header("Skill Point")] 
@@ -65,6 +66,21 @@ public class PlayerSkillHandle : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (onPrepareSkill)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ConfirmSkill();
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                CancelSkill();
+            }
+        }
+    }
+
     public void AddSkillPoint(int count)
     {
         if (skillPoint >= minMaxSkillPoint.y + GetComponent<PlayerArtifact>().SkillPoint)
@@ -95,6 +111,7 @@ public class PlayerSkillHandle : MonoBehaviour
         currentSkill = Instantiate(_skillSlots[slotSkillIndex].skillData.skillPattern,skillParent);
         makeSureUI.SetActive(true);
         SkillPointUiUpdate();
+        onPrepareSkill = true;
     }
 
     private void SkillPointUiUpdate()
@@ -105,6 +122,7 @@ public class PlayerSkillHandle : MonoBehaviour
     
     public void ConfirmSkill()
     {
+        onPrepareSkill = false;
         skillPoint -= _skillSlots[slotSelect].skillData.skillCost - GetComponent<PlayerArtifact>().SkillDiscount;
         currentSkill.GetComponent<SkillAction>().ActiveSkill();
         currentSkill = null;
@@ -115,6 +133,7 @@ public class PlayerSkillHandle : MonoBehaviour
     
     public void CancelSkill()
     {
+        onPrepareSkill = false;
         GetComponent<PlayerMovementGrid>().currentState = MovementState.Combat;
         Destroy(currentSkill.gameObject);
         StartCoroutine(GetComponent<PlayerMovementGrid>().SetMover());

@@ -76,6 +76,19 @@ public class Player : MonoBehaviour, ITakeDamage
         }
     }
 
+    public void AlertFalseCheck()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, gridMoverLayer))
+        {
+            if (hit.transform.GetComponent<GridMover>() != null)
+            {
+                hit.transform.GetComponent<GridMover>().isAlert = false;
+            }
+        }
+    }
+
     private void PlayerDeadHandle()
     {
         if (playerHealth <= 0) 

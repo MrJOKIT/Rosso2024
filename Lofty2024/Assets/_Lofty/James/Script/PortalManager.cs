@@ -1,15 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TransitionsPlus;
 using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
 
+public enum ProgressState
+{
+    StandBy,
+    OnProgress,
+    ProgressSuccess,
+}
 public class PortalManager : Singeleton<PortalManager>
 {
 
 
-    [Header("Random Room Setting")] 
+    [Tab("Random Room Setting")] 
     [SerializeField] private int gameLoopCount;
     public int firstStageNumber = 1;
     public int secondStageNumber = 1;
@@ -59,13 +66,37 @@ public class PortalManager : Singeleton<PortalManager>
     [Space(7)]
     public Transform checkRightRoomPos;
     public bool checkRightRoom;
-    
+
+    [Tab("Game Progress")] 
+    public ProgressState progressState;
+    public GameObject progressCanvas;
+    public Transform rossoUI;
+    public List<ProgressBar> progressList;
+    [Space(10)] 
+    public float loadTimeMax;
+    private float loadTimeCounter;
+
+    private void Start()
+    {
+        SetProgress();
+    }
+
     private void Update()
     {
         checkForwardRoom = Physics.Raycast(checkForwardRoomPos.position,Vector3.down, Mathf.Infinity, roomLayer);
         checkLeftRoom = Physics.Raycast(checkLeftRoomPos.position,Vector3.down, Mathf.Infinity, roomLayer);
         checkMiddleRoom = Physics.Raycast(checkMiddleRoomPos.position, Vector3.down, Mathf.Infinity, roomLayer);
         checkRightRoom = Physics.Raycast(checkRightRoomPos.position, Vector3.down, Mathf.Infinity, roomLayer);
+
+        if (progressState == ProgressState.OnProgress)
+        {
+            progressCanvas.SetActive(true);
+            ProgressBarUpdate();
+        }
+        else if (progressState == ProgressState.ProgressSuccess)
+        {
+            progressState = ProgressState.StandBy;
+        }
     }
 
     public void ShowStageNumber()
@@ -301,5 +332,39 @@ public class PortalManager : Singeleton<PortalManager>
         }
 
         return room;
+    }
+
+    private void SetProgress()
+    {
+        for (int a = 0; a < progressList.Count; a++)
+        {
+            progressList[a].stageText.text = $"{firstStageNumber} - {a + 1}";
+        }
+    }
+    private void ProgressBarUpdate()
+    {
+        loadTimeCounter += Time.deltaTime;
+        Transform target = progressList[secondStageNumber - 2].barPoint;
+        rossoUI.position = Vector3.MoveTowards(rossoUI.position,target.position, 100 * Time.deltaTime);
+        if (rossoUI.position == target.position)
+        {
+            progressState = ProgressState.ProgressSuccess;
+            StartCoroutine(UpdateProgressSuccess());
+        }
+    }
+
+    IEnumerator UpdateProgressSuccess()
+    {
+        if (loadTimeCounter < loadTimeMax)
+        {
+            yield return new WaitForSeconds(5f - loadTimeCounter);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        progressCanvas.SetActive(false);
+        TransitionAnimator animatorTwo = TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true);
+        
     }
 }

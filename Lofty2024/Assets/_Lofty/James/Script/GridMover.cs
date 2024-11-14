@@ -17,7 +17,8 @@ public enum GridState
 
 public class GridMover : MonoBehaviour
 {
-    [Header("Ref")]
+    [Header("Ref")] 
+    public bool enemyDie;
     public bool isPortal;
     public bool isAlert;
     public Enemy enemy;
@@ -68,7 +69,15 @@ public class GridMover : MonoBehaviour
             {
                 enemy = null;
                 enemyActive = false;
-                gridState = GridState.Empty;
+                if (enemyDie)
+                {
+                    gridState = GridState.OnMove;
+                    enemyDie = false;
+                }
+                else
+                {
+                    gridState = GridState.Empty;
+                }
             }
         }
         GridStateHandle();
@@ -264,7 +273,16 @@ public class GridMover : MonoBehaviour
         }
         else if(other.CompareTag("Enemy") || other.CompareTag("Boss"))
         {
-            gridState = GridState.Empty;
+            if (enemyDie)
+            {
+                gridState = GridState.OnMove;
+                enemyDie = false;
+            }
+            else
+            {
+                gridState = GridState.Empty;
+            }
+            
             enemy = null;
 
         }
