@@ -218,6 +218,7 @@ public class RoomManager : MonoBehaviour
     public void AddNewEnemyInRoom(GameObject newEnemyPrefab)
     {
         GameObject enemy = Instantiate(newEnemyPrefab, CheckSpawnPoint(), Quaternion.identity,enemyParent);
+        VisualEffectManager.Instance.CallEffect(EffectName.Summon,enemy.transform);
         enemyInRoom.Add(enemy.GetComponent<Enemy>());
         enemy.GetComponent<Enemy>().targetTransform = playerTrans;
         enemy.GetComponent<Enemy>().ActiveUnit();

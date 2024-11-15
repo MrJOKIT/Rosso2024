@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum EffectName
 {
-    SummonDrop,
+    Summon,
     Stun,
     Slash,
 }
