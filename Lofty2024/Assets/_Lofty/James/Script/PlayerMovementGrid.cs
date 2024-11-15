@@ -1184,6 +1184,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         defaultDamage += GetComponent<PlayerArtifact>().Damage;
         defaultMovePoint += GetComponent<PlayerArtifact>().ActionPoint;
         defaultKnockBackRange += GetComponent<PlayerArtifact>().KnockBackRange;
+
+        damage = defaultDamage;
+        maxMovePoint = defaultMovePoint;
+        knockBackRange = defaultKnockBackRange;
     }
    
 }

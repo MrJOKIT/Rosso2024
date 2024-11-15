@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caae6e2a3c9e3754eb940aca4d2b2112, type: 3}
+  m_Name: Bomber
+  m_EditorClassIdentifier: 
+  enemyName: Bomber
+  enemySprite: {fileID: 305846341, guid: 1c505fd7e99f08d4f9d1efd9afb2309a, type: 3}
+  isBoss: 0
+  enemyMaxHealth: 1
+  enemyHealth: 1
+  damage: 0
+  enemySpeed: 10

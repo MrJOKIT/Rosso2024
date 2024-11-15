@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using TransitionsPlus;
 using UnityEngine;
 using VInspector;
@@ -70,6 +71,7 @@ public class PortalManager : Singeleton<PortalManager>
     [Tab("Game Progress")] 
     public ProgressState progressState;
     public GameObject progressCanvas;
+    public TextMeshProUGUI currentStageNumberText;
     public Transform rossoUI;
     public List<ProgressBar> progressList;
     [Space(10)] 
@@ -90,6 +92,7 @@ public class PortalManager : Singeleton<PortalManager>
 
         if (progressState == ProgressState.OnProgress)
         {
+            currentStageNumberText.text = $"STAGE {firstStageNumber} - {secondStageNumber}";
             progressCanvas.SetActive(true);
             ProgressBarUpdate();
         }
@@ -102,15 +105,7 @@ public class PortalManager : Singeleton<PortalManager>
     public void ShowStageNumber()
     {
         GetComponent<AnnouncementManager>().ShowTextTimer($"Stage {firstStageNumber} - {secondStageNumber}",5f);
-        if (secondStageNumber < 3)
-        {
-            secondStageNumber += 1;
-        }
-        else
-        {
-            firstStageNumber += 1;
-            secondStageNumber = 1;
-        }
+        
     }
     private Vector3 GetSpawnPoint()
     {
@@ -342,10 +337,10 @@ public class PortalManager : Singeleton<PortalManager>
         }
     }
     private void ProgressBarUpdate()
-    {
+    { 
         loadTimeCounter += Time.deltaTime;
-        Transform target = progressList[secondStageNumber - 2].barPoint;
-        rossoUI.position = Vector3.MoveTowards(rossoUI.position,target.position, 100 * Time.deltaTime);
+        Transform target = progressList[secondStageNumber - 1].barPoint;
+        rossoUI.position = Vector3.MoveTowards(rossoUI.position,target.position, 200 * Time.deltaTime);
         if (rossoUI.position == target.position)
         {
             progressState = ProgressState.ProgressSuccess;
@@ -365,6 +360,16 @@ public class PortalManager : Singeleton<PortalManager>
         }
         progressCanvas.SetActive(false);
         TransitionAnimator animatorTwo = TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true);
+        GameManager.Instance.GetComponent<PortalManager>().ShowStageNumber();
+        if (secondStageNumber <= 3)
+        {
+            secondStageNumber += 1;
+        }
+        else
+        {
+            firstStageNumber += 1;
+            secondStageNumber = 1;
+        }
         
     }
 }

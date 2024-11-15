@@ -908,6 +908,7 @@ MonoBehaviour:
   enemyHealth: 0
   enemySpeed: 0
   isDead: 0
+  onImmortalObject: 0
   curseHave: []
   curseCanvas: {fileID: 7533957303092838807}
   curseUiPrefab: {fileID: 3857760036129689616, guid: 3546fb8c5723e5446842ee4e515ea1e4,
@@ -960,7 +961,7 @@ MonoBehaviour:
   enemyMoveDirection: 0
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1408
   forwardBlock: 0
   forwardLeftBlock: 0
   forwardRightBlock: 0

@@ -104,8 +104,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         playerTrans.position = new Vector3(warpPoint.x,playerTrans.position.y,warpPoint.z);
         playerTrans.GetComponent<PlayerMovementGrid>().ResetPlayerTarget();
         CameraManager.Instance.SetCameraTarget(roomCenter.position);
-        GameManager.Instance.GetComponent<PortalManager>().ShowStageNumber();
-        PortalManager.Instance.progressList[PortalManager.Instance.secondStageNumber - 2].SetBarType(roomTypeConnect);
+        PortalManager.Instance.progressList[PortalManager.Instance.secondStageNumber - 1].SetBarType(roomTypeConnect);
         PortalManager.Instance.progressState = ProgressState.OnProgress;
         //TransitionAnimator animatorTwo = TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true,playDelay:2f);
         //animatorTwo.onTransitionEnd.AddListener(GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().StartRoom);

@@ -15,7 +15,8 @@ public class SkillSlot
     [Space(10)]
     [Header("UI")]
     public Image skillImage;
-    
+    public TextMeshProUGUI skillCostText;
+
 }
 public class PlayerSkillHandle : MonoBehaviour
 {
@@ -46,6 +47,7 @@ public class PlayerSkillHandle : MonoBehaviour
     {
         makeSureUI.SetActive(false);
         RandomSetSkill();
+        SkillPointUiUpdate();
     }
 
     private void RandomSetSkill()
@@ -61,6 +63,7 @@ public class PlayerSkillHandle : MonoBehaviour
                 SkillData randomSkill = _skillDatas[Random.Range(0, _skillDatas.Count - 1)];
                 slot.skillData = randomSkill;
                 slot.skillImage.sprite = randomSkill.skillImage;
+                slot.skillCostText.text = randomSkill.skillCost.ToString();
                 _skillDatas.Remove(randomSkill);
             }
         }
@@ -79,6 +82,8 @@ public class PlayerSkillHandle : MonoBehaviour
                 CancelSkill();
             }
         }
+
+        
     }
 
     public void AddSkillPoint(int count)
@@ -118,6 +123,21 @@ public class PlayerSkillHandle : MonoBehaviour
     {
         skillPointText.text = "" + skillPoint;
         maxSkillPointText.text = $"{minMaxSkillPoint.y + GetComponent<PlayerArtifact>().SkillPoint}";
+        foreach (SkillSlot slot in _skillSlots)
+        {
+            if (slot.skillData == null)
+            {
+                continue;
+            }
+            if (skillPoint >= slot.skillData.skillCost)
+            {
+                slot.skillImage.gameObject.GetComponent<Button>().interactable = true;
+            }
+            else
+            {
+                slot.skillImage.gameObject.GetComponent<Button>().interactable = false;
+            }
+        }
     }
     
     public void ConfirmSkill()
@@ -129,6 +149,7 @@ public class PlayerSkillHandle : MonoBehaviour
         ClearSlot(slotSelect);
         GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
         GetComponent<PlayerMovementGrid>().EndTurn();
+        SkillPointUiUpdate();
     }
     
     public void CancelSkill()
@@ -145,5 +166,6 @@ public class PlayerSkillHandle : MonoBehaviour
     {
         _skillSlots[slotIndex].skillData = null;
         _skillSlots[slotIndex].skillImage.gameObject.SetActive(false);
+        _skillSlots[slotIndex].skillCostText.text = "-";
     }
 }
