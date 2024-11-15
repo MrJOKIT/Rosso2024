@@ -19,7 +19,7 @@ public class SkillAction : MonoBehaviour
     [SerializeField] private CurseType curseType;
     [SerializeField] private int damageCount;
     [SerializeField] private int knockBackRange = 1;
-    
+    [SerializeField] private GameObject vfx;
     [Space(10)] 
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private List<Transform> checkPosition;
@@ -149,6 +149,7 @@ public class SkillAction : MonoBehaviour
         {
             foreach (Transform checkPoint in optionalChecker)
             {
+                Instantiate(vfx, checkPoint.position,Quaternion.identity);
                 Collider[] enemyColliders = Physics.OverlapSphere(checkPoint.position, 0.2f, enemyLayer);
                 foreach (Collider enemies in enemyColliders)
                 {
