@@ -436,6 +436,8 @@ MonoBehaviour:
   enemyPrefab:
   - {fileID: 9134819534939182666, guid: 0adc65148a5a5b842866b7fa1a46b55c, type: 3}
   - {fileID: 9134819534939182666, guid: cf2144912ad9e7b4a8835f4869d99ebb, type: 3}
+  - {fileID: 9134819534939182666, guid: cf2144912ad9e7b4a8835f4869d99ebb, type: 3}
+  - {fileID: 9134819534939182666, guid: a9495d3c97cecaf4f8ebf26a9d6949bf, type: 3}
   enemyInRoom: []
   roomClear: 0
   obstacleSpawnComplete: 0
@@ -851,7 +853,7 @@ MonoBehaviour:
   - Packages/com.tripolygon.umodeler-x/Editor/Resources/Materials/UModelerX_Gray_URP.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_2fa19c0f-b98b-4f50-a45c-6558a8adfbd3
+    name: UM_OperatedMesh_79250ada-2b53-4618-9dfe-51f0c2980de7
     skinnedMesh: 0
     sharedMesh: {fileID: -4943758353868826497}
     buidVersion:
@@ -863,7 +865,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: 2fa19c0f-b98b-4f50-a45c-6558a8adfbd3
+  sourceMeshRendererGUID: 79250ada-2b53-4618-9dfe-51f0c2980de7
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0

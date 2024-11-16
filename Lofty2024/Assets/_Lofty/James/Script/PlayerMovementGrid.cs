@@ -74,6 +74,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Header("Player Input")]
     public MoveType moveType;
     public Animator playerAnimator;
+    public SpriteRenderer playerSprite;
 
     [Space(10)] [Header("Movement Point")] 
     public int moveCount;
@@ -220,6 +221,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 {
                     HandleClickToMove();
                 }*/
+                
                 if (playerNavigation.navigationSuccess == false)
                 {
                     return;
@@ -287,7 +289,23 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         currentEnemyGrid = hit.collider.GetComponent<GridMover>();
                         if (distance <= 1.5f)
                         {
-                            playerAnimator.SetTrigger("CloseAttack");
+                            if (hit.transform.position.x < transform.position.x)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackLeft");
+                            }
+                            else if (hit.transform.position.x > transform.position.x)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackRight");
+                            }
+                            else if (hit.transform.position.z > transform.position.z)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackLeft");
+                            }
+                            else if (hit.transform.position.z < transform.position.z)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackRight");
+                            }
+                            
                             //playableDirector.Play();
                         }
                         else
@@ -453,6 +471,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             }
             //transform.position = Vector3.MoveTowards(transform.position,targetTransform,moveSpeed * Time.deltaTime);
         }
+        
          
         if (transform.position == targetTransform || moveCount > 15)
         {
@@ -461,6 +480,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             GetComponent<PlayerAbility>().CheckAbilityUse();
             EndTurn();
             moveCount = 0;
+            playerAnimator.SetBool("OnMove",false);
+            playerAnimator.SetFloat("X",0);
+            playerAnimator.SetFloat("Z",0);
+            playerSprite.flipX = false;
         }
     }
 
@@ -502,11 +525,38 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 //transform.position = Vector3.MoveTowards(transform.position,supTargetTransform, moveSpeed * Time.deltaTime);
                 break;
         }
+        playerAnimator.SetBool("OnMove",true);
+        if (supTargetTransform.x < transform.position.x)
+        {
+            playerAnimator.SetFloat("X",-1);
+        }
+        else if (supTargetTransform.x > transform.position.x)
+        {
+            playerAnimator.SetFloat("X",1);
+        }
+        else
+        {
+            playerAnimator.SetFloat("X",0);
+        }
+        
+        if (supTargetTransform.z < transform.position.z)
+        {
+            playerAnimator.SetFloat("Z",-1);
+        }
+        else if (supTargetTransform.z > transform.position.z)
+        {
+            playerAnimator.SetFloat("Z",1);
+        }
+        else
+        {
+            playerAnimator.SetFloat("Z",0);
+        }
         AddMovePath(lastPlayerTransform,direction);
         moveCount += 1;
     }
     private void MoveHandle()
     {
+        
         if (forwardMoveBlock && forwardLeftMoveBlock && forwardRightMoveBlock && backwardMoveBlock && backwardLeftMoveBlock && backwardRightMoveBlock && leftMoveBlock && rightMoveBlock)
         {
             ClearMovePath();
