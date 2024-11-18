@@ -19,7 +19,7 @@ public class EnemyAI : Enemy
     public bool leftMoveBlock;
     public bool rightMoveBlock;
 
-    [Tab("Combat")]
+    [Tab("Combat")] 
     [Header("Combat Checker")]
     public bool playerInRange;
     public LayerMask gridLayer;
@@ -47,9 +47,7 @@ public class EnemyAI : Enemy
                 {
                     if (playerInRange)
                     {
-                        //Combat time
                         enemyAnimator.SetTrigger("Attack");
-                        targetTransform.GetComponent<Player>().TakeDamage(enemyData.damage);
                         EndTurn();
                     }
                     else

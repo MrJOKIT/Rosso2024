@@ -6,6 +6,11 @@ using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
 
+public enum CameraChangingState
+{
+    OnIdle,
+    OnChanging,
+}
 public class CameraManager : Singeleton<CameraManager>
 {
     [Tab("Shake Setting")]
@@ -14,8 +19,12 @@ public class CameraManager : Singeleton<CameraManager>
     public float dampingSpeed = 1.0f;
     private Vector3 initialPosition;
     public bool onShake;
+
+    [Space(20)] [Header("Changing Camera Setting")]
+    public CameraChangingState changingState;
+    public bool onTopdown;
     [Space(20)]
-    public bool followTarget;
+    [Tab("Second Camera")]
     public Transform targetTransform;
     
     void Start()
@@ -32,13 +41,30 @@ public class CameraManager : Singeleton<CameraManager>
         StartCoroutine(Shake());
     }
 
-    private void Update()
+    public void ChangeCameraView()
     {
-        if (followTarget == false)
+        if (changingState == CameraChangingState.OnChanging)
         {
             return;
         }
-        
+        if (onTopdown)
+        {
+            GetComponent<Animator>().SetBool("TopDown",false);
+            onTopdown = false;
+        }
+        else
+        {
+            GetComponent<Animator>().SetBool("TopDown",true);
+            onTopdown = true;
+        }
+
+        changingState = CameraChangingState.OnChanging;
+
+    }
+
+    public void ChangeSuccess()
+    {
+        changingState = CameraChangingState.OnIdle;
     }
 
     IEnumerator Shake()
@@ -75,12 +101,8 @@ public class CameraManager : Singeleton<CameraManager>
     
     public void SetCameraTarget(Vector3 newTarget)
     {
-        transform.position = new Vector3(newTarget.x,transform.position.y, newTarget.z);
+        transform.position = new Vector3(newTarget.x + 1.5f,transform.position.y, newTarget.z + 1.5f);
         initialPosition = transform.localPosition;
     }
-
-    public void ChangeCamera()
-    {
-        TransitionAnimator transitionAnimator = TransitionAnimator.Start(TransitionType.Smear);
-    }
+    
 }

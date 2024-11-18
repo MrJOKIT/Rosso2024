@@ -34,7 +34,6 @@ public class RoomManager : MonoBehaviour
     public Transform portalRight;
 
     [Tab("Enemy Generator")] 
-    public RandomRateProfile randomRate;
     public bool isBossRoom;
     public Transform bossSpawnPoint;
     [Space(10)]
@@ -45,7 +44,6 @@ public class RoomManager : MonoBehaviour
     private int spawnEnemyMax;
     
     public Transform enemyParent;
-    public List<GameObject> enemyPrefab;
     public List<Enemy> enemyInRoom;
     public bool roomClear;
 
@@ -126,7 +124,7 @@ public class RoomManager : MonoBehaviour
     {
         if (isBossRoom)
         {
-            GameObject enemy = Instantiate(enemyPrefab[RandomMonsterNumber()], new Vector3(bossSpawnPoint.position.x,0.5f,bossSpawnPoint.position.z), Quaternion.identity,enemyParent);
+            GameObject enemy = Instantiate(EnemySpawnManager.Instance.GetBossEnemy(), new Vector3(bossSpawnPoint.position.x,0.5f,bossSpawnPoint.position.z), Quaternion.identity,enemyParent);
             enemyInRoom.Add(enemy.GetComponent<Enemy>());
             enemy.GetComponent<Enemy>().targetTransform = playerTrans;
             enemy.GetComponent<Enemy>().ActiveUnit();
@@ -139,7 +137,7 @@ public class RoomManager : MonoBehaviour
         }
         for (int i = 0; i < spawnEnemyMax; i++)
         {
-            GameObject enemy = Instantiate(enemyPrefab[RandomMonsterNumber()], CheckSpawnPoint(), Quaternion.identity,enemyParent);
+            GameObject enemy = Instantiate(EnemySpawnManager.Instance.GetEnemy(), CheckSpawnPoint(), Quaternion.identity,enemyParent);
             enemyInRoom.Add(enemy.GetComponent<Enemy>());
             enemy.GetComponent<Enemy>().targetTransform = playerTrans;
             enemy.GetComponent<Enemy>().ActiveUnit();
@@ -153,39 +151,6 @@ public class RoomManager : MonoBehaviour
                 enemySpawnComplete = true;
             }
         }
-    }
-
-    private int RandomMonsterNumber()
-    {
-        int monsterNumber = 0;
-        float randomNumber = Random.Range(0f, 1f);
-        //Debug.Log(randomNumber);
-        if (randomNumber < randomRate.pawnRate)
-        {
-            monsterNumber = 0;
-        }
-        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate)
-        {
-            monsterNumber = 1;
-        }
-        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate + randomRate.knightRate)
-        {
-            monsterNumber = 2;
-        }
-        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate + randomRate.knightRate + randomRate.bishopRate)
-        {
-            monsterNumber = 3;
-        }
-        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate + randomRate.knightRate + randomRate.bishopRate + randomRate.queenRate)
-        {
-            monsterNumber = 4;
-        }
-        else if (randomNumber < randomRate.pawnRate + randomRate.rookRate + randomRate.knightRate + randomRate.bishopRate + randomRate.queenRate + randomRate.kingRate)
-        {
-            monsterNumber = 5;
-        }
-
-        return monsterNumber;
     }
 
     private void Update()
@@ -266,6 +231,7 @@ public class RoomManager : MonoBehaviour
             GameManager.Instance.RoomClear();
             PortalManager.Instance.SetUpNextRoom(portalLeft,portalRight,playerTrans);
         }
+        EnemySpawnManager.Instance.ResetSpawnList();
     }
     private void RoomClearWithNoReward()
     {

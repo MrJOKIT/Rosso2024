@@ -18,6 +18,10 @@ public class PlayerInputHandle : MonoBehaviour
     void Update()
     {
         InventoryHandle();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CameraManager.Instance.ChangeCameraView();
+        }
     }
 
 

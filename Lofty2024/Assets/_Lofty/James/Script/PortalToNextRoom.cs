@@ -21,6 +21,8 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
     public GameObject bonusPortal;
     public GameObject bossPortal;
     public GameObject clearPortal;
+    
+    
     private void Update()
     {
         if (!onPlayer || !portalActive)

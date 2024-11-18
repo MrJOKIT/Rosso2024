@@ -340,7 +340,7 @@ public class PortalManager : Singeleton<PortalManager>
     { 
         loadTimeCounter += Time.deltaTime;
         Transform target = progressList[secondStageNumber - 1].barPoint;
-        rossoUI.position = Vector3.MoveTowards(rossoUI.position,target.position, 200 * Time.deltaTime);
+        rossoUI.position = Vector3.MoveTowards(rossoUI.position,target.position, 100 * Time.deltaTime);
         if (rossoUI.position == target.position)
         {
             progressState = ProgressState.ProgressSuccess;

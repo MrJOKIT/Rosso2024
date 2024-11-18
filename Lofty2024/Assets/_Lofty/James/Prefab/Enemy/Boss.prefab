@@ -1550,6 +1550,7 @@ GameObject:
   - component: {fileID: 2433649493371555296}
   - component: {fileID: 3464252815286209659}
   - component: {fileID: 5937204204464439269}
+  - component: {fileID: 1698735938721320184}
   m_Layer: 0
   m_Name: monster003_idle-Sheet_0
   m_TagString: Untagged
@@ -1645,6 +1646,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1698735938721320184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7733919698412457376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 925c84e6659c2284cbda8304cba65acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8231155951147250228
 GameObject:
   m_ObjectHideFlags: 0

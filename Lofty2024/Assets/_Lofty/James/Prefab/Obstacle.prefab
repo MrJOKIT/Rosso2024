@@ -57,7 +57,7 @@ MonoBehaviour:
   - Assets/_Lofty/James/Material/Wall.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_90698e1c-ac80-4238-bc50-35b8a8f8a342
+    name: UM_OperatedMesh_a5d3ec5a-6769-4948-915d-41121d88a6ea
     skinnedMesh: 0
     sharedMesh: {fileID: 7229859633042236088}
     buidVersion:
@@ -69,7 +69,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: 90698e1c-ac80-4238-bc50-35b8a8f8a342
+  sourceMeshRendererGUID: a5d3ec5a-6769-4948-915d-41121d88a6ea
   guid: f64f2d3d-293d-4a9a-b01e-117498f02929
   localOptions:
     RecalculateTangents: 0
