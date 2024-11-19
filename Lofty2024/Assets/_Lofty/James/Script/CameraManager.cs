@@ -23,9 +23,11 @@ public class CameraManager : Singeleton<CameraManager>
     [Space(20)] [Header("Changing Camera Setting")]
     public CameraChangingState changingState;
     public bool onTopdown;
-    [Space(20)]
-    [Tab("Second Camera")]
-    public Transform targetTransform;
+    [Space(20)] [Tab("Camera Setting")] 
+    public Camera mainCamera;
+    public float defaultSize = 5f;
+    public float zoomSize = 2f;
+    public float velocity = 0f;
     
     void Start()
     {
@@ -103,6 +105,22 @@ public class CameraManager : Singeleton<CameraManager>
     {
         transform.position = new Vector3(newTarget.x + 1.5f,transform.position.y, newTarget.z + 1.5f);
         initialPosition = transform.localPosition;
+    }
+
+    private void Focus(Transform focusTransform)
+    {
+        SetCameraTarget(focusTransform.position);
+        mainCamera.orthographicSize = Mathf.SmoothDamp(mainCamera.orthographicSize,zoomSize,ref velocity,0.25f);
+    }
+    public void FocusZoom()
+    {
+        Focus(TurnManager.Instance.turnData[0].unitTransform);
+    }
+
+    public void UnFocusZoom()
+    {
+        SetCameraTarget(GameManager.Instance.currentRoomPos.position);
+        mainCamera.orthographicSize = Mathf.SmoothDamp(mainCamera.orthographicSize,defaultSize,ref velocity,0.25f);
     }
     
 }

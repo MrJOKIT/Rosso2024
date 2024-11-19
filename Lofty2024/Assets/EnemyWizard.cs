@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Playables;
 using VInspector;
 
 public enum SummonState
@@ -55,8 +56,9 @@ public class EnemyWizard : Enemy
                         if (summonCooldownCounter >= summonCooldown)
                         {
                             summonState = SummonState.OnSummon;
-                            enemyAnimator.SetBool("OnSummon",true);
-                            EndTurn();
+                            //enemyAnimator.SetBool("OnSummon",true);
+                            //EndTurn();
+                            GetComponent<PlayableDirector>().Play();
                         }
                         else
                         {

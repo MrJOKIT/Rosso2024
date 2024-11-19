@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Lofty/Jo/Scenes/Menu.unity
     guid: 99ac107abd230d54bbd49c531aefffc7
   - enabled: 1

@@ -8,6 +8,8 @@ public enum EffectName
     Summon,
     Stun,
     Slash,
+    Bite,
+    Blood,
 }
 [Serializable]
 public class EffectData

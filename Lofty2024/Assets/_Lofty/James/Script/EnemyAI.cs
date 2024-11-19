@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using UnityEngine.Playables;
 using VInspector;
 
 public class EnemyAI : Enemy
@@ -47,8 +48,9 @@ public class EnemyAI : Enemy
                 {
                     if (playerInRange)
                     {
-                        enemyAnimator.SetTrigger("Attack");
-                        EndTurn();
+                        GetComponent<PlayableDirector>().Play();
+                        /*enemyAnimator.SetTrigger("Attack");
+                        EndTurn();*/
                     }
                     else
                     {

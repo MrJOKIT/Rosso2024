@@ -359,7 +359,7 @@ public class PortalManager : Singeleton<PortalManager>
             yield return new WaitForSeconds(1f);
         }
         progressCanvas.SetActive(false);
-        TransitionAnimator animatorTwo = TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true);
+        TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true);
         GameManager.Instance.GetComponent<PortalManager>().ShowStageNumber();
         if (secondStageNumber <= 3)
         {
