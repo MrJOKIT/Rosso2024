@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BossArea
-  m_Shader: {fileID: 4800000, guid: f2d3798c7faa4374b992cdfcab62cb40, type: 3}
+  m_Shader: {fileID: 4800000, guid: df8803656b6189845a31aea7baf6271d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
@@ -225,6 +225,7 @@ Material:
     - _CheckerboardTiling: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _ColorMask: 15
     - _ColorReplaceContrast: 1
     - _ColorReplaceFade: 1
     - _ColorReplaceRange: 0.05
@@ -385,6 +386,8 @@ Material:
     - _InnerOutlineOutlineOnlyToggle: 0
     - _InnerOutlineTextureToggle: 0
     - _InnerOutlineWidth: 0.02
+    - _IsText: 0
+    - _IsTextMeshPro: 0
     - _MetalContrast: 2
     - _MetalFade: 1
     - _MetalHighlightContrast: 2
@@ -503,11 +506,18 @@ Material:
     - _SquishStretch: 0.1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
     - _StrongTintContrast: 0
     - _StrongTintContrastToggle: 0
     - _StrongTintFade: 1
     - _StrongTintMaskToggle: 0
     - _Surface: 0
+    - _TMPSmoothness: 5
+    - _TMPThickness: -0.45
     - _TextureLayer1Columns: 3
     - _TextureLayer1Contrast: 1
     - _TextureLayer1ContrastToggle: 0
@@ -542,6 +552,7 @@ Material:
     - _UVDistortFade: 1
     - _UVDistortMaskToggle: 0
     - _UVRotateSpeed: 1
+    - _UseUIAlphaClip: 0
     - _VertexTintFirst: 0
     - _VibrateFade: 1
     - _VibrateFrequency: 100
