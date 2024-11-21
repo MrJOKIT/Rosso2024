@@ -2969,10 +2969,5 @@ namespace DamageNumbersPro
             }
         }
         #endregion
-
-        public DamageNumber SpawnGUI(Transform damageParent, Vector2 anchoredPosition, float newNumber)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

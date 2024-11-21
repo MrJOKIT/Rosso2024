@@ -6,6 +6,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 using VInspector;
 
+[Serializable]
+public class CardArtifact
+{
+    public ArtifactData artifactData;
+    public bool isActivate;
+    public CardArtifact(ArtifactData artifactData)
+    {
+        this.artifactData = artifactData;
+    }
+}
 
 public class PlayerArtifact : MonoBehaviour
 {
@@ -14,7 +24,7 @@ public class PlayerArtifact : MonoBehaviour
     public bool inventoryActive;
 
     [Space(10)] [Header("Artifact Data")] public int maxArtifact;
-    public List<ArtifactData> artifactHaves;
+    public List<CardArtifact> artifactHaves;
     public List<ArtifactUI> artifactSlots;
 
     [Space(20)] 
@@ -118,17 +128,18 @@ public class PlayerArtifact : MonoBehaviour
 
     public void AddNewArtifact(ArtifactData newArtifact)
     {
+        CardArtifact newCard = new CardArtifact(newArtifact);
         if (artifactHaves.Count == maxArtifact)
         {
             return;
         }
 
-        if (artifactHaves.Contains(newArtifact))
+        if (artifactHaves.Contains(newCard))
         {
             return;
         }
 
-        artifactHaves.Add(newArtifact);
+        artifactHaves.Add(newCard);
         artifactSlots[artifactHaves.Count - 1]
             .SetArtifactUI( newArtifact.artifactName, newArtifact.artifactImage);
         //Destroy(newArtifact.GameObject());
@@ -138,13 +149,14 @@ public class PlayerArtifact : MonoBehaviour
     
     public void RemoveArtifact(ArtifactData removeArtifact)
     {
-        if (!artifactHaves.Contains(removeArtifact))
+        CardArtifact removeCard = new CardArtifact(removeArtifact);
+        if (!artifactHaves.Contains(removeCard))
         {
             return;
         }
 
-        artifactSlots[artifactHaves.IndexOf(removeArtifact)].ClearArtifactSlot();
-        artifactHaves.Remove(removeArtifact);
+        artifactSlots[artifactHaves.IndexOf(removeCard)].ClearArtifactSlot();
+        artifactHaves.Remove(removeCard);
         RemoveByType(removeArtifact);
         SortingSlot();
         CardLinkUpdate();
@@ -169,10 +181,10 @@ public class PlayerArtifact : MonoBehaviour
             slots.ClearArtifactSlot();
         }
 
-        foreach (ArtifactData artifact in artifactHaves)
+        foreach (CardArtifact artifact in artifactHaves)
         {
             artifactSlots[artifactHaves.IndexOf(artifact)]
-                .SetArtifactUI(artifact.artifactName, artifact.artifactImage);
+                .SetArtifactUI(artifact.artifactData.artifactName, artifact.artifactData.artifactImage);
         }
         
         foreach (ArtifactData artifact in swordKnightType)
@@ -256,18 +268,22 @@ public class PlayerArtifact : MonoBehaviour
     [Button("Result Artifact")]
     public void ResultArtifact()
     {
-        SetDefault();
-        foreach (ArtifactData artifact in artifactHaves)
+        //SetDefault();
+        foreach (CardArtifact artifact in artifactHaves)
         {
-            switch (artifact.upgradeType)
+            if (artifact.isActivate)
+            {
+                continue;
+            }
+            switch (artifact.artifactData.upgradeType)
             {
                 case UpgradeType.PlayerCurrency:
-                    addSoulMultiple += artifact.addSoulMultiple;
-                    addCoinMultiple += artifact.addCoinMultiple;
+                    addSoulMultiple += artifact.artifactData.addSoulMultiple;
+                    addCoinMultiple += artifact.artifactData.addCoinMultiple;
                     GameManager.Instance.GetComponent<GameCurrency>().UpgradeMultiple(addCoinMultiple,addSoulMultiple);
                     break;
                 case UpgradeType.PlayerAbility:
-                    switch (artifact.abilityName)
+                    switch (artifact.artifactData.abilityName)
                     {
                         case AbilityName.Shield:
                             playerShield = true;
@@ -317,19 +333,22 @@ public class PlayerArtifact : MonoBehaviour
                     }
                     break;
                 default:
-                    addHealthPoint += artifact.addHealthPoint;
-                    addHealthPointTemp += artifact.addHealthPointTemp;
-                    addHealMultiple += artifact.addHealMultiple;
-                    addSkillPoint += artifact.addSkillPoint;
-                    addDamage += artifact.addDamage;
-                    addKnockBackRange += artifact.addKnockBackRange;
-                    addActionPoint += artifact.addActionPoint;
-                    addSkillDiscount += artifact.addSkillDiscount;
+                    addHealthPoint += artifact.artifactData.addHealthPoint;
+                    addHealthPointTemp += artifact.artifactData.addHealthPointTemp;
+                    addHealMultiple += artifact.artifactData.addHealMultiple;
+                    addSkillPoint += artifact.artifactData.addSkillPoint;
+                    addDamage += artifact.artifactData.addDamage;
+                    addKnockBackRange += artifact.artifactData.addKnockBackRange;
+                    addActionPoint += artifact.artifactData.addActionPoint;
+                    addSkillDiscount += artifact.artifactData.addSkillDiscount;
                     
-                    GetComponent<Player>().SetStats();
-                    GetComponent<PlayerMovementGrid>().SetStats();
+                    //GetComponent<Player>().LoadPlayerData();
+                    GetComponent<Player>().UpgradeStats();
+                    GetComponent<PlayerMovementGrid>().UpgradeStats();
                     break;
             }
+
+            artifact.isActivate = true;
         }
         
     }

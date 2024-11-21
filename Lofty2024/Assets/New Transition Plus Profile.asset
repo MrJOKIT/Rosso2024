@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0f9d22fa85eb43e8af60b22fb69c43c, type: 3}
   m_Name: New Transition Plus Profile
   m_EditorClassIdentifier: 
-  type: 100
-  invert: 0
+  type: 0
+  invert: 1
   timeMultiplier: 1
-  colorMode: 2
+  colorMode: 0
   color: {r: 0, g: 0, b: 0, a: 1}
   gradient:
     serializedVersion: 2

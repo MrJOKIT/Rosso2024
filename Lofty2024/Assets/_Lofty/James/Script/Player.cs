@@ -24,7 +24,7 @@ public class Player : MonoBehaviour, ITakeDamage
     public bool isDead;
 
     [Space(5)] [Header("GUI")] 
-    [Header("Damage Number")] 
+    [Header("Damage Number")] public Transform focusTransform;
     [SerializeField] private Transform damageParent;
     [SerializeField] private DamageNumber damageNumbers;
     [Header("Health")]
@@ -48,8 +48,8 @@ public class Player : MonoBehaviour, ITakeDamage
 
     private void Awake()
     {
-        SetStats();
-        CreateHealthUI();
+        LoadPlayerData();
+        
     }
 
     private void Update()
@@ -76,6 +76,19 @@ public class Player : MonoBehaviour, ITakeDamage
         }
     }
 
+    public void AlertFalseCheck()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, gridMoverLayer))
+        {
+            if (hit.transform.GetComponent<GridMover>() != null)
+            {
+                hit.transform.GetComponent<GridMover>().isAlert = false;
+            }
+        }
+    }
+
     private void PlayerDeadHandle()
     {
         if (playerHealth <= 0) 
@@ -83,21 +96,21 @@ public class Player : MonoBehaviour, ITakeDamage
             if (GetComponent<PlayerArtifact>().DeathDoor)
             {
                 playerHealth = 1;
-                GetComponent<PlayerArtifact>().RemoveArtifact(GetComponent<PlayerArtifact>().artifactHaves.Find(x=> x.abilityName == AbilityName.DeathDoor)); 
+                GetComponent<PlayerArtifact>().RemoveArtifact(GetComponent<PlayerArtifact>().artifactHaves.Find(x=> x.artifactData.abilityName == AbilityName.DeathDoor).artifactData); 
             }
             else
             {
-                PlayerDie();
+                GetComponent<PlayerMovementGrid>().playerAnimator.SetBool("IsDead",true);
             }
             
         }
     }
 
-    private void PlayerDie()
+    public void PlayerDie()
     {
         //ใช้ตอน Player ตาย 
         isDead = true;
-        TransitionAnimator transitionAnimator = TransitionAnimator.Start(TransitionType.Burn,2f);
+        TransitionAnimator transitionAnimator = TransitionAnimator.Start(TransitionType.Smear,2f,playDelay:2f);
         transitionAnimator.onTransitionEnd.AddListener(GameManager.Instance.GameOver);
     }
     
@@ -128,7 +141,7 @@ public class Player : MonoBehaviour, ITakeDamage
     
     public void TakeDamage(int damage)
     {
-        CameraManager.Instance.TriggerShake();
+        //CameraManager.Instance.TriggerShake();
         
         if (haveShield)
         {
@@ -286,12 +299,15 @@ public class Player : MonoBehaviour, ITakeDamage
         }
     }
 
-    public void SetStats()
+    
+
+    public void UpgradeStats()
     {
-        playerHealthTemp = defaultHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp; 
-        maxHealth = defaultMaxHealth + GetComponent<PlayerArtifact>().HealthPoint;
+        defaultHealthTemp = playerHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp;
+        defaultMaxHealth = maxHealth + GetComponent<PlayerArtifact>().HealthPoint;
         
-        LoadData();
+        CreateHealthUI();
+        UpdateHealthUI();
     }
 
     private void CreateHealthUI()
@@ -341,18 +357,52 @@ public class Player : MonoBehaviour, ITakeDamage
         }
         
     }
-
-    private void SaveData()
+    public void SavePlayerData()
     {
-        ES3.Save<int>("PlayerHealth", playerHealth);
+        ES3.Save("PlayerDefaultHealth",defaultMaxHealth);
+        ES3.Save("PlayerDefaultHealthTemp",defaultHealthTemp);
+        ES3.Save("PlayerCurrentHealth",playerHealth);
+        ES3.Save("PlayerCurrentHealthTemp",playerHealthTemp);
+        
+        ES3.Save("PlayerDefaultMovePoint",GetComponent<PlayerMovementGrid>().DefaultMovePoint);
+        ES3.Save("PlayerDefaultDamage",GetComponent<PlayerMovementGrid>().DefaultDamage);
+        ES3.Save("PlayerDefaultKnockBackRange",GetComponent<PlayerMovementGrid>().DefaultKnockBackRange);
+        
+        ES3.Save("ArtifactHave",GetComponent<PlayerArtifact>().artifactHaves);
     }
-    private void LoadData()
+
+    [Button("Load Data")]
+    public void LoadPlayerData()
     {
-        playerHealth = ES3.Load<int>("PlayerHealth",maxHealth);
+        GetComponent<PlayerArtifact>().artifactHaves = ES3.Load("ArtifactHave",GetComponent<PlayerArtifact>().artifactHaves);
+        GetComponent<PlayerArtifact>().ResultArtifact();
+        
+        playerHealthTemp = ES3.Load("PlayerDefaultHealthTemp",0) + GetComponent<PlayerArtifact>().HealthPointTemp; 
+        maxHealth = ES3.Load("PlayerDefaultHealth",3) + GetComponent<PlayerArtifact>().HealthPoint;
+
+        playerHealthTemp = ES3.Load("PlayerCurrentHealthTemp", playerHealthTemp);
+        playerHealth = ES3.Load("PlayerCurrentHealth", maxHealth);
+
+        GetComponent<PlayerMovementGrid>().DefaultMovePoint = ES3.Load("PlayerDefaultMovePoint", 2);
+        GetComponent<PlayerMovementGrid>().DefaultDamage = ES3.Load("PlayerDefaultDamage", 1);
+        GetComponent<PlayerMovementGrid>().DefaultKnockBackRange = ES3.Load("PlayerDefaultKnockBackRange", 1);
+        
+        CreateHealthUI();
+
     }
 
-    private void ClearData()
+    [Button("Format Data")]
+    public void FormatPlayerData()
     {
-        ES3.DeleteKey("PlayerHealth");
+        ES3.DeleteKey("PlayerDefaultHealth");
+        ES3.DeleteKey("PlayerDefaultHealthTemp");
+        ES3.DeleteKey("PlayerCurrentHealth");
+        ES3.DeleteKey("PlayerCurrentHealthTemp");
+        
+        ES3.DeleteKey("PlayerDefaultMovePoint");
+        ES3.DeleteKey("PlayerDefaultDamage");
+        ES3.DeleteKey("PlayerDefaultKnockBackRange");
+        
+        ES3.DeleteKey("ArtifactHave");
     }
 }

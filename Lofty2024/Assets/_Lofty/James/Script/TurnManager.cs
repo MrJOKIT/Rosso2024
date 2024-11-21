@@ -166,7 +166,10 @@ public class TurnManager : Singeleton<TurnManager>
         {
             turnData[a].turnSlot.transform.SetParent(queueTransform[a].transform);
             turnData[a].turnSlot.transform.position = queueTransform[a].transform.position;
-            turnData[a].turnSlot.enemyOwner = turnData[a].unitTransform.GetComponent<Enemy>();
+            if (turnData[a].isPlayer == false)
+            {
+                turnData[a].turnSlot.SetSlot(turnData[a].unitTransform.GetComponent<Enemy>(),turnData[a].unitTransform.GetComponent<Enemy>().enemyData.enemySprite);
+            }
         }
     }
 

@@ -1,16 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using TransitionsPlus;
 using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
 
+public enum ProgressState
+{
+    StandBy,
+    OnProgress,
+    ProgressSuccess,
+}
 public class PortalManager : Singeleton<PortalManager>
 {
 
 
-    [Header("Random Room Setting")] 
+    [Tab("Random Room Setting")] 
     [SerializeField] private int gameLoopCount;
+    public int firstStageNumber = 1;
+    public int secondStageNumber = 1;
+    public int stageClearCount;
     [Space(10)]
     [SerializeField] private int roomCount;
     [Space(10)]
@@ -57,7 +68,28 @@ public class PortalManager : Singeleton<PortalManager>
     [Space(7)]
     public Transform checkRightRoomPos;
     public bool checkRightRoom;
-    
+
+    [Tab("Game Progress")] 
+    public ProgressState progressState;
+    public GameObject progressCanvas;
+    public TextMeshProUGUI currentStageNumberText;
+    public Transform rossoUI;
+    public List<ProgressBar> progressList;
+    [Space(10)] 
+    public float loadTimeMax;
+    private float loadTimeCounter;
+
+
+    public override void Awake()
+    {
+        base.Awake();
+        GetComponent<GameDataManager>().LoadProgress();
+    }
+
+    private void Start()
+    {
+        SetProgress();
+    }
 
     private void Update()
     {
@@ -65,8 +97,24 @@ public class PortalManager : Singeleton<PortalManager>
         checkLeftRoom = Physics.Raycast(checkLeftRoomPos.position,Vector3.down, Mathf.Infinity, roomLayer);
         checkMiddleRoom = Physics.Raycast(checkMiddleRoomPos.position, Vector3.down, Mathf.Infinity, roomLayer);
         checkRightRoom = Physics.Raycast(checkRightRoomPos.position, Vector3.down, Mathf.Infinity, roomLayer);
+
+        if (progressState == ProgressState.OnProgress)
+        {
+            currentStageNumberText.text = $"STAGE {firstStageNumber} - {secondStageNumber}";
+            progressCanvas.SetActive(true);
+            ProgressBarUpdate();
+        }
+        else if (progressState == ProgressState.ProgressSuccess)
+        {
+            progressState = ProgressState.StandBy;
+        }
     }
 
+    public void ShowStageNumber()
+    {
+        GetComponent<AnnouncementManager>().ShowTextTimer($"Stage {firstStageNumber} - {secondStageNumber}",5f);
+        
+    }
     private Vector3 GetSpawnPoint()
     {
         
@@ -288,4 +336,57 @@ public class PortalManager : Singeleton<PortalManager>
 
         return room;
     }
+
+    private void SetProgress()
+    {
+        for (int a = 0; a < progressList.Count; a++)
+        {
+            progressList[a].stageText.text = $"{firstStageNumber} - {a + 1}";
+        }
+    }
+    private void ProgressBarUpdate()
+    { 
+        Transform target = progressList[secondStageNumber - 1].barPoint;
+        if (rossoUI.position == target.position || loadTimeCounter > 20)
+        {
+            progressState = ProgressState.ProgressSuccess;
+            StartCoroutine(UpdateProgressSuccess());
+        }
+        else
+        {
+            loadTimeCounter += Time.deltaTime;
+            rossoUI.position = Vector3.MoveTowards(rossoUI.position,target.position, 100 * Time.deltaTime);
+        }
+    }
+
+    IEnumerator UpdateProgressSuccess()
+    {
+        if (loadTimeCounter < loadTimeMax)
+        {
+            yield return new WaitForSeconds(5f - loadTimeCounter);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        progressCanvas.SetActive(false);
+        TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true);
+        GameManager.Instance.GetComponent<PortalManager>().ShowStageNumber();
+        if (secondStageNumber <= 3)
+        {
+            secondStageNumber += 1;
+        }
+        else
+        {
+            firstStageNumber += 1;
+            secondStageNumber = 1;
+        }
+
+        stageClearCount += 1;
+        
+        GetComponent<GameDataManager>().SaveProgress();
+
+    }
+
+    
 }

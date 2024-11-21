@@ -44,6 +44,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     [Tab("Enemy Host")]
     [Header("Player")]
     public Transform targetTransform;
+    public Transform focusTransform;
     
     [Header("Data")]
     public TurnData enemyTurnData;
@@ -57,6 +58,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public int enemyHealth;
     public float enemySpeed;
     public bool isDead;
+    public bool onImmortalObject;
 
     [Space(10)] 
     [Header("Curse Status")] 
@@ -176,7 +178,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
             curse.curseUI.turnCount.text = curse.curseTurn.ToString();
         }
     }
-    private void EnemyDie()
+    protected void EnemyDie()
     {
         MouseSelectorManager.Instance.ClearSelector(this);
         TurnManager.Instance.RemoveUnit(enemyTurnData);
@@ -237,8 +239,12 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     public void TakeDamage(int damage)
     {
+        if (onImmortalObject)
+        {
+            return;
+        }
         enemyAnimator.SetTrigger("TakeDamage");
-        CameraManager.Instance.TriggerShake();
+        //CameraManager.Instance.TriggerShake();
         enemyHealth -= damage;
         if (enemyHealth <= 0)
         {

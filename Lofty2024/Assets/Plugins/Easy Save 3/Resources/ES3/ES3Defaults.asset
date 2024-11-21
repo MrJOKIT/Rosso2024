@@ -35,8 +35,13 @@ MonoBehaviour:
     - Assembly-CSharp-firstpass
     - AttributesSamples
     - Beardy.BeardsGridLayoutGroup.Runtime
+    - Cinemachine
     - DamageNumbersPro
     - EditorAttributes
+    - Febucci.Attributes.Runtime
+    - Febucci.TextAnimator.Demo.Runtime
+    - Febucci.TextAnimator.Runtime
+    - Febucci.TextAnimator.TMP.Runtime
     - GridBuilder2_Core
     - ProCamera2D.Examples
     - ProCamera2D.Runtime

@@ -124,28 +124,28 @@ public class RandomCardManager : MonoBehaviour
             case ArtifactGrade.Common:
                 if (commonOutOfStock)
                 {
-                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    GetComponent<AnnouncementManager>().ShowTextTimer("Out of cards",1.5f);
                     return;
                 }
                 break;
             case ArtifactGrade.Rare:
                 if (rareOutOfStock)
                 {
-                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    GetComponent<AnnouncementManager>().ShowTextTimer("Out of cards",1.5f);
                     return;
                 }
                 break;
             case ArtifactGrade.Epic:
                 if (epicOutOfStock)
                 {
-                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    GetComponent<AnnouncementManager>().ShowTextTimer("Out of cards",1.5f);
                     return;
                 }
                 break;
             default:
                 if (cardOutOfStock)
                 {
-                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    GetComponent<AnnouncementManager>().ShowTextTimer("Out of cards",1.5f);
                     return;
                 }
                 break;
@@ -251,28 +251,28 @@ public class RandomCardManager : MonoBehaviour
             case CardClass.SwordKnight:
                 if (cardKnightOutOfStock)
                 {
-                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    GetComponent<AnnouncementManager>().ShowTextTimer("Out of cards",1.5f);
                     return;
                 }
                 break;
             case CardClass.BladeMaster:
                 if (cardBladeOutOfStock)
                 {
-                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    GetComponent<AnnouncementManager>().ShowTextTimer("Out of cards",1.5f);
                     return;
                 }
                 break;
             case CardClass.ShootingCaster:
                 if (cardShootOutOfStock)
                 {
-                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    GetComponent<AnnouncementManager>().ShowTextTimer("Out of cards",1.5f);
                     return;
                 }
                 break;
             default:
                 if (cardOutOfStock)
                 {
-                    AnnouncementManager.Instance.ShowTextTimer("Out of cards",1.5f);
+                    GetComponent<AnnouncementManager>().ShowTextTimer("Out of cards",1.5f);
                     return;
                 }
                 break;
@@ -814,7 +814,7 @@ public class RandomCardManager : MonoBehaviour
         randomAgainWithArtifactButton.gameObject.SetActive(false);
     }
 
-    private void RandomEnd()
+    public void RandomEnd()
     {
         
         currentCost = randomCost / 2;
@@ -861,5 +861,7 @@ public class RandomCardManager : MonoBehaviour
         player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
         player.GetComponent<PlayerArtifact>().ResultArtifact();
         isRandom = false;
+        GetComponent<GameDataManager>().SaveCardManager();
+        GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().SavePlayerData();
     }
 }

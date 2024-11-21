@@ -908,6 +908,7 @@ MonoBehaviour:
   enemyHealth: 0
   enemySpeed: 0
   isDead: 0
+  onImmortalObject: 0
   curseHave: []
   curseCanvas: {fileID: 7533957303092838807}
   curseUiPrefab: {fileID: 3857760036129689616, guid: 3546fb8c5723e5446842ee4e515ea1e4,
@@ -937,7 +938,7 @@ MonoBehaviour:
   currentAlert: {fileID: 0}
   _bossRadiusChecker: {fileID: 4639124650009307854}
   jumpPrepare: 0
-  monsterPrefab: {fileID: 9134819534939182666, guid: 0adc65148a5a5b842866b7fa1a46b55c,
+  monsterPrefab: {fileID: 9134819534939182666, guid: d1bbcf898b76739479e56552022ca3d9,
     type: 3}
   maxSummon: 7
 --- !u!114 &7957445349075815389
@@ -960,7 +961,7 @@ MonoBehaviour:
   enemyMoveDirection: 0
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1408
   forwardBlock: 0
   forwardLeftBlock: 0
   forwardRightBlock: 0
@@ -1549,6 +1550,7 @@ GameObject:
   - component: {fileID: 2433649493371555296}
   - component: {fileID: 3464252815286209659}
   - component: {fileID: 5937204204464439269}
+  - component: {fileID: 1698735938721320184}
   m_Layer: 0
   m_Name: monster003_idle-Sheet_0
   m_TagString: Untagged
@@ -1644,6 +1646,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1698735938721320184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7733919698412457376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 925c84e6659c2284cbda8304cba65acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8231155951147250228
 GameObject:
   m_ObjectHideFlags: 0

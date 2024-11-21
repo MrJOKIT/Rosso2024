@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class AnnouncementManager : Singeleton<AnnouncementManager>
 {
+    public GameObject announcementCanvas;
     public TextMeshProUGUI announcementText;
     public string currentText;
     public float textTime;
@@ -13,6 +14,7 @@ public class AnnouncementManager : Singeleton<AnnouncementManager>
     public override void Awake()
     {
         announcementText.text = String.Empty;
+        announcementCanvas.SetActive(false);
     }
 
     private void Update()
@@ -25,6 +27,7 @@ public class AnnouncementManager : Singeleton<AnnouncementManager>
             {
                 currentText = String.Empty;
                 announcementText.text = String.Empty;
+                announcementCanvas.SetActive(false);
                 textTime = 0;
             }
         }
@@ -32,6 +35,7 @@ public class AnnouncementManager : Singeleton<AnnouncementManager>
 
     public void ShowTextTimer(string text,float timeToShow)
     {
+        announcementCanvas.SetActive(true);
         currentText = text;
         textTime = timeToShow;
     }

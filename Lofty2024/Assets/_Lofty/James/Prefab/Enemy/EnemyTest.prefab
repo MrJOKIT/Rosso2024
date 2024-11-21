@@ -474,6 +474,7 @@ GameObject:
   - component: {fileID: 3141139431505907782}
   - component: {fileID: 5132409856165259308}
   - component: {fileID: 6484183459520965145}
+  - component: {fileID: 3392960150704179705}
   m_Layer: 0
   m_Name: EnemySprite
   m_TagString: Untagged
@@ -569,6 +570,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3392960150704179705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909134265450959571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 925c84e6659c2284cbda8304cba65acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1119838918483221931
 GameObject:
   m_ObjectHideFlags: 0
@@ -5622,10 +5635,13 @@ MonoBehaviour:
     baseSpeed: 0
     turnSlot: {fileID: 0}
   enemyData: {fileID: 11400000, guid: 08a05c9babdc4764aa30b1193c1f2392, type: 2}
+  focusArrow: {fileID: 0}
   enemyAnimator: {fileID: 6484183459520965145}
+  enemyMaxHealth: 0
   enemyHealth: 5
   enemySpeed: 25
   isDead: 0
+  onImmortalObject: 0
   curseHave: []
   curseCanvas: {fileID: 448169777976912810}
   curseUiPrefab: {fileID: 3857760036129689616, guid: 3546fb8c5723e5446842ee4e515ea1e4,
@@ -5690,7 +5706,7 @@ MonoBehaviour:
   enemyMoveDirection: 0
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 1408
   forwardBlock: 0
   forwardLeftBlock: 0
   forwardRightBlock: 0

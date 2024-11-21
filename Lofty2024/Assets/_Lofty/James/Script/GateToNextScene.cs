@@ -19,6 +19,7 @@ public class GateToNextScene : InterfacePopUp<GateToNextScene>
         if (Input.GetKeyDown(KeyCode.E))
         {
             TransitionAnimator animator = TransitionAnimator.Start(TransitionType.Smear,2f,sceneNameToLoad:sceneName);
+            animator.onTransitionEnd.AddListener(LoadNextScene);
         }
     }
 

@@ -53,10 +53,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a42056e954ed1c47bbddb688b80413b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageTo: 0
   skillAttackType: 2
   curseType: 0
   damageCount: 1
   knockBackRange: 1
+  vfx: {fileID: 4374370317186983222, guid: 45c94e769ce2b854b8117ae90d091a3e, type: 3}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -242,6 +244,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 457e287dc17566c479299f28a38369d3, type: 2}
+    - target: {fileID: 663133015893556568, guid: 331d68f9c2bdc32489bdaf88bc22a831,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7625380060752373555, guid: 331d68f9c2bdc32489bdaf88bc22a831,
         type: 3}
       propertyPath: m_LocalPosition.x
