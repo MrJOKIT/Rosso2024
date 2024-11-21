@@ -36,7 +36,7 @@ public class ToggleSetting : MonoBehaviour
 
     private void Start()
     {
-        LoadSettings(); // Load the saved settings when the scene starts
+        LoadSettings(); 
         InitializeGameObjects();
         InitializeResolutionGameObjects();
         InitializeFPSLimitGameObjects();
@@ -45,7 +45,6 @@ public class ToggleSetting : MonoBehaviour
         fpsSlider.maxValue = 240;
         fpsSlider.value = limitedFPS;
         fpsValueText.text = limitedFPS.ToString();
-        fpsSlider.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -238,6 +237,7 @@ private bool IsResolutionSupported(Vector2Int resolution)
         {
             fpsValueText.text = ((int)fpsSlider.value).ToString();
             limitedFPS = (int)fpsSlider.value;
+            SaveSettings(); // Save the FPS limit when changed
         }
     }
 
