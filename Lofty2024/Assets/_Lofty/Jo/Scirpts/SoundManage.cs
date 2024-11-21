@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum Sound
 {
@@ -50,6 +51,11 @@ public class SoundManage : MonoBehaviour
         {
             Destroy(gameObject);  
         }
+
+        // Ensure audio sources are correctly initialized
+        InitializeAudioSources();
+        // Register to handle scene load events
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void InitializeSoundDictionary()
@@ -65,6 +71,25 @@ public class SoundManage : MonoBehaviour
     {
         LoadSettings();  
         PlayBackgroundMusic(Sound.Music1);  
+    }
+
+    void InitializeAudioSources()
+    {
+        if (BGaudioSource == null)
+        {
+            BGaudioSource = GetComponent<AudioSource>(); // Assuming you have the AudioSource component attached
+        }
+        if (EffectAudioSource == null)
+        {
+            EffectAudioSource = GetComponent<AudioSource>(); // Ensure you have both AudioSource components
+        }
+    }
+
+    // Called when the scene is loaded
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        InitializeAudioSources();
+        UpdateVolumes(); // Reapply volume settings after scene load
     }
 
     public void PlayBackgroundMusic(Sound musicType = Sound.Music1)
@@ -121,10 +146,11 @@ public class SoundManage : MonoBehaviour
 
         UpdateVolumes();  
     }
+
     //เปลี่ยนเพลง
     public void ChangeToMusic()
     {
-       BGaudioSource.Stop(); 
-       PlayBackgroundMusic(Sound.Music1); 
+        BGaudioSource.Stop(); 
+        PlayBackgroundMusic(Sound.Music1); 
     }
 }

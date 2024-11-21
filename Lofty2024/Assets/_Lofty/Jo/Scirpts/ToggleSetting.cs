@@ -141,47 +141,89 @@ public class ToggleSetting : MonoBehaviour
     }
 
     public void ApplySettings()
+{
+    
+    switch (currentIndex)
     {
-        // Apply the selected screen mode
-        switch (currentIndex)
-        {
-            case 0: // Fullscreen
-                Screen.SetResolution(previewResolution.x, previewResolution.y, true);
+        case 0: 
+         
+            if (IsResolutionSupported(previewResolution))
+            {
+               
+                Screen.SetResolution(previewResolution.x, previewResolution.y, true); // Fullscreen
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen; // Ensures exclusive fullscreen
                 Debug.Log("Applied Fullscreen mode.");
-                break;
-            case 1: // Windowed
-                Screen.SetResolution(previewResolution.x, previewResolution.y, false);
-                Screen.fullScreenMode = FullScreenMode.Windowed;
+            }
+            else
+            {
+                Debug.LogWarning("Selected resolution is not supported.");
+            }
+            break;
+
+        case 1: 
+           
+            if (IsResolutionSupported(previewResolution))
+            {
+               
+                Screen.SetResolution(previewResolution.x, previewResolution.y, false); 
+                Screen.fullScreenMode = FullScreenMode.Windowed; // Explicitly set to windowed
                 Debug.Log("Applied Windowed mode.");
-                break;
-            case 2: // Borderless
-                Screen.SetResolution(previewResolution.x, previewResolution.y, true);
-                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+            }
+            else
+            {
+                Debug.LogWarning("Selected resolution is not supported.");
+            }
+            break;
+
+        case 2: // Borderless
+           
+            if (IsResolutionSupported(previewResolution))
+            {
+               
+                Screen.SetResolution(previewResolution.x, previewResolution.y, true); 
+                Screen.fullScreenMode = FullScreenMode.FullScreenWindow; // Borderless
                 Debug.Log("Applied Borderless mode.");
-                break;
-        }
-
-        // Set FPS and V-Sync
-        if (isVSyncEnabled)
-        {
-            QualitySettings.vSyncCount = 1;
-            Application.targetFrameRate = -1;
-            Debug.Log("V-Sync is enabled, FPS limit is disabled.");
-        }
-        else if (isFPSLimited)
-        {
-            limitedFPS = (int)fpsSlider.value;
-            Application.targetFrameRate = limitedFPS;
-            Debug.Log($"FPS limit set to: {limitedFPS}");
-        }
-        else
-        {
-            Application.targetFrameRate = -1;
-        }
-
-        Debug.Log($"Settings applied. Current GameObject: {gameObjects[currentIndex].name}, Resolution: {previewResolution.x}x{previewResolution.y}, FPS Limit: {(isFPSLimited ? limitedFPS.ToString() : "Uncapped")}");
-        fpsValueText.text = isFPSLimited ? limitedFPS.ToString() : "Uncapped";
+            }
+            else
+            {
+                Debug.LogWarning("Selected resolution is not supported.");
+            }
+            break;
     }
+
+    
+    if (isVSyncEnabled)
+    {
+        QualitySettings.vSyncCount = 1;
+        Application.targetFrameRate = -1;
+        Debug.Log("V-Sync is enabled, FPS limit is disabled.");
+    }
+    else if (isFPSLimited)
+    {
+        limitedFPS = (int)fpsSlider.value;
+        Application.targetFrameRate = limitedFPS;
+        Debug.Log($"FPS limit set to: {limitedFPS}");
+    }
+    else
+    {
+        Application.targetFrameRate = -1;
+    }
+
+    Debug.Log($"Settings applied. Current GameObject: {gameObjects[currentIndex].name}, Resolution: {previewResolution.x}x{previewResolution.y}, FPS Limit: {(isFPSLimited ? limitedFPS.ToString() : "Uncapped")}");
+    fpsValueText.text = isFPSLimited ? limitedFPS.ToString() : "Uncapped";
+}
+
+private bool IsResolutionSupported(Vector2Int resolution)
+{
+    foreach (var res in Screen.resolutions)
+    {
+        if (res.width == resolution.x && res.height == resolution.y)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
     public void ChangeResolutionPreview()
     {
@@ -213,7 +255,7 @@ public class ToggleSetting : MonoBehaviour
         Debug.Log($"V-Sync is now {(isVSyncEnabled ? "enabled" : "disabled")}");
     }
 
-    // Save the current settings
+    
     private void SaveSettings()
     {
         PlayerPrefs.SetInt("ScreenModeIndex", currentIndex);
@@ -223,7 +265,7 @@ public class ToggleSetting : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    // Load the saved settings
+   
     private void LoadSettings()
     {
         if (PlayerPrefs.HasKey("ScreenModeIndex"))
