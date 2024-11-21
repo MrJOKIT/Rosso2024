@@ -71,6 +71,8 @@ public class GameManager : Singeleton<GameManager>
 
     public void TryAgain()
     {
+        currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().FormatPlayerData();
+        GetComponent<GameDataManager>().FormatAllData();
         SceneManager.LoadSceneAsync(sceneName);
     }
 
