@@ -3,46 +3,52 @@ using UnityEngine;
 
 public enum Sound
 {
-    Effect1, 
+    //เอฟเฟค
+    Effect1,
     Effect2,
-    Music1
+    Effect3,
+    
+    //เพลง
+    Music1,
+    Music2,
+    EndCredits
 }
 
 [System.Serializable]
-public class SoundClip
+public class SoundClip  
 {
-    public Sound sound; 
-    public AudioClip clip; 
-    public bool isBackground; 
+    public Sound sound;  
+    public AudioClip clip;  
+    public bool isBackground;  
 }
 
 public class SoundManage : MonoBehaviour
 {
     public static SoundManage Instance;  
     public AudioSource BGaudioSource;  
-    public AudioSource EffectAudioSource;
-    public List<SoundClip> soundClips; 
-    
-   
+    public AudioSource EffectAudioSource;  
+    public List<SoundClip> soundClips;  
 
     [Range(0f, 1f)]
-    public float bgVolume = 0.5f;  
+    public float masterVolume = 1f;    
     [Range(0f, 1f)]
-    public float effectVolume = 1f; 
+    public float bgVolume = 0.5f;     
+    [Range(0f, 1f)]
+    public float effectVolume = 1f;
 
-    private Dictionary<Sound, AudioClip> soundDictionary; 
+    private Dictionary<Sound, AudioClip> soundDictionary;  
 
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); 
+            DontDestroyOnLoad(gameObject);  
             InitializeSoundDictionary(); 
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject);  
         }
     }
 
@@ -57,15 +63,16 @@ public class SoundManage : MonoBehaviour
 
     void Start()
     {
-        PlayBackgroundMusic();
+        LoadSettings();  
+        PlayBackgroundMusic(Sound.Music1);  
     }
 
-    private void PlayBackgroundMusic()
+    public void PlayBackgroundMusic(Sound musicType = Sound.Music1)
     {
-        if (soundDictionary.TryGetValue(Sound.Music1, out AudioClip clip))
+        if (soundDictionary.TryGetValue(musicType, out AudioClip clip))
         {
             BGaudioSource.clip = clip;
-            BGaudioSource.volume = bgVolume;
+            BGaudioSource.volume = bgVolume * masterVolume;
             BGaudioSource.loop = true;
             BGaudioSource.Play();
         }
@@ -79,16 +86,45 @@ public class SoundManage : MonoBehaviour
     {
         if (soundDictionary.TryGetValue(sound, out AudioClip clip))
         {
-            EffectAudioSource.PlayOneShot(clip, effectVolume);  // Use effectAudioSource here
+            EffectAudioSource.PlayOneShot(clip, effectVolume * masterVolume);
         }
         else
         {
             Debug.LogWarning($"Sound {sound} not found!");
         }
     }
+
     public void UpdateVolumes()
     {
-        BGaudioSource.volume = bgVolume; // for background music
-        EffectAudioSource.volume = effectVolume; // for sound effects
+        BGaudioSource.volume = bgVolume * masterVolume;
+        EffectAudioSource.volume = effectVolume * masterVolume;
+    }
+
+    public void SaveSettings()
+    {
+        PlayerPrefs.SetFloat("MasterVolume", masterVolume);
+        PlayerPrefs.SetFloat("BGVolume", bgVolume);
+        PlayerPrefs.SetFloat("EffectVolume", effectVolume);
+        PlayerPrefs.Save();  
+    }
+
+    public void LoadSettings()
+    {
+        if (PlayerPrefs.HasKey("MasterVolume"))
+            masterVolume = PlayerPrefs.GetFloat("MasterVolume");
+
+        if (PlayerPrefs.HasKey("BGVolume"))
+            bgVolume = PlayerPrefs.GetFloat("BGVolume");
+
+        if (PlayerPrefs.HasKey("EffectVolume"))
+            effectVolume = PlayerPrefs.GetFloat("EffectVolume");
+
+        UpdateVolumes();  
+    }
+    //เปลี่ยนเพลง
+    public void ChangeToMusic()
+    {
+       BGaudioSource.Stop(); 
+       PlayBackgroundMusic(Sound.Music1); 
     }
 }
