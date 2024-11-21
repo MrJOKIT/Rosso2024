@@ -475,6 +475,8 @@ GameObject:
   - component: {fileID: 5132409856165259308}
   - component: {fileID: 6484183459520965145}
   - component: {fileID: 2063314937431447355}
+  - component: {fileID: 3840912808515874037}
+  - component: {fileID: 6691821824451760490}
   m_Layer: 0
   m_Name: EnemySprite
   m_TagString: Untagged
@@ -582,6 +584,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 925c84e6659c2284cbda8304cba65acb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3840912808515874037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909134265450959571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b93eac6bfdb2a4ab3616ebdf9aff98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeMagnitude: 0.2
+  dampingSpeed: 1
+  onShake: 0
+  enemyHost: {fileID: 4105074982136015885}
+  effectName: 0
+--- !u!114 &6691821824451760490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909134265450959571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 86d84fea96f1fee4a87aa7a58d7302d1, type: 2}
+    - {fileID: 11400000, guid: da909c58d21ceaa4592248285905138f, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3840912808515874037}
+          m_TargetAssemblyTypeName: EnemyAttacker, Assembly-CSharp
+          m_MethodName: Focus
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3840912808515874037}
+          m_TargetAssemblyTypeName: EnemyAttacker, Assembly-CSharp
+          m_MethodName: UnFocus
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1119838918483221931
 GameObject:
   m_ObjectHideFlags: 0
@@ -5895,6 +5960,7 @@ Transform:
   - {fileID: 6429970611301861293}
   - {fileID: 7291931354862353383}
   - {fileID: 6242236833104438454}
+  - {fileID: 5373017925096965319}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4105074982136015885
@@ -5910,6 +5976,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 0}
+  focusTransform: {fileID: 5373017925096965319}
   enemyTurnData:
     isPlayer: 0
     unitTransform: {fileID: 0}
@@ -5961,6 +6028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 0}
+  focusTransform: {fileID: 0}
   enemyTurnData:
     isPlayer: 0
     unitTransform: {fileID: 0}
@@ -6102,7 +6170,7 @@ PlayableDirector:
   m_Enabled: 1
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: 51349e8114dbab94b8b27d60252c2ca5, type: 2}
-  m_InitialState: 1
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
@@ -6112,7 +6180,9 @@ PlayableDirector:
   - key: {fileID: 5702636999445375175, guid: 51349e8114dbab94b8b27d60252c2ca5, type: 2}
     value: {fileID: 6484183459520965145}
   - key: {fileID: 7717156175707490353, guid: 51349e8114dbab94b8b27d60252c2ca5, type: 2}
-    value: {fileID: 0}
+    value: {fileID: 6691821824451760490}
+  - key: {fileID: 4132371665871174290, guid: 51349e8114dbab94b8b27d60252c2ca5, type: 2}
+    value: {fileID: 5635431936281220737}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &5635431936281220737
@@ -6145,3 +6215,34 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!1 &9197133822445386976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5373017925096965319}
+  m_Layer: 7
+  m_Name: FocusPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5373017925096965319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9197133822445386976}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -3.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6779046353836863007}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

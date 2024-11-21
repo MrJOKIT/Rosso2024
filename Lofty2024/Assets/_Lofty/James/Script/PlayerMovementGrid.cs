@@ -60,6 +60,13 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public float turnSpeed = 20f;
     [SerializeField] private int defaultDamage;
     [SerializeField] private int damage;
+
+    public int DefaultDamage
+    {
+        get { return defaultDamage; }
+        set { defaultDamage = value; }
+    }
+    
     public List<Button> playerInteractButton;
 
     [Space(10)] 
@@ -69,6 +76,12 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public int effectiveTurnTime = 1;
     [SerializeField] private int knockBackRange = 1;
     [SerializeField] private int defaultKnockBackRange = 1;
+    public int DefaultKnockBackRange
+    {
+        get { return defaultKnockBackRange; }
+        set { defaultKnockBackRange = value; }
+    }
+    
 
     [Tab("Movement")] 
     [Header("Player Input")]
@@ -81,6 +94,13 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [SerializeField] private int defaultMovePoint = 2;
     [SerializeField] private int movePoint;
     [SerializeField] private int maxMovePoint;
+    public int DefaultMovePoint
+    {
+        get { return defaultMovePoint; }
+        set { defaultMovePoint = value; }
+    }
+    
+    
     public bool rabbitPaws;
     public bool inBattle;
     [Space(5)] 
@@ -310,7 +330,23 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         }
                         else
                         {
-                            playerAnimator.SetTrigger("RangeAttack");
+                            if (hit.transform.position.x < transform.position.x)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackLeft");
+                            }
+                            else if (hit.transform.position.x > transform.position.x)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackRight");
+                            }
+                            else if (hit.transform.position.z > transform.position.z)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackLeft");
+                            }
+                            else if (hit.transform.position.z < transform.position.z)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackRight");
+                            }
+                            //playerAnimator.SetTrigger("RangeAttack");
                         }
                         break;
                     case GridState.Empty:
@@ -1231,9 +1267,9 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     public void UpgradeStats()
     {
-        defaultDamage += GetComponent<PlayerArtifact>().Damage;
-        defaultMovePoint += GetComponent<PlayerArtifact>().ActionPoint;
-        defaultKnockBackRange += GetComponent<PlayerArtifact>().KnockBackRange;
+        defaultDamage = damage + GetComponent<PlayerArtifact>().Damage;
+        defaultMovePoint = maxMovePoint + GetComponent<PlayerArtifact>().ActionPoint;
+        defaultKnockBackRange = knockBackRange + GetComponent<PlayerArtifact>().KnockBackRange;
 
         damage = defaultDamage;
         maxMovePoint = defaultMovePoint;

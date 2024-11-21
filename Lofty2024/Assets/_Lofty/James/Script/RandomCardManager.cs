@@ -861,5 +861,7 @@ public class RandomCardManager : MonoBehaviour
         player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
         player.GetComponent<PlayerArtifact>().ResultArtifact();
         isRandom = false;
+        GetComponent<GameDataManager>().SaveCardManager();
+        GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().SavePlayerData();
     }
 }

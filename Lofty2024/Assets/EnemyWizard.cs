@@ -56,8 +56,6 @@ public class EnemyWizard : Enemy
                         if (summonCooldownCounter >= summonCooldown)
                         {
                             summonState = SummonState.OnSummon;
-                            //enemyAnimator.SetBool("OnSummon",true);
-                            //EndTurn();
                             GetComponent<PlayableDirector>().Play();
                         }
                         else
@@ -529,5 +527,6 @@ public class EnemyWizard : Enemy
         summonCooldownCounter = 0;
         summonState = SummonState.OnPrepareSummon;
         enemyAnimator.SetBool("OnSummon",false);
+        EndTurn();
     }
 }

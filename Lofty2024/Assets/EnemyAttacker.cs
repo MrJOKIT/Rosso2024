@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,56 +12,43 @@ public class EnemyAttacker : MonoBehaviour
     public float dampingSpeed = 1.0f;
     private Vector3 initialPosition;
     public bool onShake;
-    public Transform cameraTrans;
     public Enemy enemyHost;
     public EffectName effectName;
     
-    void Start()
-    {
-        initialPosition = cameraTrans.localPosition;
-    }
     public void AttackPlayer()
     {
         enemyHost.targetTransform.GetComponent<Player>().TakeDamage(enemyHost.enemyData.damage);
         VisualEffectManager.Instance.CallEffect(effectName,enemyHost.targetTransform);
-        enemyHost.EndTurn();
-        if (onShake)
-        {
-            return;
-        }
-
-        StartCoroutine(Shake());
     }
-    
-    IEnumerator Shake()
+
+    private void Update()
     {
-        onShake = true;
-        float elapsed = 0.0f;
-
-        while (elapsed < shakeDuration)
+        if (enemyHost.targetTransform.position.x < transform.position.x)
         {
-            // Create a random shake offset
-            Vector3 randomOffset = Random.insideUnitSphere * shakeMagnitude;
-
-            // Apply the shake to the camera position
-            cameraTrans.localPosition = initialPosition + randomOffset;
-
-            // Increment elapsed time
-            elapsed += Time.deltaTime;
-
-            // Wait until the next frame
-            yield return null;
+            GetComponent<SpriteRenderer>().flipX = true;
         }
-        
-        while (elapsed > 0)
+        else if (enemyHost.targetTransform.position.x > transform.position.x)
         {
-            cameraTrans.localPosition = Vector3.Lerp(cameraTrans.localPosition, initialPosition, dampingSpeed * Time.deltaTime);
-            elapsed -= Time.deltaTime;
-
-            yield return null;
+            GetComponent<SpriteRenderer>().flipX = true;
         }
-        
-        cameraTrans.localPosition = initialPosition;
-        onShake = false;
+        else if (enemyHost.targetTransform.position.z > transform.position.z)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+        else if (enemyHost.targetTransform.position.z < transform.position.z)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+    }
+
+    public void Focus()
+    {
+        CameraManager.Instance.FocusZoom();
+    }
+
+    public void UnFocus()
+    {
+        CameraManager.Instance.UnFocusZoom();
+        enemyHost.EndTurn();
     }
 }

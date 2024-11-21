@@ -44,6 +44,7 @@ public class GameManager : Singeleton<GameManager>
         gateObject.GetComponent<GateToNextScene>().SetNextScene(sceneName);
         cardSelectCanvas.SetActive(true);
         GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.All,4);
+        currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().SavePlayerData();
     }
 
     public void RoomClear()
@@ -64,6 +65,7 @@ public class GameManager : Singeleton<GameManager>
     public void GameOver()
     {
         Debug.Log("Game Over");
+        currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().FormatPlayerData();
         deadCanvas.SetActive(true);
     }
 

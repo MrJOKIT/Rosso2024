@@ -650,12 +650,42 @@ MonoBehaviour:
   m_Events:
     m_Signals:
     - {fileID: 11400000, guid: 27ab268c5eb6b174a87452c7d9c6a300, type: 2}
+    - {fileID: 11400000, guid: 86d84fea96f1fee4a87aa7a58d7302d1, type: 2}
+    - {fileID: 11400000, guid: da909c58d21ceaa4592248285905138f, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 6109457766652315438}
           m_TargetAssemblyTypeName: EnemyAttacker, Assembly-CSharp
           m_MethodName: AttackPlayer
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6109457766652315438}
+          m_TargetAssemblyTypeName: EnemyAttacker, Assembly-CSharp
+          m_MethodName: Focus
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6109457766652315438}
+          m_TargetAssemblyTypeName: EnemyAttacker, Assembly-CSharp
+          m_MethodName: UnFocus
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -4223,6 +4253,37 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   gridCheck: 0
+--- !u!1 &6548892973210834584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5693324392004847354}
+  m_Layer: 7
+  m_Name: FocusPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5693324392004847354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6548892973210834584}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -3.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6779046353836863007}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6667486929650330365
 GameObject:
   m_ObjectHideFlags: 0
@@ -5912,6 +5973,7 @@ Transform:
   - {fileID: 2827602034614999267}
   - {fileID: 6429970611301861293}
   - {fileID: 3845336036910663632}
+  - {fileID: 5693324392004847354}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7017859661631850910
@@ -5927,6 +5989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 0}
+  focusTransform: {fileID: 5693324392004847354}
   enemyTurnData:
     isPlayer: 0
     unitTransform: {fileID: 0}

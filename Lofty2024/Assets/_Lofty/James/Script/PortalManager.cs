@@ -21,6 +21,7 @@ public class PortalManager : Singeleton<PortalManager>
     [SerializeField] private int gameLoopCount;
     public int firstStageNumber = 1;
     public int secondStageNumber = 1;
+    public int stageClearCount;
     [Space(10)]
     [SerializeField] private int roomCount;
     [Space(10)]
@@ -77,6 +78,13 @@ public class PortalManager : Singeleton<PortalManager>
     [Space(10)] 
     public float loadTimeMax;
     private float loadTimeCounter;
+
+
+    public override void Awake()
+    {
+        base.Awake();
+        GetComponent<GameDataManager>().LoadProgress();
+    }
 
     private void Start()
     {
@@ -338,13 +346,16 @@ public class PortalManager : Singeleton<PortalManager>
     }
     private void ProgressBarUpdate()
     { 
-        loadTimeCounter += Time.deltaTime;
         Transform target = progressList[secondStageNumber - 1].barPoint;
-        rossoUI.position = Vector3.MoveTowards(rossoUI.position,target.position, 100 * Time.deltaTime);
-        if (rossoUI.position == target.position)
+        if (rossoUI.position == target.position || loadTimeCounter > 20)
         {
             progressState = ProgressState.ProgressSuccess;
             StartCoroutine(UpdateProgressSuccess());
+        }
+        else
+        {
+            loadTimeCounter += Time.deltaTime;
+            rossoUI.position = Vector3.MoveTowards(rossoUI.position,target.position, 100 * Time.deltaTime);
         }
     }
 
@@ -370,6 +381,12 @@ public class PortalManager : Singeleton<PortalManager>
             firstStageNumber += 1;
             secondStageNumber = 1;
         }
+
+        stageClearCount += 1;
         
+        GetComponent<GameDataManager>().SaveProgress();
+
     }
+
+    
 }

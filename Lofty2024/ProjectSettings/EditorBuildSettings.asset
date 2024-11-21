@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/_Lofty/Jo/Scenes/Menu.unity
     guid: 99ac107abd230d54bbd49c531aefffc7
   - enabled: 1
-    path: Assets/_Lofty/Jo/Scenes/Game.unity
-    guid: 0653021f97a11fa4dbe35990421b97a9
+    path: Assets/James/Scenes/Lobby.unity
+    guid: 253710ed2903f4d49a732c3806e03b00
+  - enabled: 1
+    path: Assets/_Lofty/James/Scene/JamesLab.unity
+    guid: 0f97394ae39dca6468658b0fdfc99eb6
   m_configObjects: {}
