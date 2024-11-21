@@ -386,6 +386,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 676703756940453559, guid: e5c7388ffb79e3b46af3a6b25defc490,
+        type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 676703756940453559, guid: e5c7388ffb79e3b46af3a6b25defc490,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 1186581738467841725, guid: e5c7388ffb79e3b46af3a6b25defc490,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -404,11 +414,6 @@ PrefabInstance:
     - target: {fileID: 1186581738467841725, guid: e5c7388ffb79e3b46af3a6b25defc490,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3055074183015207821, guid: e5c7388ffb79e3b46af3a6b25defc490,
-        type: 3}
-      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3404377275054059540, guid: e5c7388ffb79e3b46af3a6b25defc490,
@@ -481,45 +486,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4153554362618222922, guid: e5c7388ffb79e3b46af3a6b25defc490,
-        type: 3}
-      propertyPath: m_Name
-      value: Next
-      objectReference: {fileID: 0}
     - target: {fileID: 4587719961998890928, guid: e5c7388ffb79e3b46af3a6b25defc490,
         type: 3}
       propertyPath: m_Name
       value: UIJoMainScene
-      objectReference: {fileID: 0}
-    - target: {fileID: 5544163790237320029, guid: e5c7388ffb79e3b46af3a6b25defc490,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6056246717589784070, guid: e5c7388ffb79e3b46af3a6b25defc490,
-        type: 3}
-      propertyPath: m_Name
-      value: PauseSetting
-      objectReference: {fileID: 0}
-    - target: {fileID: 6148576154663713069, guid: e5c7388ffb79e3b46af3a6b25defc490,
-        type: 3}
-      propertyPath: soundClips.Array.data[2].sound
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6148576154663713069, guid: e5c7388ffb79e3b46af3a6b25defc490,
-        type: 3}
-      propertyPath: soundClips.Array.data[2].isBackground
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550740127595510177, guid: e5c7388ffb79e3b46af3a6b25defc490,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: Menu
-      objectReference: {fileID: 0}
-    - target: {fileID: 7814197570355397035, guid: e5c7388ffb79e3b46af3a6b25defc490,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8339401480597597783, guid: e5c7388ffb79e3b46af3a6b25defc490,
         type: 3}
@@ -582,8 +552,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 7814197570355397035, guid: e5c7388ffb79e3b46af3a6b25defc490, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5c7388ffb79e3b46af3a6b25defc490, type: 3}

@@ -4,12 +4,9 @@ using UnityEngine.SceneManagement;
 
 public enum Sound
 {
-    //เอฟเฟค
     Effect1,
     Effect2,
     Effect3,
-    
-    //เพลง
     Music1,
     Music2,
     EndCredits
@@ -44,18 +41,17 @@ public class SoundManage : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);  
-            InitializeSoundDictionary(); 
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject);  
+            Destroy(gameObject);
         }
 
-        // Ensure audio sources are correctly initialized
         InitializeAudioSources();
-        // Register to handle scene load events
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        InitializeSoundDictionary(); 
     }
 
     void InitializeSoundDictionary()
@@ -69,7 +65,7 @@ public class SoundManage : MonoBehaviour
 
     void Start()
     {
-        LoadSettings();  
+        LoadSettings();  // โหลดค่าการตั้งค่าเสียง
         PlayBackgroundMusic(Sound.Music1);  
     }
 
@@ -77,19 +73,18 @@ public class SoundManage : MonoBehaviour
     {
         if (BGaudioSource == null)
         {
-            BGaudioSource = GetComponent<AudioSource>(); // Assuming you have the AudioSource component attached
+            BGaudioSource = GetComponent<AudioSource>();
         }
         if (EffectAudioSource == null)
         {
-            EffectAudioSource = GetComponent<AudioSource>(); // Ensure you have both AudioSource components
+            EffectAudioSource = GetComponent<AudioSource>();
         }
     }
 
-    // Called when the scene is loaded
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         InitializeAudioSources();
-        UpdateVolumes(); // Reapply volume settings after scene load
+        UpdateVolumes();  // อัปเดตระดับเสียงเมื่อเปลี่ยนซีน
     }
 
     public void PlayBackgroundMusic(Sound musicType = Sound.Music1)
@@ -97,7 +92,7 @@ public class SoundManage : MonoBehaviour
         if (soundDictionary.TryGetValue(musicType, out AudioClip clip))
         {
             BGaudioSource.clip = clip;
-            BGaudioSource.volume = bgVolume * masterVolume;
+            BGaudioSource.volume = bgVolume * masterVolume;  // คำนวณระดับเสียงจริง
             BGaudioSource.loop = true;
             BGaudioSource.Play();
         }
@@ -111,7 +106,7 @@ public class SoundManage : MonoBehaviour
     {
         if (soundDictionary.TryGetValue(sound, out AudioClip clip))
         {
-            EffectAudioSource.PlayOneShot(clip, effectVolume * masterVolume);
+            EffectAudioSource.PlayOneShot(clip, effectVolume * masterVolume);  // คำนวณระดับเสียงจริง
         }
         else
         {
@@ -121,8 +116,8 @@ public class SoundManage : MonoBehaviour
 
     public void UpdateVolumes()
     {
-        BGaudioSource.volume = bgVolume * masterVolume;
-        EffectAudioSource.volume = effectVolume * masterVolume;
+        BGaudioSource.volume = bgVolume * masterVolume;  // อัปเดตระดับเสียงของ BG
+        EffectAudioSource.volume = effectVolume * masterVolume;  // อัปเดตระดับเสียงของ Effect
     }
 
     public void SaveSettings()
@@ -130,7 +125,7 @@ public class SoundManage : MonoBehaviour
         PlayerPrefs.SetFloat("MasterVolume", masterVolume);
         PlayerPrefs.SetFloat("BGVolume", bgVolume);
         PlayerPrefs.SetFloat("EffectVolume", effectVolume);
-        PlayerPrefs.Save();  
+        PlayerPrefs.Save();  // บันทึกค่าที่ตั้งไว้
     }
 
     public void LoadSettings()
@@ -144,13 +139,17 @@ public class SoundManage : MonoBehaviour
         if (PlayerPrefs.HasKey("EffectVolume"))
             effectVolume = PlayerPrefs.GetFloat("EffectVolume");
 
-        UpdateVolumes();  
+        UpdateVolumes();  // อัปเดตค่าระดับเสียงเมื่อโหลดการตั้งค่า
     }
 
-    //เปลี่ยนเพลง
     public void ChangeToMusic()
     {
         BGaudioSource.Stop(); 
-        PlayBackgroundMusic(Sound.Music1); 
+        PlayBackgroundMusic(Sound.Music1);  
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

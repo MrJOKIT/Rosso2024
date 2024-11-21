@@ -13,21 +13,21 @@ public class SettingsManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);  
+            DontDestroyOnLoad(gameObject);  // ทำให้ SettingsManager ไม่ถูกทำลายระหว่างการเปลี่ยนซีน
         }
         else
         {
-            Destroy(gameObject);  
+            Destroy(gameObject);  // ลบตัวเดิมถ้ามีอยู่แล้ว
         }
 
-        LoadSettings(); 
+        LoadSettings();  // โหลดการตั้งค่าเมื่อเริ่มต้น
     }
 
     public void SaveSettings()
     {
         PlayerPrefs.SetInt("ResolutionWidth", resolution.x);
         PlayerPrefs.SetInt("ResolutionHeight", resolution.y);
-        PlayerPrefs.SetInt("FPSLimit", isFPSLimited ? limitedFPS : -1); 
+        PlayerPrefs.SetInt("FPSLimit", isFPSLimited ? limitedFPS : -1);  // -1 คือไม่จำกัด FPS
         PlayerPrefs.SetInt("VSyncEnabled", isVSyncEnabled ? 1 : 0);
         PlayerPrefs.Save();
     }
@@ -39,7 +39,7 @@ public class SettingsManager : MonoBehaviour
             resolution = new Vector2Int(PlayerPrefs.GetInt("ResolutionWidth"), PlayerPrefs.GetInt("ResolutionHeight"));
         }
         isFPSLimited = PlayerPrefs.GetInt("FPSLimit", -1) != -1;
-        limitedFPS = PlayerPrefs.GetInt("FPSLimit", 60);  
+        limitedFPS = PlayerPrefs.GetInt("FPSLimit", 60);  // ค่า default 60
         isVSyncEnabled = PlayerPrefs.GetInt("VSyncEnabled", 0) == 1;
     }
 
