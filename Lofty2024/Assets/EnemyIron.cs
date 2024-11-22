@@ -32,6 +32,7 @@ public class EnemyIron : Enemy
         
         if (onTurn == false)
         {
+            EnemyAlertCheck();
             return;
         }
         switch (GetComponent<EnemyMovementGrid>().currentState)
@@ -555,19 +556,42 @@ public class EnemyIron : Enemy
                     GridMover gridMover = hit.collider.GetComponent<GridMover>();
                     if (gridMover.gridState == GridState.OnPlayer)
                     {
-                        gridMover.isAlert = true;
                         playerInRange = true;
                         break;
                     }
                     else
                     {
-                        gridMover.isAlert = false;
                         playerInRange = false;
                     }
                 }
             }
         }
         
+    }
+    
+    private void EnemyAlertCheck()
+    {
+        foreach (Transform combatCheck in combatChecker)
+        {
+            Ray ray = new Ray(combatCheck.position,Vector3.down);
+            RaycastHit hit;
+            if (Physics.Raycast(ray.origin,Vector3.down,out hit,gridLayer))
+            {
+                if (hit.collider.GetComponent<GridMover>() != null)
+                {
+                    GridMover gridMover = hit.collider.GetComponent<GridMover>();
+                    if (gridMover.gridState == GridState.OnPlayer)
+                    {
+                        gridMover.isAlert = true;
+                        break;
+                    }
+                    else
+                    {
+                        gridMover.isAlert = false;
+                    }
+                }
+            }
+        }
     }
     
     #endregion

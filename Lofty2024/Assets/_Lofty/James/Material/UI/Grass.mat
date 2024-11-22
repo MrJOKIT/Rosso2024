@@ -538,11 +538,11 @@ Material:
     - _VibrateFrequency: 100
     - _VibrateOffset: 0.04
     - _VibrateRotation: 4
-    - _WiggleFade: 1
+    - _WiggleFade: 0.6
     - _WiggleFixedGroundToggle: 0
-    - _WiggleFrequency: 2
-    - _WiggleOffset: 0.02
-    - _WiggleSpeed: 2
+    - _WiggleFrequency: 2.5
+    - _WiggleOffset: 0.015
+    - _WiggleSpeed: 1.5
     - _WindFlip: 0
     - _WindHighQualityNoise: 0
     - _WindIsParallax: 0

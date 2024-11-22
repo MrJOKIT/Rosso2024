@@ -535,13 +535,11 @@ public class EnemyBomber : Enemy
                     GridMover gridMover = hit.collider.GetComponent<GridMover>();
                     if (gridMover.gridState == GridState.OnPlayer)
                     {
-                        gridMover.isAlert = true;
                         playerInRange = true;
                         break;
                     }
                     else
                     {
-                        gridMover.isAlert = false;
                         playerInRange = false;
                     }
                 }
@@ -549,4 +547,5 @@ public class EnemyBomber : Enemy
         }
         
     }
+   
 }

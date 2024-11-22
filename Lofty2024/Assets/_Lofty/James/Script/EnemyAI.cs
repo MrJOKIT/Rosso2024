@@ -29,11 +29,14 @@ public class EnemyAI : Enemy
     {
         ChangeGridMoverUnder();
         CheckMoveHandle();
-       
+        EnemyCombatHandle();
+        EnemyAlertCheck();
         if (onTurn == false)
         {
+            
             return;
         }
+        
         switch (GetComponent<EnemyMovementGrid>().currentState)
         {
             case MovementState.Idle: 
@@ -46,10 +49,9 @@ public class EnemyAI : Enemy
                 }
                 else
                 {
-                    EnemyCombatHandle();
                     if (playerInRange)
                     {
-                        onTurn = false;
+                        //onTurn = false;
                         GetComponent<PlayableDirector>().Play();
                         /*enemyAnimator.SetTrigger("Attack");
                         EndTurn();*/
@@ -544,6 +546,11 @@ public class EnemyAI : Enemy
 
     private void EnemyCombatHandle()
     {
+        //playerInRange = Physics.Raycast(transform.position,Vector3.)
+        
+    }
+    private void EnemyAlertCheck()
+    {
         foreach (Transform combatCheck in combatChecker)
         {
             Ray ray = new Ray(combatCheck.position,Vector3.down);
@@ -556,16 +563,16 @@ public class EnemyAI : Enemy
                     if (gridMover.gridState == GridState.OnPlayer)
                     {
                         gridMover.isAlert = true;
-                        playerInRange = true;
-                        break;
+                        
                     }
-
-                    gridMover.isAlert = false;
-                    playerInRange = false;
+                    else
+                    {
+                        gridMover.isAlert = false;
+                    }
+                    
                 }
             }
         }
-        
     }
     
     #endregion

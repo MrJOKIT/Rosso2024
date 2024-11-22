@@ -50,5 +50,6 @@ public class EnemyAttacker : MonoBehaviour
     {
         CameraManager.Instance.UnFocusZoom();
         enemyHost.EndTurn();
+        
     }
 }
