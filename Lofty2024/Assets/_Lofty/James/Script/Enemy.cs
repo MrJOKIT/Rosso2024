@@ -244,7 +244,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
             return;
         }
         enemyAnimator.SetTrigger("TakeDamage");
-        //CameraManager.Instance.TriggerShake();
+        CameraManager.Instance.TriggerShake();
         enemyHealth -= damage;
         if (enemyHealth <= 0)
         {

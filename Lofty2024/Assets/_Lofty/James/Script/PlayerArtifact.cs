@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using VInspector;
 
 [Serializable]
@@ -17,6 +18,12 @@ public class CardArtifact
     }
 }
 
+public enum ClassType
+{
+    SwordKnight,
+    BladeMaster,
+    ShootingCaster,
+}
 public class PlayerArtifact : MonoBehaviour
 {
     [Tab("Artifact")]
@@ -84,6 +91,8 @@ public class PlayerArtifact : MonoBehaviour
     public bool EyeKing => eyeKing;
     [SerializeField] private bool deathDoor;
 
+    [Tab("Class Unlock")] 
+
     public bool DeathDoor
     {
         get { return deathDoor; }
@@ -102,6 +111,17 @@ public class PlayerArtifact : MonoBehaviour
     [SerializeField] private bool ironBody;
     public bool IronBody => ironBody;
 
+    [Tab("Class Unlock UI")] 
+    public GameObject crownObject;
+    public Animator crownAnimator;
+    public bool firstUnlockSuccess;
+    [Space(10)] 
+    public Image playerProfile;
+    public Sprite classicProfile;
+    public Sprite swordKnightProfile;
+    public Sprite bladeMasterProfile;
+    public Sprite shootCasterProfile;
+    
     [Space(20)] [Tab("Mode Active")] [Space(10)] 
     [Header("Link UI")]
     public TextMeshProUGUI swordKnightTier1; 
@@ -150,6 +170,7 @@ public class PlayerArtifact : MonoBehaviour
         //Destroy(newArtifact.GameObject());
         SortingArtifactType(newArtifact);
         CardLinkUpdate();
+        CrownClassHandle();
     }
     
     public void RemoveArtifact(ArtifactData removeArtifact)
@@ -469,6 +490,52 @@ public class PlayerArtifact : MonoBehaviour
         GameManager.Instance.GetComponent<RandomCardManager>().haveArtifact = false;
     }
 
+    private void CrownClassHandle()
+    {
+        if (firstUnlockSuccess == false)
+        {
+            if (swordKnightTier1)
+            {
+                playerProfile.sprite = swordKnightProfile;
+                crownObject.SetActive(true);
+                crownAnimator.SetBool("BlueCrown",false);
+                crownAnimator.SetBool("RedCrown",false);
+                crownAnimator.SetBool("RainbowCrown",false);
+                crownAnimator.SetBool("YellowCrown",true);
+                
+                firstUnlockSuccess = true;
+            }
+            else if (bladeMasterTier1)
+            {
+                playerProfile.sprite = bladeMasterProfile;
+                crownObject.SetActive(true);
+                crownAnimator.SetBool("BlueCrown",false);
+                crownAnimator.SetBool("YellowCrown",false);
+                crownAnimator.SetBool("RainbowCrown",false);
+                crownAnimator.SetBool("RedCrown",true);
+                
+                firstUnlockSuccess = true;
+            }
+            else if (shootCasterTier1)
+            {
+                playerProfile.sprite = shootCasterProfile;
+                crownObject.SetActive(true);
+                crownAnimator.SetBool("YellowCrown",false);
+                crownAnimator.SetBool("RedCrown",false);
+                crownAnimator.SetBool("RainbowCrown",false);
+                crownAnimator.SetBool("BlueCrown",true);
+                
+                firstUnlockSuccess = true;
+            }
+
+            
+        }
+        else
+        {
+            
+        }
+        
+    }
     public void ActiveStartRoom()
     {
         

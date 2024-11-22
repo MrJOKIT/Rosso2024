@@ -20,6 +20,7 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private int maxHealth;
     [SerializeField] private int playerHealthTemp;
     [SerializeField] private int playerHealth;
+    public int PlayerHealth => playerHealth;
     [SerializeField] private int takeDamageCount = 0;
     public bool isDead;
 
@@ -34,7 +35,15 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private List<HealthUI> healthUI;
     [SerializeField] private List<HealthUI> healthTempUI;
     [Header("Alert")] 
-    [SerializeField] private LayerMask gridMoverLayer;
+    [SerializeField] private LayerMask enemyLayer;
+    public bool enemyForward;
+    public bool enemyForwardLeft;
+    public bool enemyForwardRight;
+    public bool enemyBackward;
+    public bool enemyBackwardLeft;
+    public bool enemyBackwardRight;
+    public bool enemyLeft;
+    public bool enemyRight;
     [SerializeField] private GameObject alertObject;
     [SerializeField] private GameObject alertObjectTwo;
     
@@ -66,30 +75,33 @@ public class Player : MonoBehaviour, ITakeDamage
 
     private void AlertChecker()
     {
-        Ray ray = new Ray(transform.position, Vector3.down);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, gridMoverLayer))
-        {
-            if (hit.transform.GetComponent<GridMover>() != null)
-            {
-                alertObject.SetActive(hit.transform.GetComponent<GridMover>().isAlert);
-                alertObjectTwo.SetActive(hit.transform.GetComponent<GridMover>().isAlert);
-            }
-        }
-    }
+        //Forward Check
+        enemyForward = Physics.Raycast(transform.position, Vector3.forward, 1,enemyLayer);
+        enemyForwardLeft = Physics.Raycast(transform.position, new Vector3(-1,0,1), 1,enemyLayer);
+        enemyForwardRight = Physics.Raycast(transform.position, new Vector3(1, 0, 1), 1,enemyLayer);
+       
+        //Backward Check
+        enemyBackward = Physics.Raycast(transform.position, Vector3.back, 1, enemyLayer);
+        enemyBackwardLeft = Physics.Raycast(transform.position, new Vector3(-1, 0, -1), 1, enemyLayer);
+        enemyBackwardRight = Physics.Raycast(transform.position, new Vector3(1, 0, -1), 1, enemyLayer);
+       
+        //Left & Right
+        enemyLeft = Physics.Raycast(transform.position, Vector3.left, 1, enemyLayer);
+        enemyRight = Physics.Raycast(transform.position, Vector3.right, 1, enemyLayer);
 
-    public void AlertFalseCheck()
-    {
-        Ray ray = new Ray(transform.position, Vector3.down);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, gridMoverLayer))
+
+        if (enemyForward || enemyForwardLeft || enemyForwardRight || enemyBackward || enemyBackwardLeft || enemyBackwardRight || enemyLeft || enemyRight)
         {
-            if (hit.transform.GetComponent<GridMover>() != null)
-            {
-                hit.transform.GetComponent<GridMover>().isAlert = false;
-            }
+            alertObject.SetActive(true);
+            alertObjectTwo.SetActive(true);   
+        }
+        else if (!enemyForward && !enemyForwardLeft && !enemyForwardRight && !enemyBackward && !enemyBackwardLeft && !enemyBackwardRight && !enemyLeft && !enemyRight)
+        {
+            alertObject.SetActive(false);
+            alertObjectTwo.SetActive(false);
         }
     }
+    
 
     private void PlayerDeadHandle()
     {
@@ -145,7 +157,7 @@ public class Player : MonoBehaviour, ITakeDamage
     
     public void TakeDamage(int damage)
     {
-        //CameraManager.Instance.TriggerShake();
+        CameraManager.Instance.TriggerShake();
         
         if (haveShield)
         {
@@ -360,6 +372,53 @@ public class Player : MonoBehaviour, ITakeDamage
             }
         }
         
+    }
+
+    public void PlayerKnockBack(Transform center,int knockBackRange)
+    {
+        //forward
+        if (center.position.z < transform.position.z && Mathf.Approximately(center.position.x, transform.position.x))
+        {
+            //knock back forward
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + knockBackRange);
+        }
+        else if (center.position.z < transform.position.z && center.position.x < transform.position.x)
+        {
+            //knock back forward left
+            transform.position = new Vector3(transform.position.x - knockBackRange, transform.position.y, transform.position.z + knockBackRange);
+        }
+        else if (center.position.z < transform.position.z && center.position.x > transform.position.x)
+        {
+            //knock back forward right
+            transform.position = new Vector3(transform.position.x + knockBackRange, transform.position.y, transform.position.z + knockBackRange);
+        }
+        //backward
+        if (center.position.z > transform.position.z && Mathf.Approximately(center.position.x, transform.position.x))
+        {
+            //knock back backward
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - knockBackRange);
+        }
+        else if (center.position.z > transform.position.z && center.position.x > transform.position.x)
+        {
+            //knock back backward left
+            transform.position = new Vector3(transform.position.x - knockBackRange, transform.position.y, transform.position.z - knockBackRange);
+        }
+        else if (center.position.z > transform.position.z && center.position.x < transform.position.x)
+        {
+            //knock back backward right
+            transform.position = new Vector3(transform.position.x + knockBackRange, transform.position.y, transform.position.z - knockBackRange);
+        }
+        
+        //left
+        if (center.position.x > transform.position.x && Mathf.Approximately(center.position.z, transform.position.z))
+        {
+            transform.position = new Vector3(transform.position.x - knockBackRange, transform.position.y, transform.position.z);
+        }
+        //right
+        if (center.position.x < transform.position.x && Mathf.Approximately(center.position.z, transform.position.z))
+        {
+            transform.position = new Vector3(transform.position.x + knockBackRange, transform.position.y, transform.position.z);
+        }
     }
     public void SavePlayerData()
     {

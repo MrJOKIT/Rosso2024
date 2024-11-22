@@ -18,4 +18,4 @@ MonoBehaviour:
   enemyMaxHealth: 1
   enemyHealth: 1
   damage: 0
-  enemySpeed: 10
+  enemySpeed: 0

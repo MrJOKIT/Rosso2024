@@ -91,7 +91,10 @@ public class SkillAction : MonoBehaviour
                                 break;
                             case AttackType.KnockBackAttack:
                                 player.TakeDamage(damageCount);
-                                player.GetComponent<PlayerMovementGrid>().KnockBack(transform,knockBackRange);
+                                if (player.PlayerHealth > 0)
+                                {
+                                    player.GetComponent<Player>().PlayerKnockBack(transform,knockBackRange);
+                                }
                                 break;
                             case AttackType.EffectiveAttack:
                                 player.AddCurseStatus(curseType,1);
@@ -129,7 +132,10 @@ public class SkillAction : MonoBehaviour
                                 break;
                             case AttackType.KnockBackAttack:
                                 player.TakeDamage(damageCount);
-                                player.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange);
+                                if (player.PlayerHealth > 0)
+                                {
+                                    player.GetComponent<Player>().PlayerKnockBack(transform,knockBackRange);
+                                }
                                 break;
                             case AttackType.EffectiveAttack:
                                 player.AddCurseStatus(curseType,1);

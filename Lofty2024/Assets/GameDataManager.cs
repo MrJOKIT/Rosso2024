@@ -17,6 +17,7 @@ public class GameDataManager : MonoBehaviour
     {
         FormatProgress();
         FormatCardManager();
+        FormatPlayerData();
     }
     
     #region GameProgress
@@ -61,4 +62,18 @@ public class GameDataManager : MonoBehaviour
         ES3.DeleteKey("CardStock");
     }
     #endregion
+    
+    private void FormatPlayerData()
+    {
+        ES3.DeleteKey("PlayerDefaultHealth");
+        ES3.DeleteKey("PlayerDefaultHealthTemp");
+        ES3.DeleteKey("PlayerCurrentHealth");
+        ES3.DeleteKey("PlayerCurrentHealthTemp");
+        
+        ES3.DeleteKey("PlayerDefaultMovePoint");
+        ES3.DeleteKey("PlayerDefaultDamage");
+        ES3.DeleteKey("PlayerDefaultKnockBackRange");
+        
+        ES3.DeleteKey("ArtifactHave");
+    }
 }

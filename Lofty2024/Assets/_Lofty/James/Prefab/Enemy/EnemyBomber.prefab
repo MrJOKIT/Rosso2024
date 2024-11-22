@@ -5982,15 +5982,17 @@ MonoBehaviour:
   gridLayer:
     serializedVersion: 2
     m_Bits: 8
-  combatChecker:
-  - {fileID: 360837141170042965}
-  - {fileID: 359745219340887300}
-  - {fileID: 6698356810287111128}
-  - {fileID: 1981943399144618550}
-  - {fileID: 3001899083981491206}
-  - {fileID: 8393355383329438581}
-  - {fileID: 3748651310870279}
-  - {fileID: 3609222498801251503}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  enemyForward: 0
+  enemyForwardLeft: 0
+  enemyForwardRight: 0
+  enemyBackward: 0
+  enemyBackwardLeft: 0
+  enemyBackwardRight: 0
+  enemyLeft: 0
+  enemyRight: 0
 --- !u!114 &8556914738638223055
 MonoBehaviour:
   m_ObjectHideFlags: 0

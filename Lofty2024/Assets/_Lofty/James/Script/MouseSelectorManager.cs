@@ -55,7 +55,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
                     {
                         uiCanvas.SetActive(true);
                         selectedEnemy = hit.transform.GetComponent<GridMover>().enemy;
-                        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(selectedEnemy.enemyData.name,selectedEnemy.enemyData.enemySprite,selectedEnemy.enemyHealth);
+                        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(selectedEnemy.enemyData.name,selectedEnemy.enemyData.enemySprite,selectedEnemy.enemyHealth,selectedEnemy.enemyData.damage);
                         CreateHearth(selectedEnemy);
                     }
                     else
@@ -86,7 +86,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
     public void ShowEnemyData(Enemy enemy)
     {
         uiCanvas.SetActive(true);
-        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(enemy.enemyData.name,enemy.enemyData.enemySprite,enemy.enemyHealth);
+        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(enemy.enemyData.name,enemy.enemyData.enemySprite,enemy.enemyHealth,enemy.enemyData.damage);
         CreateHearth(enemy);
     }
     private void CreateHearth(Enemy enemy)

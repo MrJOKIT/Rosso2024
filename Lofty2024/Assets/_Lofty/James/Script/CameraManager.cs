@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using EditorAttributes;
 using TransitionsPlus;
 using UnityEngine;
 using VInspector;
@@ -25,7 +24,6 @@ public class CameraManager : Singeleton<CameraManager>
     public float shakeDuration = 0.5f;
     public float shakeMagnitude = 0.2f;
     public float dampingSpeed = 1.0f;
-    private Vector3 initialPosition;
     public bool onShake;
 
     [Space(20)] [Header("Changing Camera Setting")]
@@ -46,11 +44,6 @@ public class CameraManager : Singeleton<CameraManager>
     public Vector3 offset = new Vector3(1.5f, 2, 1.5f);
     public float smoothSpeed = 0.125f;
     
-    void Start()
-    {
-        initialPosition = transform.localPosition;
-    }
-
     private void Update()
     {
         switch (changingState)
@@ -102,6 +95,7 @@ public class CameraManager : Singeleton<CameraManager>
         }
     }
 
+    [Button("Shake")]
     public void TriggerShake()
     {
         if (onShake)
@@ -148,7 +142,7 @@ public class CameraManager : Singeleton<CameraManager>
             Vector3 randomOffset = Random.insideUnitSphere * shakeMagnitude;
 
             // Apply the shake to the camera position
-            transform.localPosition = initialPosition + randomOffset;
+            transform.localPosition += randomOffset;
 
             // Increment elapsed time
             elapsed += Time.deltaTime;
@@ -157,15 +151,6 @@ public class CameraManager : Singeleton<CameraManager>
             yield return null;
         }
         
-        while (elapsed > 0)
-        {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, initialPosition, dampingSpeed * Time.deltaTime);
-            elapsed -= Time.deltaTime;
-
-            yield return null;
-        }
-        
-        transform.localPosition = initialPosition;
         onShake = false;
     }
     
@@ -199,7 +184,7 @@ public class CameraManager : Singeleton<CameraManager>
         zoomType = ZoomType.ZoomOut;
         SetCameraTarget(GameManager.Instance.currentRoomPos);
         changingState = CameraChangingState.OnZooming;
-
+        
     }
 
     [ContextMenu("Test Zoom")]

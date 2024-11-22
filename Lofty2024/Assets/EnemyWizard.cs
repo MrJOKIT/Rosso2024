@@ -517,7 +517,6 @@ public class EnemyWizard : Enemy
 
     #endregion
     
-    
 
     private void EnemySummon()
     {

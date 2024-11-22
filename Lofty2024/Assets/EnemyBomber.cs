@@ -22,7 +22,15 @@ public class EnemyBomber : Enemy
     [Space(10)]
     public bool playerInRange;
     public LayerMask gridLayer;
-    public List<Transform> combatChecker;
+    public LayerMask enemyLayer;
+    public bool enemyForward;
+    public bool enemyForwardLeft;
+    public bool enemyForwardRight;
+    public bool enemyBackward;
+    public bool enemyBackwardLeft;
+    public bool enemyBackwardRight;
+    public bool enemyLeft;
+    public bool enemyRight;
 
     private void Start()
     {
@@ -33,12 +41,11 @@ public class EnemyBomber : Enemy
     {
         //ChangeGridMoverUnder();
         //CheckMoveHandle();
-        ;
+        ;EnemyCombatHandle();
         if (onTurn == false)
         {
             return;
         }
-        
         switch (GetComponent<EnemyMovementGrid>().currentState)
         {
             case MovementState.Idle: 
@@ -53,10 +60,9 @@ public class EnemyBomber : Enemy
                 {
                     if (bomberState == BomberState.OnHolding)
                     {
-                        EnemyCombatHandle();
                         if (playerInRange)
                         {
-                            onTurn = false;
+                            onTurn = false; 
                             bomberState = BomberState.OnBombing;
                             currentBomber = Instantiate(bomberArea, bombPos);
                             onImmortalObject = true;
@@ -524,26 +530,28 @@ public class EnemyBomber : Enemy
 
     private void EnemyCombatHandle()
     {
-        foreach (Transform combatCheck in combatChecker)
+        //Forward Check
+        enemyForward = Physics.Raycast(transform.position, Vector3.forward, 1,enemyLayer);
+        enemyForwardLeft = Physics.Raycast(transform.position, new Vector3(-1,0,1), 1,enemyLayer);
+        enemyForwardRight = Physics.Raycast(transform.position, new Vector3(1, 0, 1), 1,enemyLayer);
+       
+        //Backward Check
+        enemyBackward = Physics.Raycast(transform.position, Vector3.back, 1, enemyLayer);
+        enemyBackwardLeft = Physics.Raycast(transform.position, new Vector3(-1, 0, -1), 1, enemyLayer);
+        enemyBackwardRight = Physics.Raycast(transform.position, new Vector3(1, 0, -1), 1, enemyLayer);
+       
+        //Left & Right
+        enemyLeft = Physics.Raycast(transform.position, Vector3.left, 1, enemyLayer);
+        enemyRight = Physics.Raycast(transform.position, Vector3.right, 1, enemyLayer);
+
+
+        if (enemyForward || enemyForwardLeft || enemyForwardRight || enemyBackward || enemyBackwardLeft || enemyBackwardRight || enemyLeft || enemyRight)
         {
-            Ray ray = new Ray(combatCheck.position,Vector3.down);
-            RaycastHit hit;
-            if (Physics.Raycast(ray.origin,Vector3.down,out hit,gridLayer))
-            {
-                if (hit.collider.GetComponent<GridMover>() != null)
-                {
-                    GridMover gridMover = hit.collider.GetComponent<GridMover>();
-                    if (gridMover.gridState == GridState.OnPlayer)
-                    {
-                        playerInRange = true;
-                        break;
-                    }
-                    else
-                    {
-                        playerInRange = false;
-                    }
-                }
-            }
+            playerInRange = true;
+        }
+        else if (!enemyForward && !enemyForwardLeft && !enemyForwardRight && !enemyBackward && !enemyBackwardLeft && !enemyBackwardRight && !enemyLeft && !enemyRight)
+        {
+            playerInRange = false;
         }
         
     }

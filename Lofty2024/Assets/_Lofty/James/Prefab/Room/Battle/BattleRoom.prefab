@@ -550,6 +550,8 @@ MonoBehaviour:
   obstacleParent: {fileID: 8984488573865151415}
   obstaclePrefab:
   - {fileID: 6344253970654772230, guid: 7c7998c3062a94f40af81755ce8db02d, type: 3}
+  - {fileID: 6344253970654772230, guid: bdaf4f2d79582124e9c6d321aedf8cdd, type: 3}
+  - {fileID: 6344253970654772230, guid: b405e0398daa7b24497935ed07248fbb, type: 3}
   currentGrid:
   - {fileID: 362080986821127452}
   - {fileID: 701118779881393310}
@@ -1203,7 +1205,7 @@ MonoBehaviour:
   - Assets/James/Materials/Ground.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_18235d7d-5b37-4cec-a488-1da724cd2bff
+    name: UM_OperatedMesh_0fea4c3c-f3d1-4d52-a3fe-b3931835388a
     skinnedMesh: 0
     sharedMesh: {fileID: -4943758353868826497}
     buidVersion:
@@ -1215,7 +1217,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: 18235d7d-5b37-4cec-a488-1da724cd2bff
+  sourceMeshRendererGUID: 0fea4c3c-f3d1-4d52-a3fe-b3931835388a
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0

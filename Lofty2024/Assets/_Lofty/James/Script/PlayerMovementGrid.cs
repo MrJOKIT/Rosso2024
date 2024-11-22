@@ -429,7 +429,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             }
 
             currentEnemyGrid.enemyDie = true;
-            GetComponent<Player>().AlertFalseCheck();
             EndTurn();
             //SetTargetPosition(hit.point);
         }
