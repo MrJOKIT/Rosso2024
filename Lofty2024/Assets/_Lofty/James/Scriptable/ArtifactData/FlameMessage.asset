@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d71822a0623704448bef5196b9eb410, type: 3}
-  m_Name: DealFlameSoul
+  m_Name: FlameMessage
   m_EditorClassIdentifier: 
   artifactGrade: 0
+  artifactClass: 0
   artifactName: The deal from flame
   artifactImage: {fileID: 21300000, guid: 4fb370f5af0826b4a86214efc4896b1e, type: 3}
   artifactDetail: Earn more flame soul (1.5x)

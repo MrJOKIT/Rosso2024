@@ -18,12 +18,12 @@ public class EnemyAttacker : MonoBehaviour
     public void AttackPlayer()
     {
         enemyHost.targetTransform.GetComponent<Player>().TakeDamage(enemyHost.enemyData.damage);
-        VisualEffectManager.Instance.CallEffect(effectName,enemyHost.targetTransform);
+        VisualEffectManager.Instance.CallEffect(effectName,enemyHost.targetTransform,1f);
     }
 
     private void Update()
     {
-        if (enemyHost.targetTransform.position.x < transform.position.x)
+        /*if (enemyHost.targetTransform.position.x < transform.position.x)
         {
             GetComponent<SpriteRenderer>().flipX = true;
         }
@@ -38,7 +38,7 @@ public class EnemyAttacker : MonoBehaviour
         else if (enemyHost.targetTransform.position.z < transform.position.z)
         {
             GetComponent<SpriteRenderer>().flipX = false;
-        }
+        }*/
     }
 
     public void Focus()

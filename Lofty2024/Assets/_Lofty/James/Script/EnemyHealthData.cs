@@ -8,10 +8,12 @@ public class EnemyHealthData : MonoBehaviour
 {
     public TextMeshProUGUI enemyNameText;
     public Image enemyImage;
+    public TextMeshProUGUI enemyHealthText;
 
-    public void SetEnemyData(string name, Sprite sprite)
+    public void SetEnemyData(string name, Sprite sprite,int enemyHealth)
     {
         enemyNameText.text = name;
         enemyImage.sprite = sprite;
+        enemyHealthText.text = "HP: " + enemyHealth;
     }
 }

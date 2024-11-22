@@ -10,6 +10,8 @@ public enum EffectName
     Slash,
     Bite,
     Blood,
+    Revive,
+    CoinReward,
 }
 [Serializable]
 public class EffectData
@@ -21,10 +23,10 @@ public class VisualEffectManager : Singeleton<VisualEffectManager>
 {
     public EffectData[] effectData;
     
-    public void CallEffect(EffectName effectName,Transform instancePosition)
+    public void CallEffect(EffectName effectName,Transform instancePosition,float lifeTime)
     {
         GameObject vfx = Instantiate(GetEffect(effectName).vfxPrefab.gameObject, instancePosition.position,Quaternion.identity);
-        Destroy(vfx,1f);
+        Destroy(vfx,lifeTime);
     }
 
     private EffectData GetEffect(EffectName name)

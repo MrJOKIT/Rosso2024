@@ -5,12 +5,7 @@ using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
 
-public enum CombatPhase
-{
-    NormalPhase,
-    JumpPhase,
-    SummonPhase,
-}
+
 public class EnemyBoss : Enemy
 {
     [Tab("Boss Setting")]

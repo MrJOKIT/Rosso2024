@@ -15,7 +15,7 @@ MonoBehaviour:
   artifactGrade: 1
   artifactClass: 1
   artifactName: Motivation
-  artifactImage: {fileID: 21300000, guid: 624f25227598f8b49968ea38496ec096, type: 3}
+  artifactImage: {fileID: 21300000, guid: 0e70d63b288daf8419d882589d7d088c, type: 3}
   artifactDetail: If you healing you gain more HP+1
   upgradeType: 0
   addHealthPoint: 0

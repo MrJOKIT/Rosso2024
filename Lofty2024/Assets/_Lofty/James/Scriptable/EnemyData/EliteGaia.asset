@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: caae6e2a3c9e3754eb940aca4d2b2112, type: 3}
-  m_Name: Pawn
+  m_Name: EliteGaia
   m_EditorClassIdentifier: 
-  enemyName: Labigon
-  enemySprite: {fileID: -2095233154, guid: 0ae12e22e3a555346bdad3028eebe122, type: 3}
-  isBoss: 0
-  enemyMaxHealth: 1
-  enemyHealth: 1
-  damage: 1
-  enemySpeed: 10
+  enemyName: Elite Gaia
+  enemySprite: {fileID: -1241085639, guid: 49c928386bbaf68488155c4d148fb652, type: 3}
+  isBoss: 1
+  enemyMaxHealth: 10
+  enemyHealth: 10
+  damage: 2
+  enemySpeed: 60

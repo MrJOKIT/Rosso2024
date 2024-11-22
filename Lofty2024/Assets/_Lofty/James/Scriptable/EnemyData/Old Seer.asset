@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caae6e2a3c9e3754eb940aca4d2b2112, type: 3}
+  m_Name: Old Seer
+  m_EditorClassIdentifier: 
+  enemyName: Old Seer
+  enemySprite: {fileID: 440735516, guid: 8d4996d401b12dc4db60fa4c4513c46f, type: 3}
+  isBoss: 0
+  enemyMaxHealth: 2
+  enemyHealth: 2
+  damage: 0
+  enemySpeed: 35

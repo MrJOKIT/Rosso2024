@@ -29,7 +29,7 @@ public class EnemyIron : Enemy
     {
         ChangeGridMoverUnder();
         CheckMoveHandle();
-        EnemyCombatHandle();
+        
         if (onTurn == false)
         {
             return;
@@ -46,8 +46,10 @@ public class EnemyIron : Enemy
                 }
                 else
                 {
+                    EnemyCombatHandle();
                     if (playerInRange)
                     {
+                        onTurn = false;
                         //enemyAnimator.SetTrigger("Attack");
                         GetComponent<PlayableDirector>().Play();
                         //EndTurn();

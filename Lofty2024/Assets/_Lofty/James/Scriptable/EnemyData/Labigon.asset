@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: caae6e2a3c9e3754eb940aca4d2b2112, type: 3}
-  m_Name: Rook
+  m_Name: Labigon
   m_EditorClassIdentifier: 
-  enemyName: 002
-  enemySprite: {fileID: 50947352, guid: c054d8ab1de1cb242abe602ec1d77497, type: 3}
+  enemyName: Labigon
+  enemySprite: {fileID: -2095233154, guid: 0ae12e22e3a555346bdad3028eebe122, type: 3}
   isBoss: 0
-  enemyMaxHealth: 3
-  enemyHealth: 3
+  enemyMaxHealth: 2
+  enemyHealth: 2
   damage: 1
-  enemySpeed: 25
+  enemySpeed: 10

@@ -36,6 +36,7 @@ public class Player : MonoBehaviour, ITakeDamage
     [Header("Alert")] 
     [SerializeField] private LayerMask gridMoverLayer;
     [SerializeField] private GameObject alertObject;
+    [SerializeField] private GameObject alertObjectTwo;
     
     [Space(10)] 
     [Tab("Usage Item")] 
@@ -72,6 +73,7 @@ public class Player : MonoBehaviour, ITakeDamage
             if (hit.transform.GetComponent<GridMover>() != null)
             {
                 alertObject.SetActive(hit.transform.GetComponent<GridMover>().isAlert);
+                alertObjectTwo.SetActive(hit.transform.GetComponent<GridMover>().isAlert);
             }
         }
     }
@@ -95,8 +97,10 @@ public class Player : MonoBehaviour, ITakeDamage
         {
             if (GetComponent<PlayerArtifact>().DeathDoor)
             {
-                playerHealth = 1;
-                GetComponent<PlayerArtifact>().RemoveArtifact(GetComponent<PlayerArtifact>().artifactHaves.Find(x=> x.artifactData.abilityName == AbilityName.DeathDoor).artifactData); 
+                playerHealth = maxHealth;
+                CreateHealthUI();
+                GetComponent<PlayerArtifact>().DeathDoor = false;
+                VisualEffectManager.Instance.CallEffect(EffectName.Revive,transform,2f);
             }
             else
             {

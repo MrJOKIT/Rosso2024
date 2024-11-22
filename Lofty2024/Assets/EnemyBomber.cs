@@ -33,7 +33,7 @@ public class EnemyBomber : Enemy
     {
         //ChangeGridMoverUnder();
         //CheckMoveHandle();
-        EnemyCombatHandle();
+        ;
         if (onTurn == false)
         {
             return;
@@ -53,8 +53,10 @@ public class EnemyBomber : Enemy
                 {
                     if (bomberState == BomberState.OnHolding)
                     {
+                        EnemyCombatHandle();
                         if (playerInRange)
                         {
+                            onTurn = false;
                             bomberState = BomberState.OnBombing;
                             currentBomber = Instantiate(bomberArea, bombPos);
                             onImmortalObject = true;

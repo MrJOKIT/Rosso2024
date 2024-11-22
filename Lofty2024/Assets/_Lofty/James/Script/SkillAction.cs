@@ -136,7 +136,7 @@ public class SkillAction : MonoBehaviour
                                 break;
                         }
                     }
-                    
+                    Instantiate(vfx, checkPoint.position,Quaternion.identity);
                 }
                 catch (Exception a)
                 {

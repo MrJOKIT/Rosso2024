@@ -54,6 +54,7 @@ public class GameManager : Singeleton<GameManager>
     private void StageReward()
     {
         Instantiate(rewardVFX, new Vector3(currentRoomPos.position.x, 3,currentRoomPos.position.z), Quaternion.identity);
+        //GetComponent<VisualEffectManager>().CallEffect(EffectName.CoinReward,currentRoomPos,3f);
         GetComponent<GameCurrency>().IncreaseEricCoin(Random.Range(dropRate.x,dropRate.y));
     }
     

@@ -369,7 +369,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         {
             return;
         }
-        VisualEffectManager.Instance.CallEffect(EffectName.Slash,currentEnemy.transform);
+        VisualEffectManager.Instance.CallEffect(EffectName.Slash,currentEnemy.transform,1f);
         PlayerArtifact artifact = GetComponent<PlayerArtifact>();
         switch (attackType)
         {

@@ -83,7 +83,12 @@ public class PlayerArtifact : MonoBehaviour
     [SerializeField] private bool eyeKing;
     public bool EyeKing => eyeKing;
     [SerializeField] private bool deathDoor;
-    public bool DeathDoor => deathDoor;
+
+    public bool DeathDoor
+    {
+        get { return deathDoor; }
+        set { deathDoor = value; }
+    }
     [SerializeField] private bool giftOfDeath;
     public bool GiftOfDeath => giftOfDeath;
     [SerializeField] private bool checkMate;
@@ -149,7 +154,7 @@ public class PlayerArtifact : MonoBehaviour
     
     public void RemoveArtifact(ArtifactData removeArtifact)
     {
-        CardArtifact removeCard = new CardArtifact(removeArtifact);
+        CardArtifact removeCard = artifactHaves.Find(x=>x.artifactData == removeArtifact);
         if (!artifactHaves.Contains(removeCard))
         {
             return;

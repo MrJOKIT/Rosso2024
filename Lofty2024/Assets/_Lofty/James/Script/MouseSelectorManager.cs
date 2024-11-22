@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class MouseSelectorManager : Singeleton<MouseSelectorManager>
@@ -54,7 +55,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
                     {
                         uiCanvas.SetActive(true);
                         selectedEnemy = hit.transform.GetComponent<GridMover>().enemy;
-                        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(selectedEnemy.enemyData.name,selectedEnemy.enemyData.enemySprite);
+                        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(selectedEnemy.enemyData.name,selectedEnemy.enemyData.enemySprite,selectedEnemy.enemyHealth);
                         CreateHearth(selectedEnemy);
                     }
                     else
@@ -85,7 +86,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
     public void ShowEnemyData(Enemy enemy)
     {
         uiCanvas.SetActive(true);
-        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(enemy.enemyData.name,enemy.enemyData.enemySprite);
+        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(enemy.enemyData.name,enemy.enemyData.enemySprite,enemy.enemyHealth);
         CreateHearth(enemy);
     }
     private void CreateHearth(Enemy enemy)

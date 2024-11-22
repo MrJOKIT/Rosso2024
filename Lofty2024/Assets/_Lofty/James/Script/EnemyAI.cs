@@ -29,7 +29,7 @@ public class EnemyAI : Enemy
     {
         ChangeGridMoverUnder();
         CheckMoveHandle();
-        EnemyCombatHandle();
+       
         if (onTurn == false)
         {
             return;
@@ -46,8 +46,10 @@ public class EnemyAI : Enemy
                 }
                 else
                 {
+                    EnemyCombatHandle();
                     if (playerInRange)
                     {
+                        onTurn = false;
                         GetComponent<PlayableDirector>().Play();
                         /*enemyAnimator.SetTrigger("Attack");
                         EndTurn();*/
@@ -557,11 +559,9 @@ public class EnemyAI : Enemy
                         playerInRange = true;
                         break;
                     }
-                    else
-                    {
-                        gridMover.isAlert = false;
-                        playerInRange = false;
-                    }
+
+                    gridMover.isAlert = false;
+                    playerInRange = false;
                 }
             }
         }

@@ -573,9 +573,9 @@ MonoBehaviour:
   cardName: {fileID: 7353059655727360376}
   cardDetail: {fileID: 2225055973492426709}
   cardClassIcon: {fileID: 7367614223103756064}
-  swordIcon: {fileID: 21300000, guid: e7ef962961a27f345977d7f597c5c879, type: 3}
+  swordIcon: {fileID: 21300000, guid: 20427d0103464464eb4b0776c50e9f53, type: 3}
   bladeIcon: {fileID: 21300000, guid: 07eab51b547f1654dbcafe59259885ae, type: 3}
-  shootIcon: {fileID: 21300000, guid: 24ea16d8306a2014fbc01f8ec3a8ef31, type: 3}
+  shootIcon: {fileID: 21300000, guid: a324b73e845e3e04e8f6d36e290724d3, type: 3}
 --- !u!114 &2531248228313481996
 MonoBehaviour:
   m_ObjectHideFlags: 0

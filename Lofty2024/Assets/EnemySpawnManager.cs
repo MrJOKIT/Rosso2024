@@ -53,7 +53,23 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
     
     public GameObject GetBossEnemy()
     {
-        return new GameObject();
+        int enemyNumber = 0;
+        float randomNumber = Random.Range(0, 100f);
+        Debug.Log("Enemy = " + randomNumber);
+        if (randomNumber <= 33f)
+        {
+            enemyNumber = 0;
+        }
+        else if (randomNumber <= 66f)
+        {
+            enemyNumber = 1;
+        }
+        else if (randomNumber <= 100f)
+        {
+            enemyNumber = 2;
+        }
+
+        return bossSpawnList[enemyNumber].enemyPrefab;
     }
 
     public void ResetSpawnList()

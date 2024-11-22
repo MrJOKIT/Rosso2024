@@ -30,8 +30,9 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && pressActive == false)
+        if (Input.GetKeyDown(KeyCode.E) && pressActive == false && playerTrans.GetComponent<PlayerMovementGrid>().currentState == MovementState.Combat)
         {
+            playerTrans.GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
             TransitionAnimator animator = TransitionAnimator.Start(TransitionType.Fade,0.75f,autoDestroy:true);
             animator.onTransitionEnd.AddListener(WarpToPoint);
             pressActive = true;
@@ -108,6 +109,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         CameraManager.Instance.SetCameraTarget(roomCenter);
         PortalManager.Instance.progressList[PortalManager.Instance.secondStageNumber - 1].SetBarType(roomTypeConnect);
         PortalManager.Instance.progressState = ProgressState.OnProgress;
+       // playerTrans.GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
         //TransitionAnimator animatorTwo = TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true,playDelay:2f);
         //animatorTwo.onTransitionEnd.AddListener(GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().StartRoom);
     }
