@@ -1,0 +1,1104 @@
+fileFormatVersion: 2
+guid: 24cb736f07771c64595c4e41c4748fa7
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 128
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_0"
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 273a8998e9dbd584eaad4f970f363598
+      internalID: 1584632594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_1"
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5defc63b2ad18734caae03cb93f6044a
+      internalID: 80446086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_2"
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e9bafeea8c54784aad8b43958adadd0
+      internalID: 755935831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_3"
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0393cca534130d41ae212fd6855d053
+      internalID: -1176187576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_4"
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 377c1c881ac613c42a5c12fff7cbbb7a
+      internalID: -1842035629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_5"
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0201d33c8d43bc94aa36d69336980742
+      internalID: 567637353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_6"
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7980a036ae5089047ba89fa6465b4324
+      internalID: -1073620266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_7"
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dcea88a60a6f8f49831864b31891e91
+      internalID: -1729725650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_8"
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f8ebd38493a4d242aa6bda65acf26ef
+      internalID: 1519608740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_9"
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66d05d10eadd6744ca5ba51b679f8c39
+      internalID: -160009142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_10"
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77a59ed63b1005c418f765d67910429c
+      internalID: 476683666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_11"
+      rect:
+        serializedVersion: 2
+        x: 1408
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 895269921d64b4941949fe1574ecdfcd
+      internalID: 824481587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_12"
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7ba20d700303e54d8163d87005cd76a
+      internalID: 1678126023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_13"
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2478e3948c22a944a729506ab89bf0c
+      internalID: -45671306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_14"
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e64f7275c051ec646a085f164fcfbef5
+      internalID: -999759856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_15"
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 419cee18175b3db4584fde76818f2e21
+      internalID: -2044747652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_16"
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83cd287399025c94a8e87202f7ab4f4f
+      internalID: 620725348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_17"
+      rect:
+        serializedVersion: 2
+        x: 2176
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6622293c3fedb8842b0c0d186bd19958
+      internalID: 1471920313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_18"
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c17979bac21b744691eb94bd90c1a45
+      internalID: -648828594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_19"
+      rect:
+        serializedVersion: 2
+        x: 2432
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eac2f49b66dc6184ea132694bec91b84
+      internalID: 1359486509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_20"
+      rect:
+        serializedVersion: 2
+        x: 2560
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f048118961b81004092ebf3b0391df0a
+      internalID: 226396413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_21"
+      rect:
+        serializedVersion: 2
+        x: 2688
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3da483b5bde55f4ab1cb8a9f75d530c
+      internalID: 1766668007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_22"
+      rect:
+        serializedVersion: 2
+        x: 2816
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 310f3ade6eb1bc645b54fc891b7ffbc4
+      internalID: -1914988551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_23"
+      rect:
+        serializedVersion: 2
+        x: 2944
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49a1c9c807824314084d200d4c214391
+      internalID: -1543277488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_24"
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 038cc966fc8cb46459d0224c07a13327
+      internalID: 1771845150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_25"
+      rect:
+        serializedVersion: 2
+        x: 3200
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0abda77273428af48b7f571445c6a3bf
+      internalID: -221779421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_26"
+      rect:
+        serializedVersion: 2
+        x: 3328
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f365357700d6ef479754b8fa5980777
+      internalID: -382251666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_27"
+      rect:
+        serializedVersion: 2
+        x: 3456
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 138286f248035114681723f1d88f2b78
+      internalID: -1465600566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_28"
+      rect:
+        serializedVersion: 2
+        x: 3584
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fd7c3cd01e4d22459735290160524dd
+      internalID: -1151302579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_29"
+      rect:
+        serializedVersion: 2
+        x: 3712
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c29c1ee0fe1bda4bafd09f25a0330d4
+      internalID: -760501194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_30"
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b03660f04e4efe04e88f73fa6b6ae538
+      internalID: -4965797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_31"
+      rect:
+        serializedVersion: 2
+        x: 3968
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc54f591afea02d42b39963d49a29be6
+      internalID: 1474714047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_32"
+      rect:
+        serializedVersion: 2
+        x: 4096
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 568553f0330a8bf4eb8a77cf2d5d77bb
+      internalID: -177747178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_33"
+      rect:
+        serializedVersion: 2
+        x: 4224
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb19969ffeb656742b0b774a830cb752
+      internalID: 1530123326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_34"
+      rect:
+        serializedVersion: 2
+        x: 4352
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e189306be44d6ae428ae94ea2f669872
+      internalID: -1429713072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_35"
+      rect:
+        serializedVersion: 2
+        x: 4480
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3816ba2369712dd4e92940e5d6c49e3f
+      internalID: 54482794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_36"
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1689eecf7883d8489222288a34ae903
+      internalID: -1611845991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_37"
+      rect:
+        serializedVersion: 2
+        x: 4736
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07a2d48a640e4ba47b373e2a11912871
+      internalID: 1069004708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_38"
+      rect:
+        serializedVersion: 2
+        x: 4864
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 570b945b7d89d644bb95b4799c634eec
+      internalID: -1881897064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_39"
+      rect:
+        serializedVersion: 2
+        x: 4992
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cdd953e91b47e84b9ea443dcc624e9b
+      internalID: -483068634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_40"
+      rect:
+        serializedVersion: 2
+        x: 5120
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74a7b4e2cc0712d4c9c412456ff5794b
+      internalID: -1489239043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_41"
+      rect:
+        serializedVersion: 2
+        x: 5248
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 974a39a516d71ae44b50728ab497fce1
+      internalID: 810112523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_42"
+      rect:
+        serializedVersion: 2
+        x: 5376
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fb410642415eb94a9a9beb6d47792e7
+      internalID: -1363886056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_43"
+      rect:
+        serializedVersion: 2
+        x: 5504
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cfb8425380f03464cabe01e29ebfa587
+      internalID: 64819601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_44"
+      rect:
+        serializedVersion: 2
+        x: 5632
+        y: 0
+        width: 128
+        height: 176
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ada82bd0502f814290d41bd54972af7
+      internalID: -753314724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 0ffc3eae62fb77b4bb181a118b2f7d6c
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_0": 1584632594
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_1": 80446086
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_10": 476683666
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_11": 824481587
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_12": 1678126023
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_13": -45671306
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_14": -999759856
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_15": -2044747652
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_16": 620725348
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_17": 1471920313
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_18": -648828594
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_19": 1359486509
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_2": 755935831
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_20": 226396413
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_21": 1766668007
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_22": -1914988551
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_23": -1543277488
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_24": 1771845150
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_25": -221779421
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_26": -382251666
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_27": -1465600566
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_28": -1151302579
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_29": -760501194
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_3": -1176187576
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_30": -4965797
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_31": 1474714047
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_32": -177747178
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_33": 1530123326
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_34": -1429713072
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_35": 54482794
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_36": -1611845991
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_37": 1069004708
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_38": -1881897064
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_39": -483068634
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_4": -1842035629
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_40": -1489239043
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_41": 810112523
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_42": -1363886056
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_43": 64819601
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_44": -753314724
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_5": 567637353
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_6": -1073620266
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_7": -1729725650
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_8": 1519608740
+      "TreeOfFlame_Loop_\u0E43\u0E1A\u0E44\u0E21\u0E49-Sheet_9": -160009142
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
