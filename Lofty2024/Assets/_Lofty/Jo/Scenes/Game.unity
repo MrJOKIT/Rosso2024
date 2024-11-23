@@ -416,6 +416,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3055074183015207821, guid: e5c7388ffb79e3b46af3a6b25defc490,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3404377275054059540, guid: e5c7388ffb79e3b46af3a6b25defc490,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -486,10 +491,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4115942587652167949, guid: e5c7388ffb79e3b46af3a6b25defc490,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4587719961998890928, guid: e5c7388ffb79e3b46af3a6b25defc490,
         type: 3}
       propertyPath: m_Name
       value: UIJoMainScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 5544163790237320029, guid: e5c7388ffb79e3b46af3a6b25defc490,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8339401480597597783, guid: e5c7388ffb79e3b46af3a6b25defc490,
         type: 3}
