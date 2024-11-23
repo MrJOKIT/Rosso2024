@@ -3,6 +3,7 @@ using UnityEngine;
 public class SettingsManager : MonoBehaviour
 {
     public static SettingsManager Instance;
+
     public Vector2Int resolution;
     public bool isFPSLimited;
     public int limitedFPS;
@@ -20,7 +21,7 @@ public class SettingsManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        LoadSettings();
+        LoadSettings(); // โหลดค่าตั้งต้นจาก PlayerPrefs
     }
 
     public void SaveSettings()
@@ -28,7 +29,7 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetInt("ResolutionWidth", resolution.x);
         PlayerPrefs.SetInt("ResolutionHeight", resolution.y);
         PlayerPrefs.SetInt("FPSLimit", isFPSLimited ? limitedFPS : -1);
-        PlayerPrefs.SetInt("VSyncEnabled", isVSyncEnabled ? 1 : 0);
+        PlayerPrefs.SetInt("VSyncEnabled", isVSyncEnabled ? 1 : 0); // Save the V-Sync setting
         PlayerPrefs.Save();
     }
 
@@ -40,7 +41,7 @@ public class SettingsManager : MonoBehaviour
         }
         isFPSLimited = PlayerPrefs.GetInt("FPSLimit", -1) != -1;
         limitedFPS = PlayerPrefs.GetInt("FPSLimit", 60);  
-        isVSyncEnabled = PlayerPrefs.GetInt("VSyncEnabled", 0) == 1;
+        isVSyncEnabled = PlayerPrefs.GetInt("VSyncEnabled", 0) == 1; // Load the V-Sync setting
     }
 
     public void ApplySettings()

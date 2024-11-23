@@ -4473,7 +4473,6 @@ GameObject:
   - component: {fileID: 9027838132317943570}
   - component: {fileID: 1112555364930737621}
   - component: {fileID: 58501820096643572}
-  - component: {fileID: 7408978068059493182}
   m_Layer: 5
   m_Name: Arrow
   m_TagString: Untagged
@@ -4595,33 +4594,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7408978068059493182}
-        m_TargetAssemblyTypeName: UIButtonColorChanger, Assembly-CSharp
-        m_MethodName: OnButtonClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &7408978068059493182
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3718264021259938153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7c1703f699bdcc45a1526e82f29fc38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myButton: {fileID: 58501820096643572}
-  text1: {fileID: 6185530195159573444}
-  text3: {fileID: 3967399608998657251}
 --- !u!1 &3901101334055662424
 GameObject:
   m_ObjectHideFlags: 0
@@ -9585,6 +9557,9 @@ MonoBehaviour:
   fpsLimitGameObjects:
   - {fileID: 6643296040724502146}
   - {fileID: 4491628506137367538}
+  vsyncGameObjects:
+  - {fileID: 4236374469618402207}
+  - {fileID: 6286499672044123375}
   fpsText: {fileID: 7772661730799135904}
   fpsValueText: {fileID: 1137440253052527370}
   fpsSlider: {fileID: 8927786751387202218}

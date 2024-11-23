@@ -8,14 +8,14 @@ public class ToggleSetting : MonoBehaviour
     [SerializeField] private List<GameObject> gameObjects;
     [SerializeField] private List<GameObject> resolutionGameObjects;
     [SerializeField] private List<GameObject> fpsLimitGameObjects;
+    [SerializeField] private List<GameObject> vsyncGameObjects; // VSYNC game objects
+
     [SerializeField] private TextMeshProUGUI fpsText;
     [SerializeField] private TextMeshProUGUI fpsValueText;
-    [SerializeField] private Slider fpsSlider;  // Reference to the FPS slider
+    [SerializeField] private Slider fpsSlider;
 
     private int currentIndex = 0;
     private int resolutionIndex = 0;
-
-    private bool isBorderless = false;
 
     [SerializeField] private List<Vector2Int> resolutions = new List<Vector2Int>
     {
@@ -36,18 +36,38 @@ public class ToggleSetting : MonoBehaviour
 
     private void Start()
     {
-        LoadSettings(); 
+        // Load and apply saved settings
+        SettingsManager.Instance.LoadSettings();
+        previewResolution = SettingsManager.Instance.resolution;
+        isVSyncEnabled = SettingsManager.Instance.isVSyncEnabled;
+        isFPSLimited = SettingsManager.Instance.isFPSLimited;
+        limitedFPS = SettingsManager.Instance.limitedFPS;
+
+        // Initialize game objects, resolution, FPS settings
         InitializeGameObjects();
         InitializeResolutionGameObjects();
         InitializeFPSLimitGameObjects();
 
+        // Ensure the FPS slider has a valid range and value
         fpsSlider.minValue = 30;
         fpsSlider.maxValue = 240;
-        fpsSlider.value = limitedFPS;
-        fpsValueText.text = limitedFPS.ToString();
 
-        // Ensure the FPS slider visibility matches the FPS limit state
-        fpsSlider.gameObject.SetActive(isFPSLimited);
+        // Ensure the FPS slider is visible and has a valid value
+        if (isFPSLimited)
+        {
+            fpsSlider.value = limitedFPS >= 30 && limitedFPS <= 240 ? limitedFPS : 60; // Default to 60 if invalid value
+            fpsValueText.text = limitedFPS.ToString();
+            fpsSlider.gameObject.SetActive(true); // Show slider if FPS is limited
+        }
+        else
+        {
+            fpsSlider.value = 60; // Default value when FPS is uncapped
+            fpsValueText.text = "Uncapped";
+            fpsSlider.gameObject.SetActive(false); // Hide slider if FPS is not limited
+        }
+
+        // Update visibility of V-Sync GameObjects based on the saved setting
+        UpdateVSyncGameObjects();
     }
 
     private void Update()
@@ -90,6 +110,33 @@ public class ToggleSetting : MonoBehaviour
         UpdateFPSLimitGameObject();
     }
 
+    // Update V-Sync GameObjects visibility based on the current setting
+    private void UpdateVSyncGameObjects()
+    {
+        if (vsyncGameObjects.Count > 0)
+        {
+            vsyncGameObjects[0].SetActive(!isVSyncEnabled); // If V-Sync is off, show vsyncGameObjects[0]
+            if (vsyncGameObjects.Count > 1)
+            {
+                vsyncGameObjects[1].SetActive(isVSyncEnabled); // If V-Sync is on, show vsyncGameObjects[1]
+            }
+        }
+    }
+
+    public void ToggleVSync()
+    {
+        isVSyncEnabled = !isVSyncEnabled;
+
+        // Update visibility of V-Sync game objects
+        UpdateVSyncGameObjects();
+
+        Debug.Log($"V-Sync state changed to: {(isVSyncEnabled ? "enabled" : "disabled")}");
+
+        // Save the new V-Sync setting
+        SettingsManager.Instance.isVSyncEnabled = isVSyncEnabled;
+        SettingsManager.Instance.SaveSettings();
+    }
+
     public void ToggleScreenMode()
     {
         if (gameObjects.Count == 0) return;
@@ -98,7 +145,7 @@ public class ToggleSetting : MonoBehaviour
         currentIndex = (currentIndex + 1) % gameObjects.Count;
 
         gameObjects[currentIndex].SetActive(true);
-        SaveSettings(); // Save settings when toggled
+        SettingsManager.Instance.SaveSettings(); // Save settings when toggled
         Debug.Log("Toggled GameObject: " + gameObjects[currentIndex].name);
     }
 
@@ -111,22 +158,19 @@ public class ToggleSetting : MonoBehaviour
         resolutionGameObjects[resolutionIndex].SetActive(true);
 
         previewResolution = resolutions[resolutionIndex];
-        SaveSettings(); // Save settings when toggled
+        SettingsManager.Instance.resolution = previewResolution;
+        SettingsManager.Instance.SaveSettings(); 
         Debug.Log("Toggled Resolution GameObject: " + resolutionGameObjects[resolutionIndex].name);
     }
 
     public void ToggleFPS()
     {
-        // Toggle the FPS limiting state
         isFPSLimited = !isFPSLimited;
-    
-        // Update the visibility of the FPS limit game objects based on whether FPS limiting is enabled or not
+        SettingsManager.Instance.isFPSLimited = isFPSLimited;
+        
         UpdateFPSLimitGameObject();
-
-        // Show or hide the FPS slider based on the state of isFPSLimited
         fpsSlider.gameObject.SetActive(isFPSLimited);
 
-        // Update the FPS value text
         if (isFPSLimited)
         {
             fpsValueText.text = ((int)fpsSlider.value).ToString();
@@ -136,124 +180,34 @@ public class ToggleSetting : MonoBehaviour
             fpsValueText.text = "Uncapped";
         }
 
-        // Save the settings when toggled
-        SaveSettings(); 
+        SettingsManager.Instance.SaveSettings(); 
         Debug.Log("FPS Limit toggled to: " + (isFPSLimited ? limitedFPS.ToString() : "Uncapped"));
     }
 
     private void UpdateFPSLimitGameObject()
     {
-        // Toggle the visibility of the FPS limit game objects
         for (int i = 0; i < fpsLimitGameObjects.Count; i++)
         {
             fpsLimitGameObjects[i].SetActive(i == (isFPSLimited ? 1 : 0));
         }
     }
 
- public void ApplySettings()
-{
-    // Apply screen mode (fullscreen, windowed, borderless)
-    switch (currentIndex)
+    public void ApplySettings()
     {
-        case 0: // Fullscreen
-            if (IsResolutionSupported(previewResolution))
-            {
-                Screen.SetResolution(previewResolution.x, previewResolution.y, true); // Fullscreen
-                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen; // Ensures exclusive fullscreen
-                Debug.Log("Applied Fullscreen mode.");
-            }
-            else
-            {
-                Debug.LogWarning("Selected resolution is not supported.");
-            }
-            break;
+        SettingsManager.Instance.ApplySettings(); // Apply the settings from the SettingsManager
 
-        case 1: // Windowed
-            if (IsResolutionSupported(previewResolution))
-            {
-                Screen.SetResolution(previewResolution.x, previewResolution.y, false); // Windowed
-                Screen.fullScreenMode = FullScreenMode.Windowed; // Explicitly set to windowed
-                Debug.Log("Applied Windowed mode.");
-            }
-            else
-            {
-                Debug.LogWarning("Selected resolution is not supported.");
-            }
-            break;
-
-        case 2: // Borderless
-            if (IsResolutionSupported(previewResolution))
-            {
-                Screen.SetResolution(previewResolution.x, previewResolution.y, true); // Fullscreen
-                Screen.fullScreenMode = FullScreenMode.FullScreenWindow; // Borderless
-                Debug.Log("Applied Borderless mode.");
-            }
-            else
-            {
-                Debug.LogWarning("Selected resolution is not supported.");
-            }
-            break;
-    }
-
-    // Handle FPS limiting or uncapped frame rate
-    if (isVSyncEnabled)
-    {
-        // V-Sync is enabled, we don't need to manually set FPS
-        QualitySettings.vSyncCount = 1; // Enable V-Sync
-        Application.targetFrameRate = -1; // V-Sync will manage the FPS limit
-        Debug.Log("V-Sync is enabled, FPS limit is disabled.");
-    }
-    else
-    {
-        // V-Sync is disabled, we apply FPS limit manually
-        QualitySettings.vSyncCount = 0; // Disable V-Sync
-        if (isFPSLimited)
-        {
-            limitedFPS = (int)fpsSlider.value;
-            Application.targetFrameRate = limitedFPS; // Apply FPS limit manually
-            Debug.Log($"FPS limit set to: {limitedFPS}");
-        }
-        else
-        {
-            Application.targetFrameRate = -1; // No FPS limit (uncapped)
-            Debug.Log("FPS limit is uncapped.");
-        }
-    }
-
-    Debug.Log($"Settings applied. Current GameObject: {gameObjects[currentIndex].name}, Resolution: {previewResolution.x}x{previewResolution.y}, FPS Limit: {(isFPSLimited ? limitedFPS.ToString() : "Uncapped")}");
-    fpsValueText.text = isFPSLimited ? limitedFPS.ToString() : "Uncapped";
-}
-
-
-
-
-    private bool IsResolutionSupported(Vector2Int resolution)
-    {
-        foreach (var res in Screen.resolutions)
-        {
-            if (res.width == resolution.x && res.height == resolution.y)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void ChangeResolutionPreview()
-    {
-        resolutionIndex = (resolutionIndex + 1) % resolutions.Count;
-        previewResolution = resolutions[resolutionIndex];
-        Debug.Log($"Preview resolution changed to: {previewResolution.x}x{previewResolution.y}");
+        Debug.Log($"Settings applied. Resolution: {previewResolution.x}x{previewResolution.y}, FPS Limit: {(isFPSLimited ? limitedFPS.ToString() : "Uncapped")}");
+        fpsValueText.text = isFPSLimited ? limitedFPS.ToString() : "Uncapped";
     }
 
     public void OnSliderValueChanged()
     {
-        // Update FPS value text when slider changes
         if (isFPSLimited)
         {
             fpsValueText.text = ((int)fpsSlider.value).ToString();
             limitedFPS = (int)fpsSlider.value;
-            SaveSettings(); // Save the FPS limit when changed
+            SettingsManager.Instance.limitedFPS = limitedFPS;
+            SettingsManager.Instance.SaveSettings();
         }
     }
 
@@ -261,35 +215,5 @@ public class ToggleSetting : MonoBehaviour
     {
         Application.Quit();
         Debug.Log("Game is exiting...");
-    }
-
-    public void ToggleVSync()
-    {
-        // Toggle the V-Sync enabled state
-        isVSyncEnabled = !isVSyncEnabled;
-
-        // Update the UI or show status (optional)
-        Debug.Log($"V-Sync state changed to: {(isVSyncEnabled ? "enabled" : "disabled")}");
-    }
-
-    private void SaveSettings()
-    {
-        PlayerPrefs.SetInt("ScreenModeIndex", currentIndex);
-        PlayerPrefs.SetInt("ResolutionIndex", resolutionIndex);
-        PlayerPrefs.SetInt("FPSLimit", isFPSLimited ? limitedFPS : -1);
-        PlayerPrefs.SetInt("VSync", isVSyncEnabled ? 1 : 0);
-        PlayerPrefs.Save();
-    }
-
-    private void LoadSettings()
-    {
-        if (PlayerPrefs.HasKey("ScreenModeIndex"))
-        {
-            currentIndex = PlayerPrefs.GetInt("ScreenModeIndex");
-            resolutionIndex = PlayerPrefs.GetInt("ResolutionIndex");
-            limitedFPS = PlayerPrefs.GetInt("FPSLimit", 60);
-            isFPSLimited = limitedFPS != -1;
-            isVSyncEnabled = PlayerPrefs.GetInt("VSync") == 1;
-        }
     }
 }

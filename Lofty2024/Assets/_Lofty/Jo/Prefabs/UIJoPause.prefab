@@ -8572,6 +8572,9 @@ MonoBehaviour:
   fpsLimitGameObjects:
   - {fileID: 5645293670112442645}
   - {fileID: 8618722467883386495}
+  vsyncGameObjects:
+  - {fileID: 9095716854653736858}
+  - {fileID: 5170265173268373747}
   fpsText: {fileID: 5031836565986182999}
   fpsValueText: {fileID: 3163516505497024983}
   fpsSlider: {fileID: 1939918030551215050}
