@@ -53,5 +53,6 @@ public class GateToNextScene : InterfacePopUp<GateToNextScene>
         ES3.DeleteKey("PlayerDefaultKnockBackRange");
         
         ES3.DeleteKey("ArtifactHave");
+        ES3.DeleteKey("TimeCount");
     }
 }

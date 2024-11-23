@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VInspector;
+using Random = UnityEngine.Random;
 
 public enum CursorType
 {
@@ -29,15 +32,61 @@ public class GameManager : Singeleton<GameManager>
     [Header("Game Over Setting")] 
     public GameObject deadCanvas;
 
+    [Tab("Time Count")]
+    public TextMeshProUGUI timeText; // Drag a UI Text element to this in the Inspector.
+    private float elapsedTime; // Variable to store the elapsed time.
+    private bool isCounting; // Flag to check if the timer is running.
+    
     [Tab("Cursor Setting")] 
     public Texture2D defaultCursor;
     public Texture2D onSkillCursor;
     public Texture2D onDataCursor;
 
+    private void Start()
+    {
+        elapsedTime = ES3.Load("TimeCount", 0);
+    }
+
+    private void Update()
+    {
+        if (isCounting)
+        {
+            elapsedTime += Time.deltaTime;
+            UpdateTimeDisplay(); 
+        }
+    }
+    
+    public void StartTimer()
+    {
+        isCounting = true; 
+    }
+
+    public void PauseTimer()
+    {
+        isCounting = false; 
+    }
+
+    public void ResetTimer()
+    {
+        isCounting = false;
+        elapsedTime = 0f;
+        UpdateTimeDisplay();
+    }
+
+    void UpdateTimeDisplay()
+    {
+        int minutes = Mathf.FloorToInt(elapsedTime / 60);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60);
+        int milliseconds = Mathf.FloorToInt((elapsedTime % 1) * 1000);
+        
+        timeText.text = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, milliseconds);
+    }
+
     #region Game Manager
 
     public void StageClear()
     {
+        PauseTimer();
         Debug.Log("Stage is clear!!!");
         StageReward();
         GameObject gateObject = Instantiate(gatePrefab, currentRoomPos.GetComponent<RoomManager>().CheckSpawnPoint(), Quaternion.identity);
@@ -45,6 +94,7 @@ public class GameManager : Singeleton<GameManager>
         cardSelectCanvas.SetActive(true);
         GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.All,4);
         currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().SavePlayerData();
+        ES3.Save("TimeCount",elapsedTime);
     }
 
     public void RoomClear()
@@ -53,6 +103,7 @@ public class GameManager : Singeleton<GameManager>
     }
     private void StageReward()
     {
+        PauseTimer();
         Instantiate(rewardVFX, new Vector3(currentRoomPos.position.x, 3,currentRoomPos.position.z), Quaternion.identity);
         //GetComponent<VisualEffectManager>().CallEffect(EffectName.CoinReward,currentRoomPos,3f);
         GetComponent<GameCurrency>().IncreaseEricCoin(Random.Range(dropRate.x,dropRate.y));
@@ -65,6 +116,7 @@ public class GameManager : Singeleton<GameManager>
 
     public void GameOver()
     {
+        PauseTimer();
         Debug.Log("Game Over");
         currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().FormatPlayerData();
         deadCanvas.SetActive(true);

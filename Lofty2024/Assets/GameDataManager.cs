@@ -18,6 +18,7 @@ public class GameDataManager : MonoBehaviour
         FormatProgress();
         FormatCardManager();
         FormatPlayerData();
+        ES3.DeleteKey("TimeCount");
     }
     
     #region GameProgress

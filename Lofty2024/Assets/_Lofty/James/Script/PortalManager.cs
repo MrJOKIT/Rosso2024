@@ -22,12 +22,14 @@ public class PortalManager : Singeleton<PortalManager>
     public int firstStageNumber = 1;
     public int secondStageNumber = 1;
     public int stageClearCount;
-    [Space(10)]
+    [Space(10)] 
+    [SerializeField] private int maxFirstStage = 3;
     [SerializeField] private int roomCount;
     [Space(10)]
     public List<GameObject> battleRoomModel;
     public List<GameObject> bonusRoomModel;
     public List<GameObject> clearRoomModel;
+    public List<GameObject> bossRoomModel;
     public Vector3 spawnPoint;
     
     [Space(20)]
@@ -156,6 +158,7 @@ public class PortalManager : Singeleton<PortalManager>
         this.portalRightPos = portalRightPos;
 
 
+        
         if (isBossRoom)
         {
             Invoke("SpawnRoom",0.2f);
@@ -165,7 +168,11 @@ public class PortalManager : Singeleton<PortalManager>
             Invoke("SpawnRoom",0.2f);
             Invoke("SpawnRoom",0.3f);
         }
-        
+
+        if (roomCount <= 0 && firstStageNumber >= maxFirstStage)
+        {
+            isBossRoom = true;
+        }
     }
 
     private void SpawnRoom()
@@ -173,6 +180,17 @@ public class PortalManager : Singeleton<PortalManager>
         if (isBossRoom)
         {
             //show one portal
+            rightRoomType = RandomRoom();
+            GameObject rightRoomObject = Instantiate(GetRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
+            rightRoom = rightRoomObject.GetComponent<RoomManager>();
+            rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
+            portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform);
+            portalRight.transform.position = portalRightPos.position;
+            portalRight.GetComponent<PortalToNextRoom>().ActivePortal();
+            if (roomCount == 0)
+            {
+                rightRoom.isLastRoom = true;
+            }
         }
         else
         {
@@ -290,7 +308,7 @@ public class PortalManager : Singeleton<PortalManager>
         {
             if (isBossRoom)
             {
-                //fix type is boss
+                roomType = RoomType.Boss;
             }
             else
             {
@@ -319,6 +337,7 @@ public class PortalManager : Singeleton<PortalManager>
                 //battleRoomModel.Remove(room);
                 break;
             case RoomType.Boss:
+                room = bossRoomModel[Random.Range(0, bonusRoomModel.Count - 1)];
                 break;
         }
 
@@ -327,6 +346,7 @@ public class PortalManager : Singeleton<PortalManager>
             if (isBossRoom)
             {
                 //random boss room
+                room = bossRoomModel[Random.Range(0, bonusRoomModel.Count - 1)];
             }
             else
             {

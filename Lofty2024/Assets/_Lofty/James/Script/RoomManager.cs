@@ -91,7 +91,7 @@ public class RoomManager : MonoBehaviour
             RoomClearWithNoReward(); 
             return;
         }
-        
+        GameManager.Instance.StartTimer();
         SpawnObstacle();
         
         spawnObstacleMax = Random.Range(spawnObstacleCount.x, spawnObstacleCount.y);

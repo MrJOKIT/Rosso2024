@@ -5,6 +5,7 @@ using EditorAttributes;
 using UnityEngine;
 using UnityEngine.Playables;
 using VInspector;
+using Random = UnityEngine.Random;
 
 public enum CombatPhase
 {
@@ -22,7 +23,14 @@ public class EnemyEliteGaia : Enemy
     public bool jumpPrepare;
     [Tab("Boss Setting")]
     public CombatPhase currentPhase;
+    [Header("Jump")]
     public float jumpDistanceCheck = 4f;
+    [Header("Summon")]
+    public int summonCount;
+    public int summonCooldown;
+    private int summonCooldownCounter;
+    public SummonState summonState; 
+    
     [Tab("Move Checker")]
     public LayerMask moveBlockLayer;
     [Space(10)]
@@ -80,24 +88,39 @@ public class EnemyEliteGaia : Enemy
                     }
                     else
                     {
-                        float playerDistance = Vector3.Distance(transform.position, targetTransform.position);
-                        Debug.Log(playerDistance);
-                        if (jumpPrepare)
+                        if (summonState == SummonState.OnSummon && GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().enemyInRoom.Count == 1)
                         {
-                            JumpMoveToPlayer();
+                            EnemySummon();
                         }
                         else
                         {
-                            if (playerDistance < jumpDistanceCheck )
-                            {
-                                EnemyMoveToPlayer();
-                            }
-                            else
+                            float playerDistance = Vector3.Distance(transform.position, targetTransform.position);
+                            Debug.Log(playerDistance);
+                            if (jumpPrepare)
                             {
                                 JumpMoveToPlayer();
                             }
+                            else
+                            {
+                                if (playerDistance < jumpDistanceCheck )
+                                {
+                                    EnemyMoveToPlayer();
+                                }
+                                else
+                                {
+                                    JumpMoveToPlayer();
+                                }
+                            }
+
+                            if (summonCooldownCounter < summonCooldown)
+                            {
+                                summonCooldownCounter += 1;
+                            }
+                            else
+                            {
+                                summonState = SummonState.OnSummon;
+                            }
                         }
-                        
                         
                     }
                 }
@@ -634,5 +657,15 @@ public class EnemyEliteGaia : Enemy
         }
         EndTurn();
     }
-    
+    private void EnemySummon()
+    {
+        for (int a = 0; a < summonCount; a++)
+        {
+            GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().AddNewEnemyInRoom(EnemySpawnManager.Instance.GetEnemy());
+        }
+        summonCooldownCounter = 0;
+        summonState = SummonState.OnPrepareSummon;
+        enemyAnimator.SetBool("OnSummon",false);
+        EndTurn();
+    }
 }

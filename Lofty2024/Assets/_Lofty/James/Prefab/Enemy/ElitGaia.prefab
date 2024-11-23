@@ -6150,6 +6150,9 @@ MonoBehaviour:
   jumpPrepare: 0
   currentPhase: 0
   jumpDistanceCheck: 4
+  summonCount: 3
+  summonCooldown: 3
+  summonState: 0
   moveBlockLayer:
     serializedVersion: 2
     m_Bits: 1920
