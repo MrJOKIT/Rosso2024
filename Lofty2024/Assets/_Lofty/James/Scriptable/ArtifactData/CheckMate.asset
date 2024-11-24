@@ -15,7 +15,7 @@ MonoBehaviour:
   artifactGrade: 0
   artifactClass: 2
   artifactName: Checkmate!!
-  artifactImage: {fileID: 21300000, guid: 4fb370f5af0826b4a86214efc4896b1e, type: 3}
+  artifactImage: {fileID: 21300000, guid: 0011c79eebbd61b49a66f83f97d40da5, type: 3}
   artifactDetail: Select start point when start battle
   upgradeType: 3
   addHealthPoint: 0
