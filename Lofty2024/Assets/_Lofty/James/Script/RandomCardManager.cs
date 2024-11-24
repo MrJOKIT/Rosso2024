@@ -64,22 +64,7 @@ public class RandomCardManager : MonoBehaviour
         currentCost = randomCost / 2;
         SortingCardGrade();
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            StartRandomCardFixClass(CardClass.SwordKnight,4);
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            StartRandomCardFixClass(CardClass.BladeMaster,4);
-        }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            StartRandomCardFixClass(CardClass.ShootingCaster,4);
-        }
-    }
+    
 
     [Button("RandomCard")]
     public void StartRandomCard()
