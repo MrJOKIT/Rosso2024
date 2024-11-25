@@ -20,17 +20,18 @@ public class SettingsSound : MonoBehaviour
         masterVolumeSlider.value = SoundManage.Instance.masterVolume;
         bgVolumeSlider.value = SoundManage.Instance.bgVolume;
         effectVolumeSlider.value = SoundManage.Instance.effectVolume;
-
+        
         UpdateMasterVolumeText(masterVolumeSlider.value);
         UpdateBGVolumeText(bgVolumeSlider.value);
         UpdateEffectVolumeText(effectVolumeSlider.value);
-
+        
         masterVolumeSlider.onValueChanged.AddListener((value) => UpdateMasterVolume(value));  
         bgVolumeSlider.onValueChanged.AddListener((value) => UpdateVolumeLevels());  
         effectVolumeSlider.onValueChanged.AddListener((value) => UpdateVolumeLevels());  
         applyButton.onClick.AddListener(ApplySettings);  
     }
 
+    // เมื่อปรับ master volume
     void UpdateMasterVolume(float value)
     {
         SoundManage.Instance.masterVolume = value;
@@ -38,42 +39,47 @@ public class SettingsSound : MonoBehaviour
         UpdateVolumeLevels();
     }
 
+    
     void UpdateMasterVolumeText(float value)
     {
         masterVolumeText.text = $"{(value * 100).ToString("0")}%";  
     }
-
+    
     void UpdateVolumeLevels()
     {
         float bgVolumeWithMaster = bgVolumeSlider.value * SoundManage.Instance.masterVolume;
         float effectVolumeWithMaster = effectVolumeSlider.value * SoundManage.Instance.masterVolume;
-
         SoundManage.Instance.bgVolume = bgVolumeWithMaster;
         SoundManage.Instance.effectVolume = effectVolumeWithMaster;
-
         UpdateBGVolumeText(bgVolumeSlider.value);
         UpdateEffectVolumeText(effectVolumeSlider.value);
-
         SoundManage.Instance.UpdateVolumes();
     }
 
+    
     void ApplySettings()
     {
-        SoundManage.Instance.bgVolume = bgVolumeSlider.value * SoundManage.Instance.masterVolume;
-        SoundManage.Instance.effectVolume = effectVolumeSlider.value * SoundManage.Instance.masterVolume;
-
+        SoundManage.Instance.bgVolume = bgVolumeSlider.value;
+        SoundManage.Instance.effectVolume = effectVolumeSlider.value;
+        
         SoundManage.Instance.SaveSettings();  
         SoundManage.Instance.UpdateVolumes();  
-
+        
         UpdateBGVolumeText(bgVolumeSlider.value);
         UpdateEffectVolumeText(effectVolumeSlider.value);
+        
+        masterVolumeSlider.value = SoundManage.Instance.masterVolume;
+        bgVolumeSlider.value = SoundManage.Instance.bgVolume;
+        effectVolumeSlider.value = SoundManage.Instance.effectVolume;
     }
 
+   
     void UpdateBGVolumeText(float value)
     {
         bgVolumeText.text = $"{(value * 100).ToString("0")}%";
     }
 
+   
     void UpdateEffectVolumeText(float value)
     {
         effectVolumeText.text = $"{(value * 100).ToString("0")}%";
