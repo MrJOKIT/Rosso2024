@@ -390,6 +390,22 @@ public class PortalManager : Singeleton<PortalManager>
             yield return new WaitForSeconds(1f);
         }
         progressCanvas.SetActive(false);
+        switch (GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().roomType)
+        {
+            case RoomType.Combat:
+                SoundManager.instace.Play(SoundManager.SoundName.BattleBGM);
+                break;
+            case RoomType.Bonus:
+                SoundManager.instace.Play(SoundManager.SoundName.BonusBGM);
+                break;
+            case RoomType.Clear:
+                SoundManager.instace.Play(SoundManager.SoundName.BonusBGM);
+                break;
+            case RoomType.Boss:
+                SoundManager.instace.Play(SoundManager.SoundName.BattleBGM);
+                break;
+        }
+        
         TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true);
         GameManager.Instance.GetComponent<PortalManager>().ShowStageNumber();
         if (secondStageNumber <= 3)

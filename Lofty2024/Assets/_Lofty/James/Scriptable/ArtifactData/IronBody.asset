@@ -15,7 +15,7 @@ MonoBehaviour:
   artifactGrade: 0
   artifactClass: 1
   artifactName: Iron Body
-  artifactImage: {fileID: 21300000, guid: 4fb370f5af0826b4a86214efc4896b1e, type: 3}
+  artifactImage: {fileID: 21300000, guid: 7d3960f7eb4ac424e9b491b31d48291f, type: 3}
   artifactDetail: Curse no effect to Player
   upgradeType: 3
   addHealthPoint: 0

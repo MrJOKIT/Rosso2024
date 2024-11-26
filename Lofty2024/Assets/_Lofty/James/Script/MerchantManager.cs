@@ -1,12 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ArtifactStock
+public enum ItemList
 {
-    public ArtifactData artifactData;
-    public Button buyButton;
+    HealthPotion,
+    ShieldArmor,
+}
+[Serializable]
+public class ItemStock
+{
+    public ItemList itemName;
+    public int itemCost;
 }
 public class MerchantManager : Singeleton<MerchantManager>
 {
@@ -15,11 +22,7 @@ public class MerchantManager : Singeleton<MerchantManager>
     public bool shopActive;
     [Space(10)] 
     [Header("Merchant")] 
-    public ArtifactData slotOne;
-    public ArtifactData slotTwo;
-    public ArtifactData slotThree;
-    public ArtifactData slotFour;
-    public ArtifactData slotFive;
+    public List<ItemStock> itemStocks;
     
     public void OpenShop()
     {
@@ -33,19 +36,26 @@ public class MerchantManager : Singeleton<MerchantManager>
         shopActive = false;
     }
 
-    public void BuyArtifact(int slotIndex)
+    public void BuyItem(int index)
     {
-        switch (slotIndex)
+        if ( GetComponent<GameCurrency>().EricCoin < itemStocks[index].itemCost)
         {
-            case 0:
+            Debug.Log("Not enough money");
+            return;
+        }
+        ItemActive(itemStocks[index].itemName);
+        GetComponent<GameCurrency>().DecreaseEricCoin(itemStocks[index].itemCost);
+    }
+
+    private void ItemActive(ItemList itemName)
+    {
+        switch (itemName)
+        {
+            case ItemList.HealthPotion:
+                GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().TakeHealth(1);
                 break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
+            case ItemList.ShieldArmor:
+                GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().ActiveShield();
                 break;
         }
     }

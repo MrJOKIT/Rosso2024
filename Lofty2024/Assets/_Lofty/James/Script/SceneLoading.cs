@@ -24,6 +24,7 @@ public class SceneLoading : MonoBehaviour
         {
             startLoad = true;
             loadingScene.SetActive(false);
+            SoundManager.instace.Play(SoundManager.SoundName.BonusBGM);
             TransitionAnimator animator = TransitionAnimator.Start(loadSuccesProfile);
             animator.onTransitionEnd.AddListener(LoadSucces);
         }
@@ -39,6 +40,7 @@ public class SceneLoading : MonoBehaviour
         loadSucces = true;
         GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().StartRoom();
         GetComponent<GameManager>().StartTimer();
+        
     }
     
 }

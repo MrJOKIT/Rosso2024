@@ -47,8 +47,6 @@ public class RoomManager : MonoBehaviour
     [Tab("Room Generator")] 
     public bool obstacleSpawnComplete;
     public Vector2Int spawnObstacleCount;
-    private int spawnedObstacleCount;
-    private int spawnObstacleMax;
     
     public Transform obstacleParent;
     public List<GameObject> obstaclePrefab;
@@ -91,8 +89,6 @@ public class RoomManager : MonoBehaviour
         GameManager.Instance.StartTimer();
         SpawnObstacle();
         
-        spawnObstacleMax = Random.Range(spawnObstacleCount.x, spawnObstacleCount.y);
-     
         Invoke("SpawnObstacle",0.1f);
         Invoke("SpawnEnemy",0.2f);
         
@@ -106,15 +102,12 @@ public class RoomManager : MonoBehaviour
             obstacleSpawnComplete = true;
             return;
         }
-        for (int i = 0; i < spawnObstacleMax; i++)
+
+        while (EnemySpawnManager.Instance.obstacleCost > 0)
         {
-            Instantiate(obstaclePrefab[Random.Range(0, obstaclePrefab.Count - 1)], CheckSpawnPoint(), Quaternion.identity, obstacleParent);
-            spawnedObstacleCount += 1;
-            if (spawnedObstacleCount == spawnObstacleMax)
-            {
-                obstacleSpawnComplete = true;
-            }
+            Instantiate(EnemySpawnManager.Instance.GetObstacle(), CheckSpawnPoint(), Quaternion.identity, obstacleParent);
         }
+        obstacleSpawnComplete = true;
     }
     private void SpawnEnemy()
     {

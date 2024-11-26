@@ -21,6 +21,7 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private int maxHealth;
     [SerializeField] private int playerHealthTemp;
     [SerializeField] private int playerHealth;
+    public int MaxPlayerHealth => maxHealth;
     public int PlayerHealth => playerHealth;
     [SerializeField] private int takeDamageCount = 0;
     public bool isDead;
@@ -155,6 +156,11 @@ public class Player : MonoBehaviour, ITakeDamage
         TakeHealth(1);
         UpdateHealthUI();
     }
+
+    public void ActiveShield()
+    {
+        haveShield = true;
+    }
     
     public void TakeDamage(int damage)
     {
@@ -163,6 +169,7 @@ public class Player : MonoBehaviour, ITakeDamage
         if (haveShield)
         {
             haveShield = false;
+            TurnManager.Instance.AddLog(playerName,"",LogList.Block,true);
             return;
         }
 

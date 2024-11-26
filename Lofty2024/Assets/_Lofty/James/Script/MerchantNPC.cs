@@ -24,7 +24,6 @@ public class MerchantNPC : InterfacePopUp<MerchantNPC>
         {
             treeAnimator.SetBool("Open",false);
             randomSuccess = true;
-            Destroy(gameObject);
         }
         if (onPlayer)
         {

@@ -16,6 +16,7 @@ public enum LogList
     Evade,
     KnockBack,
     Bomb,
+    Block,
 }
 public class CombatLogSlot : MonoBehaviour
 {
@@ -64,6 +65,9 @@ public class CombatLogSlot : MonoBehaviour
                 break;
             case LogList.Bomb:
                 log = "Bombed";
+                break;
+            case LogList.Block:
+                log = "Blocked";
                 break;
         }
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   artifactGrade: 0
   artifactClass: 0
   artifactName: The deal from flame
-  artifactImage: {fileID: 21300000, guid: 4fb370f5af0826b4a86214efc4896b1e, type: 3}
+  artifactImage: {fileID: 21300000, guid: 8c097ac6b2aeb5248b2f12afa7accee6, type: 3}
   artifactDetail: Earn more flame soul (1.5x)
   upgradeType: 4
   addHealthPoint: 0

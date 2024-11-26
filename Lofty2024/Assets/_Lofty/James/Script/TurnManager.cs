@@ -256,6 +256,12 @@ public class TurnManager : Singeleton<TurnManager>
                 currentLog.Remove(currentLog[0]);
                 logTimeCounter = 0;
             }
+            else if (currentLog.Count > maxLog)
+            {
+                Destroy(currentLog[0].gameObject);
+                currentLog.Remove(currentLog[0]);
+                logTimeCounter = 0;
+            }
         }
     }
 

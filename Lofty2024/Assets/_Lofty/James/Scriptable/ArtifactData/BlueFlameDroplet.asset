@@ -15,7 +15,7 @@ MonoBehaviour:
   artifactGrade: 1
   artifactClass: 3
   artifactName: Blue flame droplet
-  artifactImage: {fileID: 21300000, guid: 4fb370f5af0826b4a86214efc4896b1e, type: 3}
+  artifactImage: {fileID: 21300000, guid: 7517f68007ba0414ca21c9620bdd9134, type: 3}
   artifactDetail: When start your turn you gain free action 1 time
   upgradeType: 3
   addHealthPoint: 0
