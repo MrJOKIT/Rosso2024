@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 public class Player : MonoBehaviour, ITakeDamage
 {
     [Tab("Player")] 
+    public string playerName = "ROSSO";
     [Header("Default Stats")] 
     [SerializeField] private int defaultMaxHealth;
     [SerializeField] private int defaultHealthTemp;
@@ -198,6 +199,7 @@ public class Player : MonoBehaviour, ITakeDamage
             }
             else
             {
+                TurnManager.Instance.AddLog(GetComponent<Player>().playerName,"",LogList.Evade,true);
                 Debug.Log("Miss");
             }
         }

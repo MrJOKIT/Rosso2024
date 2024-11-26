@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Playables;
 using VInspector;
 
 public enum BomberState
@@ -75,8 +76,7 @@ public class EnemyBomber : Enemy
                     }
                     else
                     {
-                        currentBomber.GetComponent<SkillAction>().ActiveSkill();
-                        EnemyDie();
+                        GetComponent<PlayableDirector>().Play();
                         //EndTurn();
                     }
                     
@@ -554,6 +554,13 @@ public class EnemyBomber : Enemy
             playerInRange = false;
         }
         
+    }
+
+    public void Bomb()
+    {
+        TurnManager.Instance.AddLog(enemyData.enemyName,"",LogList.Bomb,false);
+        currentBomber.GetComponent<SkillAction>().ActiveSkill();
+        EnemyDie();
     }
    
 }

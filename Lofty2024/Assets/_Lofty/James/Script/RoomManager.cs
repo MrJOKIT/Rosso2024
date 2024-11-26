@@ -39,9 +39,6 @@ public class RoomManager : MonoBehaviour
     [Space(10)]
     public bool enemySpawnComplete;
     public bool stunAll;
-    public Vector2Int spawnEnemyCount;
-    private int spawnedEnemyCount;
-    private int spawnEnemyMax;
     
     public Transform enemyParent;
     public List<Enemy> enemyInRoom;
@@ -95,7 +92,6 @@ public class RoomManager : MonoBehaviour
         SpawnObstacle();
         
         spawnObstacleMax = Random.Range(spawnObstacleCount.x, spawnObstacleCount.y);
-        spawnEnemyMax = Random.Range(spawnEnemyCount.x,spawnEnemyCount.y);
      
         Invoke("SpawnObstacle",0.1f);
         Invoke("SpawnEnemy",0.2f);
@@ -135,7 +131,8 @@ public class RoomManager : MonoBehaviour
             enemySpawnComplete = true;
             return;
         }
-        for (int i = 0; i < spawnEnemyMax; i++)
+
+        while (EnemySpawnManager.Instance.difficultyCost > 0)
         {
             GameObject enemy = Instantiate(EnemySpawnManager.Instance.GetEnemy(), CheckSpawnPoint(), Quaternion.identity,enemyParent);
             enemyInRoom.Add(enemy.GetComponent<Enemy>());
@@ -145,12 +142,9 @@ public class RoomManager : MonoBehaviour
             {
                 enemy.GetComponent<Enemy>().AddCurseStatus(CurseType.Stun,1); 
             }
-            spawnedEnemyCount += 1;
-            if (spawnedEnemyCount == spawnEnemyMax)
-            {
-                enemySpawnComplete = true;
-            }
         }
+
+        enemySpawnComplete = true;
     }
 
     private void Update()

@@ -117,6 +117,7 @@ public class GameManager : Singeleton<GameManager>
     public void GameOver()
     {
         PauseTimer();
+        TurnManager.Instance.gameEnd = true;
         Debug.Log("Game Over");
         currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().FormatPlayerData();
         deadCanvas.SetActive(true);

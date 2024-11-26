@@ -379,26 +379,40 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                     float randomNumber = Random.Range(0, 1f);
                     if (randomNumber <= 0.2f)
                     {
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.CriticalAttack,true);
                         currentEnemy.TakeDamage(damage + 5);
                     }
                     else
                     { 
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Attacked,true);
                         currentEnemy.TakeDamage(damage);
                     }
                 }
                 else 
                 { 
+                    TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Attacked,true);
                     currentEnemy.TakeDamage(damage);
                 } 
                 break;
             case AttackType.SpecialAttack: 
+                TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.CriticalAttack,true);
                 currentEnemy.TakeDamage(damage * 2); 
                 break;
             case AttackType.KnockBackAttack: 
+                TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.KnockBack,true);
                 currentEnemy.TakeDamage(damage); 
                 currentEnemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange); 
                 break;
-            case AttackType.EffectiveAttack: 
+            case AttackType.EffectiveAttack:
+                switch (effectiveType)
+                {
+                    case CurseType.Burn:
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Burn,true);
+                        break;
+                    case CurseType.Stun:
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Stunned,true);
+                        break;
+                }
                 currentEnemy.TakeDamage(damage); 
                 currentEnemy.AddCurseStatus(effectiveType,effectiveTurnTime); 
                 break;

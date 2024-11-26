@@ -5898,6 +5898,8 @@ GameObject:
   - component: {fileID: 8556914738638223055}
   - component: {fileID: 6523055040565516207}
   - component: {fileID: 6605323122867381334}
+  - component: {fileID: 3184528081818566223}
+  - component: {fileID: 4916341409367655035}
   m_Layer: 7
   m_Name: EnemyBomber
   m_TagString: Enemy
@@ -6073,3 +6075,54 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!320 &3184528081818566223
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9134819534939182666}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 911954ba3f591b643a866c36c3c94a55, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -8993134407058625462, guid: 911954ba3f591b643a866c36c3c94a55, type: 2}
+    value: {fileID: 4916341409367655035}
+  - key: {fileID: 7570246986804058772, guid: 911954ba3f591b643a866c36c3c94a55, type: 2}
+    value: {fileID: 6484183459520965145}
+  m_ExposedReferences:
+    m_References: []
+--- !u!114 &4916341409367655035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9134819534939182666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: d10077dd22b02354593735a122ac2e4b, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 9134573452131459688}
+          m_TargetAssemblyTypeName: EnemyBomber, Assembly-CSharp
+          m_MethodName: Bomb
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

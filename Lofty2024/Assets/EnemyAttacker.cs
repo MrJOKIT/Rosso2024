@@ -19,6 +19,7 @@ public class EnemyAttacker : MonoBehaviour
     {
         enemyHost.targetTransform.GetComponent<Player>().TakeDamage(enemyHost.enemyData.damage);
         VisualEffectManager.Instance.CallEffect(effectName,enemyHost.targetTransform,1f);
+        TurnManager.Instance.AddLog(enemyHost.enemyData.enemyName,enemyHost.targetTransform.GetComponent<Player>().playerName,LogList.Attacked,false);
     }
 
     private void Update()

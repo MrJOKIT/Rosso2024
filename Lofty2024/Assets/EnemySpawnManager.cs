@@ -10,45 +10,43 @@ using Random = UnityEngine.Random;
 public class EnemySpawnList
 {
     public GameObject enemyPrefab;
-    [Tooltip("If maxSpawn equal 0 is show ti no limit")] public int maxSpawn;
-    public int currentSpawn;
+    public int cost;
 }
 
 
 public class EnemySpawnManager : Singeleton<EnemySpawnManager>
 {
-    [Tab("Enemy")]
-    public RandomRateProfile enemyRandomRate;
+    [Tab("Enemy")] 
+    public int defaultDifficultyCost = 10;
+    public int difficultyCost;
     public List<EnemySpawnList> enemySpawnList;
+    public List<EnemySpawnList> enemyList;
     [Tab("Boss")]
     public List<EnemySpawnList> bossSpawnList;
-    
-    
+
+    private void Start()
+    {
+        ResetSpawnList();
+    }
+
+    private void SetList()
+    {
+        enemyList.Clear();
+        foreach (EnemySpawnList enemy in enemySpawnList)
+        {
+            if (enemy.cost <= difficultyCost)
+            {
+                enemyList.Add(enemy);
+            }
+        }
+    }
     public GameObject GetEnemy()
     {
-        int enemyNumber = 0;
-        float randomNumber = Random.Range(0, 100f);
-        Debug.Log("Enemy = " + randomNumber);
-        if (randomNumber <= enemyRandomRate.labigonRate)
-        {
-            enemyNumber = 0;
-        }
-        else if (randomNumber <= enemyRandomRate.ironRate)
-        {
-            enemyNumber = 1;
-        }
-        else if (randomNumber <= enemyRandomRate.wizardRate)
-        {
-            enemyNumber = 2;
-        }
-
-        if (enemySpawnList[enemyNumber].currentSpawn >= enemySpawnList[enemyNumber].maxSpawn)
-        {
-            enemyNumber = 0;
-            
-        }
-        enemySpawnList[enemyNumber].currentSpawn += 1;
-        return enemySpawnList[enemyNumber].enemyPrefab;
+        int randomNumber = Random.Range(0, enemyList.Count - 1);
+        GameObject newEnemy = enemyList[randomNumber].enemyPrefab;
+        difficultyCost -= enemyList[randomNumber].cost;
+        SetList();
+        return newEnemy;
     }
     
     public GameObject GetBossEnemy()
@@ -74,9 +72,7 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
 
     public void ResetSpawnList()
     {
-        foreach (EnemySpawnList enemy in enemySpawnList)
-        {
-            enemy.currentSpawn = 0;
-        }
+        difficultyCost = defaultDifficultyCost;
+        SetList();
     }
 }

@@ -729,7 +729,7 @@ Transform:
   - {fileID: 8121135055242244604}
   - {fileID: 8524608166342114936}
   - {fileID: 2053665822839750457}
-  - {fileID: 5060309423775936835}
+  - {fileID: 344463606707010466}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5636902839952104771
@@ -759,7 +759,6 @@ MonoBehaviour:
   bossSpawnPoint: {fileID: 0}
   enemySpawnComplete: 0
   stunAll: 0
-  spawnEnemyCount: {x: 4, y: 6}
   enemyParent: {fileID: 3347568995621606985}
   enemyInRoom: []
   roomClear: 0
@@ -906,14 +905,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764484870659356035}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.23911768, y: -0.3696438, z: 0.09904579, w: 0.89239913}
+  m_LocalPosition: {x: 0, y: -0.11785116, z: -0.20412414}
+  m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333328}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7138532745497963408}
-  - {fileID: 344463606707010466}
-  m_Father: {fileID: 6756964171588841694}
+  m_Father: {fileID: 344463606707010466}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &192775201722200905
 MonoBehaviour:
@@ -1099,7 +1097,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &5986995352905506510
 Rigidbody:
@@ -1900,11 +1900,12 @@ Transform:
   m_GameObject: {fileID: 3693512178707104633}
   serializedVersion: 2
   m_LocalRotation: {x: 0.23911768, y: 0.3696438, z: -0.09904579, w: 0.89239913}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0.5}
+  m_LocalPosition: {x: 1.5, y: 0, z: 4.5}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 5060309423775936835}
+  m_Children:
+  - {fileID: 5060309423775936835}
+  m_Father: {fileID: 6756964171588841694}
   m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
 --- !u!212 &9169726781900282934
 SpriteRenderer:
@@ -2438,7 +2439,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &1607661260425984801
 Rigidbody:
@@ -2522,7 +2525,7 @@ MonoBehaviour:
   - Assets/James/Materials/Ground.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_23211eeb-a2c9-49f3-97a5-2b1bc375de4d
+    name: UM_OperatedMesh_7979286e-3868-4144-ae98-71f303e120cd
     skinnedMesh: 0
     sharedMesh: {fileID: -4943758353868826497}
     buidVersion:
@@ -2534,7 +2537,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: 23211eeb-a2c9-49f3-97a5-2b1bc375de4d
+  sourceMeshRendererGUID: 7979286e-3868-4144-ae98-71f303e120cd
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0
@@ -2816,7 +2819,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &7979834433671987820
 Rigidbody:
@@ -4691,7 +4696,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &383078920439377515
 Rigidbody:

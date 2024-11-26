@@ -6,6 +6,7 @@ using EditorAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using VInspector;
 
 [Serializable]
 public class TurnData
@@ -25,6 +26,7 @@ public class TurnData
 }
 public class TurnManager : Singeleton<TurnManager>
 {
+    [Tab("Turn Handle")]
     [Space(10)] 
     [Header("Stage Manage")] 
     public bool currentRoomClear;
@@ -45,9 +47,21 @@ public class TurnManager : Singeleton<TurnManager>
     public GameObject queuePrefab;
     public GameObject turnSlotAllyPrefab;
     public GameObject turnSlotEnemyPrefab;
+    public bool gameEnd;
 
+    [Tab("Combat Log")] 
+    [Header("Log Ref")]
+    public Transform logSpawnPoint;
+    public GameObject logPrefab;
+    public List<CombatLogSlot> currentLog;
+    [Header("Log Setting")]
+    public int maxLog;
+    public float logTime;
+    private float logTimeCounter;
+    
     private void Update()
     {
+        CombatLogHandle();
         if (currentRoomClear)
         {
             onPlayerTurn = true;
@@ -68,7 +82,7 @@ public class TurnManager : Singeleton<TurnManager>
 
     private void FixedUpdate()
     {
-        if (onPlayerTurn || onEnemyTurn)
+        if (onPlayerTurn || onEnemyTurn || gameEnd)
         {
             return;
         }
@@ -220,5 +234,31 @@ public class TurnManager : Singeleton<TurnManager>
         GameObject turnSlot =Instantiate(turnSlotEnemyPrefab, queue.transform); 
         turnData.Find(x => x.unitTransform == transform).turnSlot = turnSlot.GetComponent<TurnSlot>();;
     }
-    
+
+    #region Combat Log
+
+    public void AddLog(string ownerName, string oppositeName, LogList logList,bool isPlayer)
+    {
+        GameObject logObject = Instantiate(logPrefab, logSpawnPoint);
+        logObject.GetComponent<CombatLogSlot>().SetLog(ownerName, oppositeName, logList,isPlayer);
+        
+        currentLog.Add(logObject.GetComponent<CombatLogSlot>());
+    }
+
+    private void CombatLogHandle()
+    {
+        if (currentLog.Count > 0)
+        {
+            logTimeCounter += Time.deltaTime;
+            if (logTimeCounter >= logTime)
+            {
+                Destroy(currentLog[0].gameObject);
+                currentLog.Remove(currentLog[0]);
+                logTimeCounter = 0;
+            }
+        }
+    }
+
+    #endregion
+
 }
