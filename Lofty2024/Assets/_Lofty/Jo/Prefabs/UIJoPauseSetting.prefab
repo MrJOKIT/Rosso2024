@@ -9357,7 +9357,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8845447128110505727}
   m_Layer: 0
-  m_Name: UIJoMainScene
+  m_Name: UIJoPauseSetting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

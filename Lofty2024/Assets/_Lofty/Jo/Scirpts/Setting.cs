@@ -39,13 +39,12 @@ public class Setting : MonoBehaviour
     void OnButtonClick()
     {
         Debug.Log("Button clicked!");
-        SoundManage.Instance.PlaySound(Sound.Effect2); 
+       
 
        
-        if (uiPanel != null)
-        {
-            uiPanel.SetActive(!uiPanel.activeSelf);
-        }
+       EffectSoundManage.instance.PlaySFX("adriantnt_u_click");
+            uiPanel.SetActive(true);
+        
     }
 
     void OnArrowButtonClick()
