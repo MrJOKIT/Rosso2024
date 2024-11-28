@@ -42,6 +42,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
         {
             if (hit.collider != null)
             {
+                GetComponent<GameManager>().ChangeCursor(CursorType.DataCursor);
                 if (hit.transform.GetComponent<GridMover>() != selectedGrid || hit.transform.GetComponent<GridMover>() == null )
                 {
                     selectedGrid = hit.transform.GetComponent<GridMover>();
@@ -76,6 +77,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
         }
         else
         {
+            GetComponent<GameManager>().ChangeCursor(CursorType.DefaultCursor);
             GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().ClearSelectedGird();
             selectedGrid = null;
             selectedEnemy = null;

@@ -109,6 +109,7 @@ public class Player : MonoBehaviour, ITakeDamage
     {
         if (playerHealth <= 0) 
         {
+            isDead = true;
             if (GetComponent<PlayerArtifact>().DeathDoor)
             {
                 playerHealth = maxHealth;
@@ -119,6 +120,7 @@ public class Player : MonoBehaviour, ITakeDamage
             else
             {
                 GetComponent<PlayerMovementGrid>().playerAnimator.SetBool("IsDead",true);
+                VisualEffectManager.Instance.CallEffect(EffectName.Dead,transform,1f);
             }
             
         }
@@ -127,7 +129,6 @@ public class Player : MonoBehaviour, ITakeDamage
     public void PlayerDie()
     {
         //ใช้ตอน Player ตาย 
-        isDead = true;
         TransitionAnimator transitionAnimator = TransitionAnimator.Start(TransitionType.Smear,2f,playDelay:2f);
         transitionAnimator.onTransitionEnd.AddListener(GameManager.Instance.GameOver);
     }
@@ -266,6 +267,7 @@ public class Player : MonoBehaviour, ITakeDamage
 
     public void TakeHealth(int health)
     {
+        VisualEffectManager.Instance.CallEffect(EffectName.Heal,transform,1.5f);
         playerHealth += health + GetComponent<PlayerArtifact>().HealMultiple;
         
         if (playerHealth >= maxHealth + GetComponent<PlayerArtifact>().HealthPoint + playerHealthTemp)
@@ -330,6 +332,8 @@ public class Player : MonoBehaviour, ITakeDamage
     {
         defaultHealthTemp = playerHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp;
         defaultMaxHealth = maxHealth + GetComponent<PlayerArtifact>().HealthPoint;
+        maxHealth += GetComponent<PlayerArtifact>().HealthPoint;
+        playerHealthTemp += GetComponent<PlayerArtifact>().HealthPointTemp;
         
         CreateHealthUI();
         UpdateHealthUI();

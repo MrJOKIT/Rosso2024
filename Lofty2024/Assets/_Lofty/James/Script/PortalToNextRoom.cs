@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
 {
-    [Header("Portal Setting")]
+    [Header("Portal Setting")] 
     public RoomType roomTypeConnect;
     public Transform roomCenter;
     public Vector3 warpPoint;
@@ -15,8 +15,8 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
     public bool portalActive;
     public bool isConnect;
     public bool pressActive;
-    [Space(10)] 
-    [Header("Portal Object")] 
+    [Space(10)] [Header("Portal Object")] 
+    public List<SpriteRenderer> iconSprite;
     public GameObject combatPortal;
     public GameObject bonusPortal;
     public GameObject bossPortal;
@@ -39,13 +39,16 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         }
     }
 
-    public void SetPortal(RoomType roomType,Vector3 warpPos,Transform roomCenter,Transform playerTransform)
+    public void SetPortal(RoomType roomType,Vector3 warpPos,Transform roomCenter,Transform playerTransform,Sprite iconSprite)
     {
         this.roomTypeConnect = roomType;
         this.roomCenter = roomCenter;
         playerTrans = playerTransform;
-        
-        
+
+        foreach (SpriteRenderer sprite in this.iconSprite)
+        {
+            sprite.sprite = iconSprite;
+        }
         switch (roomType)
         {
             case RoomType.Combat:

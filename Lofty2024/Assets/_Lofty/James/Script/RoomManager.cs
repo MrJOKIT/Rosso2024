@@ -18,6 +18,7 @@ public class RoomManager : MonoBehaviour
 {
     [Tab("Room Setting")] 
     [Space(5)] 
+    public Sprite roomIcon;
     public bool isStandbyRoom;
     public bool isLastRoom;
     public bool roomActive;

@@ -14,6 +14,7 @@ public class EnemyWizard : Enemy
 {
     [Tab("Summon Setting")] 
     public GameObject summonEnemyPrefab;
+    public GameObject summonVfx;
     public int summonCount;
     [Header("Cooldown")]
     public int summonCooldown;
@@ -57,6 +58,7 @@ public class EnemyWizard : Enemy
                         {
                             summonState = SummonState.OnSummon;
                             GetComponent<PlayableDirector>().Play();
+                            summonVfx.SetActive(true);
                         }
                         else
                         {
@@ -67,6 +69,7 @@ public class EnemyWizard : Enemy
                     else
                     {
                         EnemySummon();
+                        summonVfx.SetActive(false);
                     }
                     
                     

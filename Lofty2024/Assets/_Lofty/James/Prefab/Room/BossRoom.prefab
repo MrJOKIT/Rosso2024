@@ -150,7 +150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &6236537505387766490
 Rigidbody:
@@ -1416,7 +1418,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &3102041297015694248
 Rigidbody:
@@ -1696,7 +1700,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &2180795813790104756
 Rigidbody:
@@ -1844,6 +1850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38ca3476d3ddc148a3fbdad2eb7c215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomIcon: {fileID: 21300000, guid: e088d4029c7734391a840e6acd500e8d, type: 3}
   isStandbyRoom: 0
   isLastRoom: 0
   roomActive: 0
@@ -1859,7 +1866,6 @@ MonoBehaviour:
   bossSpawnPoint: {fileID: 5959194902820620167}
   enemySpawnComplete: 0
   stunAll: 0
-  spawnEnemyCount: {x: 1, y: 1}
   enemyParent: {fileID: 70167837347030421}
   enemyInRoom: []
   roomClear: 0
@@ -2372,7 +2378,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &455070732974099973
 Rigidbody:
@@ -2456,7 +2464,7 @@ MonoBehaviour:
   - Assets/James/Materials/Ground.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_1fda8462-52e2-434a-8d39-6f75f1727c3b
+    name: UM_OperatedMesh_f3a22eea-d2d1-4a14-b603-0ca99ab31382
     skinnedMesh: 0
     sharedMesh: {fileID: -5978146987537643433}
     buidVersion:
@@ -2468,7 +2476,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: 1fda8462-52e2-434a-8d39-6f75f1727c3b
+  sourceMeshRendererGUID: f3a22eea-d2d1-4a14-b603-0ca99ab31382
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0

@@ -12,6 +12,9 @@ public enum EffectName
     Blood,
     Revive,
     CoinReward,
+    Dead,
+    EnemyDead,
+    Heal,
 }
 [Serializable]
 public class EffectData

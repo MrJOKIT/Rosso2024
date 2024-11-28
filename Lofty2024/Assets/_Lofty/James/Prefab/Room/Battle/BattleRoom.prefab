@@ -119,7 +119,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &6690903182147779804
 Rigidbody:
@@ -298,7 +300,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &1869155053415635026
 Rigidbody:
@@ -526,6 +530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38ca3476d3ddc148a3fbdad2eb7c215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomIcon: {fileID: 21300000, guid: 8fb2a9a9f3b8d403baf408fdee0de87c, type: 3}
   isStandbyRoom: 0
   isLastRoom: 0
   roomActive: 0
@@ -541,7 +546,6 @@ MonoBehaviour:
   bossSpawnPoint: {fileID: 0}
   enemySpawnComplete: 0
   stunAll: 0
-  spawnEnemyCount: {x: 4, y: 6}
   enemyParent: {fileID: 3347568995621606985}
   enemyInRoom: []
   roomClear: 0
@@ -1205,7 +1209,7 @@ MonoBehaviour:
   - Assets/James/Materials/Ground.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_0fea4c3c-f3d1-4d52-a3fe-b3931835388a
+    name: UM_OperatedMesh_193d5bfb-c1c3-4adf-ad2b-f5f8db0e82db
     skinnedMesh: 0
     sharedMesh: {fileID: -4943758353868826497}
     buidVersion:
@@ -1217,7 +1221,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: 0fea4c3c-f3d1-4d52-a3fe-b3931835388a
+  sourceMeshRendererGUID: 193d5bfb-c1c3-4adf-ad2b-f5f8db0e82db
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0
@@ -1402,7 +1406,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &224117966926057863
 Rigidbody:
@@ -2686,7 +2692,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58680fce47540b4981b70a824f40c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInZone: {fileID: 0}
   enemyInZone: []
+  onPlayer: 0
   onEnemy: 0
 --- !u!54 &1177553170625330283
 Rigidbody:

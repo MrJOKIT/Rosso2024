@@ -180,6 +180,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     protected void EnemyDie()
     {
+        VisualEffectManager.Instance.CallEffect(EffectName.EnemyDead,transform,1f);
         MouseSelectorManager.Instance.ClearSelector(this);
         TurnManager.Instance.RemoveUnit(enemyTurnData);
         isDead = true;

@@ -367,8 +367,8 @@ public class PlayerArtifact : MonoBehaviour
                     addKnockBackRange += artifact.artifactData.addKnockBackRange;
                     addActionPoint += artifact.artifactData.addActionPoint;
                     addSkillDiscount += artifact.artifactData.addSkillDiscount;
-                    
                     //GetComponent<Player>().LoadPlayerData();
+                    GetComponent<Player>().
                     GetComponent<Player>().UpgradeStats();
                     GetComponent<PlayerMovementGrid>().UpgradeStats();
                     break;
@@ -494,7 +494,7 @@ public class PlayerArtifact : MonoBehaviour
     {
         if (firstUnlockSuccess == false)
         {
-            if (swordKnightTier1)
+            if (swordKnightPassiveOne)
             {
                 playerProfile.sprite = swordKnightProfile;
                 crownObject.SetActive(true);
@@ -505,7 +505,7 @@ public class PlayerArtifact : MonoBehaviour
                 
                 firstUnlockSuccess = true;
             }
-            else if (bladeMasterTier1)
+            else if (bladeMasterPassiveOne)
             {
                 playerProfile.sprite = bladeMasterProfile;
                 crownObject.SetActive(true);
@@ -516,7 +516,7 @@ public class PlayerArtifact : MonoBehaviour
                 
                 firstUnlockSuccess = true;
             }
-            else if (shootCasterTier1)
+            else if (shootCasterPassiveOne)
             {
                 playerProfile.sprite = shootCasterProfile;
                 crownObject.SetActive(true);

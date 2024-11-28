@@ -31,6 +31,7 @@ public class SoundManager : MonoBehaviour
         Empty,
         BattleBGM,
         BonusBGM,
+        DeadBGM,
     }
     public enum VfxName
     {
