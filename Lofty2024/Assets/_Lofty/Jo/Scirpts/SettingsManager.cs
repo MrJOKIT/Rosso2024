@@ -11,7 +11,7 @@ public class SettingsManager : MonoBehaviour
     public bool isFPSLimited;
     public int limitedFPS;
     public bool isVSyncEnabled;
-    public bool isWindowedMode; // Track windowed/fullscreen setting
+    public bool isWindowedMode; 
 
     private void Awake()
     {
@@ -25,7 +25,7 @@ public class SettingsManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        LoadSettings(); // Load settings from PlayerPrefs
+        LoadSettings(); 
     }
 
     public void SaveSettings()
@@ -36,7 +36,7 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetInt("VSyncEnabled", isVSyncEnabled ? 1 : 0);
         PlayerPrefs.SetInt("WindowedMode", isWindowedMode ? 1 : 0);
 
-        // Save the indices for game objects and resolutions
+       
         PlayerPrefs.SetInt("CurrentGameObjectIndex", currentGameObjectIndex);
         PlayerPrefs.SetInt("CurrentResolutionIndex", currentResolutionIndex);
 
@@ -51,7 +51,7 @@ public class SettingsManager : MonoBehaviour
         }
         else
         {
-            resolution = new Vector2Int(1920, 1080); // Default resolution if not found in PlayerPrefs
+            resolution = new Vector2Int(1920, 1080); 
         }
 
         isFPSLimited = PlayerPrefs.GetInt("FPSLimit", -1) != -1;
@@ -68,43 +68,42 @@ public class SettingsManager : MonoBehaviour
 
     public void ApplySettings()
     {
-        // Apply the resolution and screen mode (Windowed, Fullscreen, Borderless) based on the settings
+       
         if (isWindowedMode)
         {
-            // If in windowed mode
-            Screen.SetResolution(resolution.x, resolution.y, false); // Set windowed resolution
-            Screen.fullScreen = false; // Ensure it's not fullscreen
+            
+            Screen.SetResolution(resolution.x, resolution.y, false); 
+            Screen.fullScreen = false; 
         }
         else
         {
-            // If in fullscreen mode
-            Screen.SetResolution(resolution.x, resolution.y, true); // Set fullscreen resolution
-            Screen.fullScreen = true; // Ensure it's fullscreen
+          
+            Screen.SetResolution(resolution.x, resolution.y, true);
+            Screen.fullScreen = true; 
         }
 
-        // Apply borderless window mode if necessary
-        if (!isWindowedMode && currentResolutionIndex == 1) // Assuming index 1 is for Borderless
+       
+        if (!isWindowedMode && currentResolutionIndex == 1) 
         {
             SetBorderlessWindow();
         }
 
-        // Apply FPS and V-Sync settings
+        
         Application.targetFrameRate = isFPSLimited ? limitedFPS : -1;
         QualitySettings.vSyncCount = isVSyncEnabled ? 1 : 0;
     }
 
-    // Set borderless window mode
+   
     private void SetBorderlessWindow()
     {
-        // For Borderless mode, use native resolution but ensure it's windowed (not fullscreen)
+       
         Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, false);
-        Screen.fullScreen = false; // Ensure not in fullscreen mode
+        Screen.fullScreen = false; 
 
-        // Additional platform-specific code can be added here if necessary (e.g., Windows plugins for full borderless control)
+        
         if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
         {
-            // Ideally, you need a native plugin or platform-specific code to make this truly borderless on Windows
-            // Some Windows API or plugin could help set the window to borderless.
+            
         }
         Debug.Log("Borderless Window Mode Enabled");
     }

@@ -17,20 +17,19 @@ public class ImagePopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (buttonText != null)
         {
             buttonText.color = Color.white;
-            originalFontSize = buttonText.fontSize; // Store the original font size
+            originalFontSize = buttonText.fontSize;
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        SoundManage.Instance.PlaySound(Sound.Effect1); 
         Debug.Log("Mouse entered!");
         imageToShow.SetActive(true);
         
         if (buttonText != null)
         {
             buttonText.color = Color.yellow; 
-            buttonText.fontSize = originalFontSize * 1.1f; // Increase font size by 10%
+            buttonText.fontSize = originalFontSize * 1.1f; 
         }
     }
 
@@ -42,13 +41,22 @@ public class ImagePopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (buttonText != null)
         {
             buttonText.color = Color.white; 
-            buttonText.fontSize = originalFontSize; // Restore original font size
+            buttonText.fontSize = originalFontSize; 
         }
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("Mouse clicked!");
-        SoundManage.Instance.PlaySound(Sound.Effect1); 
+        EffectSoundManage.instance.PlaySFX("adriantnt_u_click");
+    }
+
+    public void ChangeMusic()
+    {
+        MusicVolumeSetting.instance.ChangeMusic("swift-valkyrie-remastered-229741");
+    }
+    public void ChangeBack()
+    {
+        MusicVolumeSetting.instance.ChangeMusic("Voicy_Yu-Gi-Oh! - Millennium Battle Theme");
     }
 }
