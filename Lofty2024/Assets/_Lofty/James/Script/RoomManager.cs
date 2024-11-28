@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TransitionsPlus;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VInspector;
@@ -18,7 +19,7 @@ public class RoomManager : MonoBehaviour
 {
     [Tab("Room Setting")] 
     [Space(5)] 
-    public Sprite roomIcon;
+    public RuntimeAnimatorController iconAnimator;
     public bool isStandbyRoom;
     public bool isLastRoom;
     public bool roomActive;
@@ -212,7 +213,15 @@ public class RoomManager : MonoBehaviour
         
         if (isLastRoom)
         {
-            GameManager.Instance.StageClear();
+            if (isBossRoom)
+            {
+                GameManager.Instance.GameClearRevealer();
+            }
+            else
+            {
+                GameManager.Instance.StageClear();
+            }
+            
         }
         else
         {
@@ -221,6 +230,7 @@ public class RoomManager : MonoBehaviour
         }
         EnemySpawnManager.Instance.ResetSpawnList();
     }
+    
     private void RoomClearWithNoReward()
     {
         roomClear = true; 

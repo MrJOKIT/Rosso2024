@@ -72,6 +72,13 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
         return newEnemy;
     }
 
+    public GameObject GetEnemyNoCost()
+    {
+        int randomNumber = Random.Range(0, enemySpawnList.Count - 1);
+        GameObject newEnemy = enemySpawnList[randomNumber].enemyPrefab;
+        return newEnemy;
+    }
+
     public GameObject GetObstacle()
     {
         int randomNumber = Random.Range(0, obstacleList.Count - 1);

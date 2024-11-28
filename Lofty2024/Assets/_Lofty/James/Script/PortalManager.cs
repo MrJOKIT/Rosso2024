@@ -184,7 +184,7 @@ public class PortalManager : Singeleton<PortalManager>
             GameObject rightRoomObject = Instantiate(GetRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
             rightRoom = rightRoomObject.GetComponent<RoomManager>();
             rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
-            portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform,rightRoom.roomIcon);
+            portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform,rightRoom.iconAnimator);
             portalRight.transform.position = portalRightPos.position;
             portalRight.GetComponent<PortalToNextRoom>().ActivePortal();
             if (roomCount == 0)
@@ -200,7 +200,7 @@ public class PortalManager : Singeleton<PortalManager>
                 GameObject leftRoomObject = Instantiate(GetRoom(leftRoomType),GetSpawnPoint(),Quaternion.identity);
                 leftRoom = leftRoomObject.GetComponent<RoomManager>();
                 leftRoomWarpPoint = leftRoom.GetComponent<RoomManager>().startPoint.transform.position;
-                portalLeft.SetPortal(leftRoomType,leftRoomWarpPoint,leftRoom.transform,playerTransform,leftRoom.roomIcon);
+                portalLeft.SetPortal(leftRoomType,leftRoomWarpPoint,leftRoom.transform,playerTransform,leftRoom.iconAnimator);
                 portalLeft.transform.position = portalLeftPos.position;
                 portalLeft.GetComponent<PortalToNextRoom>().ActivePortal();
                 if (roomCount == 0)
@@ -216,7 +216,7 @@ public class PortalManager : Singeleton<PortalManager>
                 GameObject rightRoomObject = Instantiate(GetRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
                 rightRoom = rightRoomObject.GetComponent<RoomManager>();
                 rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
-                portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform,rightRoom.roomIcon);
+                portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform,rightRoom.iconAnimator);
                 portalRight.transform.position = portalRightPos.position;
                 portalRight.GetComponent<PortalToNextRoom>().ActivePortal();
                 if (roomCount == 0)
@@ -346,7 +346,7 @@ public class PortalManager : Singeleton<PortalManager>
             if (isBossRoom)
             {
                 //random boss room
-                room = bossRoomModel[Random.Range(0, bonusRoomModel.Count - 1)];
+                room = bossRoomModel[Random.Range(0, bossRoomModel.Count - 1)];
             }
             else
             {

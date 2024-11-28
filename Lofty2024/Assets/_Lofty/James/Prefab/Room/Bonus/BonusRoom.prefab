@@ -744,7 +744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38ca3476d3ddc148a3fbdad2eb7c215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomIcon: {fileID: 21300000, guid: 72cc0c9ec5b864fbd831ce17d339ac25, type: 3}
+  iconAnimator: {fileID: 9100000, guid: 047127c3294001e49ae3eb5863cb0765, type: 2}
   isStandbyRoom: 0
   isLastRoom: 0
   roomActive: 0
@@ -1789,8 +1789,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5390467713224236952}
   - {fileID: 8130317774602919461}
+  - {fileID: 5390467713224236952}
   m_Father: {fileID: 5060309423775936835}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2526,7 +2526,7 @@ MonoBehaviour:
   - Assets/James/Materials/Ground.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_140f17ac-6ba2-43d0-9cbe-50ff3a0f8367
+    name: UM_OperatedMesh_c22d4a41-145e-459c-bc7c-3a315aa58dc2
     skinnedMesh: 0
     sharedMesh: {fileID: -4943758353868826497}
     buidVersion:
@@ -2538,7 +2538,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: 140f17ac-6ba2-43d0-9cbe-50ff3a0f8367
+  sourceMeshRendererGUID: c22d4a41-145e-459c-bc7c-3a315aa58dc2
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0

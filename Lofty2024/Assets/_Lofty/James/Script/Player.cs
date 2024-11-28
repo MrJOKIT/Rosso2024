@@ -330,10 +330,12 @@ public class Player : MonoBehaviour, ITakeDamage
 
     public void UpgradeStats()
     {
-        defaultHealthTemp = playerHealthTemp + GetComponent<PlayerArtifact>().HealthPointTemp;
-        defaultMaxHealth = maxHealth + GetComponent<PlayerArtifact>().HealthPoint;
-        maxHealth += GetComponent<PlayerArtifact>().HealthPoint;
-        playerHealthTemp += GetComponent<PlayerArtifact>().HealthPointTemp;
+        defaultHealthTemp += GetComponent<PlayerArtifact>().HealthPointTemp;
+        defaultMaxHealth += GetComponent<PlayerArtifact>().HealthPoint;
+        GetComponent<PlayerArtifact>().HealthPointTemp = 0;
+        GetComponent<PlayerArtifact>().HealthPoint = 0;
+        maxHealth = defaultMaxHealth;
+        playerHealthTemp = defaultHealthTemp;
         
         CreateHealthUI();
         UpdateHealthUI();
@@ -435,14 +437,14 @@ public class Player : MonoBehaviour, ITakeDamage
     }
     public void SavePlayerData()
     {
-        ES3.Save("PlayerDefaultHealth",defaultMaxHealth);
-        ES3.Save("PlayerDefaultHealthTemp",defaultHealthTemp);
+        /*ES3.Save("PlayerDefaultHealth",defaultMaxHealth);
+        ES3.Save("PlayerDefaultHealthTemp",defaultHealthTemp);*/
         ES3.Save("PlayerCurrentHealth",playerHealth);
         ES3.Save("PlayerCurrentHealthTemp",playerHealthTemp);
         
-        ES3.Save("PlayerDefaultMovePoint",GetComponent<PlayerMovementGrid>().DefaultMovePoint);
+        /*ES3.Save("PlayerDefaultMovePoint",GetComponent<PlayerMovementGrid>().DefaultMovePoint);
         ES3.Save("PlayerDefaultDamage",GetComponent<PlayerMovementGrid>().DefaultDamage);
-        ES3.Save("PlayerDefaultKnockBackRange",GetComponent<PlayerMovementGrid>().DefaultKnockBackRange);
+        ES3.Save("PlayerDefaultKnockBackRange",GetComponent<PlayerMovementGrid>().DefaultKnockBackRange);*/
         
         ES3.Save("ArtifactHave",GetComponent<PlayerArtifact>().artifactHaves);
     }
@@ -451,17 +453,19 @@ public class Player : MonoBehaviour, ITakeDamage
     public void LoadPlayerData()
     {
         GetComponent<PlayerArtifact>().artifactHaves = ES3.Load("ArtifactHave",GetComponent<PlayerArtifact>().artifactHaves);
+        GetComponent<PlayerArtifact>().ResetArtifact();
         GetComponent<PlayerArtifact>().ResultArtifact();
         
-        playerHealthTemp = ES3.Load("PlayerDefaultHealthTemp",0) + GetComponent<PlayerArtifact>().HealthPointTemp; 
-        maxHealth = ES3.Load("PlayerDefaultHealth",3) + GetComponent<PlayerArtifact>().HealthPoint;
+        //playerHealthTemp = ES3.Load("PlayerDefaultHealthTemp",0) + GetComponent<PlayerArtifact>().HealthPointTemp; 
+        //maxHealth = ES3.Load("PlayerDefaultHealth",3) + GetComponent<PlayerArtifact>().HealthPoint;
 
-        playerHealthTemp = ES3.Load("PlayerCurrentHealthTemp", playerHealthTemp);
+        maxHealth = defaultMaxHealth;
+        playerHealthTemp = ES3.Load("PlayerCurrentHealthTemp", defaultHealthTemp);
         playerHealth = ES3.Load("PlayerCurrentHealth", maxHealth);
 
-        GetComponent<PlayerMovementGrid>().DefaultMovePoint = ES3.Load("PlayerDefaultMovePoint", 2);
+        /*GetComponent<PlayerMovementGrid>().DefaultMovePoint = ES3.Load("PlayerDefaultMovePoint", 2);
         GetComponent<PlayerMovementGrid>().DefaultDamage = ES3.Load("PlayerDefaultDamage", 1);
-        GetComponent<PlayerMovementGrid>().DefaultKnockBackRange = ES3.Load("PlayerDefaultKnockBackRange", 1);
+        GetComponent<PlayerMovementGrid>().DefaultKnockBackRange = ES3.Load("PlayerDefaultKnockBackRange", 1);*/
         
         CreateHealthUI();
 
@@ -470,14 +474,14 @@ public class Player : MonoBehaviour, ITakeDamage
     [Button("Format Data")]
     public void FormatPlayerData()
     {
-        ES3.DeleteKey("PlayerDefaultHealth");
-        ES3.DeleteKey("PlayerDefaultHealthTemp");
+        /*ES3.DeleteKey("PlayerDefaultHealth");
+        ES3.DeleteKey("PlayerDefaultHealthTemp");*/
         ES3.DeleteKey("PlayerCurrentHealth");
         ES3.DeleteKey("PlayerCurrentHealthTemp");
         
-        ES3.DeleteKey("PlayerDefaultMovePoint");
+        /*ES3.DeleteKey("PlayerDefaultMovePoint");
         ES3.DeleteKey("PlayerDefaultDamage");
-        ES3.DeleteKey("PlayerDefaultKnockBackRange");
+        ES3.DeleteKey("PlayerDefaultKnockBackRange");*/
         
         ES3.DeleteKey("ArtifactHave");
     }

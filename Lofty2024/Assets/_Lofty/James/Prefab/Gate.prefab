@@ -9915,6 +9915,8 @@ MonoBehaviour:
   popUpCanvas: {fileID: 3161751588238605166}
   onPlayer: 0
   sceneName: 
+  onWarp: 0
+  formatWhenWarp: 0
 --- !u!65 &145480375171011920
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9995,8 +9997,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3559983483143345031}
   - {fileID: 5216159364352936495}
+  - {fileID: 3559983483143345031}
   m_Father: {fileID: 1184369795054353043}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

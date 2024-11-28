@@ -9,6 +9,7 @@ public class GateToNextScene : InterfacePopUp<GateToNextScene>
 {
     [SerializeField] private string sceneName;
     public bool onWarp;
+    public bool formatWhenWarp;
 
     private void Update()
     {
@@ -20,7 +21,10 @@ public class GateToNextScene : InterfacePopUp<GateToNextScene>
         if (Input.GetKeyDown(KeyCode.E) && !onWarp)
         {
             onWarp = true;
-            FormatAllData();
+            if (formatWhenWarp)
+            {
+                FormatAllData();
+            }
             TransitionAnimator animator = TransitionAnimator.Start(TransitionType.Smear,2f,sceneNameToLoad:sceneName);
             animator.onTransitionEnd.AddListener(LoadNextScene);
         }

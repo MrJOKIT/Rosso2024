@@ -52,8 +52,18 @@ public class PlayerArtifact : MonoBehaviour
     [SerializeField] private int addHealthPointTemp;
     [SerializeField] private int addSkillPoint;
     [SerializeField] private int addHealMultiple;
-    public int HealthPoint => addHealthPoint;
-    public int HealthPointTemp => addHealthPointTemp;
+    public int HealthPoint
+    {
+        get { return addHealthPoint; }
+        set { addHealthPoint = value; }
+    }
+
+    public int HealthPointTemp
+    {
+        get { return addHealthPointTemp; }
+        set { addHealthPointTemp = value; }
+    }
+
     public int SkillPoint => addSkillPoint;
     public int HealMultiple => addHealMultiple;
 
@@ -368,7 +378,6 @@ public class PlayerArtifact : MonoBehaviour
                     addActionPoint += artifact.artifactData.addActionPoint;
                     addSkillDiscount += artifact.artifactData.addSkillDiscount;
                     //GetComponent<Player>().LoadPlayerData();
-                    GetComponent<Player>().
                     GetComponent<Player>().UpgradeStats();
                     GetComponent<PlayerMovementGrid>().UpgradeStats();
                     break;
@@ -377,6 +386,14 @@ public class PlayerArtifact : MonoBehaviour
             artifact.isActivate = true;
         }
         
+    }
+
+    public void ResetArtifact()
+    {
+        foreach (CardArtifact artifact in artifactHaves)
+        {
+            artifact.isActivate = false;
+        }
     }
 
     private void CardLinkUpdate()

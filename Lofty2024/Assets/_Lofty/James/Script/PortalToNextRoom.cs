@@ -16,7 +16,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
     public bool isConnect;
     public bool pressActive;
     [Space(10)] [Header("Portal Object")] 
-    public List<SpriteRenderer> iconSprite;
+    public List<Animator> iconAnimator;
     public GameObject combatPortal;
     public GameObject bonusPortal;
     public GameObject bossPortal;
@@ -39,15 +39,15 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         }
     }
 
-    public void SetPortal(RoomType roomType,Vector3 warpPos,Transform roomCenter,Transform playerTransform,Sprite iconSprite)
+    public void SetPortal(RoomType roomType,Vector3 warpPos,Transform roomCenter,Transform playerTransform,RuntimeAnimatorController animator)
     {
         this.roomTypeConnect = roomType;
         this.roomCenter = roomCenter;
         playerTrans = playerTransform;
 
-        foreach (SpriteRenderer sprite in this.iconSprite)
+        foreach (Animator sprite in this.iconAnimator)
         {
-            sprite.sprite = iconSprite;
+            sprite.runtimeAnimatorController = animator;
         }
         switch (roomType)
         {

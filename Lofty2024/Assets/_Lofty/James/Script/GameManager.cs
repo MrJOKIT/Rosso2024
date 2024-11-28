@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using TMPro;
+using TransitionsPlus;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VInspector;
@@ -28,12 +29,15 @@ public class GameManager : Singeleton<GameManager>
     [SerializeField] private GameObject rewardVFX;
     [SerializeField] private Vector2Int dropRate;
 
-    [Space(10)] 
+    [Space(10)] [Header("Game Clear Setting")]
+    public GameObject clearGameCanvas;
+    public TextRevealer textRevealer;
     [Header("Game Over Setting")] 
     public GameObject deadCanvas;
 
     [Tab("Time Count")]
     public TextMeshProUGUI timeText; // Drag a UI Text element to this in the Inspector.
+    public TextMeshProUGUI timeTextTwo;
     private float elapsedTime; // Variable to store the elapsed time.
     private bool isCounting; // Flag to check if the timer is running.
     
@@ -44,7 +48,7 @@ public class GameManager : Singeleton<GameManager>
 
     private void Start()
     {
-        elapsedTime = ES3.Load("TimeCount", 0);
+        elapsedTime = ES3.Load<float>("TimeCount", 0f);
     }
 
     private void Update()
@@ -80,6 +84,7 @@ public class GameManager : Singeleton<GameManager>
         int milliseconds = Mathf.FloorToInt((elapsedTime % 1) * 1000);
         
         timeText.text = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, milliseconds);
+        timeTextTwo.text = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, milliseconds);
     }
 
     #region Game Manager
@@ -94,9 +99,38 @@ public class GameManager : Singeleton<GameManager>
         cardSelectCanvas.SetActive(true);
         GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.All,4);
         currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().SavePlayerData();
-        ES3.Save("TimeCount",elapsedTime);
+        ES3.Save<float>("TimeCount",elapsedTime);
     }
 
+    public void GameClearRevealer()
+    {
+        textRevealer.Reveal();
+    }
+
+    public void GameClearCorutine()
+    {
+        StartCoroutine(BossRoomClear());
+    }
+    IEnumerator BossRoomClear()
+    {
+        yield return new WaitForSeconds(2f);
+        TransitionAnimator transitionAnimator = TransitionAnimator.Start(TransitionType.Smear);
+        transitionAnimator.onTransitionEnd.AddListener(GameManager.Instance.GameClear);
+    }
+    public void GameClear()
+    {
+        PauseTimer();
+        SoundManager.instace.Play(SoundManager.SoundName.VictoryBGM);
+        Debug.Log("Game is clear!!!");
+        TurnManager.Instance.gameEnd = true;
+        clearGameCanvas.SetActive(true);
+        //GameObject gateObject = Instantiate(gatePrefab, currentRoomPos.GetComponent<RoomManager>().CheckSpawnPoint(), Quaternion.identity);
+        //gateObject.GetComponent<GateToNextScene>().SetNextScene(sceneName);
+        //cardSelectCanvas.SetActive(true);
+        //GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.All,4);
+        currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().SavePlayerData();
+        ES3.Save<float>("TimeCount",elapsedTime);
+    }
     public void RoomClear()
     {
         StageReward();

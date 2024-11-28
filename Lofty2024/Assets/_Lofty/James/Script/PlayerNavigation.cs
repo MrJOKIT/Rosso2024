@@ -54,7 +54,7 @@ public class PlayerNavigation : MonoBehaviour
         supTargetTransform = transform.position;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (moveArrow.Count > 100)
         {

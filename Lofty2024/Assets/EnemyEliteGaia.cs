@@ -661,7 +661,7 @@ public class EnemyEliteGaia : Enemy
     {
         for (int a = 0; a < summonCount; a++)
         {
-            GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().AddNewEnemyInRoom(EnemySpawnManager.Instance.GetEnemy());
+            GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().AddNewEnemyInRoom(EnemySpawnManager.Instance.GetEnemyNoCost());
         }
         summonCooldownCounter = 0;
         summonState = SummonState.OnPrepareSummon;
