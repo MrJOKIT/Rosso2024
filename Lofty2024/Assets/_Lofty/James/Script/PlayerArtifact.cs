@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 using VInspector;
 
@@ -28,6 +29,8 @@ public class PlayerArtifact : MonoBehaviour
 {
     [Tab("Artifact")]
     [Header("Artifact UI")] public GameObject artifactInventory;
+    public PlayableDirector classUnlockDirector;
+    public TextMeshProUGUI classTextDirector;
     public bool inventoryActive;
 
     [Space(10)] [Header("Artifact Data")] public int maxArtifact;
@@ -125,6 +128,7 @@ public class PlayerArtifact : MonoBehaviour
     public GameObject crownObject;
     public Animator crownAnimator;
     public bool firstUnlockSuccess;
+    public bool secondUnlockSuccess;
     [Space(10)] 
     public Image playerProfile;
     public Sprite classicProfile;
@@ -180,7 +184,6 @@ public class PlayerArtifact : MonoBehaviour
         //Destroy(newArtifact.GameObject());
         SortingArtifactType(newArtifact);
         CardLinkUpdate();
-        CrownClassHandle();
     }
     
     public void RemoveArtifact(ArtifactData removeArtifact)
@@ -364,6 +367,7 @@ public class PlayerArtifact : MonoBehaviour
                             ironBody = true;
                             break;
                         case AbilityName.LastChance:
+                            GameManager.Instance.GetComponent<RandomCardManager>().StartRandomCard();
                             GameManager.Instance.GetComponent<RandomCardManager>().haveArtifact = true;
                             break;
                     }
@@ -393,6 +397,13 @@ public class PlayerArtifact : MonoBehaviour
         foreach (CardArtifact artifact in artifactHaves)
         {
             artifact.isActivate = false;
+        }
+
+        for (int i = 0; i < artifactHaves.Count; i++)
+        {
+            artifactSlots[i].SetArtifactUI(artifactHaves[i].artifactData.artifactName,artifactHaves[i].artifactData.artifactImage);
+            SortingArtifactType(artifactHaves[i].artifactData);
+            CardLinkUpdate();
         }
     }
 
@@ -460,7 +471,7 @@ public class PlayerArtifact : MonoBehaviour
         }
         else if (shootCasterType.Count >= 3)
         {
-            shootCasterPassiveTwo = true;
+            shootCasterPassiveOne = true;
             shootCasterTier1.color = activeColor;
         }
 
@@ -476,6 +487,8 @@ public class PlayerArtifact : MonoBehaviour
             shootCasterPassiveTwo = false;
             shootCasterTier2.color = deActiveColor;
         }
+        
+        CrownClassHandle();
     }
 
     private void SetDefault()
@@ -513,6 +526,8 @@ public class PlayerArtifact : MonoBehaviour
         {
             if (swordKnightPassiveOne)
             {
+                classUnlockDirector.Play();
+                classTextDirector.text = "Sword Knight";
                 playerProfile.sprite = swordKnightProfile;
                 crownObject.SetActive(true);
                 crownAnimator.SetBool("BlueCrown",false);
@@ -520,10 +535,12 @@ public class PlayerArtifact : MonoBehaviour
                 crownAnimator.SetBool("RainbowCrown",false);
                 crownAnimator.SetBool("YellowCrown",true);
                 
-                firstUnlockSuccess = true;
+                firstUnlockSuccess = true; 
             }
-            else if (bladeMasterPassiveOne)
+            if (bladeMasterPassiveOne)
             {
+                classUnlockDirector.Play();
+                classTextDirector.text = "Blade Master";
                 playerProfile.sprite = bladeMasterProfile;
                 crownObject.SetActive(true);
                 crownAnimator.SetBool("BlueCrown",false);
@@ -533,8 +550,10 @@ public class PlayerArtifact : MonoBehaviour
                 
                 firstUnlockSuccess = true;
             }
-            else if (shootCasterPassiveOne)
+            if (shootCasterPassiveOne)
             {
+                classUnlockDirector.Play();
+                classTextDirector.text = "Shoot Caster";
                 playerProfile.sprite = shootCasterProfile;
                 crownObject.SetActive(true);
                 crownAnimator.SetBool("YellowCrown",false);
@@ -549,7 +568,27 @@ public class PlayerArtifact : MonoBehaviour
         }
         else
         {
-            
+            if (secondUnlockSuccess)
+            {
+                return;
+            }
+            if (swordKnightPassiveTwo)
+            {
+                classUnlockDirector.Play();
+                secondUnlockSuccess = true;
+            }
+
+            if (bladeMasterPassiveTwo)
+            {
+                classUnlockDirector.Play();
+                secondUnlockSuccess = true;
+            }
+
+            if (shootCasterPassiveTwo)
+            {
+                classUnlockDirector.Play();
+                secondUnlockSuccess = true;
+            }
         }
         
     }

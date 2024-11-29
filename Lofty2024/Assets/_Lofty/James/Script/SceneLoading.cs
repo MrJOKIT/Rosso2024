@@ -40,6 +40,7 @@ public class SceneLoading : MonoBehaviour
         loadSucces = true;
         GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().StartRoom();
         GetComponent<GameManager>().StartTimer();
+        GetComponent<GameManager>().SetCursorVisible(true);
         
     }
     

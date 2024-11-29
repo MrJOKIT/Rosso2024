@@ -10,7 +10,7 @@ public class AbilityOrb : MonoBehaviour
     [SerializeField] private GameObject uiCanvas;
     private bool onPlayer;
     private PlayerAbility _player;
-    public SpriteRenderer iconImage;
+    public List<SpriteRenderer> iconImage;
     public Sprite pawn;
     public Sprite rook;
     public Sprite knight;
@@ -28,19 +28,34 @@ public class AbilityOrb : MonoBehaviour
         switch (abilityType)
         {
             case AbilityType.Pawn:
-                iconImage.sprite = pawn; 
+                foreach (SpriteRenderer iconImage in this.iconImage)
+                {
+                    iconImage.sprite = pawn; 
+                }
                 break;
             case AbilityType.Rook:
-                iconImage.sprite = rook;
+                foreach (SpriteRenderer iconImage in this.iconImage)
+                {
+                    iconImage.sprite = rook;
+                }
                 break;
             case AbilityType.Knight:
-                iconImage.sprite = knight;
+                foreach (SpriteRenderer iconImage in this.iconImage)
+                {
+                    iconImage.sprite = knight;
+                }
                 break;
             case AbilityType.Bishop:
-                iconImage.sprite = bishop;
+                foreach (SpriteRenderer iconImage in this.iconImage)
+                {
+                    iconImage.sprite = bishop;
+                }
                 break;
             case AbilityType.Queen:
-                iconImage.sprite = queen;
+                foreach (SpriteRenderer iconImage in this.iconImage)
+                {
+                    iconImage.sprite = queen;
+                }
                 break;
         }
     }

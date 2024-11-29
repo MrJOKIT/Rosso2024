@@ -56,6 +56,7 @@ public class EnemyWizard : Enemy
                     {
                         if (summonCooldownCounter >= summonCooldown)
                         {
+                            onTurn = false;
                             summonState = SummonState.OnSummon;
                             GetComponent<PlayableDirector>().Play();
                             summonVfx.SetActive(true);

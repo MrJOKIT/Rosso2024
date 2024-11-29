@@ -29,7 +29,7 @@ public class Player : MonoBehaviour, ITakeDamage
     [Space(5)] [Header("GUI")] 
     [Header("Damage Number")] public Transform focusTransform;
     [SerializeField] private Transform damageParent;
-    [SerializeField] private DamageNumber damageNumbers;
+    [SerializeField] private Animator damageAnimator;
     [Header("Health")]
     [SerializeField] private Transform healthPrefabUI;
     [SerializeField] private Transform healthParentUI;
@@ -109,7 +109,7 @@ public class Player : MonoBehaviour, ITakeDamage
     {
         if (playerHealth <= 0) 
         {
-            isDead = true;
+            
             if (GetComponent<PlayerArtifact>().DeathDoor)
             {
                 playerHealth = maxHealth;
@@ -121,6 +121,7 @@ public class Player : MonoBehaviour, ITakeDamage
             {
                 GetComponent<PlayerMovementGrid>().playerAnimator.SetBool("IsDead",true);
                 VisualEffectManager.Instance.CallEffect(EffectName.Dead,transform,1f);
+                isDead = true;
             }
             
         }
@@ -199,6 +200,7 @@ public class Player : MonoBehaviour, ITakeDamage
                 else
                 {
                     playerHealth -= damage;
+                    damageAnimator.SetTrigger("TakeDamage");
                     if (playerHealth < 0)
                     {
                         playerHealth = 0;
@@ -233,11 +235,12 @@ public class Player : MonoBehaviour, ITakeDamage
                     healthTempUI.Remove(healthTempUI[^1]);
                     playerHealthTemp -= damage;
                 }
-                
+                damageAnimator.SetTrigger("TakeDamage");
             }
             else
             {
                 
+                damageAnimator.SetTrigger("TakeDamage");
                 playerHealth -= damage;
                 if (playerHealth < 0)
                 {
@@ -344,6 +347,11 @@ public class Player : MonoBehaviour, ITakeDamage
     private void CreateHealthUI()
     {
         foreach (HealthUI health in healthUI.ToList())
+        {
+            Destroy(health.gameObject);
+            healthUI.Remove(health);
+        }
+        foreach (HealthUI health in healthTempUI.ToList())
         {
             Destroy(health.gameObject);
             healthUI.Remove(health);
@@ -460,8 +468,9 @@ public class Player : MonoBehaviour, ITakeDamage
         //maxHealth = ES3.Load("PlayerDefaultHealth",3) + GetComponent<PlayerArtifact>().HealthPoint;
 
         maxHealth = defaultMaxHealth;
-        playerHealthTemp = ES3.Load("PlayerCurrentHealthTemp", defaultHealthTemp);
-        playerHealth = ES3.Load("PlayerCurrentHealth", maxHealth);
+        
+        playerHealthTemp = defaultHealthTemp;
+        playerHealth = maxHealth;
 
         /*GetComponent<PlayerMovementGrid>().DefaultMovePoint = ES3.Load("PlayerDefaultMovePoint", 2);
         GetComponent<PlayerMovementGrid>().DefaultDamage = ES3.Load("PlayerDefaultDamage", 1);

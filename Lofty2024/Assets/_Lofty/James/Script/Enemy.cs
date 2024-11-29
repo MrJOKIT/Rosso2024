@@ -104,7 +104,27 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public void StartTurn()
     {
         onTurn = true;
-        
+        SetTurnDirection();
+    }
+
+    private void SetTurnDirection()
+    {
+        if (targetTransform.position.x < transform.position.x)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (targetTransform.position.x > transform.position.x)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (targetTransform.position.z > transform.position.z)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (targetTransform.position.z < transform.position.z)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
 
     public void EndTurn()

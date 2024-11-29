@@ -64,6 +64,7 @@ public class CameraManager : Singeleton<CameraManager>
     
     private void LateUpdate()
     {
+        
         if (onShake)
         {
             return;

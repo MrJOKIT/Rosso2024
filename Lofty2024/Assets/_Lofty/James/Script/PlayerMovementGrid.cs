@@ -228,10 +228,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         break;
                     case MoveType.Both:
                         HandleClickToMove();
-                        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
-                        {
-                            return;
-                        }
                         GetComponent<PlayerInputHandle>().HandleInput();
                         break;
                 }

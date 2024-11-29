@@ -10,6 +10,7 @@ public class GameDataManager : MonoBehaviour
     {
         LoadProgress();
         LoadCardManager();
+        LoadCurrency();
     }
 
     [Button("Format All")]
@@ -18,6 +19,7 @@ public class GameDataManager : MonoBehaviour
         FormatProgress();
         FormatCardManager();
         FormatPlayerData();
+        FormatCurrency();
         ES3.DeleteKey("TimeCount");
     }
     
@@ -63,7 +65,27 @@ public class GameDataManager : MonoBehaviour
         ES3.DeleteKey("CardStock");
     }
     #endregion
-    
+
+    #region Currenncy
+
+    public void SaveCurrency()
+    {
+        ES3.Save("EricCoin",GetComponent<GameCurrency>().EricCoin);
+        ES3.Save("FlameSoul",GetComponent<GameCurrency>().FlameSoul);
+    }
+
+    public void LoadCurrency()
+    {
+        GetComponent<GameCurrency>().IncreaseEricCoin(ES3.Load("EricCoin",0));
+        GetComponent<GameCurrency>().IncreaseFlameSoul(ES3.Load("FlameSoul",0));
+    }
+
+    public void FormatCurrency()
+    {
+        ES3.DeleteKey("EricCoin");
+        ES3.DeleteKey("FlameSoul");
+    }
+    #endregion
     private void FormatPlayerData()
     {
         ES3.DeleteKey("PlayerDefaultHealth");

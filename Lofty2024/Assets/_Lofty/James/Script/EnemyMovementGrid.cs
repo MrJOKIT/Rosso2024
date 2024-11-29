@@ -239,7 +239,7 @@ public class EnemyMovementGrid : MonoBehaviour
                    GetComponent<Enemy>().EndTurn();
                    currentState = MovementState.Idle;
                }
-                  
+               GetComponent<Enemy>().enemyAnimator.SetBool("OnMove",false);
            }
            
        }
@@ -274,6 +274,7 @@ public class EnemyMovementGrid : MonoBehaviour
                   SetTargetPosition(new Vector3(transform.localPosition.x + 1,transform.localPosition.y,transform.localPosition.z - 1));
                   break;
                }
+           GetComponent<Enemy>().enemyAnimator.SetBool("OnMove",true);
        }
        private void OnDrawGizmos()
        {

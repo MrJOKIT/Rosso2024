@@ -42,6 +42,7 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
 
     private void SetEnemyList()
     {
+        
         enemyList.Clear();
         foreach (EnemySpawnList enemy in enemySpawnList)
         {
@@ -50,6 +51,7 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
                 enemyList.Add(enemy);
             }
         }
+        enemyList = enemyList.OrderBy(x => Random.value).ToList();
     }
 
     private void SetObstacleList()
@@ -62,6 +64,7 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
                 obstacleList.Add(obstacle);
             }
         }
+        obstacleList = obstacleList.OrderBy(x => Random.value).ToList();
     }
     public GameObject GetEnemy()
     {

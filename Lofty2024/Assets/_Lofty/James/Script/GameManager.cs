@@ -46,8 +46,11 @@ public class GameManager : Singeleton<GameManager>
     public Texture2D onSkillCursor;
     public Texture2D onDataCursor;
 
+    public Vector2 mouseCursorHotSpot;
+
     private void Start()
     {
+        SetCursorVisible(false);
         elapsedTime = ES3.Load<float>("TimeCount", 0f);
     }
 
@@ -59,7 +62,21 @@ public class GameManager : Singeleton<GameManager>
             UpdateTimeDisplay(); 
         }
     }
-    
+
+    public void SetCursorVisible(bool visible)
+    {
+        if (visible)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        
+    }
     public void StartTimer()
     {
         isCounting = true; 
@@ -175,13 +192,13 @@ public class GameManager : Singeleton<GameManager>
         switch (cursorType)
         {
             case CursorType.DefaultCursor:
-                Cursor.SetCursor(defaultCursor,new Vector2(100,100),CursorMode.Auto);
+                Cursor.SetCursor(defaultCursor,mouseCursorHotSpot,CursorMode.Auto);
                 break;
             case CursorType.SkillCursor:
-                Cursor.SetCursor(onSkillCursor,new Vector2(100,100),CursorMode.Auto);
+                Cursor.SetCursor(onSkillCursor,new Vector2(0,0),CursorMode.Auto);
                 break;
             case CursorType.DataCursor:
-                Cursor.SetCursor(onDataCursor,new Vector2(100,100),CursorMode.Auto);
+                Cursor.SetCursor(onDataCursor,new Vector2(0,0),CursorMode.Auto);
                 break;
         }
     }

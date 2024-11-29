@@ -761,7 +761,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _abilityType: 0
   uiCanvas: {fileID: 4655862393857930423}
-  iconImage: {fileID: 5920718665316657618}
+  iconImage:
+  - {fileID: 5920718665316657618}
+  - {fileID: 895996100852675722}
   pawn: {fileID: 21300000, guid: ce670aaf245479344a273e0428f86e75, type: 3}
   rook: {fileID: 21300000, guid: b10db81a428fe6842bd671f24ffa1581, type: 3}
   knight: {fileID: 21300000, guid: 892acf9b23545f54a9ace5a9ab91aa51, type: 3}

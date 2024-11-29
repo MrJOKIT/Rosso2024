@@ -6192,7 +6192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  moveSpeed: 5
+  moveSpeed: 3
   knockBackSpeed: 100
   gridSize: {x: 1, y: 1, z: 1}
   isKnockBack: 0

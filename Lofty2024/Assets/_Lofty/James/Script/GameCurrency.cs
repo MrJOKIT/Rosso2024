@@ -104,6 +104,7 @@ public class GameCurrency : MonoBehaviour
     public void IncreaseEricCoin(int count)
     {
         maxEricCoin += count;
+        GetComponent<GameDataManager>().SaveCurrency();
     }
     [Button("Decrease Eric Coin")]
     public void DecreaseEricCoin(int count)
@@ -118,6 +119,7 @@ public class GameCurrency : MonoBehaviour
     public void IncreaseFlameSoul(int count)
     {
         maxFlameSoul += count;
+        GetComponent<GameDataManager>().SaveCurrency();
     }
     [Button("Decrease Flame Soul")]
     public void DecreaseFlameSoul(int count)

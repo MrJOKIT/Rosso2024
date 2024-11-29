@@ -1850,7 +1850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38ca3476d3ddc148a3fbdad2eb7c215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomIcon: {fileID: 21300000, guid: e088d4029c7734391a840e6acd500e8d, type: 3}
+  iconAnimator: {fileID: 9100000, guid: f17bb16ef07334148823398cf6f4afbd, type: 2}
   isStandbyRoom: 0
   isLastRoom: 0
   roomActive: 0
@@ -2464,7 +2464,7 @@ MonoBehaviour:
   - Assets/James/Materials/Ground.mat
   currentMaterialIndex: 0
   renderableMesh:
-    name: UM_OperatedMesh_f3a22eea-d2d1-4a14-b603-0ca99ab31382
+    name: UM_OperatedMesh_9b415ac6-b8f9-40d4-a119-93ca473f62d1
     skinnedMesh: 0
     sharedMesh: {fileID: -5978146987537643433}
     buidVersion:
@@ -2476,7 +2476,7 @@ MonoBehaviour:
       IndexVersion: 0
       OptimizedTopology: 0
   sourceMesh: {fileID: 0}
-  sourceMeshRendererGUID: f3a22eea-d2d1-4a14-b603-0ca99ab31382
+  sourceMeshRendererGUID: 9b415ac6-b8f9-40d4-a119-93ca473f62d1
   guid: b0ff19b6-2022-4a19-8b18-2454ecad4c15
   localOptions:
     RecalculateTangents: 0

@@ -29,7 +29,7 @@ public class PlayerInputHandle : MonoBehaviour
 
     public void HandleInput()
     {
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode != PlayerMode.Normal ||
+        if (TurnManager.Instance.turnData.Count > 1 ||
             GameManager.Instance.GetComponent<SceneLoading>().loadSucces == false)
         {
             return;
