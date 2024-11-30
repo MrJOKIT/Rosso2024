@@ -399,6 +399,15 @@ public class PlayerArtifact : MonoBehaviour
             artifact.isActivate = false;
         }
 
+        firstUnlockSuccess = ES3.Load("FirstClassUnlock", false);
+        secondUnlockSuccess = ES3.Load("SecondClassUnlock", false);
+        swordKnightPassiveOne = ES3.Load("SwordPassiveOne", false);
+        swordKnightPassiveTwo = ES3.Load("SwordPassiveTwo", false);
+        bladeMasterPassiveOne = ES3.Load("BladePassiveOne", false);
+        bladeMasterPassiveTwo = ES3.Load("BladePassiveTwo", false);
+        shootCasterPassiveOne = ES3.Load("ShootPassiveOne", false);
+        shootCasterPassiveTwo = ES3.Load("ShootPassiveTwo", false);
+        
         for (int i = 0; i < artifactHaves.Count; i++)
         {
             artifactSlots[i].SetArtifactUI(artifactHaves[i].artifactData.artifactName,artifactHaves[i].artifactData.artifactImage);

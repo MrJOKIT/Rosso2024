@@ -149,4 +149,26 @@ public class CrownLink : MonoBehaviour
             crownComplete = true;
         }
     }
+
+    public void ShowCrown()
+    {
+        if (playerArtifact.swordKnightPassiveOne)
+        {
+            crownAnimator.SetBool("Red",true);
+            crownAnimator.SetBool("Yellow",false);
+            crownAnimator.SetBool("Blue",false);
+        }
+        if (playerArtifact.bladeMasterPassiveOne)
+        {
+            crownAnimator.SetBool("Red",true);
+            crownAnimator.SetBool("Yellow",false);
+            crownAnimator.SetBool("Blue",false);
+        }
+        if (playerArtifact.shootCasterPassiveOne)
+        {
+            crownAnimator.SetBool("Blue",true);
+            crownAnimator.SetBool("Red",false);
+            crownAnimator.SetBool("Yellow",false);
+        }
+    }
 }

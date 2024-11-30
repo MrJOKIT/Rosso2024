@@ -98,5 +98,14 @@ public class GameDataManager : MonoBehaviour
         ES3.DeleteKey("PlayerDefaultKnockBackRange");
         
         ES3.DeleteKey("ArtifactHave");
+        
+        ES3.DeleteKey("FirstClassUnlock");
+        ES3.DeleteKey("SecondClassUnlock");
+        ES3.DeleteKey("SwordPassiveOne");
+        ES3.DeleteKey("SwordPassiveTwo");
+        ES3.DeleteKey("BladePassiveOne");
+        ES3.DeleteKey("BladePassiveTwo");
+        ES3.DeleteKey("ShootPassiveOne");
+        ES3.DeleteKey("ShootPassiveTwo");
     }
 }

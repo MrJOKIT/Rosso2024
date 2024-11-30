@@ -453,6 +453,14 @@ public class Player : MonoBehaviour, ITakeDamage
         /*ES3.Save("PlayerDefaultMovePoint",GetComponent<PlayerMovementGrid>().DefaultMovePoint);
         ES3.Save("PlayerDefaultDamage",GetComponent<PlayerMovementGrid>().DefaultDamage);
         ES3.Save("PlayerDefaultKnockBackRange",GetComponent<PlayerMovementGrid>().DefaultKnockBackRange);*/
+        ES3.Save("FirstClassUnlock",GetComponent<PlayerArtifact>().firstUnlockSuccess);
+        ES3.Save("SecondClassUnlock",GetComponent<PlayerArtifact>().secondUnlockSuccess);
+        ES3.Save("SwordPassiveOne",GetComponent<PlayerArtifact>().swordKnightPassiveOne);
+        ES3.Save("SwordPassiveTwo",GetComponent<PlayerArtifact>().swordKnightPassiveTwo);
+        ES3.Save("BladePassiveOne",GetComponent<PlayerArtifact>().bladeMasterPassiveOne);
+        ES3.Save("BladePassiveOne",GetComponent<PlayerArtifact>().bladeMasterPassiveTwo);
+        ES3.Save("ShootPassiveOne",GetComponent<PlayerArtifact>().shootCasterPassiveOne);
+        ES3.Save("ShootPassiveOne",GetComponent<PlayerArtifact>().shootCasterPassiveTwo);
         
         ES3.Save("ArtifactHave",GetComponent<PlayerArtifact>().artifactHaves);
     }
@@ -493,5 +501,14 @@ public class Player : MonoBehaviour, ITakeDamage
         ES3.DeleteKey("PlayerDefaultKnockBackRange");*/
         
         ES3.DeleteKey("ArtifactHave");
+        
+        ES3.DeleteKey("FirstClassUnlock");
+        ES3.DeleteKey("SecondClassUnlock");
+        ES3.DeleteKey("SwordPassiveOne");
+        ES3.DeleteKey("SwordPassiveTwo");
+        ES3.DeleteKey("BladePassiveOne");
+        ES3.DeleteKey("BladePassiveTwo");
+        ES3.DeleteKey("ShootPassiveOne");
+        ES3.DeleteKey("ShootPassiveTwo");
     }
 }

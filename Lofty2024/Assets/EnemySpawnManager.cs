@@ -114,6 +114,22 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
 
     public void ResetSpawnList()
     {
+        if (GetComponent<PortalManager>().firstStageNumber == 1)
+        {
+            defaultDifficultyCost = 6;
+        }
+        else if (GetComponent<PortalManager>().firstStageNumber == 2)
+        {
+            defaultDifficultyCost = 12;
+        }
+        else if (GetComponent<PortalManager>().firstStageNumber == 3)
+        {
+            defaultDifficultyCost = 18;
+        }
+        else
+        {
+            defaultDifficultyCost = 20;
+        }
         difficultyCost = defaultDifficultyCost;
         obstacleCost = defaultObstacleCost;
         SetEnemyList();
