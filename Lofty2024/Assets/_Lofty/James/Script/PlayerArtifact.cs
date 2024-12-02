@@ -118,7 +118,7 @@ public class PlayerArtifact : MonoBehaviour
     public Color swordColor;
     public Color bladeColor;
     public Color shootColor;
-    [SerializeField] private bool giftOfDeath;
+    [SerializeField] private bool giftOfDeath; 
     public bool GiftOfDeath => giftOfDeath;
     [SerializeField] private bool checkMate;
     public bool CheckMate => checkMate;
@@ -347,12 +347,9 @@ public class PlayerArtifact : MonoBehaviour
                             godOfWar = true;
                             break;
                         case AbilityName.TheEyeKing:
-                            if (!eyeKing)
-                            {
-                                GameManager.Instance.GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.Epic,1);
-                                ES3.Save ("EyeKing",true);
-                                eyeKing = true;
-                            }
+                            GameManager.Instance.GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.Epic,1);
+                            ES3.Save ("EyeKing",true);
+                            eyeKing = true;
                             break;
                         case AbilityName.DeathDoor:
                             deathDoor = true;

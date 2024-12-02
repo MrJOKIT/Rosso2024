@@ -458,6 +458,11 @@ public class PortalManager : Singeleton<PortalManager>
         }
     }
 
+    public void HidePortal()
+    {
+        portalLeft.transform.position = new Vector3(-20f, 0.5f, 0);
+        portalRight.transform.position = new Vector3(-20f, 0.5f, 0);
+    }
     IEnumerator UpdateProgressSuccess()
     {
         if (loadTimeCounter < loadTimeMax)
