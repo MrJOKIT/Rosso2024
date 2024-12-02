@@ -7,6 +7,7 @@ public class InterfacePopUp<T> : MonoBehaviour where T : Component
 {
     public GameObject popUpCanvas;
     public bool onPlayer;
+    public bool close;
 
     private void Awake()
     {
@@ -22,6 +23,11 @@ public class InterfacePopUp<T> : MonoBehaviour where T : Component
 
     private void OnTriggerStay(Collider other)
     {
+        if (close)
+        { 
+            popUpCanvas.SetActive(false);
+            return;
+        }
         if (other.CompareTag("Player"))
         {
             popUpCanvas.SetActive(true);

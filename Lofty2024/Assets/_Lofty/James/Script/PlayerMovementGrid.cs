@@ -17,6 +17,7 @@ public enum MovementState
     Combat,
     Moving,
     Freeze,
+    OnAttack,
 }
 
 public enum MoveType
@@ -175,6 +176,20 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         {
             return;
         }
+
+        if (GameManager.Instance.OnLoad)
+        {
+            return;
+        }
+
+        if (TutorialManager.Instance.tutorialState == TutorialState.OnProgress)
+        {
+            return;
+        }
+        if (GameManager.Instance.GetComponent<RandomCardManager>().isRandom)
+        {
+            return;
+        }
         MoveChecker();
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
@@ -299,6 +314,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             return;
                         }
 
+                        currentState = MovementState.OnAttack;
                         float distance = Vector3.Distance(transform.position, hit.transform.position);
                         Debug.Log($"Player and Enemy distance = {distance}");
                         currentEnemy = hit.collider.GetComponent<GridMover>().enemy;
@@ -344,6 +360,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             }
                             //playerAnimator.SetTrigger("RangeAttack");
                         }
+                        GetComponent<PlayerAbility>().CheckAbilityUse();
                         break;
                     case GridState.Empty:
                         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
@@ -365,7 +382,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         {
             return;
         }
-        VisualEffectManager.Instance.CallEffect(EffectName.Slash,currentEnemy.transform,1f);
+        VisualEffectManager.Instance.CallEffect(EffectName.Hit,currentEnemy.transform,1f);
         PlayerArtifact artifact = GetComponent<PlayerArtifact>();
         switch (attackType)
         {
@@ -373,10 +390,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 if (artifact.GodOfWar)
                 {
                     float randomNumber = Random.Range(0, 1f);
-                    if (randomNumber <= 0.2f)
+                    if (randomNumber <= 0.25f)
                     {
+                        VisualEffectManager.Instance.CallEffect(EffectName.Critical, transform,1.5f);
                         TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.CriticalAttack,true);
-                        currentEnemy.TakeDamage(damage + 5);
+                        currentEnemy.TakeDamage(damage * 2);
                     }
                     else
                     { 
@@ -388,16 +406,41 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 { 
                     TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Attacked,true);
                     currentEnemy.TakeDamage(damage);
-                } 
+                }
+
+                if (artifact.shootCasterPassiveOne)
+                {
+                    float randomNumber = Random.Range(0, 1f);
+                    if (randomNumber <= 0.4f)
+                    {
+                        currentEnemy.AddCurseStatus(CurseType.Burn,2);
+                    }
+                }
                 break;
             case AttackType.SpecialAttack: 
                 TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.CriticalAttack,true);
                 currentEnemy.TakeDamage(damage * 2); 
+                if (artifact.shootCasterPassiveOne)
+                {
+                    float randomNumber = Random.Range(0, 1f);
+                    if (randomNumber <= 0.4f)
+                    {
+                        currentEnemy.AddCurseStatus(CurseType.Burn,2);
+                    }
+                }
                 break;
             case AttackType.KnockBackAttack: 
                 TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.KnockBack,true);
                 currentEnemy.TakeDamage(damage); 
                 currentEnemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange); 
+                if (artifact.shootCasterPassiveOne)
+                {
+                    float randomNumber = Random.Range(0, 1f);
+                    if (randomNumber <= 0.4f)
+                    {
+                        currentEnemy.AddCurseStatus(CurseType.Burn,2);
+                    }
+                }
                 break;
             case AttackType.EffectiveAttack:
                 switch (effectiveType)
@@ -423,7 +466,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                     GetComponent<Player>().TakeHealth(1);
                 }
             }
-            
+             
             if (artifact.bladeMasterPassiveOne) 
             { 
                 float randomNumber = Random.Range(0, 1f); 
@@ -436,6 +479,16 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             if (artifact.Kamikaze) 
             { 
                 currentEnemy.BombEnemy();
+            }
+
+            if (artifact.shootCasterPassiveTwo)
+            {
+                float randomNumber = Random.Range(0, 1f); 
+                if (randomNumber <= 0.35f) 
+                { 
+                    movePoint += 1;
+                }
+                
             }
 
             currentEnemyGrid.enemyDie = true;
@@ -1130,6 +1183,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             button.interactable = true;
         }
 
+        GetComponent<Player>().CurseHandle();
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
             
@@ -1175,6 +1229,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     
     public void EndTurn()
     {
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().UpdateEmptyGrid();
         if (movePattern != King)
         {
             movePattern = King;
@@ -1186,6 +1241,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         ClearPattern();
         onTurn = false;
         moveSuccess = false;
+        GetComponent<Player>().CurseEnd();
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
             if (rabbitPaws)
@@ -1220,6 +1276,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Button("End Turn")]
     public void EndTurnPermanent()
     {
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().UpdateEmptyGrid();
         if (movePattern != King)
         {
             movePattern = King;
@@ -1228,6 +1285,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         {
             button.interactable = false;
         }
+        GetComponent<Player>().CurseEnd();
         ClearPattern();
         onTurn = false;
         moveSuccess = false;

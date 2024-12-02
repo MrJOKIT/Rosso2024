@@ -27,6 +27,7 @@ public class Player : MonoBehaviour, ITakeDamage
     public bool isDead;
 
     [Space(5)] [Header("GUI")] 
+    public PlayerStatsUI playerStatsUI;
     [Header("Damage Number")] public Transform focusTransform;
     [SerializeField] private Transform damageParent;
     [SerializeField] private Animator damageAnimator;
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private Transform healthTempParentUI;
     [SerializeField] private List<HealthUI> healthUI;
     [SerializeField] private List<HealthUI> healthTempUI;
+    public Transform stunAreaPrefab;
     [Header("Alert")] 
     [SerializeField] private LayerMask enemyLayer;
     public bool enemyForward;
@@ -58,10 +60,9 @@ public class Player : MonoBehaviour, ITakeDamage
     [SerializeField] private Transform curseUiParent;
     
 
-    private void Awake()
+    private void Start()
     {
         LoadPlayerData();
-        
     }
 
     private void Update()
@@ -72,7 +73,6 @@ public class Player : MonoBehaviour, ITakeDamage
             return;
         }
         PlayerDeadHandle();
-        CurseHandle();
     }
 
     private void AlertChecker()
@@ -163,6 +163,18 @@ public class Player : MonoBehaviour, ITakeDamage
     {
         haveShield = true;
     }
+
+    private void UpgradeHealthTemp(int count)
+    {
+        defaultHealthTemp += count;
+        playerHealthTemp = defaultHealthTemp;
+        
+        GameObject health = Instantiate(healthPrefabUI.gameObject, healthTempParentUI);
+        healthTempUI.Add(health.GetComponent<HealthUI>());
+        health.GetComponent<HealthUI>().ChangeToTemp();
+        
+        playerStatsUI.SetStatsText(GetComponent<PlayerMovementGrid>().DefaultDamage,maxHealth,GetComponent<PlayerMovementGrid>().DefaultMovePoint);
+    }
     
     public void TakeDamage(int damage)
     {
@@ -177,10 +189,10 @@ public class Player : MonoBehaviour, ITakeDamage
 
         if (GetComponent<PlayerArtifact>().swordKnightPassiveOne)
         {
-            damage -= 1;
-            if (damage < 0)
+            float randomNumber = Random.Range(0, 1f);
+            if (randomNumber <= 0.3f)
             {
-                damage = 0;
+                UpgradeHealthTemp(1);
             }
         }
 
@@ -209,6 +221,7 @@ public class Player : MonoBehaviour, ITakeDamage
             }
             else
             {
+                VisualEffectManager.Instance.CallEffect(EffectName.Miss, transform,1.5f);
                 TurnManager.Instance.AddLog(GetComponent<Player>().playerName,"",LogList.Evade,true);
                 Debug.Log("Miss");
             }
@@ -254,13 +267,12 @@ public class Player : MonoBehaviour, ITakeDamage
 
         if (GetComponent<PlayerArtifact>().swordKnightPassiveTwo)
         {
-            if (takeDamageCount < 6)
+            takeDamageCount += 1;
+            if (takeDamageCount >= 3)
             {
-                takeDamageCount += 1;
-            }
-            else
-            {
-                Debug.LogWarning("Don't forgot create stun around");
+                GameObject stunArea = Instantiate(stunAreaPrefab.gameObject, transform.position, Quaternion.identity);
+                stunArea.GetComponent<SkillAction>().ActiveSkill();
+                takeDamageCount = 0;
             }
         }
 
@@ -282,17 +294,23 @@ public class Player : MonoBehaviour, ITakeDamage
     
     public void AddCurseStatus(CurseType curseType, int turnTime)
     {
+        if (GetComponent<PlayerArtifact>().IronBody || GetComponent<PlayerArtifact>().TrapNotActiveSelf)
+        {
+            VisualEffectManager.Instance.CallEffect(EffectName.Failed,transform,1.5f);
+            return;
+        }
         GameObject curseGUI = Instantiate(curseUiPrefab, curseUiParent);
         curseHave.Add(new CurseData(curseType,turnTime,curseGUI.GetComponent<CurseUI>()));
+        CurseUiUpdate();
     }
     
     public void CurseHandle()
     {
-        if (curseHave == null)
+        if (curseHave.Count == 0)
         {
             return;
         }
-        CurseUiUpdate();
+        
         foreach (CurseData curse in curseHave)
         {
             if (curse.curseActivated || GetComponent<PlayerArtifact>().IronBody)
@@ -306,20 +324,43 @@ public class Player : MonoBehaviour, ITakeDamage
                     break;
                 case CurseType.Blood:
                     //ลดช่องเดิน 1 ตามั้ง?
-                    playerHealth -= 1;
+                    TakeDamage(1);
                     break;
                 case CurseType.Burn:
-                    playerHealth -= 1;
+                    TakeDamage(1);
                     break;
                 case CurseType.Provoke:
                     //คิดก่อน มีทำไม
                     break;
             }
-
+            
             curse.curseActivated = true;
         }
+        
+        CurseUiUpdate();
     }
 
+    public void CurseEnd()
+    {
+        foreach (CurseData curse in curseHave.ToList())
+        {
+            if (curse.curseActivated == false)
+            {
+                continue;
+            }
+            curse.curseTurn -= 1;
+            if (curse.curseTurn <= 0 )
+            {
+                Destroy(curse.curseUI.gameObject);
+                curseHave.Remove(curse);
+            }
+            else
+            {
+                CurseUiUpdate();
+                curse.curseActivated = false;
+            }
+        }
+    }
     public void CurseUiUpdate()
     {
         foreach (CurseData curse in curseHave)
@@ -342,6 +383,7 @@ public class Player : MonoBehaviour, ITakeDamage
         
         CreateHealthUI();
         UpdateHealthUI();
+        playerStatsUI.SetStatsText(GetComponent<PlayerMovementGrid>().DefaultDamage,maxHealth,GetComponent<PlayerMovementGrid>().DefaultMovePoint);
     }
 
     private void CreateHealthUI()
@@ -354,7 +396,7 @@ public class Player : MonoBehaviour, ITakeDamage
         foreach (HealthUI health in healthTempUI.ToList())
         {
             Destroy(health.gameObject);
-            healthUI.Remove(health);
+            healthTempUI.Remove(health);
         }
         for (int a = 0; a < maxHealth + playerHealthTemp; a++)
         {
@@ -450,6 +492,7 @@ public class Player : MonoBehaviour, ITakeDamage
         ES3.Save("PlayerCurrentHealth",playerHealth);
         ES3.Save("PlayerCurrentHealthTemp",playerHealthTemp);
         
+        ES3.Save("PlayerAbility",GetComponent<PlayerAbility>().swapAbility);
         /*ES3.Save("PlayerDefaultMovePoint",GetComponent<PlayerMovementGrid>().DefaultMovePoint);
         ES3.Save("PlayerDefaultDamage",GetComponent<PlayerMovementGrid>().DefaultDamage);
         ES3.Save("PlayerDefaultKnockBackRange",GetComponent<PlayerMovementGrid>().DefaultKnockBackRange);*/
@@ -471,7 +514,6 @@ public class Player : MonoBehaviour, ITakeDamage
         GetComponent<PlayerArtifact>().artifactHaves = ES3.Load("ArtifactHave",GetComponent<PlayerArtifact>().artifactHaves);
         GetComponent<PlayerArtifact>().ResetArtifact();
         GetComponent<PlayerArtifact>().ResultArtifact();
-        
         //playerHealthTemp = ES3.Load("PlayerDefaultHealthTemp",0) + GetComponent<PlayerArtifact>().HealthPointTemp; 
         //maxHealth = ES3.Load("PlayerDefaultHealth",3) + GetComponent<PlayerArtifact>().HealthPoint;
 
@@ -483,9 +525,9 @@ public class Player : MonoBehaviour, ITakeDamage
         /*GetComponent<PlayerMovementGrid>().DefaultMovePoint = ES3.Load("PlayerDefaultMovePoint", 2);
         GetComponent<PlayerMovementGrid>().DefaultDamage = ES3.Load("PlayerDefaultDamage", 1);
         GetComponent<PlayerMovementGrid>().DefaultKnockBackRange = ES3.Load("PlayerDefaultKnockBackRange", 1);*/
-        
+         
         CreateHealthUI();
-
+        playerStatsUI.SetStatsText(GetComponent<PlayerMovementGrid>().DefaultDamage,maxHealth,GetComponent<PlayerMovementGrid>().DefaultMovePoint);
     }
 
     [Button("Format Data")]
@@ -510,5 +552,9 @@ public class Player : MonoBehaviour, ITakeDamage
         ES3.DeleteKey("BladePassiveTwo");
         ES3.DeleteKey("ShootPassiveOne");
         ES3.DeleteKey("ShootPassiveTwo");
+        
+        ES3.DeleteKey("ClassType");
+        ES3.DeleteKey("EyeKing");
+        ES3.DeleteKey("LastChance");
     }
 }

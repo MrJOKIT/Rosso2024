@@ -13,6 +13,7 @@ public enum ProgressState
     OnProgress,
     ProgressSuccess,
 }
+
 public class PortalManager : Singeleton<PortalManager>
 {
 
@@ -26,6 +27,13 @@ public class PortalManager : Singeleton<PortalManager>
     [SerializeField] private int maxFirstStage = 3;
     [SerializeField] private int roomCount;
     [Space(10)]
+    [Header("Spawn List")]
+    public List<GameObject> battleRoomModelList;
+    public List<GameObject> bonusRoomModelList;
+    public List<GameObject> clearRoomModelList;
+    public List<GameObject> bossRoomModelList;
+    
+    [Header("Current Spawn")]
     public List<GameObject> battleRoomModel;
     public List<GameObject> bonusRoomModel;
     public List<GameObject> clearRoomModel;
@@ -91,8 +99,32 @@ public class PortalManager : Singeleton<PortalManager>
     private void Start()
     {
         SetProgress();
+        SetRoomList();
     }
 
+    public void SetRoomList()
+    {
+        battleRoomModel.Clear();
+        bonusRoomModel.Clear();
+        clearRoomModel.Clear();
+        bonusRoomModel.Clear();
+        foreach (GameObject room in battleRoomModelList)
+        {
+            battleRoomModel.Add(room);
+        }
+        foreach (GameObject room in bonusRoomModelList)
+        {
+            bonusRoomModel.Add(room);
+        }
+        foreach (GameObject room in clearRoomModelList)
+        {
+            clearRoomModel.Add(room);
+        }
+        foreach (GameObject room in bossRoomModelList)
+        {
+            bossRoomModel.Add(room);
+        }
+    }
     private void Update()
     {
         checkForwardRoom = Physics.Raycast(checkForwardRoomPos.position,Vector3.down, Mathf.Infinity, roomLayer);
@@ -144,6 +176,7 @@ public class PortalManager : Singeleton<PortalManager>
     
     public void SetUpNextRoom(Transform portalLeftPos,Transform portalRightPos,Transform playerTransform)
     {
+        SetRoomList();
         if (roomCount <= 0)
         {
             portalLeft.DeActivePortal();;
@@ -239,6 +272,21 @@ public class PortalManager : Singeleton<PortalManager>
     {
         if (leftRoom != null)
         {
+            /*switch (leftRoom.roomType)
+            {
+                case RoomType.Combat:
+                    battleRoomModel.Add(leftRoom.gameObject);
+                    break;
+                case RoomType.Bonus:
+                    bonusRoomModel.Add(leftRoom.gameObject);
+                    break;
+                case RoomType.Clear:
+                    clearRoomModel.Add(leftRoom.gameObject);
+                    break;
+                case RoomType.Boss:
+                    bossRoomModel.Add(leftRoom.gameObject);
+                    break;
+            }*/
             if (leftRoom.playerTrans != null)
             {
                 if (currentRoom == null)
@@ -263,6 +311,21 @@ public class PortalManager : Singeleton<PortalManager>
          
         if (rightRoom != null)
         {
+            /*switch (rightRoom.roomType)
+            {
+                case RoomType.Combat:
+                    battleRoomModel.Add(rightRoom.gameObject);
+                    break;
+                case RoomType.Bonus:
+                    bonusRoomModel.Add(rightRoom.gameObject);
+                    break;
+                case RoomType.Clear:
+                    clearRoomModel.Add(rightRoom.gameObject);
+                    break;
+                case RoomType.Boss:
+                    bossRoomModel.Add(rightRoom.gameObject);
+                    break;
+            }*/
             if (rightRoom.playerTrans != null)
             {
                 if (currentRoom == null)
@@ -297,10 +360,26 @@ public class PortalManager : Singeleton<PortalManager>
                 roomType = RoomType.Combat;
                 break;
             case 1:
-                roomType = RoomType.Bonus;
+                if (bonusRoomModel.Count > 0)
+                {
+                    roomType = RoomType.Bonus;
+                }
+                else
+                {
+                    roomType = RoomType.Combat;
+                }
+                
                 break;
             case 2:
-                roomType = RoomType.Clear;
+                if (clearRoomModel.Count > 0)
+                {
+                    roomType = RoomType.Clear;
+                }
+                else
+                {
+                    roomType = RoomType.Combat;
+                }
+                
                 break;
         }
 
@@ -326,18 +405,18 @@ public class PortalManager : Singeleton<PortalManager>
         {
             case RoomType.Clear:
                 room = clearRoomModel[Random.Range(0, clearRoomModel.Count - 1)];
-                //clearRoomModel.Remove(room);
+                clearRoomModel.Remove(room);
                 break;
             case RoomType.Bonus:
                 room = bonusRoomModel[Random.Range(0, bonusRoomModel.Count - 1)];
-                //bonusRoomModel.Remove(room);
+                bonusRoomModel.Remove(room);
                 break;
             case RoomType.Combat:
                 room = battleRoomModel[Random.Range(0, battleRoomModel.Count - 1)];
                 //battleRoomModel.Remove(room);
                 break;
             case RoomType.Boss:
-                room = bossRoomModel[Random.Range(0, bonusRoomModel.Count - 1)];
+                room = bossRoomModel[Random.Range(0, bossRoomModel.Count - 1)];
                 break;
         }
 
@@ -406,7 +485,7 @@ public class PortalManager : Singeleton<PortalManager>
                 break;
         }
         
-        TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true);
+        TransitionAnimator transitionAnimator = TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true);
         GameManager.Instance.GetComponent<PortalManager>().ShowStageNumber();
         if (secondStageNumber <= 3)
         {
@@ -421,6 +500,7 @@ public class PortalManager : Singeleton<PortalManager>
         stageClearCount += 1;
         
         GetComponent<GameDataManager>().SaveProgress();
+        transitionAnimator.onTransitionEnd.AddListener(GetComponent<GameManager>().StageLoadSuccess);
 
     }
 

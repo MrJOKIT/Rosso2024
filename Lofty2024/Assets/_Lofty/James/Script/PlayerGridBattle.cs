@@ -63,8 +63,8 @@ public class PlayerGridBattle : MonoBehaviour
                 }
                 Debug.Log("Normal");
                 GridSpawnManager.Instance.ClearMover();
-                oldMode = _playerMode;
                 AppearUI(false);
+                oldMode = _playerMode;
                 break;
             case PlayerMode.Combat:
                 if (oldMode == _playerMode)

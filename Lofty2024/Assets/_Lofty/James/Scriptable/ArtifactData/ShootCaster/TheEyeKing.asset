@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   artifactGrade: 1
   artifactClass: 3
-  artifactName: TheEyeKing
+  artifactName: The eye of king
   artifactImage: {fileID: 21300000, guid: 88e5b1bbc44b61f4b8c2d8ed5679c0c8, type: 3}
   artifactDetail: Random epic card 1 card
   upgradeType: 3

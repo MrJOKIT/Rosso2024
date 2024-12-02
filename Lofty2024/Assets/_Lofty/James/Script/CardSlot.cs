@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CardSlot : MonoBehaviour
+public class CardSlot : MonoBehaviour, IPointerEnterHandler,IPointerExitHandler
 {
     public int cardIndex;
     public Image cardImage;
     public TextMeshProUGUI cardName;
     public TextMeshProUGUI cardDetail;
+    public GameObject detailBack;
     [Space(10)] 
-    public Image cardClassIcon;
-    public Sprite swordIcon;
-    public Sprite bladeIcon;
-    public Sprite shootIcon;
+    public GameObject swordIcon;
+    public GameObject bladeIcon;
+    public GameObject shootIcon;
+    [Space(10)] 
+    public Material highLightMat;
 
     public void SetCard(int cardIndex,ArtifactData artifactData)
     {
@@ -25,28 +29,45 @@ public class CardSlot : MonoBehaviour
         switch (artifactData.artifactClass)
         {
             case CardClass.SwordKnight:
-                cardClassIcon.sprite = swordIcon;
+                swordIcon.SetActive(true);
+                shootIcon.SetActive(false);
+                bladeIcon.SetActive(false);
                 break;
             case CardClass.BladeMaster:
-                cardClassIcon.sprite = bladeIcon;
+                bladeIcon.SetActive(true);
+                shootIcon.SetActive(false);
+                swordIcon.SetActive(false);
                 break;
             case CardClass.ShootingCaster:
-                cardClassIcon.sprite = shootIcon;
+                shootIcon.SetActive(true);
+                swordIcon.SetActive(false);
+                bladeIcon.SetActive(false);
                 break;
             default:
-                cardClassIcon.gameObject.SetActive(false);
+                swordIcon.SetActive(false);
+                bladeIcon.SetActive(false);
+                shootIcon.SetActive(false);
                 break;
         }
     }
 
-    public void Reveal()
-    {
-        cardDetail.GetComponent<TextRevealer>().RevealTime = 0.5f;
-        cardDetail.GetComponent<TextRevealer>().Reveal();
-    }
+    
+    
 
     public void SelectedCard()
     {
         GameManager.Instance.GetComponent<RandomCardManager>().SelectedCard(cardIndex);
+    }
+    
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        detailBack.SetActive(true);
+        cardImage.material = highLightMat;
+    }
+    
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        detailBack.SetActive(false);
+        cardImage.material = null;
     }
 }

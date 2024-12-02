@@ -33,6 +33,7 @@ public class SoundManager : MonoBehaviour
         BonusBGM,
         DeadBGM,
         VictoryBGM,
+        ClearBGM,
     }
     public enum VfxName
     {
@@ -52,18 +53,6 @@ public class SoundManager : MonoBehaviour
             return;
         }
         //DontDestroyOnLoad( gameObject );
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Play(SoundName.BattleBGM);
-        }
-        else if (Input.GetKeyDown(KeyCode.O))
-        {
-            Play(SoundName.BonusBGM);
-        }
     }
 
     public void PlayVFX(VfxName vfxName)

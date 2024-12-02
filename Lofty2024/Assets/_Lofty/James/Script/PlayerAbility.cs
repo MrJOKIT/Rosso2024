@@ -41,7 +41,7 @@ public class PlayerAbility : MonoBehaviour
     private void Awake()
     {
         currentAbility = GetComponent<PlayerMovementGrid>().movePattern;
-        swapAbility = AbilityType.Empty;
+        swapAbility = ES3.Load("PlayerAbility", AbilityType.Empty);
     }
 
     private void Update()

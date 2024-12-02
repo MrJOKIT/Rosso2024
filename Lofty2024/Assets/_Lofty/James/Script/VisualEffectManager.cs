@@ -7,7 +7,7 @@ public enum EffectName
 {
     Summon,
     Stun,
-    Slash,
+    Hit,
     Bite,
     Blood,
     Revive,
@@ -15,6 +15,13 @@ public enum EffectName
     Dead,
     EnemyDead,
     Heal,
+    Miss,
+    Epic,
+    Critical,
+    Pop,
+    ClassOne,
+    ClassTwo,
+    Failed,
 }
 [Serializable]
 public class EffectData

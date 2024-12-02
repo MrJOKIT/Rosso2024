@@ -59,10 +59,17 @@ public class RandomCardManager : MonoBehaviour
     public bool cardShootOutOfStock;
 
     
-    private void Awake()
+    private void Start()
     {
         currentCost = randomCost / 2;
-        SortingCardGrade();
+        if (cardList.Count == 0)
+        {
+            cardOutOfStock = true;
+        }
+        else
+        {
+            SortingCardGrade();
+        }
     }
     
 
@@ -76,7 +83,7 @@ public class RandomCardManager : MonoBehaviour
         }
         isRandom = true;
         player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
-        currentCost *= 2; 
+        currentCost *= 2;
         cardRandomCanvas.SetActive(true);
         if (cardList.Count > 1)
         {
@@ -722,6 +729,10 @@ public class RandomCardManager : MonoBehaviour
 
     public void SelectedCard(int cardIndex)
     {
+        if (currentCardRandom[cardIndex].artifactGrade == ArtifactGrade.Epic)
+        {
+            VisualEffectManager.Instance.CallEffect(EffectName.Epic,GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().playerTrans.transform,1.5f);
+        }
         player.AddNewArtifact(currentCardRandom[cardIndex]);
         currentCardRandom.Remove(currentCardRandom[cardIndex]);
         RandomEnd();
@@ -769,8 +780,8 @@ public class RandomCardManager : MonoBehaviour
     private void UpdateButton()
     {
         costText.text = "COST: " + currentCost;
+        randomAgainButton.gameObject.SetActive(true);
         randomAgainButton.interactable = GetComponent<GameCurrency>().EricCoin >= currentCost;
-
         if (haveArtifact)
         {
             if (!artifactUsed)
@@ -844,9 +855,9 @@ public class RandomCardManager : MonoBehaviour
             cardShootOutOfStock = true;
         }
         player.GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
-        player.GetComponent<PlayerArtifact>().ResultArtifact();
         isRandom = false;
         GetComponent<GameDataManager>().SaveCardManager();
         GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().SavePlayerData();
+        TutorialManager.Instance.ActiveTutorial(TutorialName.CardLink);
     }
 }

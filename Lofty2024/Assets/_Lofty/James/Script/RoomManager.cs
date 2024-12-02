@@ -54,6 +54,7 @@ public class RoomManager : MonoBehaviour
     public List<GameObject> obstaclePrefab;
     public List<GridMover> currentGrid;
     public List<GridMover> emptyGrid;
+    public List<GameObject> trapObject;
  
     [Tab("Item In Room")] 
     public List<GameObject> itemInRoom;
@@ -93,6 +94,7 @@ public class RoomManager : MonoBehaviour
         
         Invoke("SpawnObstacle",0.1f);
         Invoke("SpawnEnemy",0.2f);
+        Invoke("SpawnTrap",0.3f);
         
         TurnManager.Instance.TurnStart();
     }
@@ -142,6 +144,24 @@ public class RoomManager : MonoBehaviour
         enemySpawnComplete = true;
     }
 
+    private void SpawnTrap()
+    {
+        while (EnemySpawnManager.Instance.curseCost > 0)
+        {
+            GameObject trap = Instantiate(EnemySpawnManager.Instance.GetTrap(), CheckSpawnPoint(), Quaternion.identity,transform);
+            trapObject.Add(trap);
+        }
+    }
+
+    private void ClearTrap()
+    {
+        foreach (GameObject trap in trapObject.ToList())
+        {
+            Destroy(trap);
+            trapObject.Remove(trap);
+        }
+    }
+
     private void Update()
     {
         if (!roomActive)
@@ -168,6 +188,7 @@ public class RoomManager : MonoBehaviour
         emptyGrid.Remove(grid);
         return spawnPoint;
     }
+    
 
     public void AddNewEnemyInRoom(GameObject newEnemyPrefab)
     {
@@ -205,6 +226,8 @@ public class RoomManager : MonoBehaviour
     {
         roomClear = true; 
         roomType = RoomType.Clear;
+        SoundManager.instace.Play(SoundManager.SoundName.ClearBGM);
+        ClearTrap();
         TurnManager.Instance.CurrentRoomClear(); 
         if (isStandbyRoom)
         {

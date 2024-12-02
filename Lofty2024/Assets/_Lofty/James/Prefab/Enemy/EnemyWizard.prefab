@@ -6112,7 +6112,7 @@ MonoBehaviour:
   enemyMoveDirection: 0
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 1408
+    m_Bits: 1920
   forwardBlock: 0
   forwardLeftBlock: 0
   forwardRightBlock: 0

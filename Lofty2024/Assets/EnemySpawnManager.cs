@@ -19,11 +19,18 @@ public class ObstacleSpawnList
     public GameObject obstacle;
     public int cost;
 }
+
+[Serializable]
+public class CurseList
+{
+    public GameObject trapObject;
+    public int cost;
+}
 public class EnemySpawnManager : Singeleton<EnemySpawnManager>
 {
     [Tab("Enemy")] 
     [Header("Normal")]
-    public int defaultDifficultyCost = 10;
+    public int defaultDifficultyCost = 6;
     public int difficultyCost;
     public List<EnemySpawnList> enemySpawnList;
     public List<EnemySpawnList> enemyList;
@@ -35,6 +42,12 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
     public int obstacleCost;
     public List<ObstacleSpawnList> obstacleSpawnList;
     public List<ObstacleSpawnList> obstacleList;
+
+    [Tab("Curse Spawn")] 
+    public int defaultCurseCost = 3;
+    public int curseCost;
+    public List<CurseList> curseSpawnList;
+    public List<CurseList> curseList;
     private void Start()
     {
         ResetSpawnList();
@@ -66,6 +79,20 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
         }
         obstacleList = obstacleList.OrderBy(x => Random.value).ToList();
     }
+
+    public void SetCurseList()
+    {
+        curseList.Clear();
+        foreach (CurseList curse in curseSpawnList)
+        {
+            if (curse.cost <= curseCost)
+            {
+                curseList.Add(curse);
+            }
+        }
+        
+        curseList = curseList.OrderBy(x => Random.value).ToList();
+    }
     public GameObject GetEnemy()
     {
         int randomNumber = Random.Range(0, enemyList.Count - 1);
@@ -89,6 +116,15 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
         obstacleCost -= obstacleList[randomNumber].cost;
         SetObstacleList();
         return newObstacle;
+    }
+
+    public GameObject GetTrap()
+    {
+        int randomNumber = Random.Range(0, curseList.Count - 1);
+        GameObject trap = curseList[randomNumber].trapObject;
+        curseCost -= curseList[randomNumber].cost;
+        SetCurseList();
+        return trap;
     }
     
     public GameObject GetBossEnemy()
@@ -120,19 +156,21 @@ public class EnemySpawnManager : Singeleton<EnemySpawnManager>
         }
         else if (GetComponent<PortalManager>().firstStageNumber == 2)
         {
-            defaultDifficultyCost = 12;
+            defaultDifficultyCost = 8;
         }
         else if (GetComponent<PortalManager>().firstStageNumber == 3)
         {
-            defaultDifficultyCost = 18;
+            defaultDifficultyCost = 10;
         }
         else
         {
-            defaultDifficultyCost = 20;
+            defaultDifficultyCost = 12;
         }
         difficultyCost = defaultDifficultyCost;
         obstacleCost = defaultObstacleCost;
+        curseCost = defaultCurseCost;
         SetEnemyList();
         SetObstacleList();
+        SetCurseList();
     }
 }

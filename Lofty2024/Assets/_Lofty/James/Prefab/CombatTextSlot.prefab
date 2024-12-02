@@ -69,8 +69,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: <ROSSO> ATTACK <LABIGON>
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5094b715585444e90b7306721788dae5, type: 2}
-  m_sharedMaterial: {fileID: 2393364598115949451, guid: 5094b715585444e90b7306721788dae5,
+  m_fontAsset: {fileID: 11400000, guid: d4b2c7b8e9b42e446970469b15ae76f8, type: 2}
+  m_sharedMaterial: {fileID: 3707305858064862562, guid: d4b2c7b8e9b42e446970469b15ae76f8,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

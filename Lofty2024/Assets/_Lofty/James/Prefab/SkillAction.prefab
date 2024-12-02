@@ -50,7 +50,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4381847463047908256
 Transform:
   m_ObjectHideFlags: 0
@@ -189,7 +189,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4547333838220908651
 Transform:
   m_ObjectHideFlags: 0
@@ -328,7 +328,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8303717772980584470
 Transform:
   m_ObjectHideFlags: 0
@@ -467,7 +467,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6667179641811466683
 Transform:
   m_ObjectHideFlags: 0
@@ -638,7 +638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4178735969594301134
 Transform:
   m_ObjectHideFlags: 0
@@ -781,9 +781,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageTo: 1
   skillAttackType: 2
-  curseType: 0
-  damageCount: 3
+  curseType: 1
+  damageCount: 1
   knockBackRange: 1
+  vfx: {fileID: 1533464435461110144, guid: 4d1bf74f19f342748bb38bf9555a583d, type: 3}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -884,7 +885,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7375611186568513243
 Transform:
   m_ObjectHideFlags: 0
@@ -991,7 +992,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6584978320540260700
 Transform:
   m_ObjectHideFlags: 0
@@ -1098,7 +1099,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6405736355624578818
 Transform:
   m_ObjectHideFlags: 0

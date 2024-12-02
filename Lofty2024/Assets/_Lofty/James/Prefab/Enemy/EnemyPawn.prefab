@@ -634,6 +634,8 @@ MonoBehaviour:
   onShake: 0
   enemyHost: {fileID: 4171816214948986574}
   effectName: 3
+  curseType: 2
+  cursePercentage: 0.2
 --- !u!114 &8394541700457994185
 MonoBehaviour:
   m_ObjectHideFlags: 0

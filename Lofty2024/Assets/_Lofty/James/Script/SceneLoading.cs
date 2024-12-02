@@ -7,6 +7,7 @@ using UnityEngine;
 public class SceneLoading : MonoBehaviour
 {
     public GameObject loadingScene;
+    public GameObject tutorialConfirmCanvas;
     public float loadTime;
     public bool loadSucces;
     public bool startLoad;
@@ -41,7 +42,16 @@ public class SceneLoading : MonoBehaviour
         GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().StartRoom();
         GetComponent<GameManager>().StartTimer();
         GetComponent<GameManager>().SetCursorVisible(true);
+        bool tutorialEnable = ES3.Load("TutorialPopUp", true);
+        if (tutorialEnable)
+        {
+            tutorialConfirmCanvas.SetActive(true);
+            TutorialManager.Instance.tutorialState = TutorialState.OnProgress;
+        }
         
+
+
+
     }
     
 }

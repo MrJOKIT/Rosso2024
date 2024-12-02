@@ -21,27 +21,11 @@ public class CrownLink : MonoBehaviour
     public Image card3;
     public Image card4;
     public Image card5;
-    
-    [Header("Sword Image")] 
-    public Sprite cardSword1;
-    public Sprite cardSword2;
-    public Sprite cardSword3;
-    public Sprite cardSword4;
-    public Sprite cardSword5;
-    
-    [Header("Blade Image")] 
-    public Sprite cardBlade1;
-    public Sprite cardBlade2;
-    public Sprite cardBlade3;
-    public Sprite cardBlade4;
-    public Sprite cardBlade5;
-    
-    [Header("Shoot Image")] 
-    public Sprite cardShoot1;
-    public Sprite cardShoot2;
-    public Sprite cardShoot3;
-    public Sprite cardShoot4;
-    public Sprite cardShoot5;
+
+    public GameObject swordKnightCharacter;
+    public GameObject bladeMasterCharacter;
+    public GameObject shootCasterCharacter;
+    public TextRevealer textRevealer;
 
     private void Update()
     {
@@ -108,6 +92,9 @@ public class CrownLink : MonoBehaviour
         }
         if (playerArtifact.swordKnightPassiveOne)
         {
+            swordKnightCharacter.SetActive(true);
+            bladeMasterCharacter.SetActive(false);
+            shootCasterCharacter.SetActive(false);
             crownAnimator.SetBool("Red",true);
             crownAnimator.SetBool("Yellow",false);
             crownAnimator.SetBool("Blue",false);
@@ -122,6 +109,9 @@ public class CrownLink : MonoBehaviour
         }
         if (playerArtifact.bladeMasterPassiveOne)
         {
+            bladeMasterCharacter.SetActive(true);
+            swordKnightCharacter.SetActive(false);
+            shootCasterCharacter.SetActive(false);
             crownAnimator.SetBool("Red",true);
             crownAnimator.SetBool("Yellow",false);
             crownAnimator.SetBool("Blue",false);
@@ -136,6 +126,9 @@ public class CrownLink : MonoBehaviour
         }
         if (playerArtifact.shootCasterPassiveOne)
         {
+            shootCasterCharacter.SetActive(true);
+            bladeMasterCharacter.SetActive(false);
+            swordKnightCharacter.SetActive(false);
             crownAnimator.SetBool("Blue",true);
             crownAnimator.SetBool("Red",false);
             crownAnimator.SetBool("Yellow",false);
@@ -150,6 +143,10 @@ public class CrownLink : MonoBehaviour
         }
     }
 
+    public void RevealTrack()
+    {
+        textRevealer.Reveal();
+    }
     public void ShowCrown()
     {
         if (playerArtifact.swordKnightPassiveOne)

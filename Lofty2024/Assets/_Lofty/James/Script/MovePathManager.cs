@@ -23,7 +23,7 @@ public class MovePathManager : MonoBehaviour
 
     public void SetPath(PlayerMoveDirection direction)
     {
-        switch (direction)
+        /*switch (direction)
         {
             case PlayerMoveDirection.Forward:
                 forwardPath.SetActive(false);
@@ -49,6 +49,6 @@ public class MovePathManager : MonoBehaviour
             case PlayerMoveDirection.Right:
                 rightPath.SetActive(false);
                 break;
-        }
+        }*/
     }
 }

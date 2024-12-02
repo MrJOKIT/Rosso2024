@@ -33,6 +33,7 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         if (Input.GetKeyDown(KeyCode.E) && pressActive == false && playerTrans.GetComponent<PlayerMovementGrid>().currentState == MovementState.Combat)
         {
             playerTrans.GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
+            GameManager.Instance.OnLoadStage();
             TransitionAnimator animator = TransitionAnimator.Start(TransitionType.Fade,0.75f,autoDestroy:true);
             animator.onTransitionEnd.AddListener(WarpToPoint);
             pressActive = true;

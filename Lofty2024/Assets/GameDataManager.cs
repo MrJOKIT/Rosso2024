@@ -98,6 +98,12 @@ public class GameDataManager : MonoBehaviour
         ES3.DeleteKey("PlayerDefaultKnockBackRange");
         
         ES3.DeleteKey("ArtifactHave");
+        ES3.DeleteKey("ClassType");
+        ES3.DeleteKey("EyeKing");
+        ES3.DeleteKey("LastChance");
+        ES3.DeleteKey("Tutorial");
+        ES3.DeleteKey("TutorialPopUp");
+        ES3.DeleteKey("PlayerAbility");
         
         ES3.DeleteKey("FirstClassUnlock");
         ES3.DeleteKey("SecondClassUnlock");

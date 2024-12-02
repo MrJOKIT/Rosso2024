@@ -21,6 +21,7 @@ public class MoveChecker : MonoBehaviour
                         gm.gridState = GridState.OnMove;
                         break;
                     case GridState.OnEnemy:
+                        TutorialManager.Instance.ActiveTutorial(TutorialName.HowToAttack);
                         gm.ActiveEnemy();
                         break;
                 }

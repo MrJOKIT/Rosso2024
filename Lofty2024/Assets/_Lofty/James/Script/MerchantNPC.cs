@@ -8,6 +8,7 @@ public class MerchantNPC : InterfacePopUp<MerchantNPC>
     public Animator treeAnimator;
     public bool onRandom;
     public bool randomSuccess;
+    public GameObject rayObject;
     
     private void Update()
     {
@@ -22,12 +23,14 @@ public class MerchantNPC : InterfacePopUp<MerchantNPC>
         }
         if (onRandom)
         {
+            rayObject.SetActive(false);
+            close = true;
             treeAnimator.SetBool("Open",false);
             randomSuccess = true;
         }
         if (onPlayer)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<PlayerMovementGrid>().currentState == MovementState.Combat)
             {
                 GameManager.Instance.GetComponent<RandomCardManager>().StartRandomCard();
                 onRandom = true;

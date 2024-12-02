@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyName: Elite Gaia
   enemySprite: {fileID: -1241085639, guid: 49c928386bbaf68488155c4d148fb652, type: 3}
   isBoss: 1
-  enemyMaxHealth: 10
-  enemyHealth: 10
-  damage: 2
+  enemyMaxHealth: 15
+  enemyHealth: 15
+  damage: 3
   enemySpeed: 60

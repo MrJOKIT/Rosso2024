@@ -14,10 +14,13 @@ public enum CursorType
     DefaultCursor,
     SkillCursor,
     DataCursor,
+    AttackCursor,
 }
 public class GameManager : Singeleton<GameManager>
 {
-    [Tab("Game Manager")]
+    [Tab("Game Manager")] 
+    [SerializeField] private bool onLoad;
+    public bool OnLoad => onLoad;
     [Header("Clear Stage Setting")] 
     [SerializeField] private string sceneName;
     [SerializeField] private GameObject gatePrefab;
@@ -45,6 +48,7 @@ public class GameManager : Singeleton<GameManager>
     public Texture2D defaultCursor;
     public Texture2D onSkillCursor;
     public Texture2D onDataCursor;
+    public Texture2D onAttackCursor;
 
     public Vector2 mouseCursorHotSpot;
 
@@ -61,6 +65,18 @@ public class GameManager : Singeleton<GameManager>
             elapsedTime += Time.deltaTime;
             UpdateTimeDisplay(); 
         }
+    }
+
+    public void OnLoadStage()
+    {
+        //SetCursorVisible(false);
+        onLoad = true;
+    }
+
+    public void StageLoadSuccess()
+    {
+        //SetCursorVisible(true);
+        onLoad = false;
     }
 
     public void SetCursorVisible(bool visible)
@@ -111,6 +127,10 @@ public class GameManager : Singeleton<GameManager>
         PauseTimer();
         Debug.Log("Stage is clear!!!");
         StageReward();
+        if (currentRoomPos.GetComponent<RoomManager>().roomType == RoomType.Boss)
+        {
+            return;
+        }
         GameObject gateObject = Instantiate(gatePrefab, currentRoomPos.GetComponent<RoomManager>().CheckSpawnPoint(), Quaternion.identity);
         gateObject.GetComponent<GateToNextScene>().SetNextScene(sceneName);
         cardSelectCanvas.SetActive(true);
@@ -179,7 +199,7 @@ public class GameManager : Singeleton<GameManager>
     {
         currentRoomPos.GetComponent<RoomManager>().playerTrans.GetComponent<Player>().FormatPlayerData();
         GetComponent<GameDataManager>().FormatAllData();
-        SceneManager.LoadSceneAsync("Lobby");
+        SceneManager.LoadSceneAsync("Menu");
     }
 
     #endregion
@@ -199,6 +219,9 @@ public class GameManager : Singeleton<GameManager>
                 break;
             case CursorType.DataCursor:
                 Cursor.SetCursor(onDataCursor,new Vector2(0,0),CursorMode.Auto);
+                break;
+            case CursorType.AttackCursor:
+                Cursor.SetCursor(onAttackCursor,new Vector2(0,0),CursorMode.Auto);
                 break;
         }
     }

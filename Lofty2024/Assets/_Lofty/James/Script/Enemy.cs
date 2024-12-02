@@ -211,6 +211,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
 
         if (abilityDrop != AbilityType.Empty)
         {
+            TutorialManager.Instance.ActiveTutorial(TutorialName.HowToGetAbility);
             GameObject abilityOrbItem =Instantiate(abilityOrbPrefab, new Vector3(transform.position.x,0,transform.position.z), Quaternion.identity);
             abilityOrbItem.GetComponent<AbilityOrb>().SetOrbAbility(abilityDrop);
         }
