@@ -114,7 +114,6 @@ public class PortalToNextRoom : InterfacePopUp<PortalToNextRoom>
         PortalManager.Instance.progressList[PortalManager.Instance.secondStageNumber - 1].SetBarType(roomTypeConnect);
         PortalManager.Instance.progressState = ProgressState.OnProgress;
         playerTrans.GetComponent<PlayerMovementGrid>().currentState = MovementState.Combat;
-        PortalManager.Instance.HidePortal();
         //TransitionAnimator animatorTwo = TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true,playDelay:2f);
         //animatorTwo.onTransitionEnd.AddListener(GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().StartRoom);
     }
