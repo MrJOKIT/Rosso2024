@@ -22,6 +22,7 @@ public class EnemyMovementGrid : MonoBehaviour
 {  [Header("Move Setting")]
    public MovementState currentState;
    public float moveSpeed = 5;
+   public float knockBackSpeed = 100f;
    public Vector3 gridSize = new Vector3(1,1,1);
 
    [Space(10)]
@@ -43,39 +44,18 @@ public class EnemyMovementGrid : MonoBehaviour
    public Vector3 targetPosition;
    
 
-   private void Update()
+   private void FixedUpdate()
    {
        CheckBlockHandle();
        MoveStateHandle();
-       if (GetComponent<Enemy>().autoSkip)
-       {
-           if (GetComponent<Enemy>().onTurn)
-           {
-               int randomNumber = Random.Range(0, 3);
-               switch (randomNumber)
-               {
-                   case 0:
-                       SetTargetPosition(Vector3.forward);
-                       break;
-                   case 1:
-                       SetTargetPosition(Vector3.back);
-                       break;
-                   case 2:
-                       SetTargetPosition(Vector3.left);
-                       break;
-                   case 3:
-                       SetTargetPosition(Vector3.right);
-                       break;
-               }
-           
-               GetComponent<Enemy>().EndTurn();
-           }
-       }
-       
    }
 
    public void KnockBack(Transform playerTrans,int gridDistance)
    {
+       if (GetComponent<Enemy>().enemyData.isBoss)
+       {
+           return;
+       }
       //ถอยกี่ช่อง
       isKnockBack = true;
       BackDirectionHandle(playerTrans);
@@ -236,7 +216,15 @@ public class EnemyMovementGrid : MonoBehaviour
    
        private void MoveToTarget()
        {
-           transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, moveSpeed * Time.deltaTime);
+           if (isKnockBack)
+           {
+               transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, knockBackSpeed * Time.deltaTime);
+           }
+           else
+           {
+               transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPosition, moveSpeed * Time.deltaTime);
+           }
+           
 
            if (transform.localPosition == targetPosition)
            {
@@ -251,7 +239,7 @@ public class EnemyMovementGrid : MonoBehaviour
                    GetComponent<Enemy>().EndTurn();
                    currentState = MovementState.Idle;
                }
-                  
+               GetComponent<Enemy>().enemyAnimator.SetBool("OnMove",false);
            }
            
        }
@@ -286,6 +274,7 @@ public class EnemyMovementGrid : MonoBehaviour
                   SetTargetPosition(new Vector3(transform.localPosition.x + 1,transform.localPosition.y,transform.localPosition.z - 1));
                   break;
                }
+           GetComponent<Enemy>().enemyAnimator.SetBool("OnMove",true);
        }
        private void OnDrawGizmos()
        {

@@ -18,6 +18,10 @@ public class PlayerInputHandle : MonoBehaviour
     void Update()
     {
         InventoryHandle();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CameraManager.Instance.ChangeCameraView();
+        }
     }
 
 
@@ -25,7 +29,8 @@ public class PlayerInputHandle : MonoBehaviour
 
     public void HandleInput()
     {
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode != PlayerMode.Normal)
+        if (TurnManager.Instance.turnData.Count > 1 ||
+            GameManager.Instance.GetComponent<SceneLoading>().loadSucces == false)
         {
             return;
         }

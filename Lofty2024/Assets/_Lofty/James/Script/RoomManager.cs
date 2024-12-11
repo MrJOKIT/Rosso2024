@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GD.MinMaxSlider;
+using TransitionsPlus;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VInspector;
@@ -19,6 +19,7 @@ public class RoomManager : MonoBehaviour
 {
     [Tab("Room Setting")] 
     [Space(5)] 
+    public RuntimeAnimatorController iconAnimator;
     public bool isStandbyRoom;
     public bool isLastRoom;
     public bool roomActive;
@@ -33,28 +34,27 @@ public class RoomManager : MonoBehaviour
     [Header("Portal Position")] 
     public Transform portalLeft;
     public Transform portalRight;
-    
+
     [Tab("Enemy Generator")] 
+    public bool isBossRoom;
+    public Transform bossSpawnPoint;
+    [Space(10)]
     public bool enemySpawnComplete;
-    [MinMaxSlider(1,10)] public Vector2Int spawnEnemyCount;
-    private int spawnedEnemyCount;
-    private int spawnEnemyMax;
+    public bool stunAll;
     
     public Transform enemyParent;
-    public List<GameObject> enemyPrefab;
     public List<Enemy> enemyInRoom;
     public bool roomClear;
 
     [Tab("Room Generator")] 
     public bool obstacleSpawnComplete;
-    [MinMaxSlider(5,20)] public Vector2Int spawnObstacleCount;
-    private int spawnedObstacleCount;
-    private int spawnObstacleMax;
+    public Vector2Int spawnObstacleCount;
     
     public Transform obstacleParent;
     public List<GameObject> obstaclePrefab;
     public List<GridMover> currentGrid;
     public List<GridMover> emptyGrid;
+    public List<GameObject> trapObject;
  
     [Tab("Item In Room")] 
     public List<GameObject> itemInRoom;
@@ -67,6 +67,12 @@ public class RoomManager : MonoBehaviour
             GridSpawnManager.Instance.AddGridList(grid);
         }
 
+        UpdateEmptyGrid();
+    }
+
+    public void UpdateEmptyGrid()
+    {
+        emptyGrid.Clear();
         foreach (GridMover grid in currentGrid)
         {
             if (grid.gridState == GridState.Empty && grid.isPortal == false)
@@ -76,50 +82,83 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    private void StartRoom()
+    public void StartRoom()
     {
         if (roomType == RoomType.Clear || roomType == RoomType.Bonus)
         {
-            RoomClear();
+            RoomClearWithNoReward(); 
             return;
         }
-        
+        GameManager.Instance.StartTimer();
         SpawnObstacle();
         
-        spawnObstacleMax = Random.Range(spawnObstacleCount.x, spawnObstacleCount.y);
-        spawnEnemyMax = Random.Range(spawnEnemyCount.x,spawnEnemyCount.y);
-     
         Invoke("SpawnObstacle",0.1f);
         Invoke("SpawnEnemy",0.2f);
+        Invoke("SpawnTrap",0.3f);
         
         TurnManager.Instance.TurnStart();
     }
 
     private void SpawnObstacle()
     {
-        for (int i = 0; i < spawnObstacleMax; i++)
+        if (isBossRoom)
         {
-            Instantiate(obstaclePrefab[Random.Range(0, obstaclePrefab.Count - 1)], CheckSpawnPoint(), Quaternion.identity, obstacleParent);
-            spawnedObstacleCount += 1;
-            if (spawnedObstacleCount == spawnObstacleMax)
-            {
-                obstacleSpawnComplete = true;
-            }
+            obstacleSpawnComplete = true;
+            return;
         }
+
+        while (EnemySpawnManager.Instance.obstacleCost > 0)
+        {
+            Instantiate(EnemySpawnManager.Instance.GetObstacle(), CheckSpawnPoint(), Quaternion.identity, obstacleParent);
+        }
+        obstacleSpawnComplete = true;
     }
     private void SpawnEnemy()
     {
-        for (int i = 0; i < spawnEnemyMax; i++)
+        if (isBossRoom)
         {
-            GameObject enemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count - 1)], CheckSpawnPoint(), Quaternion.identity,enemyParent);
+            GameObject enemy = Instantiate(EnemySpawnManager.Instance.GetBossEnemy(), new Vector3(bossSpawnPoint.position.x,0.5f,bossSpawnPoint.position.z), Quaternion.identity,enemyParent);
             enemyInRoom.Add(enemy.GetComponent<Enemy>());
             enemy.GetComponent<Enemy>().targetTransform = playerTrans;
             enemy.GetComponent<Enemy>().ActiveUnit();
-            spawnedEnemyCount += 1;
-            if (spawnedEnemyCount == spawnEnemyMax)
+            if (stunAll)
             {
-                enemySpawnComplete = true;
+                enemy.GetComponent<Enemy>().AddCurseStatus(CurseType.Stun,1); 
             }
+            enemySpawnComplete = true;
+            return;
+        }
+
+        while (EnemySpawnManager.Instance.difficultyCost > 0)
+        {
+            GameObject enemy = Instantiate(EnemySpawnManager.Instance.GetEnemy(), CheckSpawnPoint(), Quaternion.identity,enemyParent);
+            enemyInRoom.Add(enemy.GetComponent<Enemy>());
+            enemy.GetComponent<Enemy>().targetTransform = playerTrans;
+            enemy.GetComponent<Enemy>().ActiveUnit();
+            if (stunAll)
+            {
+                enemy.GetComponent<Enemy>().AddCurseStatus(CurseType.Stun,1); 
+            }
+        }
+
+        enemySpawnComplete = true;
+    }
+
+    private void SpawnTrap()
+    {
+        while (EnemySpawnManager.Instance.curseCost > 0)
+        {
+            GameObject trap = Instantiate(EnemySpawnManager.Instance.GetTrap(), CheckSpawnPoint(), Quaternion.identity,transform);
+            trapObject.Add(trap);
+        }
+    }
+
+    private void ClearTrap()
+    {
+        foreach (GameObject trap in trapObject.ToList())
+        {
+            Destroy(trap);
+            trapObject.Remove(trap);
         }
     }
 
@@ -149,6 +188,17 @@ public class RoomManager : MonoBehaviour
         emptyGrid.Remove(grid);
         return spawnPoint;
     }
+    
+
+    public void AddNewEnemyInRoom(GameObject newEnemyPrefab)
+    {
+        GameObject enemy = Instantiate(newEnemyPrefab, CheckSpawnPoint(), Quaternion.identity,enemyParent);
+        VisualEffectManager.Instance.CallEffect(EffectName.Summon,enemy.transform,1f);
+        enemyInRoom.Add(enemy.GetComponent<Enemy>());
+        enemy.GetComponent<Enemy>().targetTransform = playerTrans;
+        enemy.GetComponent<Enemy>().ActiveUnit();
+        TurnManager.Instance.AddNewQueue(enemy.transform);
+    }
 
     private void RoomProgressCheck()
     {
@@ -174,9 +224,11 @@ public class RoomManager : MonoBehaviour
 
     private void RoomClear()
     {
-        roomClear = true;
+        roomClear = true; 
         roomType = RoomType.Clear;
-        TurnManager.Instance.currentRoomClear = true;
+        SoundManager.instace.Play(SoundManager.SoundName.ClearBGM);
+        ClearTrap();
+        TurnManager.Instance.CurrentRoomClear(); 
         if (isStandbyRoom)
         {
             return;
@@ -184,12 +236,35 @@ public class RoomManager : MonoBehaviour
         
         if (isLastRoom)
         {
-            GameManager.Instance.StageClear();
+            if (isBossRoom)
+            {
+                GameManager.Instance.GameClearRevealer();
+            }
+            else
+            {
+                GameManager.Instance.StageClear();
+            }
+            
         }
         else
         {
+            GameManager.Instance.RoomClear();
             PortalManager.Instance.SetUpNextRoom(portalLeft,portalRight,playerTrans);
         }
+        EnemySpawnManager.Instance.ResetSpawnList();
+    }
+    
+    private void RoomClearWithNoReward()
+    {
+        roomClear = true; 
+        roomType = RoomType.Clear;
+        TurnManager.Instance.CurrentRoomClear(); 
+        if (isStandbyRoom)
+        {
+            return;
+        }
+        
+        PortalManager.Instance.SetUpNextRoom(portalLeft,portalRight,playerTrans);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -197,6 +272,7 @@ public class RoomManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerTrans = other.GetComponent<Transform>();
+            stunAll = other.GetComponent<PlayerArtifact>().CreepingTerror;
             GameManager.Instance.UpdateCurrentRoom(transform);
             PortalManager.Instance.StartClearRoom();
             foreach (GridMover grid in currentGrid)
@@ -207,7 +283,8 @@ public class RoomManager : MonoBehaviour
             {
                 return;
             }
-            StartRoom();
+
+            Invoke("StartRoom",2f);
         }
     }
 
@@ -251,5 +328,13 @@ public class RoomManager : MonoBehaviour
             Destroy(item);
         }
         Destroy(gameObject,0.1f);
+    }
+
+    public void ClearSelectedGird()
+    {
+        foreach (GridMover grid in currentGrid)
+        {
+            grid.onHover = false;
+        }
     }
 }

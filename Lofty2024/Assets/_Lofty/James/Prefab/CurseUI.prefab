@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.50482273, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -92,10 +92,10 @@ MonoBehaviour:
   curseType: 0
   curseImage: {fileID: 7472409116183140416}
   turnCount: {fileID: 276964626479676493}
-  stunImage: {fileID: 21300000, guid: 02c20bacec68a7a4bb531ae43fa9b335, type: 3}
-  bloodImage: {fileID: 21300000, guid: 929abf423699547478cc86c89860be43, type: 3}
-  burnImage: {fileID: 21300000, guid: 999cdedb5b2877149a9b215cd042485d, type: 3}
-  provokeImage: {fileID: 21300000, guid: bfd383045972a9a40b2b191c8b4c51ea, type: 3}
+  stunImage: {fileID: 21300000, guid: d6a36db67114b7847b7dda1c2241e55b, type: 3}
+  bloodImage: {fileID: 21300000, guid: cb05bc6a9aaeca941ae6cdea447d451a, type: 3}
+  burnImage: {fileID: 21300000, guid: acda1e009db637943add627aa1ab5654, type: 3}
+  provokeImage: {fileID: 21300000, guid: d6a36db67114b7847b7dda1c2241e55b, type: 3}
 --- !u!1 &8141716500438124738
 GameObject:
   m_ObjectHideFlags: 0

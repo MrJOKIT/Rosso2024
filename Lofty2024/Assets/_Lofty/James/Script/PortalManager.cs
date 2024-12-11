@@ -1,22 +1,43 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using TransitionsPlus;
 using UnityEngine;
 using VInspector;
 using Random = UnityEngine.Random;
+
+public enum ProgressState
+{
+    StandBy,
+    OnProgress,
+    ProgressSuccess,
+}
 
 public class PortalManager : Singeleton<PortalManager>
 {
 
 
-    [Header("Random Room Setting")] 
+    [Tab("Random Room Setting")] 
     [SerializeField] private int gameLoopCount;
-    [Space(10)]
+    public int firstStageNumber = 1;
+    public int secondStageNumber = 1;
+    public int stageClearCount;
+    [Space(10)] 
+    [SerializeField] private int maxFirstStage = 3;
     [SerializeField] private int roomCount;
     [Space(10)]
+    [Header("Spawn List")]
+    public List<GameObject> battleRoomModelList;
+    public List<GameObject> bonusRoomModelList;
+    public List<GameObject> clearRoomModelList;
+    public List<GameObject> bossRoomModelList;
+    
+    [Header("Current Spawn")]
     public List<GameObject> battleRoomModel;
     public List<GameObject> bonusRoomModel;
     public List<GameObject> clearRoomModel;
+    public List<GameObject> bossRoomModel;
     public Vector3 spawnPoint;
     
     [Space(20)]
@@ -57,16 +78,77 @@ public class PortalManager : Singeleton<PortalManager>
     [Space(7)]
     public Transform checkRightRoomPos;
     public bool checkRightRoom;
-    
 
+    [Tab("Game Progress")] 
+    public ProgressState progressState;
+    public GameObject progressCanvas;
+    public TextMeshProUGUI currentStageNumberText;
+    public Transform rossoUI;
+    public List<ProgressBar> progressList;
+    [Space(10)] 
+    public float loadTimeMax;
+    private float loadTimeCounter;
+
+
+    public override void Awake()
+    {
+        base.Awake();
+        GetComponent<GameDataManager>().LoadProgress();
+    }
+
+    private void Start()
+    {
+        SetProgress();
+        SetRoomList();
+    }
+
+    public void SetRoomList()
+    {
+        battleRoomModel.Clear();
+        bonusRoomModel.Clear();
+        clearRoomModel.Clear();
+        bonusRoomModel.Clear();
+        foreach (GameObject room in battleRoomModelList)
+        {
+            battleRoomModel.Add(room);
+        }
+        foreach (GameObject room in bonusRoomModelList)
+        {
+            bonusRoomModel.Add(room);
+        }
+        foreach (GameObject room in clearRoomModelList)
+        {
+            clearRoomModel.Add(room);
+        }
+        foreach (GameObject room in bossRoomModelList)
+        {
+            bossRoomModel.Add(room);
+        }
+    }
     private void Update()
     {
         checkForwardRoom = Physics.Raycast(checkForwardRoomPos.position,Vector3.down, Mathf.Infinity, roomLayer);
         checkLeftRoom = Physics.Raycast(checkLeftRoomPos.position,Vector3.down, Mathf.Infinity, roomLayer);
         checkMiddleRoom = Physics.Raycast(checkMiddleRoomPos.position, Vector3.down, Mathf.Infinity, roomLayer);
         checkRightRoom = Physics.Raycast(checkRightRoomPos.position, Vector3.down, Mathf.Infinity, roomLayer);
+
+        if (progressState == ProgressState.OnProgress)
+        {
+            currentStageNumberText.text = $"STAGE {firstStageNumber} - {secondStageNumber}";
+            progressCanvas.SetActive(true);
+            ProgressBarUpdate();
+        }
+        else if (progressState == ProgressState.ProgressSuccess)
+        {
+            progressState = ProgressState.StandBy;
+        }
     }
 
+    public void ShowStageNumber()
+    {
+        GetComponent<AnnouncementManager>().ShowTextTimer($"Stage {firstStageNumber} - {secondStageNumber}",5f);
+        
+    }
     private Vector3 GetSpawnPoint()
     {
         
@@ -94,6 +176,7 @@ public class PortalManager : Singeleton<PortalManager>
     
     public void SetUpNextRoom(Transform portalLeftPos,Transform portalRightPos,Transform playerTransform)
     {
+        SetRoomList();
         if (roomCount <= 0)
         {
             portalLeft.DeActivePortal();;
@@ -108,6 +191,7 @@ public class PortalManager : Singeleton<PortalManager>
         this.portalRightPos = portalRightPos;
 
 
+        
         if (isBossRoom)
         {
             Invoke("SpawnRoom",0.2f);
@@ -117,7 +201,11 @@ public class PortalManager : Singeleton<PortalManager>
             Invoke("SpawnRoom",0.2f);
             Invoke("SpawnRoom",0.3f);
         }
-        
+
+        if (roomCount <= 0 && firstStageNumber >= maxFirstStage)
+        {
+            isBossRoom = true;
+        }
     }
 
     private void SpawnRoom()
@@ -125,6 +213,17 @@ public class PortalManager : Singeleton<PortalManager>
         if (isBossRoom)
         {
             //show one portal
+            rightRoomType = RandomRoom();
+            GameObject rightRoomObject = Instantiate(GetRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
+            rightRoom = rightRoomObject.GetComponent<RoomManager>();
+            rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
+            portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform,rightRoom.iconAnimator);
+            portalRight.transform.position = portalRightPos.position;
+            portalRight.GetComponent<PortalToNextRoom>().ActivePortal();
+            if (roomCount == 0)
+            {
+                rightRoom.isLastRoom = true;
+            }
         }
         else
         {
@@ -134,7 +233,7 @@ public class PortalManager : Singeleton<PortalManager>
                 GameObject leftRoomObject = Instantiate(GetRoom(leftRoomType),GetSpawnPoint(),Quaternion.identity);
                 leftRoom = leftRoomObject.GetComponent<RoomManager>();
                 leftRoomWarpPoint = leftRoom.GetComponent<RoomManager>().startPoint.transform.position;
-                portalLeft.SetPortal(leftRoomType,leftRoomWarpPoint,leftRoom.transform,playerTransform);
+                portalLeft.SetPortal(leftRoomType,leftRoomWarpPoint,leftRoom.transform,playerTransform,leftRoom.iconAnimator);
                 portalLeft.transform.position = portalLeftPos.position;
                 portalLeft.GetComponent<PortalToNextRoom>().ActivePortal();
                 if (roomCount == 0)
@@ -150,7 +249,7 @@ public class PortalManager : Singeleton<PortalManager>
                 GameObject rightRoomObject = Instantiate(GetRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
                 rightRoom = rightRoomObject.GetComponent<RoomManager>();
                 rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
-                portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform);
+                portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform,rightRoom.iconAnimator);
                 portalRight.transform.position = portalRightPos.position;
                 portalRight.GetComponent<PortalToNextRoom>().ActivePortal();
                 if (roomCount == 0)
@@ -173,6 +272,21 @@ public class PortalManager : Singeleton<PortalManager>
     {
         if (leftRoom != null)
         {
+            /*switch (leftRoom.roomType)
+            {
+                case RoomType.Combat:
+                    battleRoomModel.Add(leftRoom.gameObject);
+                    break;
+                case RoomType.Bonus:
+                    bonusRoomModel.Add(leftRoom.gameObject);
+                    break;
+                case RoomType.Clear:
+                    clearRoomModel.Add(leftRoom.gameObject);
+                    break;
+                case RoomType.Boss:
+                    bossRoomModel.Add(leftRoom.gameObject);
+                    break;
+            }*/
             if (leftRoom.playerTrans != null)
             {
                 if (currentRoom == null)
@@ -197,6 +311,21 @@ public class PortalManager : Singeleton<PortalManager>
          
         if (rightRoom != null)
         {
+            /*switch (rightRoom.roomType)
+            {
+                case RoomType.Combat:
+                    battleRoomModel.Add(rightRoom.gameObject);
+                    break;
+                case RoomType.Bonus:
+                    bonusRoomModel.Add(rightRoom.gameObject);
+                    break;
+                case RoomType.Clear:
+                    clearRoomModel.Add(rightRoom.gameObject);
+                    break;
+                case RoomType.Boss:
+                    bossRoomModel.Add(rightRoom.gameObject);
+                    break;
+            }*/
             if (rightRoom.playerTrans != null)
             {
                 if (currentRoom == null)
@@ -231,10 +360,26 @@ public class PortalManager : Singeleton<PortalManager>
                 roomType = RoomType.Combat;
                 break;
             case 1:
-                roomType = RoomType.Bonus;
+                if (bonusRoomModel.Count > 0)
+                {
+                    roomType = RoomType.Bonus;
+                }
+                else
+                {
+                    roomType = RoomType.Combat;
+                }
+                
                 break;
             case 2:
-                roomType = RoomType.Clear;
+                if (clearRoomModel.Count > 0)
+                {
+                    roomType = RoomType.Clear;
+                }
+                else
+                {
+                    roomType = RoomType.Combat;
+                }
+                
                 break;
         }
 
@@ -242,7 +387,7 @@ public class PortalManager : Singeleton<PortalManager>
         {
             if (isBossRoom)
             {
-                //fix type is boss
+                roomType = RoomType.Boss;
             }
             else
             {
@@ -260,17 +405,18 @@ public class PortalManager : Singeleton<PortalManager>
         {
             case RoomType.Clear:
                 room = clearRoomModel[Random.Range(0, clearRoomModel.Count - 1)];
-                //clearRoomModel.Remove(room);
+                clearRoomModel.Remove(room);
                 break;
             case RoomType.Bonus:
                 room = bonusRoomModel[Random.Range(0, bonusRoomModel.Count - 1)];
-                //bonusRoomModel.Remove(room);
+                bonusRoomModel.Remove(room);
                 break;
             case RoomType.Combat:
                 room = battleRoomModel[Random.Range(0, battleRoomModel.Count - 1)];
                 //battleRoomModel.Remove(room);
                 break;
             case RoomType.Boss:
+                room = bossRoomModel[Random.Range(0, bossRoomModel.Count - 1)];
                 break;
         }
 
@@ -279,6 +425,7 @@ public class PortalManager : Singeleton<PortalManager>
             if (isBossRoom)
             {
                 //random boss room
+                room = bossRoomModel[Random.Range(0, bossRoomModel.Count - 1)];
             }
             else
             {
@@ -288,4 +435,79 @@ public class PortalManager : Singeleton<PortalManager>
 
         return room;
     }
+
+    private void SetProgress()
+    {
+        for (int a = 0; a < progressList.Count; a++)
+        {
+            progressList[a].stageText.text = $"{firstStageNumber} - {a + 1}";
+        }
+    }
+    private void ProgressBarUpdate()
+    { 
+        Transform target = progressList[secondStageNumber - 1].barPoint;
+        if (rossoUI.position == target.position || loadTimeCounter > 20)
+        {
+            progressState = ProgressState.ProgressSuccess;
+            StartCoroutine(UpdateProgressSuccess());
+        }
+        else
+        {
+            loadTimeCounter += Time.deltaTime;
+            rossoUI.position = Vector3.MoveTowards(rossoUI.position,target.position, 100 * Time.deltaTime);
+        }
+    }
+
+    public void HidePortal()
+    {
+        portalLeft.transform.position = new Vector3(-20f, 0.5f, 0);
+        portalRight.transform.position = new Vector3(-20f, 0.5f, 0);
+    }
+    IEnumerator UpdateProgressSuccess()
+    {
+        if (loadTimeCounter < loadTimeMax)
+        {
+            yield return new WaitForSeconds(5f - loadTimeCounter);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        progressCanvas.SetActive(false);
+        switch (GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().roomType)
+        {
+            case RoomType.Combat:
+                SoundManager.instace.Play(SoundManager.SoundName.BattleBGM);
+                break;
+            case RoomType.Bonus:
+                SoundManager.instace.Play(SoundManager.SoundName.BonusBGM);
+                break;
+            case RoomType.Clear:
+                SoundManager.instace.Play(SoundManager.SoundName.BonusBGM);
+                break;
+            case RoomType.Boss:
+                SoundManager.instace.Play(SoundManager.SoundName.BattleBGM);
+                break;
+        }
+        
+        TransitionAnimator transitionAnimator = TransitionAnimator.Start(TransitionType.Fade,duration: 2f,invert:true,autoDestroy:true);
+        GameManager.Instance.GetComponent<PortalManager>().ShowStageNumber();
+        if (secondStageNumber <= 3)
+        {
+            secondStageNumber += 1;
+        }
+        else
+        {
+            firstStageNumber += 1;
+            secondStageNumber = 1;
+        }
+
+        stageClearCount += 1;
+        
+        GetComponent<GameDataManager>().SaveProgress();
+        transitionAnimator.onTransitionEnd.AddListener(GetComponent<GameManager>().StageLoadSuccess);
+
+    }
+
+    
 }

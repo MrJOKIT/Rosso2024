@@ -46,11 +46,11 @@ public class GameCurrency : MonoBehaviour
             }
             
             flameSoul += textSpeed * Time.deltaTime;
-            flameSoulText.text = Convert.ToInt32(flameSoul).ToString();
             if (flameSoul > maxFlameSoul)
             {
                 flameSoul = maxFlameSoul;
             }
+            flameSoulText.text = Convert.ToInt32(flameSoul).ToString();
         }
         else if (flameSoul > maxFlameSoul)
         {
@@ -61,11 +61,11 @@ public class GameCurrency : MonoBehaviour
             }
             
             flameSoul -= textSpeed * Time.deltaTime;
-            flameSoulText.text = Convert.ToInt32(flameSoul).ToString();
             if (flameSoul < maxFlameSoul)
             {
                 flameSoul = maxFlameSoul;
             }
+            flameSoulText.text = Convert.ToInt32(flameSoul).ToString();
         }
 
         if (ericCoin < maxEricCoin) 
@@ -77,11 +77,11 @@ public class GameCurrency : MonoBehaviour
             }
             
             ericCoin += textSpeed * Time.deltaTime;
-            ericCoinText.text = Convert.ToInt32(ericCoin).ToString();
             if (ericCoin > maxEricCoin)
             {
                 ericCoin = maxEricCoin;
             }
+            ericCoinText.text = Convert.ToInt32(ericCoin).ToString();
         }
         else if (ericCoin > maxEricCoin)
         {
@@ -92,11 +92,11 @@ public class GameCurrency : MonoBehaviour
             }
             
             ericCoin -= textSpeed * Time.deltaTime;
-            ericCoinText.text = Convert.ToInt32(ericCoin).ToString();
             if (ericCoin < maxEricCoin)
             {
                 ericCoin = maxEricCoin;
             }
+            ericCoinText.text = Convert.ToInt32(ericCoin).ToString();
         }
     }
     
@@ -104,6 +104,7 @@ public class GameCurrency : MonoBehaviour
     public void IncreaseEricCoin(int count)
     {
         maxEricCoin += count;
+        GetComponent<GameDataManager>().SaveCurrency();
     }
     [Button("Decrease Eric Coin")]
     public void DecreaseEricCoin(int count)
@@ -118,6 +119,7 @@ public class GameCurrency : MonoBehaviour
     public void IncreaseFlameSoul(int count)
     {
         maxFlameSoul += count;
+        GetComponent<GameDataManager>().SaveCurrency();
     }
     [Button("Decrease Flame Soul")]
     public void DecreaseFlameSoul(int count)

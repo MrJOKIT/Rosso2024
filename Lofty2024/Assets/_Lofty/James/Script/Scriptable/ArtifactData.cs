@@ -14,7 +14,7 @@ public enum UpgradeType
 
 public enum AbilityName
 {
-    Shield,
+    None,
     FreeMoveWithKill,
     TrapNotActiveSelf,
     GodOfWar,
@@ -27,6 +27,7 @@ public enum AbilityName
     RabbitPaws,
     IronBody,
     LastChance,
+    Shield,
 }
 
 public enum ArtifactGrade
@@ -34,11 +35,21 @@ public enum ArtifactGrade
     Common,
     Rare,
     Epic,
+    All,
+}
+
+public enum CardClass
+{
+    Normal,
+    SwordKnight,
+    BladeMaster,
+    ShootingCaster,
 }
 [CreateAssetMenu(menuName = "Artifact",fileName = "ArtifactData",order = 3)]
 public class ArtifactData : ScriptableObject
 {
     public ArtifactGrade artifactGrade;
+    public CardClass artifactClass;
     [Space(10)]
     [Header("GUI")]
     public string artifactName;

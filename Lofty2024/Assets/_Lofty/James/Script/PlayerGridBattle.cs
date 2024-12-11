@@ -24,12 +24,10 @@ public class PlayerGridBattle : MonoBehaviour
         switch (_playerMode)
         {
             case PlayerMode.Normal:
-                Debug.Log("Normal");
                 oldMode = _playerMode;
                 AppearUI(false);
                 break;
-            case PlayerMode.Combat:
-                Debug.Log("Grid Start");
+            case PlayerMode.Combat: 
                 GetComponent<PlayerSkillHandle>().ResetSkillPoint();
                 oldMode = _playerMode;
                 AppearUI(true);
@@ -41,7 +39,17 @@ public class PlayerGridBattle : MonoBehaviour
     private void LateUpdate()
     {
         _playerMode = TurnManager.Instance.currentRoomClear ? PlayerMode.Normal : PlayerMode.Combat;
-        
+        if (_playerMode == PlayerMode.Combat)
+        {
+            if (GetComponent<PlayerMovementGrid>().onTurn == false)
+            {
+                AppearUI(false);
+            }
+            else
+            {
+                AppearUI(true);
+            }
+        }
         if (oldMode == _playerMode)
         {
             return;
@@ -55,8 +63,8 @@ public class PlayerGridBattle : MonoBehaviour
                 }
                 Debug.Log("Normal");
                 GridSpawnManager.Instance.ClearMover();
-                oldMode = _playerMode;
                 AppearUI(false);
+                oldMode = _playerMode;
                 break;
             case PlayerMode.Combat:
                 if (oldMode == _playerMode)
@@ -65,8 +73,8 @@ public class PlayerGridBattle : MonoBehaviour
                 }
                 Debug.Log("Grid Start");
                 GetComponent<PlayerSkillHandle>().ResetSkillPoint();
-                oldMode = _playerMode;
                 AppearUI(true);
+                oldMode = _playerMode;
                 break;
         }
     }

@@ -1,30 +1,41 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ModelShark;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ArtifactUI : MonoBehaviour
+public class ArtifactUI : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
 {
-    public ArtifactData currenData;
-    public string artifactName;
+    public TextMeshProUGUI artifactName;
     public Image artifactImage;
-    public TooltipTrigger toolTipText;
+    public Sprite defaultImage;
+    public GameObject hoverObject;
+    public TextMeshProUGUI cardDetail;
 
-    public void SetArtifactUI(ArtifactData artifactData,string artifactName,Sprite artifactSprite)
+    public void SetArtifactUI(string artifactName,Sprite artifactSprite,string cardDetail)
     {
-        this.currenData = artifactData;
-        this.artifactName = artifactName;
+        this.artifactName.text = artifactName;
         artifactImage.sprite = artifactSprite;
+        this.cardDetail.text = cardDetail;
     }
 
     public void ClearArtifactSlot()
     {
-        artifactName = null;
-        artifactImage.sprite = null;
+        artifactName.text = "Empty";
+        artifactImage.sprite = defaultImage;
     }
     
     
-    //ทำให้ปุ่มรับค่าแล้วลบขากของ player
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        hoverObject.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        hoverObject.SetActive(false);
+    }
 }

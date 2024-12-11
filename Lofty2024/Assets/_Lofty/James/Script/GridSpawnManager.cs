@@ -13,6 +13,8 @@ public class GridSpawnManager : Singeleton<GridSpawnManager>
 
     [Header("Current Gird")] 
     public List<GridMover> currentGrid;
+
+    public bool useWarp;
     
     
     [Button("Clear Mover")]
@@ -33,5 +35,22 @@ public class GridSpawnManager : Singeleton<GridSpawnManager>
     public void RemoveGrid(GridMover grid)
     {
         currentGrid.Remove(grid);
+    }
+
+    public IEnumerator WarpSelector()
+    {
+        yield return new WaitForSeconds(0.25f);
+        if (!useWarp)
+        {
+            foreach (GridMover grid in currentGrid)
+            {
+                if (grid.gridState == GridState.Empty)
+                {
+                    grid.gridState = GridState.OnMove;
+                }
+            }
+
+            useWarp = true;
+        }
     }
 }

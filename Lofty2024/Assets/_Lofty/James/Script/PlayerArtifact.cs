@@ -1,27 +1,54 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.UI;
 using VInspector;
-using VInspector.Libs;
 
+[Serializable]
+public class CardArtifact
+{
+    public ArtifactData artifactData;
+    public bool isActivate;
+    public CardArtifact(ArtifactData artifactData)
+    {
+        this.artifactData = artifactData;
+    }
+}
 
+public enum ClassType
+{
+    Normal,
+    SwordKnight,
+    BladeMaster,
+    ShootingCaster,
+}
 public class PlayerArtifact : MonoBehaviour
 {
     [Tab("Artifact")]
     [Header("Artifact UI")] public GameObject artifactInventory;
+    public PlayableDirector classUnlockDirector;
+    public TextMeshProUGUI classTextDirector;
     public bool inventoryActive;
 
     [Space(10)] [Header("Artifact Data")] public int maxArtifact;
-    public List<ArtifactData> artifactHaves;
+    public List<CardArtifact> artifactHaves;
     public List<ArtifactUI> artifactSlots;
 
-    [Space(20)]
-    public List<ArtifactData> statsType;
-    public List<ArtifactData> combatType;
-    public List<ArtifactData> movementType;
-    public List<ArtifactData> abilityType;
+    [Space(20)] 
+    public List<ArtifactData> normalType;
+    [Space(10)]
+    public List<ArtifactData> swordKnightType;
+    public List<ArtifactUI> swordKnightSlots;
+    [Space(10)]
+    public List<ArtifactData> bladeMasterType;
+    public List<ArtifactUI> bladeMasterSlots;
+    [Space(10)]
+    public List<ArtifactData> shootCasterType;
+    public List<ArtifactUI> shootCasterSlots;
 
     [Tab("Upgrade Setting")]
     [Header("Stats")] 
@@ -29,8 +56,18 @@ public class PlayerArtifact : MonoBehaviour
     [SerializeField] private int addHealthPointTemp;
     [SerializeField] private int addSkillPoint;
     [SerializeField] private int addHealMultiple;
-    public int HealthPoint => addHealthPoint;
-    public int HealthPointTemp => addHealthPointTemp;
+    public int HealthPoint
+    {
+        get { return addHealthPoint; }
+        set { addHealthPoint = value; }
+    }
+
+    public int HealthPointTemp
+    {
+        get { return addHealthPointTemp; }
+        set { addHealthPointTemp = value; }
+    }
+
     public int SkillPoint => addSkillPoint;
     public int HealMultiple => addHealMultiple;
 
@@ -62,13 +99,26 @@ public class PlayerArtifact : MonoBehaviour
     public bool MoveAfterKill => moveAfterKill;
     [SerializeField] private bool trapNotActiveSelf;
     public bool TrapNotActiveSelf => trapNotActiveSelf;
-    [SerializeField] private bool godOfWar;
+    [SerializeField] private bool godOfWar; 
     public bool GodOfWar => godOfWar;
     [SerializeField] private bool eyeKing;
     public bool EyeKing => eyeKing;
     [SerializeField] private bool deathDoor;
-    public bool DeathDoor => deathDoor;
-    [SerializeField] private bool giftOfDeath;
+    [SerializeField] private bool lastChance;
+
+    [Tab("Class Unlock")] 
+
+    public bool DeathDoor
+    {
+        get { return deathDoor; }
+        set { deathDoor = value; }
+    }
+
+    public Image iconBorder;
+    public Color swordColor;
+    public Color bladeColor;
+    public Color shootColor;
+    [SerializeField] private bool giftOfDeath; 
     public bool GiftOfDeath => giftOfDeath;
     [SerializeField] private bool checkMate;
     public bool CheckMate => checkMate;
@@ -80,8 +130,44 @@ public class PlayerArtifact : MonoBehaviour
     public bool RabbitPaws => rabbitPaws;
     [SerializeField] private bool ironBody;
     public bool IronBody => ironBody;
-    [SerializeField] private bool lastChance;
-    public bool LastChance => lastChance;
+
+    [Tab("Class Unlock UI")] 
+    public ClassType classType;
+    private ClassType oldClassType;
+    public GameObject crownObject;
+    public Animator crownAnimator;
+    public bool firstUnlockSuccess;
+    public bool secondUnlockSuccess;
+    [Space(10)] 
+    public Image playerProfile;
+    public Sprite classicProfile;
+    public Sprite swordKnightProfile;
+    public Sprite bladeMasterProfile;
+    public Sprite shootCasterProfile;
+    
+    [Space(20)] [Tab("Mode Active")] [Space(10)] 
+    [Header("Link UI")]
+    public TextMeshProUGUI swordKnightTier1; 
+    public TextMeshProUGUI swordKnightTier2;
+    public TextMeshProUGUI bladeMasterTier1;
+    public TextMeshProUGUI bladeMasterTier2;
+    public TextMeshProUGUI shootCasterTier1;
+    public TextMeshProUGUI shootCasterTier2;
+    [Space(10)]
+    public Color deActiveColor;
+    public Color activeColor;
+    [Space(10)] 
+    [Header("Sword Knight")] 
+    public bool swordKnightPassiveOne;
+    public bool swordKnightPassiveTwo;
+    [Space(10)]
+    [Header("Blade Master")] 
+    public bool bladeMasterPassiveOne;
+    public bool bladeMasterPassiveTwo;
+    [Space(10)]
+    [Header("Shoot Caster")]
+    public bool shootCasterPassiveOne;
+    public bool shootCasterPassiveTwo;
     
     private void Awake()
     {
@@ -90,36 +176,39 @@ public class PlayerArtifact : MonoBehaviour
 
     public void AddNewArtifact(ArtifactData newArtifact)
     {
+        CardArtifact newCard = new CardArtifact(newArtifact);
         if (artifactHaves.Count == maxArtifact)
         {
             return;
         }
 
-        if (artifactHaves.Contains(newArtifact))
+        if (artifactHaves.Contains(newCard))
         {
             return;
         }
 
-        artifactHaves.Add(newArtifact);
+        artifactHaves.Add(newCard);
         artifactSlots[artifactHaves.Count - 1]
-            .SetArtifactUI(newArtifact, newArtifact.artifactName, newArtifact.artifactImage);
+            .SetArtifactUI( newArtifact.artifactName, newArtifact.artifactImage,newArtifact.artifactDetail);
         //Destroy(newArtifact.GameObject());
         SortingArtifactType(newArtifact);
         ResultArtifact();
     }
-
+    
     public void RemoveArtifact(ArtifactData removeArtifact)
     {
-        if (!artifactHaves.Contains(removeArtifact))
+        CardArtifact removeCard = artifactHaves.Find(x=>x.artifactData == removeArtifact);
+        if (!artifactHaves.Contains(removeCard))
         {
             return;
         }
 
-        artifactSlots[artifactHaves.IndexOf(removeArtifact)].ClearArtifactSlot();
-        artifactHaves.Remove(removeArtifact);
+        artifactSlots[artifactHaves.IndexOf(removeCard)].ClearArtifactSlot();
+        artifactHaves.Remove(removeCard);
         RemoveByType(removeArtifact);
         SortingSlot();
         ResultArtifact();
+        
     }
 
     private void SortingSlot()
@@ -128,80 +217,122 @@ public class PlayerArtifact : MonoBehaviour
         {
             slots.ClearArtifactSlot();
         }
+        foreach (ArtifactUI slots in swordKnightSlots)
+        {
+            slots.ClearArtifactSlot();
+        }
+        foreach (ArtifactUI slots in bladeMasterSlots)
+        {
+            slots.ClearArtifactSlot();
+        }
+        foreach (ArtifactUI slots in shootCasterSlots)
+        {
+            slots.ClearArtifactSlot();
+        }
 
-        foreach (ArtifactData artifact in artifactHaves)
+        foreach (CardArtifact artifact in artifactHaves)
         {
             artifactSlots[artifactHaves.IndexOf(artifact)]
-                .SetArtifactUI(artifact, artifact.artifactName, artifact.artifactImage);
+                .SetArtifactUI(artifact.artifactData.artifactName, artifact.artifactData.artifactImage,artifact.artifactData.artifactDetail);
+        }
+        
+        foreach (ArtifactData artifact in swordKnightType)
+        {
+            swordKnightSlots[swordKnightType.IndexOf(artifact)]
+                .SetArtifactUI(artifact.artifactName, artifact.artifactImage,artifact.artifactDetail);
+        }
+        foreach (ArtifactData artifact in bladeMasterType)
+        {
+            bladeMasterSlots[bladeMasterType.IndexOf(artifact)]
+                .SetArtifactUI(artifact.artifactName, artifact.artifactImage,artifact.artifactDetail);
+        }
+        foreach (ArtifactData artifact in shootCasterType)
+        {
+            shootCasterSlots[shootCasterType.IndexOf(artifact)]
+                .SetArtifactUI(artifact.artifactName, artifact.artifactImage,artifact.artifactDetail);
         }
     }
 
     public void InventoryAppear()
     {
+        if (GetComponent<PlayerMovementGrid>().currentState == MovementState.Moving)
+        {
+            return;
+        }
         if (inventoryActive)
         {
             artifactInventory.SetActive(false);
             inventoryActive = false;
+            GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
         }
         else
         {
-            artifactInventory.SetActive(true);
+            artifactInventory.SetActive(true); 
             inventoryActive = true;
+            GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
         }
     }
 
     private void SortingArtifactType(ArtifactData artifactData)
     {
-        switch (artifactData.upgradeType)
+        switch (artifactData.artifactClass)
         {
-            case UpgradeType.PlayerStats:
-                statsType.Add(artifactData);
+            case CardClass.Normal:
+                normalType.Add(artifactData);
+                break; 
+            case CardClass.SwordKnight:
+                swordKnightType.Add(artifactData);
+                swordKnightSlots[swordKnightType.Count - 1].SetArtifactUI(artifactData.artifactName,artifactData.artifactImage,artifactData.artifactDetail);
                 break;
-            case UpgradeType.PlayerCombat:
-                combatType.Add(artifactData);
+            case CardClass.BladeMaster:
+                bladeMasterType.Add(artifactData);
+                bladeMasterSlots[bladeMasterType.Count - 1].SetArtifactUI(artifactData.artifactName,artifactData.artifactImage,artifactData.artifactDetail);
                 break;
-            case UpgradeType.PlayerMovement:
-                movementType.Add(artifactData);
-                break;
-            case UpgradeType.PlayerAbility:
-                abilityType.Add(artifactData);
+            case CardClass.ShootingCaster:
+                shootCasterType.Add(artifactData);
+                shootCasterSlots[shootCasterType.Count - 1].SetArtifactUI(artifactData.artifactName,artifactData.artifactImage,artifactData.artifactDetail);
                 break;
         }
     }
 
     private void RemoveByType(ArtifactData removeArtifact)
     {
-        switch (removeArtifact.upgradeType)
+        switch (removeArtifact.artifactClass)
         {
-            case UpgradeType.PlayerStats:
-                statsType.Remove(removeArtifact);
+            case CardClass.Normal:
+                normalType.Remove(removeArtifact);
                 break;
-            case UpgradeType.PlayerCombat:
-                combatType.Remove(removeArtifact);
+            case CardClass.SwordKnight:
+                swordKnightType.Remove(removeArtifact);
                 break;
-            case UpgradeType.PlayerMovement:
-                movementType.Remove(removeArtifact);
+            case CardClass.BladeMaster:
+                bladeMasterType.Remove(removeArtifact);
                 break;
-            case UpgradeType.PlayerAbility:
-                abilityType.Remove(removeArtifact);
+            case CardClass.ShootingCaster:
+                shootCasterType.Remove(removeArtifact);
                 break;
         }
     }
 
-    private void ResultArtifact()
-    {
-        SetDefault();
-        foreach (ArtifactData artifact in artifactHaves)
+    [Button("Result Artifact")]
+    public void ResultArtifact()
+    { 
+        //SetDefault();
+        foreach (CardArtifact artifact in artifactHaves)
         {
-            switch (artifact.upgradeType)
+            if (artifact.isActivate)
+            {
+                continue;
+            }
+            switch (artifact.artifactData.upgradeType)
             {
                 case UpgradeType.PlayerCurrency:
-                    addSoulMultiple += artifact.addSoulMultiple;
-                    addCoinMultiple += artifact.addCoinMultiple;
+                    addSoulMultiple += artifact.artifactData.addSoulMultiple;
+                    addCoinMultiple += artifact.artifactData.addCoinMultiple;
                     GameManager.Instance.GetComponent<GameCurrency>().UpgradeMultiple(addCoinMultiple,addSoulMultiple);
                     break;
                 case UpgradeType.PlayerAbility:
-                    switch (artifact.abilityName)
+                    switch (artifact.artifactData.abilityName)
                     {
                         case AbilityName.Shield:
                             playerShield = true;
@@ -216,6 +347,8 @@ public class PlayerArtifact : MonoBehaviour
                             godOfWar = true;
                             break;
                         case AbilityName.TheEyeKing:
+                            GameManager.Instance.GetComponent<RandomCardManager>().StartRandomCardFixGrade(ArtifactGrade.Epic,1);
+                            ES3.Save ("EyeKing",true);
                             eyeKing = true;
                             break;
                         case AbilityName.DeathDoor:
@@ -235,36 +368,153 @@ public class PlayerArtifact : MonoBehaviour
                             break;
                         case AbilityName.RabbitPaws:
                             rabbitPaws = true;
+                            GetComponent<PlayerMovementGrid>().rabbitPaws = true;
                             break;
                         case AbilityName.IronBody:
                             ironBody = true;
                             break;
                         case AbilityName.LastChance:
+                            GameManager.Instance.GetComponent<RandomCardManager>().StartRandomCard();
                             lastChance = true;
+                            ES3.Save("LastChance",true);
+                            GameManager.Instance.GetComponent<RandomCardManager>().haveArtifact = true;
                             break;
                     }
                     break;
                 default:
-                    addHealthPoint += artifact.addHealthPoint;
-                    addHealthPointTemp += artifact.addHealthPointTemp;
-                    addHealMultiple += artifact.addHealMultiple;
-                    addSkillPoint += artifact.addSkillPoint;
-                    addDamage += artifact.addDamage;
-                    addKnockBackRange += artifact.addKnockBackRange;
-                    addActionPoint += artifact.addActionPoint;
-                    addSkillDiscount += artifact.addSkillDiscount;
-                    
-                    GetComponent<Player>().SetStats();
-                    GetComponent<PlayerMovementGrid>().SetStats();
+                    addHealthPoint += artifact.artifactData.addHealthPoint;
+                    addHealthPointTemp += artifact.artifactData.addHealthPointTemp;
+                    addHealMultiple += artifact.artifactData.addHealMultiple;
+                    addSkillPoint += artifact.artifactData.addSkillPoint;
+                    addDamage += artifact.artifactData.addDamage;
+                    addKnockBackRange += artifact.artifactData.addKnockBackRange;
+                    addActionPoint += artifact.artifactData.addActionPoint;
+                    addSkillDiscount += artifact.artifactData.addSkillDiscount;
+                    //GetComponent<Player>().LoadPlayerData();
+                    GetComponent<Player>().UpgradeStats();
+                    GetComponent<PlayerMovementGrid>().UpgradeStats();
                     break;
             }
+
+            artifact.isActivate = true;
+        }
+        CardLinkUpdate();
+    }
+
+    public void ResetArtifact()
+    {
+        foreach (CardArtifact artifact in artifactHaves)
+        {
+            artifact.isActivate = false;
+        }
+
+        lastChance = ES3.Load("LastChance", false);
+        eyeKing = ES3.Load("EyeKing", false);
+        classType = ES3.Load("ClassType", ClassType.Normal);
+        firstUnlockSuccess = ES3.Load("FirstClassUnlock", false);
+        secondUnlockSuccess = ES3.Load("SecondClassUnlock", false);
+        swordKnightPassiveOne = ES3.Load("SwordPassiveOne", false);
+        swordKnightPassiveTwo = ES3.Load("SwordPassiveTwo", false);
+        bladeMasterPassiveOne = ES3.Load("BladePassiveOne", false);
+        bladeMasterPassiveTwo = ES3.Load("BladePassiveTwo", false);
+        shootCasterPassiveOne = ES3.Load("ShootPassiveOne", false);
+        shootCasterPassiveTwo = ES3.Load("ShootPassiveTwo", false);
+        
+        for (int i = 0; i < artifactHaves.Count; i++)
+        {
+            artifactSlots[i].SetArtifactUI(artifactHaves[i].artifactData.artifactName,artifactHaves[i].artifactData.artifactImage,artifactHaves[i].artifactData.artifactDetail);
+            SortingArtifactType(artifactHaves[i].artifactData);
+            CardLinkUpdate();
+        }
+    }
+
+    private void CardLinkUpdate()
+    {
+        //Sword knight
+        if (swordKnightType.Count >= 5)
+        {
+            swordKnightPassiveOne = true;
+            swordKnightPassiveTwo = true;
+            swordKnightTier1.color = activeColor;
+            swordKnightTier2.color = activeColor;
+        }
+        else if (swordKnightType.Count >= 3)
+        {
+            swordKnightPassiveOne = true;
+            swordKnightTier1.color = activeColor;
+        }
+
+        if (swordKnightType.Count < 3)
+        {
+            swordKnightPassiveOne = false;
+            swordKnightPassiveTwo = false;
+            swordKnightTier1.color = deActiveColor;
+            swordKnightTier2.color = deActiveColor;
+        }
+        else if (swordKnightType.Count < 5)
+        {
+            swordKnightPassiveTwo = false;
+            swordKnightTier2.color = deActiveColor;
+        }
+        //Blade Master
+        if (bladeMasterType.Count >= 5)
+        {
+            bladeMasterPassiveOne = true;
+            bladeMasterPassiveTwo = true;
+            bladeMasterTier1.color = activeColor;
+            bladeMasterTier2.color = activeColor;
+        }
+        else if (bladeMasterType.Count >= 3)
+        {
+            bladeMasterPassiveOne = true;
+            bladeMasterTier1.color = activeColor;
+        }
+
+        if (bladeMasterType.Count < 3)
+        {
+            bladeMasterPassiveOne = false;
+            bladeMasterPassiveTwo = false;
+            bladeMasterTier1.color = deActiveColor;
+            bladeMasterTier2.color = deActiveColor; 
+        }
+        else if (bladeMasterType.Count < 5)
+        {
+            bladeMasterPassiveTwo = false;
+            bladeMasterTier2.color = deActiveColor;
+        }
+        //Shoot Caster
+        if (shootCasterType.Count >= 5)
+        {
+            shootCasterPassiveOne = true;
+            shootCasterPassiveTwo = true;
+            shootCasterTier1.color = activeColor;
+            shootCasterTier2.color = activeColor;
+        }
+        else if (shootCasterType.Count >= 3)
+        {
+            shootCasterPassiveOne = true;
+            shootCasterTier1.color = activeColor;
+        }
+
+        if (shootCasterType.Count < 3)
+        {
+            shootCasterPassiveOne = false;
+            shootCasterPassiveTwo = false;
+            shootCasterTier1.color = deActiveColor;
+            shootCasterTier2.color = deActiveColor;
+        }
+        else if (shootCasterType.Count < 5)
+        {
+            shootCasterPassiveTwo = false;
+            shootCasterTier2.color = deActiveColor;
         }
         
+        CrownClassHandle();
     }
 
     private void SetDefault()
     {
-        //State
+        //State 
         addHealthPoint = 0;
         addHealthPointTemp = 0;
         addHealMultiple = 0;
@@ -281,7 +531,6 @@ public class PlayerArtifact : MonoBehaviour
         moveAfterKill = false;
         trapNotActiveSelf = false;
         godOfWar = false;
-        eyeKing = false;
         deathDoor = false;
         giftOfDeath = false;
         checkMate = false;
@@ -289,9 +538,132 @@ public class PlayerArtifact : MonoBehaviour
         kamikaze = false;
         rabbitPaws = false;
         ironBody = false;
-        lastChance = false;
+        GameManager.Instance.GetComponent<RandomCardManager>().haveArtifact = false;
     }
 
+    private void CrownClassHandle()
+    {
+        if (firstUnlockSuccess == false)
+        {
+            if (swordKnightPassiveOne)
+            {
+                classUnlockDirector.Play();
+                classTextDirector.text = "Sword Knight";
+                playerProfile.sprite = swordKnightProfile;
+                iconBorder.sprite = swordKnightProfile;
+                iconBorder.color = swordColor;
+                crownObject.SetActive(true);
+                crownAnimator.SetBool("BlueCrown",false);
+                crownAnimator.SetBool("RedCrown",false);
+                crownAnimator.SetBool("RainbowCrown",false);
+                crownAnimator.SetBool("YellowCrown",true);
+                
+                classType = ClassType.SwordKnight;
+                ES3.Save("ClassType",classType);
+                
+                firstUnlockSuccess = true;
+            }
+            if (bladeMasterPassiveOne)
+            {
+                classUnlockDirector.Play();
+                classTextDirector.text = "Blade Master";
+                playerProfile.sprite = bladeMasterProfile;
+                iconBorder.sprite = bladeMasterProfile;
+                iconBorder.color = bladeColor;
+                crownObject.SetActive(true);
+                crownAnimator.SetBool("BlueCrown",false);
+                crownAnimator.SetBool("YellowCrown",false);
+                crownAnimator.SetBool("RainbowCrown",false);
+                crownAnimator.SetBool("RedCrown",true);
+
+                classType = ClassType.BladeMaster;
+                ES3.Save("ClassType",classType);
+                
+                firstUnlockSuccess = true;
+            }
+            if (shootCasterPassiveOne)
+            {
+                classUnlockDirector.Play();
+                classTextDirector.text = "Shoot Caster";
+                playerProfile.sprite = shootCasterProfile;
+                iconBorder.sprite = shootCasterProfile;
+                iconBorder.color = shootColor;
+                crownObject.SetActive(true);
+                crownAnimator.SetBool("YellowCrown",false);
+                crownAnimator.SetBool("RedCrown",false);
+                crownAnimator.SetBool("RainbowCrown",false);
+                crownAnimator.SetBool("BlueCrown",true);
+                
+                classType = ClassType.ShootingCaster;
+                ES3.Save("ClassType",classType);
+                
+                firstUnlockSuccess = true;
+            }
+
+            
+        }
+        else if (secondUnlockSuccess == false)
+        {
+            if (swordKnightPassiveTwo)
+            {
+                classUnlockDirector.Play();
+                secondUnlockSuccess = true;
+            }
+
+            if (bladeMasterPassiveTwo)
+            {
+                classUnlockDirector.Play();
+                secondUnlockSuccess = true;
+            }
+
+            if (shootCasterPassiveTwo)
+            {
+                classUnlockDirector.Play();
+                secondUnlockSuccess = true;
+            }
+        }
+
+        if (oldClassType == classType)
+        {
+            return;
+        }
+        switch (classType)
+        {
+            case ClassType.SwordKnight:
+                playerProfile.sprite = swordKnightProfile;
+                iconBorder.sprite = swordKnightProfile;
+                iconBorder.color = swordColor;
+                crownObject.SetActive(true);
+                crownAnimator.SetBool("BlueCrown",false);
+                crownAnimator.SetBool("RedCrown",false);
+                crownAnimator.SetBool("RainbowCrown",false);
+                crownAnimator.SetBool("YellowCrown",true);
+                break;
+            case ClassType.BladeMaster:
+                playerProfile.sprite = bladeMasterProfile;
+                iconBorder.sprite = bladeMasterProfile;
+                iconBorder.color = bladeColor;
+                crownObject.SetActive(true);
+                crownAnimator.SetBool("BlueCrown",false);
+                crownAnimator.SetBool("YellowCrown",false);
+                crownAnimator.SetBool("RainbowCrown",false);
+                crownAnimator.SetBool("RedCrown",true);
+                break;
+            case ClassType.ShootingCaster:
+                playerProfile.sprite = shootCasterProfile;
+                iconBorder.sprite = shootCasterProfile;
+                iconBorder.color = shootColor;
+                crownObject.SetActive(true);
+                crownAnimator.SetBool("YellowCrown",false);
+                crownAnimator.SetBool("RedCrown",false);
+                crownAnimator.SetBool("RainbowCrown",false);
+                crownAnimator.SetBool("BlueCrown",true);
+                break;
+        }
+
+        oldClassType = classType;
+
+    }
     public void ActiveStartRoom()
     {
         

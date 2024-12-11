@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EditorAttributes;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum GridState
 {
@@ -11,18 +12,23 @@ public enum GridState
     OnPlayer,
     OnEnemy,
     OnObstacle,
-    OnTrap,
+    
 }
 
 public class GridMover : MonoBehaviour
 {
-    [Header("Ref")]
+    [Header("Ref")] 
+    public bool enemyDie;
     public bool isPortal;
+    public bool isAlert;
     public Enemy enemy;
     public Material oldMat;
 
     [Space(10)] 
     [Header("Checker")] 
+    public bool onHover;
+    public GameObject selectedObject;
+    [Space(10)]
     public GridState gridState;
     private GridState oldState;
     public bool gridActive;
@@ -31,52 +37,37 @@ public class GridMover : MonoBehaviour
     [Header("Optional")]
     public bool enemyActive;
     
-    [Header("Trap Setting")]
-    public bool isTrap;
-    public CurseType trapType;
-    public int trapTime;
-
-    private CurseType oldTrapType;
 
     private void Awake()
     {
         oldState = gridState;
-        oldTrapType = trapType;
         oldMat = GetComponent<MeshRenderer>().material;
     }
-
-    private void Start()
-    {
-        if (isTrap)
-        {
-            gridState = GridState.OnTrap;
-        }
-        
-    }
+    
 
     private void LateUpdate()
     {
+        selectedObject.SetActive(onHover);
         if (enemy != null)
         {
             if (enemy.isDead)
             {
                 enemy = null;
                 enemyActive = false;
-                gridState = GridState.Empty;
+                if (enemyDie)
+                {
+                    gridState = GridState.OnMove;
+                    enemyDie = false;
+                }
+                else
+                {
+                    gridState = GridState.Empty;
+                }
             }
         }
         GridStateHandle();
-        TrapStateHandle();
     }
-
-    private void TrapStateHandle()
-    {
-        if (trapType == oldTrapType)
-        {
-            return;
-        }
-        gridState = GridState.OnTrap;
-    }
+    
     private void GridStateHandle()
     {
         if (gridState == oldState)
@@ -104,11 +95,6 @@ public class GridMover : MonoBehaviour
                 GetComponent<MeshRenderer>().enabled = false;
                 oldState = gridState;
                 break;
-            case GridState.OnTrap:
-                GetComponent<MeshRenderer>().enabled = true;
-                GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.trapMat;
-                oldState = gridState;
-                break;
             case GridState.Empty:
                 GetComponent<MeshRenderer>().enabled = true;
                 GetComponent<MeshRenderer>().material = oldMat;
@@ -120,10 +106,9 @@ public class GridMover : MonoBehaviour
 
     public void ClearGrid()
     {
+        isAlert = false;
         switch (gridState)
         {
-            case GridState.OnTrap:
-                break;
             case GridState.OnObstacle:
                 break;
             case GridState.OnPlayer:
@@ -148,29 +133,20 @@ public class GridMover : MonoBehaviour
         GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.attackMat;
         enemyActive = true;
     }
-
-    [Button("Test Set Trap")]
-    public void SetTrap(CurseType curseType)
+    
+    public void BombEnemy()
     {
-        if (gridState == GridState.Empty || gridState == GridState.OnMove)
+        float randomNumber = Random.Range(0, 1f);
+        if (randomNumber < 0.5f)
         {
-            isTrap = true;
-            gridState = GridState.OnTrap;
-            trapType = curseType;
+            enemy.BombEnemy();
         }
-        else if (gridState == GridState.OnEnemy)
-        {
-            enemy.AddCurseStatus(curseType,2);
-        }
-        
+        gridState = GridState.Empty;
+        enemy = null;
     }
-
-    private void TrapActive()
-    {
-        enemy.AddCurseStatus(trapType,trapTime);
-        gridState = GridState.OnEnemy;
-        GetComponent<MeshRenderer>().material = oldMat;
-    }
+    
+    
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Obstacle"))
@@ -180,16 +156,12 @@ public class GridMover : MonoBehaviour
             GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().currentGrid.Remove(this);
             Destroy(gameObject);
         }
-        else if(other.CompareTag("Enemy"))
+        else if(other.CompareTag("Enemy") || other.CompareTag("Boss"))
         {
             gridState = GridState.OnEnemy;
             try
             {
                 enemy = other.GetComponent<Enemy>();
-                if (isTrap)
-                {
-                    TrapActive();
-                }
             }
             catch (Exception a)
             {
@@ -244,9 +216,18 @@ public class GridMover : MonoBehaviour
         {
             gridState = GridState.Empty;
         }
-        else if(other.CompareTag("Enemy"))
+        else if(other.CompareTag("Enemy") || other.CompareTag("Boss"))
         {
-            gridState = GridState.Empty;
+            if (enemyDie)
+            {
+                gridState = GridState.OnMove;
+                enemyDie = false;
+            }
+            else
+            {
+                gridState = GridState.Empty;
+            }
+            
             enemy = null;
 
         }

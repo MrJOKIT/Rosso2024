@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 70c1e7e4e75b98146bdd25b0a08cdde7
+guid: d78b0856ca8be8443b4428be698d26d1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -82,6 +82,19 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -111,8 +124,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cfc6fc01c14b5484594b4e1ec5b40fa9
-      internalID: -2128289635
+      spriteID: 4872652d2f80b4a4ca20cadcc6954ff2
+      internalID: -1205213994
       vertices: []
       indices: 
       edges: []
@@ -132,8 +145,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3830351d09e096d4a8c16e69bb421c92
-      internalID: -840824970
+      spriteID: 3cf67578473ade746b405ba45f075b17
+      internalID: 946258616
       vertices: []
       indices: 
       edges: []
@@ -153,8 +166,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b1f97ca04c9eb6744860cf35ca02c8cf
-      internalID: -2001700429
+      spriteID: 91af7835af651df44b3ee3ab6cd2c7aa
+      internalID: -1248017635
       vertices: []
       indices: 
       edges: []
@@ -174,8 +187,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 02b5220eb13127043aa84212771165d9
-      internalID: 1546009051
+      spriteID: b637b57179ab5d34fb20085f3b9897ad
+      internalID: 2044284232
       vertices: []
       indices: 
       edges: []
@@ -195,8 +208,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9cb33aae75b98834cbcf1d2f3e86dd8d
-      internalID: 127056621
+      spriteID: f371702f2d59b894ba453c3ce819d7a6
+      internalID: -659200128
       vertices: []
       indices: 
       edges: []
@@ -216,8 +229,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f555d14b7afc42459d21e3ade664a1e
-      internalID: 1244282034
+      spriteID: 24d4b961b77e8fe4184286eea914b2ba
+      internalID: -254387162
       vertices: []
       indices: 
       edges: []
@@ -225,7 +238,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 7f355a9e6186d16479dcad14c2e9316b
+    spriteID: 399c097467dfe2f47ac5eb54880a8fc4
     internalID: 0
     vertices: []
     indices: 
@@ -233,12 +246,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_0": -2128289635
-      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_1": -840824970
-      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_2": -2001700429
-      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_3": 1546009051
-      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_4": 127056621
-      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_5": 1244282034
+      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_0": -1205213994
+      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_1": 946258616
+      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_2": -1248017635
+      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_3": 2044284232
+      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_4": -659200128
+      "ICON\u0E40\u0E01\u0E08\u0E1F\u0E49\u0E32-Sheet_5": -254387162
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

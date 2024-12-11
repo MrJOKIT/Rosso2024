@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using EditorAttributes;
-using GD.MinMaxSlider;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,17 +15,19 @@ public class SkillSlot
     [Space(10)]
     [Header("UI")]
     public Image skillImage;
-    
+    public TextMeshProUGUI skillCostText;
+
 }
 public class PlayerSkillHandle : MonoBehaviour
 {
     [Header("Skill Setting")] 
     [SerializeField] private Transform skillParent;
     public GameObject makeSureUI;
+    public bool onPrepareSkill;
 
     [Space(10)] 
     [Header("Skill Point")] 
-    [GD.MinMaxSlider.MinMaxSlider(0,10)][SerializeField] private Vector2Int minMaxSkillPoint;
+    [SerializeField] private Vector2Int minMaxSkillPoint;
     [SerializeField] private int skillPoint;
 
     [Space(10)] 
@@ -40,13 +40,14 @@ public class PlayerSkillHandle : MonoBehaviour
     public TextMeshProUGUI maxSkillPointText;
     
     [Space(10)] 
-    [ReadOnly] public int slotSelect;
-    [ReadOnly] public Transform currentSkill; 
+    public int slotSelect;
+    public Transform currentSkill; 
 
     private void Awake()
     {
         makeSureUI.SetActive(false);
         RandomSetSkill();
+        SkillPointUiUpdate();
     }
 
     private void RandomSetSkill()
@@ -62,9 +63,27 @@ public class PlayerSkillHandle : MonoBehaviour
                 SkillData randomSkill = _skillDatas[Random.Range(0, _skillDatas.Count - 1)];
                 slot.skillData = randomSkill;
                 slot.skillImage.sprite = randomSkill.skillImage;
+                slot.skillCostText.text = randomSkill.skillCost.ToString();
                 _skillDatas.Remove(randomSkill);
             }
         }
+    }
+
+    private void Update()
+    {
+        if (onPrepareSkill)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ConfirmSkill();
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                CancelSkill();
+            }
+        }
+
+        
     }
 
     public void AddSkillPoint(int count)
@@ -86,39 +105,59 @@ public class PlayerSkillHandle : MonoBehaviour
     
     public void UseSkill(int slotSkillIndex)
     {
-        GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
-        slotSelect = slotSkillIndex;
-        if (skillPoint >= _skillSlots[slotSkillIndex].skillData.skillCost - GetComponent<PlayerArtifact>().SkillDiscount)
+        if (skillPoint < _skillSlots[slotSkillIndex].skillData.skillCost - GetComponent<PlayerArtifact>().SkillDiscount)
         {
-            _skillSlots[slotSkillIndex].skillImage.GetComponent<Button>().interactable = false;
-            currentSkill = Instantiate(_skillSlots[slotSkillIndex].skillData.skillPattern,skillParent);
+           return;
         }
+        GetComponent<PlayerMovementGrid>().currentState = MovementState.Freeze;
+        GridSpawnManager.Instance.ClearMover();
+        slotSelect = slotSkillIndex;
+        _skillSlots[slotSkillIndex].skillImage.GetComponent<Button>().interactable = false;
+        currentSkill = Instantiate(_skillSlots[slotSkillIndex].skillData.skillPattern,skillParent);
         makeSureUI.SetActive(true);
         SkillPointUiUpdate();
+        onPrepareSkill = true;
     }
 
     private void SkillPointUiUpdate()
     {
         skillPointText.text = "" + skillPoint;
-        maxSkillPointText.text = "" + minMaxSkillPoint.y + GetComponent<PlayerArtifact>().SkillPoint;
+        maxSkillPointText.text = $"{minMaxSkillPoint.y + GetComponent<PlayerArtifact>().SkillPoint}";
+        foreach (SkillSlot slot in _skillSlots)
+        {
+            if (slot.skillData == null)
+            {
+                continue;
+            }
+            if (skillPoint >= slot.skillData.skillCost)
+            {
+                slot.skillImage.gameObject.GetComponent<Button>().interactable = true;
+            }
+            else
+            {
+                slot.skillImage.gameObject.GetComponent<Button>().interactable = false;
+            }
+        }
     }
-
-    [Button("Confirm Skill")]
+    
     public void ConfirmSkill()
     {
+        onPrepareSkill = false;
         skillPoint -= _skillSlots[slotSelect].skillData.skillCost - GetComponent<PlayerArtifact>().SkillDiscount;
         currentSkill.GetComponent<SkillAction>().ActiveSkill();
         currentSkill = null;
         ClearSlot(slotSelect);
         GetComponent<PlayerMovementGrid>().currentState = MovementState.Idle;
         GetComponent<PlayerMovementGrid>().EndTurn();
+        SkillPointUiUpdate();
     }
-
-    [Button("Cancel Skill")]
+    
     public void CancelSkill()
     {
+        onPrepareSkill = false;
         GetComponent<PlayerMovementGrid>().currentState = MovementState.Combat;
         Destroy(currentSkill.gameObject);
+        StartCoroutine(GetComponent<PlayerMovementGrid>().SetMover());
         currentSkill = null;
         _skillSlots[slotSelect].skillImage.GetComponent<Button>().interactable = true;
     }
@@ -127,5 +166,6 @@ public class PlayerSkillHandle : MonoBehaviour
     {
         _skillSlots[slotIndex].skillData = null;
         _skillSlots[slotIndex].skillImage.gameObject.SetActive(false);
+        _skillSlots[slotIndex].skillCostText.text = "-";
     }
 }

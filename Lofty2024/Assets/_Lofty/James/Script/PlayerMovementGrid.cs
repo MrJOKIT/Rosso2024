@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VInspector;
@@ -16,6 +17,7 @@ public enum MovementState
     Combat,
     Moving,
     Freeze,
+    OnAttack,
 }
 
 public enum MoveType
@@ -36,7 +38,7 @@ public enum AttackType
 public enum PlayerMoveDirection
 {
     Forward,
-    ForwardLeft,
+    ForwardLeft, 
     ForwardRight,
     Backward,
     BackwardLeft,
@@ -47,9 +49,11 @@ public enum PlayerMoveDirection
 
 public class PlayerMovementGrid : MonoBehaviour, IUnit
 {
-    
 
-    [Tab("Combat")]
+
+    [Tab("Combat")] 
+    public Enemy currentEnemy;
+    public GridMover currentEnemyGrid;
     [Space(10)]
     [Header("Turn Setting")] 
     public bool autoSkip;
@@ -57,6 +61,13 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public float turnSpeed = 20f;
     [SerializeField] private int defaultDamage;
     [SerializeField] private int damage;
+
+    public int DefaultDamage
+    {
+        get { return defaultDamage; }
+        set { defaultDamage = value; }
+    }
+    
     public List<Button> playerInteractButton;
 
     [Space(10)] 
@@ -66,16 +77,32 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public int effectiveTurnTime = 1;
     [SerializeField] private int knockBackRange = 1;
     [SerializeField] private int defaultKnockBackRange = 1;
+    public int DefaultKnockBackRange
+    {
+        get { return defaultKnockBackRange; }
+        set { defaultKnockBackRange = value; }
+    }
+    
 
     [Tab("Movement")] 
     [Header("Player Input")]
     public MoveType moveType;
+    public Animator playerAnimator;
+    public SpriteRenderer playerSprite;
 
-    [Space(10)] 
-    [Header("Movement Point")] 
+    [Space(10)] [Header("Movement Point")] 
+    public int moveCount;
     [SerializeField] private int defaultMovePoint = 2;
     [SerializeField] private int movePoint;
     [SerializeField] private int maxMovePoint;
+    public int DefaultMovePoint
+    {
+        get { return defaultMovePoint; }
+        set { defaultMovePoint = value; }
+    }
+    
+    
+    public bool rabbitPaws;
     public bool inBattle;
     [Space(5)] 
     public TextMeshProUGUI movePointText;
@@ -118,8 +145,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     private Vector3 supTargetTransform;
     private Vector3 lastPlayerTransform;
 
+    [Tab("Timeline")] 
+    public PlayableDirector playableDirector;
     private void Awake()
     {
+        
         if (moveRandom)
         {
             moveType = MoveType.Keyboard;
@@ -131,14 +161,35 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     private void Start()
     {
-        targetTransform = transform.position;
-        supTargetTransform = transform.position;
+        ResetPlayerTarget();
         TurnManager.Instance.AddUnit(true,transform,turnSpeed);
         
     }
 
     private void Update()
     {
+        if (GetComponent<Player>().isDead)
+        {
+            return;
+        }
+        if (GameManager.Instance.GetComponent<SceneLoading>().loadSucces == false)
+        {
+            return;
+        }
+
+        if (GameManager.Instance.OnLoad)
+        {
+            return;
+        }
+
+        if (TutorialManager.Instance.tutorialState == TutorialState.OnProgress)
+        {
+            return;
+        }
+        if (GameManager.Instance.GetComponent<RandomCardManager>().isRandom)
+        {
+            return;
+        }
         MoveChecker();
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
@@ -146,6 +197,10 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             {
                 return;
             }
+        }
+        else
+        {
+            inBattle = false;
         }
         
         if (autoSkip) 
@@ -188,10 +243,6 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         break;
                     case MoveType.Both:
                         HandleClickToMove();
-                        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
-                        {
-                            return;
-                        }
                         GetComponent<PlayerInputHandle>().HandleInput();
                         break;
                 }
@@ -201,6 +252,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 {
                     HandleClickToMove();
                 }*/
+                
                 if (playerNavigation.navigationSuccess == false)
                 {
                     return;
@@ -236,6 +288,11 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (Camera.main == null)
+            {
+                Debug.Log("Main camera is disable");
+                return;
+            }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
@@ -257,36 +314,53 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             return;
                         }
 
-                        Enemy enemy = hit.collider.GetComponent<GridMover>().enemy;
-                        switch (attackType)
+                        currentState = MovementState.OnAttack;
+                        float distance = Vector3.Distance(transform.position, hit.transform.position);
+                        Debug.Log($"Player and Enemy distance = {distance}");
+                        currentEnemy = hit.collider.GetComponent<GridMover>().enemy;
+                        currentEnemyGrid = hit.collider.GetComponent<GridMover>();
+                        if (distance <= 1.5f)
                         {
-                            case AttackType.NormalAttack:
-                                enemy.TakeDamage(damage);
-                                break;
-                            case AttackType.SpecialAttack:
-                                enemy.TakeDamage(damage * 2); 
-                                break;
-                            case AttackType.KnockBackAttack:
-                                enemy.TakeDamage(damage);
-                                enemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange);
-                                break;
-                            case AttackType.EffectiveAttack:
-                                enemy.TakeDamage(damage);
-                                enemy.AddCurseStatus(effectiveType,effectiveTurnTime);
-                                break;
-                        }
-                        
-                        if (enemy.enemyHealth <= 0)
-                        {
-                            SetTargetPosition(hit.point);
+                            if (hit.transform.position.x < transform.position.x)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackLeft");
+                            }
+                            else if (hit.transform.position.x > transform.position.x)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackRight");
+                            }
+                            else if (hit.transform.position.z > transform.position.z)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackLeft");
+                            }
+                            else if (hit.transform.position.z < transform.position.z)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackRight");
+                            }
+                            
+                            //playableDirector.Play();
                         }
                         else
                         {
-                            GridSpawnManager.Instance.ClearMover();
-                            currentState = MovementState.Idle;
-                            moveSuccess = true;
-                            EndTurn();
+                            if (hit.transform.position.x < transform.position.x)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackLeft");
+                            }
+                            else if (hit.transform.position.x > transform.position.x)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackRight");
+                            }
+                            else if (hit.transform.position.z > transform.position.z)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackLeft");
+                            }
+                            else if (hit.transform.position.z < transform.position.z)
+                            {
+                                playerAnimator.SetTrigger("CloseAttackRight");
+                            }
+                            //playerAnimator.SetTrigger("RangeAttack");
                         }
+                        GetComponent<PlayerAbility>().CheckAbilityUse();
                         break;
                     case GridState.Empty:
                         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
@@ -302,6 +376,134 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         }
     }
 
+    public void AttackEnemy()
+    {
+        if (currentEnemy == null)
+        {
+            return;
+        }
+        VisualEffectManager.Instance.CallEffect(EffectName.Hit,currentEnemy.transform,1f);
+        PlayerArtifact artifact = GetComponent<PlayerArtifact>();
+        switch (attackType)
+        {
+            case AttackType.NormalAttack:
+                if (artifact.GodOfWar)
+                {
+                    float randomNumber = Random.Range(0, 1f);
+                    if (randomNumber <= 0.25f)
+                    {
+                        VisualEffectManager.Instance.CallEffect(EffectName.Critical, transform,1.5f);
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.CriticalAttack,true);
+                        currentEnemy.TakeDamage(damage * 2);
+                    }
+                    else
+                    { 
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Attacked,true);
+                        currentEnemy.TakeDamage(damage);
+                    }
+                }
+                else 
+                { 
+                    TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Attacked,true);
+                    currentEnemy.TakeDamage(damage);
+                }
+
+                if (artifact.shootCasterPassiveOne)
+                {
+                    float randomNumber = Random.Range(0, 1f);
+                    if (randomNumber <= 0.4f)
+                    {
+                        currentEnemy.AddCurseStatus(CurseType.Burn,2);
+                    }
+                }
+                break;
+            case AttackType.SpecialAttack: 
+                TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.CriticalAttack,true);
+                currentEnemy.TakeDamage(damage * 2); 
+                if (artifact.shootCasterPassiveOne)
+                {
+                    float randomNumber = Random.Range(0, 1f);
+                    if (randomNumber <= 0.4f)
+                    {
+                        currentEnemy.AddCurseStatus(CurseType.Burn,2);
+                    }
+                }
+                break;
+            case AttackType.KnockBackAttack: 
+                TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.KnockBack,true);
+                currentEnemy.TakeDamage(damage); 
+                currentEnemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange); 
+                if (artifact.shootCasterPassiveOne)
+                {
+                    float randomNumber = Random.Range(0, 1f);
+                    if (randomNumber <= 0.4f)
+                    {
+                        currentEnemy.AddCurseStatus(CurseType.Burn,2);
+                    }
+                }
+                break;
+            case AttackType.EffectiveAttack:
+                switch (effectiveType)
+                {
+                    case CurseType.Burn:
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Burn,true);
+                        break;
+                    case CurseType.Stun:
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Stunned,true);
+                        break;
+                }
+                currentEnemy.TakeDamage(damage); 
+                currentEnemy.AddCurseStatus(effectiveType,effectiveTurnTime); 
+                break;
+        }
+        if (currentEnemy.enemyHealth <= 0) 
+        { 
+            if (artifact.GiftOfDeath) 
+            { 
+                float randomNumber = Random.Range(0, 1f); 
+                if (randomNumber < 0.2) 
+                { 
+                    GetComponent<Player>().TakeHealth(1);
+                }
+            }
+             
+            if (artifact.bladeMasterPassiveOne) 
+            { 
+                float randomNumber = Random.Range(0, 1f); 
+                if (randomNumber < 0.15) 
+                { 
+                    GetComponent<Player>().TakeHealth(1);
+                }
+            }
+
+            if (artifact.Kamikaze) 
+            { 
+                currentEnemy.BombEnemy();
+            }
+
+            if (artifact.shootCasterPassiveTwo)
+            {
+                float randomNumber = Random.Range(0, 1f); 
+                if (randomNumber <= 0.35f) 
+                { 
+                    movePoint += 1;
+                }
+                
+            }
+
+            currentEnemyGrid.enemyDie = true;
+            EndTurn();
+            //SetTargetPosition(hit.point);
+        }
+        else 
+        { 
+            MouseSelectorManager.Instance.UpdateHearthUI(currentEnemy); 
+            GridSpawnManager.Instance.ClearMover(); 
+            currentState = MovementState.Idle; 
+            moveSuccess = true; 
+            EndTurn();
+        }
+    }
     private void AddMovePath(Vector3 spawnPosition,PlayerMoveDirection direction)
     {
         GameObject movePathManager = Instantiate(movePathPrefab,spawnPosition,Quaternion.identity);
@@ -368,12 +570,18 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             //transform.position = Vector3.MoveTowards(transform.position,targetTransform,moveSpeed * Time.deltaTime);
         }
         
-        if (transform.position == targetTransform)
+         
+        if (transform.position == targetTransform || moveCount > 15)
         {
             ClearMovePath();
             currentState = MovementState.Idle;
             GetComponent<PlayerAbility>().CheckAbilityUse();
             EndTurn();
+            moveCount = 0;
+            playerAnimator.SetBool("OnMove",false);
+            playerAnimator.SetFloat("X",0);
+            playerAnimator.SetFloat("Z",0);
+            playerSprite.flipX = false;
         }
     }
 
@@ -415,10 +623,42 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 //transform.position = Vector3.MoveTowards(transform.position,supTargetTransform, moveSpeed * Time.deltaTime);
                 break;
         }
+        playerAnimator.SetBool("OnMove",true);
+        if (supTargetTransform.x < transform.position.x)
+        {
+            playerAnimator.SetFloat("X",-1);
+        }
+        else if (supTargetTransform.x > transform.position.x)
+        {
+            playerAnimator.SetFloat("X",1);
+        }
+        else
+        {
+            playerAnimator.SetFloat("X",0);
+        }
+        
+        if (supTargetTransform.z < transform.position.z)
+        {
+            playerAnimator.SetFloat("Z",-1);
+        }
+        else if (supTargetTransform.z > transform.position.z)
+        {
+            playerAnimator.SetFloat("Z",1);
+        }
+        else
+        {
+            playerAnimator.SetFloat("Z",0);
+        }
         AddMovePath(lastPlayerTransform,direction);
+        moveCount += 1;
     }
     private void MoveHandle()
     {
+        
+        if (forwardMoveBlock && forwardLeftMoveBlock && forwardRightMoveBlock && backwardMoveBlock && backwardLeftMoveBlock && backwardRightMoveBlock && leftMoveBlock && rightMoveBlock)
+        {
+            ClearMovePath();
+        }
         if (transform.position.z < targetTransform.z && transform.position.x == targetTransform.x)
         {
             //Move Forward
@@ -466,6 +706,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -518,6 +759,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -569,6 +811,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -622,6 +865,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -675,6 +919,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -726,6 +971,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                                 else
                                 {
                                     Debug.Log("Can't move");
+                                    ClearMovePath();
                                 }
                         }
                     }
@@ -779,6 +1025,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -832,6 +1079,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                             else
                             {
                                 Debug.Log("Can't move");
+                                ClearMovePath();
                             }
                         }
                     }
@@ -841,7 +1089,47 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         
     }
-    
+
+    public void KnockBack(Transform startTransform,int range)
+    {
+        for (int a = 0; a < range; a++)
+        {
+            if (startTransform.position.x > transform.position.x && startTransform.position.z ==  transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.Right);
+            }
+            else if (startTransform.position.x > transform.position.x && startTransform.position.z > transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.BackwardRight);
+            }
+            else if (startTransform.position.x > transform.position.x && startTransform.position.z < transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.ForwardRight);
+            }
+            
+            if (startTransform.position.x < transform.position.x && startTransform.position.z ==  transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.Left);
+            }
+            else if (startTransform.position.x < transform.position.x && startTransform.position.z > transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.BackwardLeft);
+            }
+            else if (startTransform.position.x < transform.position.x && startTransform.position.z < transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.ForwardLeft);
+            }
+
+            if (startTransform.position.x == transform.position.x && startTransform.position.z < transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.Forward);
+            }
+            else if (startTransform.position.x == transform.position.x && startTransform.position.z > transform.position.z)
+            {
+                SetPlayerMoveDirection(PlayerMoveDirection.Backward);
+            }
+        }
+    }
     private void ClearPattern()
     {
         if (currentPattern != null)
@@ -852,12 +1140,16 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
         currentState = MovementState.Idle;
     }
-
-    [EditorAttributes.Button("Set Mover")]
-    private void SetMover()
+ 
+    
+    public IEnumerator SetMover()
     {
-        currentPattern = Instantiate(patternDatas[(int)movePattern - 1].patternPrefab, parentPattern);
-        currentPattern.GetComponent<MoverCheckerHost>().CheckMove();
+        yield return new WaitForSeconds(0.15f);
+        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        {
+            currentPattern = Instantiate(patternDatas[(int)movePattern - 1].patternPrefab, parentPattern);
+            currentPattern.GetComponent<MoverCheckerHost>().CheckMove();
+        }
     }
 
 
@@ -870,8 +1162,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         }
         GridSpawnManager.Instance.ClearMover();
         movePattern = newPattern;
-        SetMover();
-        
+        StartCoroutine(SetMover());
     }
 
     #endregion
@@ -892,15 +1183,37 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             button.interactable = true;
         }
 
+        GetComponent<Player>().CurseHandle();
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
+            
             if (inBattle == false)
             {
                 movePoint = maxMovePoint;
                 inBattle = true;
                 MovementPointInterfaceUpdate();
+                if (GetComponent<PlayerArtifact>().RabbitPaws)
+                {
+                    rabbitPaws = true;
+                }
             }
-            SetMover();
+            if (GetComponent<PlayerArtifact>().CheckMate)
+            {
+                if (GridSpawnManager.Instance.useWarp == false)
+                {
+                    StartCoroutine(GridSpawnManager.Instance.WarpSelector());
+                    movePattern = Knight;
+                }
+                else
+                {
+                    StartCoroutine(SetMover());
+                }
+            }
+            else
+            {
+                StartCoroutine(SetMover());
+            }
+            
         }
         else
         {
@@ -916,6 +1229,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     
     public void EndTurn()
     {
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().UpdateEmptyGrid();
         if (movePattern != King)
         {
             movePattern = King;
@@ -927,10 +1241,18 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         ClearPattern();
         onTurn = false;
         moveSuccess = false;
+        GetComponent<Player>().CurseEnd();
         if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
         {
-            movePoint -= 1;
-            ChaosManager.Instance.IncreaseChaosPoint(1);
+            if (rabbitPaws)
+            {
+                rabbitPaws = false;
+            }
+            else
+            {
+                movePoint -= 1;
+            }
+            //ChaosManager.Instance.IncreaseChaosPoint(1);
             MovementPointInterfaceUpdate();
             if (movePoint <= 0)
             {
@@ -954,6 +1276,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     [Button("End Turn")]
     public void EndTurnPermanent()
     {
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().UpdateEmptyGrid();
         if (movePattern != King)
         {
             movePattern = King;
@@ -962,6 +1285,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         {
             button.interactable = false;
         }
+        GetComponent<Player>().CurseEnd();
         ClearPattern();
         onTurn = false;
         moveSuccess = false;
@@ -1006,6 +1330,17 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         damage = defaultDamage + GetComponent<PlayerArtifact>().Damage;
         maxMovePoint = defaultMovePoint + GetComponent<PlayerArtifact>().ActionPoint;
         knockBackRange = defaultKnockBackRange + GetComponent<PlayerArtifact>().KnockBackRange;
+    }
+
+    public void UpgradeStats()
+    {
+        defaultDamage = damage + GetComponent<PlayerArtifact>().Damage;
+        defaultMovePoint = maxMovePoint + GetComponent<PlayerArtifact>().ActionPoint;
+        defaultKnockBackRange = knockBackRange + GetComponent<PlayerArtifact>().KnockBackRange;
+
+        damage = defaultDamage;
+        maxMovePoint = defaultMovePoint;
+        knockBackRange = defaultKnockBackRange;
     }
    
 }

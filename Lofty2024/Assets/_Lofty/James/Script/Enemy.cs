@@ -41,33 +41,41 @@ public class CurseData
 }
 public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
 {
+    [Tab("Enemy Host")]
     [Header("Player")]
     public Transform targetTransform;
+    public Transform focusTransform;
     
     [Header("Data")]
     public TurnData enemyTurnData;
     public EnemyData enemyData;
-    
-    [Space(10)]
-    [Header("Stats")]
+
+    [Space(10)] 
+    [Header("Stats")] 
+    public GameObject focusArrow;
+    public Animator enemyAnimator;
+    public int enemyMaxHealth;
     public int enemyHealth;
     public float enemySpeed;
     public bool isDead;
+    public bool onImmortalObject;
 
     [Space(10)] 
     [Header("Curse Status")] 
     public List<CurseData> curseHave;
     public Transform curseCanvas;
     public GameObject curseUiPrefab;
+    public Transform bombPrefab;
 
 
     [Space(10)] 
     [Header("Turn")] 
+    public bool skipTurn;
     public bool autoSkip;
     public bool onTurn;
 
     [Space(10)] 
-    [Header("Reward")] 
+    [Header("Reward")]
     public Image rewardImage;
     public AbilityType abilityDrop;
     public GameObject abilityOrbPrefab;
@@ -92,44 +100,40 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         TurnManager.Instance.AddUnit(false,transform,enemySpeed);
         RewardUiHandle();
     }
-
-    private void Update()
-    {
-        if (enemyHealth <= 0)
-        {
-            return;
-        }
-        
-    }
-
+    
     public void StartTurn()
     {
         onTurn = true;
-        if (autoSkip)
-        {
-            EndTurn();
-        }
-        else
-        {
-            CurseHandle();
-        }
+        SetTurnDirection();
+    }
 
-        try
+    private void SetTurnDirection()
+    {
+        if (targetTransform.position.x < transform.position.x)
         {
-            GetComponent<EnemyBrainML>().actionSuccess = false;
+            transform.localScale = new Vector3(1, 1, 1);
         }
-        catch (Exception a)
+        else if (targetTransform.position.x > transform.position.x)
         {
-            Debug.Log($"No EnemyBrainML in this object :{a}");
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (targetTransform.position.z > transform.position.z)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (targetTransform.position.z < transform.position.z)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
         }
     }
 
     public void EndTurn()
     {
         EndTurnModify();
+        GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().UpdateEmptyGrid();
         onTurn = false;
         TurnManager.Instance.TurnSucces();
-        if (curseHave != null)
+        if (curseHave.Count != 0)
         {
             foreach (CurseData curse in curseHave.ToList())
             {
@@ -151,7 +155,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     
     public void CurseHandle()
     {
-        if (curseHave == null)
+        if (curseHave.Count == 0)
         {
             return;
         }
@@ -164,7 +168,9 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
             switch (curse.curseType)
             {
                 case CurseType.Stun:
-                    EndTurn();
+                    GridSpawnManager.Instance.ClearMover();
+                    skipTurn = true;
+                    GetComponent<EnemyMovementGrid>().currentState = MovementState.Idle;
                     break;
                 case CurseType.Blood:
                     //ลดเลือดไม่ติดเกราะ
@@ -192,8 +198,10 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
             curse.curseUI.turnCount.text = curse.curseTurn.ToString();
         }
     }
-    private void EnemyDie()
+    protected void EnemyDie()
     {
+        VisualEffectManager.Instance.CallEffect(EffectName.EnemyDead,transform,1f);
+        MouseSelectorManager.Instance.ClearSelector(this);
         TurnManager.Instance.RemoveUnit(enemyTurnData);
         isDead = true;
         if (onTurn)
@@ -203,7 +211,8 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
 
         if (abilityDrop != AbilityType.Empty)
         {
-            GameObject abilityOrbItem =Instantiate(abilityOrbPrefab, transform.position, Quaternion.identity);
+            TutorialManager.Instance.ActiveTutorial(TutorialName.HowToGetAbility);
+            GameObject abilityOrbItem =Instantiate(abilityOrbPrefab, new Vector3(transform.position.x,0,transform.position.z), Quaternion.identity);
             abilityOrbItem.GetComponent<AbilityOrb>().SetOrbAbility(abilityDrop);
         }
         
@@ -211,7 +220,8 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     
     private void SetEnemyData()
-    { 
+    {
+        enemyMaxHealth = enemyData.enemyMaxHealth;
         enemyHealth = enemyData.enemyHealth;
         enemySpeed = enemyData.enemySpeed;
     }
@@ -251,13 +261,23 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     }
     public void TakeDamage(int damage)
     {
-        
+        if (onImmortalObject)
+        {
+            return;
+        }
+        enemyAnimator.SetTrigger("TakeDamage");
         CameraManager.Instance.TriggerShake();
         enemyHealth -= damage;
         if (enemyHealth <= 0)
         {
             EnemyDie();
         }
+    }
+
+    public void BombEnemy()
+    {
+        GameObject bomb = Instantiate(bombPrefab.gameObject, transform);
+        bomb.GetComponent<SkillAction>().ActiveSkill();
     }
 
     public void AddCurseStatus(CurseType curseType,int turnTime)
@@ -274,6 +294,11 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         GameObject curseGUI = Instantiate(curseUiPrefab, curseCanvas);
         curseHave.Add(new CurseData(curseType,turnTime,curseGUI.GetComponent<CurseUI>()));
         CurseUiUpdate();
+    }
+
+    private void OnMouseOver()
+    {
+        Debug.Log("See Data");
     }
 
     protected virtual void EndTurnModify()

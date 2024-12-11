@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   artifactGrade: 0
   artifactName: Heart of flames I
-  artifactImage: {fileID: 21300000, guid: 071c53064aae09c40a6475681530c51d, type: 3}
+  artifactImage: {fileID: 21300000, guid: 070560a966dbeff44a2b122ec3765077, type: 3}
   artifactDetail: Increase your HP +1
   upgradeType: 0
   addHealthPoint: 1
