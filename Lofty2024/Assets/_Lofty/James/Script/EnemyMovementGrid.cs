@@ -52,7 +52,7 @@ public class EnemyMovementGrid : MonoBehaviour
 
    public void KnockBack(Transform playerTrans,int gridDistance)
    {
-       if (GetComponent<Enemy>().enemyData.isBoss)
+       if (GetComponent<Enemy>().EnemyData.isBoss)
        {
            return;
        }
@@ -239,7 +239,7 @@ public class EnemyMovementGrid : MonoBehaviour
                    GetComponent<Enemy>().EndTurn();
                    currentState = MovementState.Idle;
                }
-               GetComponent<Enemy>().enemyAnimator.SetBool("OnMove",false);
+               GetComponent<Enemy>().Animator.SetBool("OnMove",false);
            }
            
        }
@@ -274,7 +274,7 @@ public class EnemyMovementGrid : MonoBehaviour
                   SetTargetPosition(new Vector3(transform.localPosition.x + 1,transform.localPosition.y,transform.localPosition.z - 1));
                   break;
                }
-           GetComponent<Enemy>().enemyAnimator.SetBool("OnMove",true);
+           GetComponent<Enemy>().Animator.SetBool("OnMove",true);
        }
        private void OnDrawGizmos()
        {

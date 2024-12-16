@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class AbilityOrb : MonoBehaviour
 {
-    [SerializeField] private AbilityType _abilityType;
+    [FormerlySerializedAs("_abilityType")] [SerializeField] private AbilityType abilityType;
     [SerializeField] private GameObject uiCanvas;
     private bool onPlayer;
     private PlayerAbility _player;
@@ -22,41 +23,21 @@ public class AbilityOrb : MonoBehaviour
         GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().AddItemInRoom(gameObject);
     }
 
-    public void SetOrbAbility(AbilityType abilityType)
+    public void SetOrbAbility(AbilityType _abilityType)
     {
-        _abilityType = abilityType;
-        switch (abilityType)
+        abilityType = _abilityType;
+        
+        foreach (var _iconImage in iconImage)
         {
-            case AbilityType.Pawn:
-                foreach (SpriteRenderer iconImage in this.iconImage)
-                {
-                    iconImage.sprite = pawn; 
-                }
-                break;
-            case AbilityType.Rook:
-                foreach (SpriteRenderer iconImage in this.iconImage)
-                {
-                    iconImage.sprite = rook;
-                }
-                break;
-            case AbilityType.Knight:
-                foreach (SpriteRenderer iconImage in this.iconImage)
-                {
-                    iconImage.sprite = knight;
-                }
-                break;
-            case AbilityType.Bishop:
-                foreach (SpriteRenderer iconImage in this.iconImage)
-                {
-                    iconImage.sprite = bishop;
-                }
-                break;
-            case AbilityType.Queen:
-                foreach (SpriteRenderer iconImage in this.iconImage)
-                {
-                    iconImage.sprite = queen;
-                }
-                break;
+            _iconImage.sprite = _abilityType switch
+            {
+                AbilityType.Pawn => pawn,
+                AbilityType.Rook => rook,
+                AbilityType.Knight => knight,
+                AbilityType.Bishop => bishop,
+                AbilityType.Queen => queen,
+                _ => _iconImage.sprite
+            };
         }
     }
 
@@ -75,7 +56,7 @@ public class AbilityOrb : MonoBehaviour
 
     private void TakeOrb()
     {
-        _player.swapAbility = _abilityType;
+        _player.swapAbility = abilityType;
         GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().itemInRoom.Remove(gameObject);
         Destroy(gameObject);
     }

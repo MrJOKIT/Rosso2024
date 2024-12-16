@@ -20,17 +20,17 @@ public class EnemyAttacker : MonoBehaviour
     
     public void AttackPlayer()
     {
-        enemyHost.targetTransform.GetComponent<Player>().TakeDamage(enemyHost.enemyData.damage);
+        enemyHost.TargetTransform.GetComponent<Player>().TakeDamage(enemyHost.EnemyData.damage);
         if (curseType != CurseType.Empty)
         {
-            float randomNumber = Random.Range(0, 1f);
+            var randomNumber = Random.Range(0, 1f);
             if (randomNumber <= cursePercentage)
             {
-                enemyHost.targetTransform.GetComponent<Player>().AddCurseStatus(curseType,1);
+                enemyHost.TargetTransform.GetComponent<Player>().AddCurseStatus(curseType,1);
             }
         }
-        VisualEffectManager.Instance.CallEffect(effectName,enemyHost.targetTransform,1f);
-        TurnManager.Instance.AddLog(enemyHost.enemyData.enemyName,enemyHost.targetTransform.GetComponent<Player>().playerName,LogList.Attacked,false);
+        VisualEffectManager.Instance.CallEffect(effectName,enemyHost.TargetTransform,1f);
+        TurnManager.Instance.AddLog(enemyHost.EnemyData.enemyName,enemyHost.TargetTransform.GetComponent<Player>().playerName,LogList.Attacked,false);
     }
 
     private void Update()

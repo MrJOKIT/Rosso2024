@@ -665,7 +665,7 @@ public class EnemyEliteGaia : Enemy
         }
         summonCooldownCounter = 0;
         summonState = SummonState.OnPrepareSummon;
-        enemyAnimator.SetBool("OnSummon",false);
+        animator.SetBool("OnSummon",false);
         EndTurn();
     }
 }

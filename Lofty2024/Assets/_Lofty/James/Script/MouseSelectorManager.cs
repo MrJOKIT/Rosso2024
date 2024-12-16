@@ -82,7 +82,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
                         
                         uiCanvas.SetActive(true);
                         selectedEnemy = hit.transform.GetComponent<GridMover>().enemy;
-                        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(selectedEnemy.enemyData.name,selectedEnemy.enemyData.enemySprite,selectedEnemy.enemyHealth,selectedEnemy.enemyData.damage);
+                        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(selectedEnemy.EnemyData.name, selectedEnemy.EnemyData.enemySprite, selectedEnemy.CurrentHealth, selectedEnemy.EnemyData.damage);
                         CreateHearth(selectedEnemy);
                     }
                     else
@@ -114,7 +114,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
     public void ShowEnemyData(Enemy enemy)
     {
         uiCanvas.SetActive(true);
-        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(enemy.enemyData.name,enemy.enemyData.enemySprite,enemy.enemyHealth,enemy.enemyData.damage);
+        uiCanvas.GetComponent<EnemyHealthData>().SetEnemyData(enemy.EnemyData.name, enemy.EnemyData.enemySprite, enemy.CurrentHealth, enemy.EnemyData.damage);
         CreateHearth(enemy);
     }
     private void CreateHearth(Enemy enemy)
@@ -125,7 +125,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
             healthUI.Remove(health);
         }
 
-        for (int a = 0; a < enemy.enemyData.enemyMaxHealth; a++)
+        for (int a = 0; a < enemy.EnemyData.enemyMaxHealth; a++)
         { 
             GameObject health = Instantiate(hearthPrefabUI, healthUiParent);
             healthUI.Add(health.GetComponent<HealthUI>());
@@ -137,9 +137,9 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
 
     public void UpdateHearthUI(Enemy enemy)
     {
-        for (int a = 0; a < enemy.enemyMaxHealth; a++)
+        for (int a = 0; a < enemy.MaxHealth; a++)
         {
-            healthUI[a].ActiveHearth(a < enemy.enemyHealth);
+            healthUI[a].ActiveHearth(a < enemy.CurrentHealth);
         }
     }
 

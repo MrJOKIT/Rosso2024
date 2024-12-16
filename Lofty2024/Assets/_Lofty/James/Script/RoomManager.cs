@@ -119,7 +119,7 @@ public class RoomManager : MonoBehaviour
         {
             GameObject enemy = Instantiate(EnemySpawnManager.Instance.GetBossEnemy(), new Vector3(bossSpawnPoint.position.x,0.5f,bossSpawnPoint.position.z), Quaternion.identity,enemyParent);
             enemyInRoom.Add(enemy.GetComponent<Enemy>());
-            enemy.GetComponent<Enemy>().targetTransform = playerTrans;
+            enemy.GetComponent<Enemy>().TargetTransform = playerTrans;
             enemy.GetComponent<Enemy>().ActiveUnit();
             if (stunAll)
             {
@@ -133,7 +133,7 @@ public class RoomManager : MonoBehaviour
         {
             GameObject enemy = Instantiate(EnemySpawnManager.Instance.GetEnemy(), CheckSpawnPoint(), Quaternion.identity,enemyParent);
             enemyInRoom.Add(enemy.GetComponent<Enemy>());
-            enemy.GetComponent<Enemy>().targetTransform = playerTrans;
+            enemy.GetComponent<Enemy>().TargetTransform = playerTrans;
             enemy.GetComponent<Enemy>().ActiveUnit();
             if (stunAll)
             {
@@ -195,7 +195,7 @@ public class RoomManager : MonoBehaviour
         GameObject enemy = Instantiate(newEnemyPrefab, CheckSpawnPoint(), Quaternion.identity,enemyParent);
         VisualEffectManager.Instance.CallEffect(EffectName.Summon,enemy.transform,1f);
         enemyInRoom.Add(enemy.GetComponent<Enemy>());
-        enemy.GetComponent<Enemy>().targetTransform = playerTrans;
+        enemy.GetComponent<Enemy>().TargetTransform = playerTrans;
         enemy.GetComponent<Enemy>().ActiveUnit();
         TurnManager.Instance.AddNewQueue(enemy.transform);
     }
@@ -209,7 +209,7 @@ public class RoomManager : MonoBehaviour
         bool roomComplete = true;
         foreach (Enemy enemy in enemyInRoom)
         {
-            if (enemy.isDead == false)
+            if (enemy.IsDead == false)
             {
                 roomComplete = false;
                 break;

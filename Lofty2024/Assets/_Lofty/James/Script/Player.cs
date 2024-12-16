@@ -292,7 +292,7 @@ public class Player : MonoBehaviour, ITakeDamage
         UpdateHealthUI();
     }
     
-    public void AddCurseStatus(CurseType curseType, int turnTime)
+    public void AddCurseStatus(CurseType _curseType, int _turnTime)
     {
         if (GetComponent<PlayerArtifact>().IronBody || GetComponent<PlayerArtifact>().TrapNotActiveSelf)
         {
@@ -300,8 +300,8 @@ public class Player : MonoBehaviour, ITakeDamage
             return;
         }
         GameObject curseGUI = Instantiate(curseUiPrefab, curseUiParent);
-        curseHave.Add(new CurseData(curseType,turnTime,curseGUI.GetComponent<CurseUI>()));
-        CurseUiUpdate();
+        curseHave.Add(new CurseData(_curseType,_turnTime,curseGUI.GetComponent<CurseUI>()));
+        CurseUIUpdate();
     }
     
     public void CurseHandle()
@@ -313,11 +313,11 @@ public class Player : MonoBehaviour, ITakeDamage
         
         foreach (CurseData curse in curseHave)
         {
-            if (curse.curseActivated || GetComponent<PlayerArtifact>().IronBody)
+            if (curse.CurseActivated || GetComponent<PlayerArtifact>().IronBody)
             {
                 continue;
             }
-            switch (curse.curseType)
+            switch (curse.CurseType)
             {
                 case CurseType.Stun:
                     GetComponent<PlayerMovementGrid>().EndTurn();
@@ -334,39 +334,39 @@ public class Player : MonoBehaviour, ITakeDamage
                     break;
             }
             
-            curse.curseActivated = true;
+            curse.CurseActivated = true;
         }
         
-        CurseUiUpdate();
+        CurseUIUpdate();
     }
 
     public void CurseEnd()
     {
         foreach (CurseData curse in curseHave.ToList())
         {
-            if (curse.curseActivated == false)
+            if (curse.CurseActivated == false)
             {
                 continue;
             }
-            curse.curseTurn -= 1;
-            if (curse.curseTurn <= 0 )
+            curse.CurseTurn -= 1;
+            if (curse.CurseTurn <= 0 )
             {
-                Destroy(curse.curseUI.gameObject);
+                Destroy(curse.CurseUI.gameObject);
                 curseHave.Remove(curse);
             }
             else
             {
-                CurseUiUpdate();
-                curse.curseActivated = false;
+                CurseUIUpdate();
+                curse.CurseActivated = false;
             }
         }
     }
-    public void CurseUiUpdate()
+    public void CurseUIUpdate()
     {
         foreach (CurseData curse in curseHave)
         {
-            curse.curseUI.curseType = curse.curseType;
-            curse.curseUI.turnCount.text = curse.curseTurn.ToString();
+            curse.CurseUI.curseType = curse.CurseType;
+            curse.CurseUI.turnCount.text = curse.CurseTurn.ToString();
         }
     }
 

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -24,107 +22,116 @@ public enum CurseType
     Provoke,
 }
 
-[Serializable]
-public class CurseData
-{
-    public int curseIndex;
-    public CurseType curseType;
-    public int curseTurn;
-    public CurseUI curseUI;
-    public bool curseActivated;
-    public CurseData(CurseType curseType,int curseTurn,CurseUI curseUI)
-    {
-        this.curseType = curseType;
-        this.curseTurn = curseTurn;
-        this.curseUI = curseUI;
-    }
-}
 public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
 {
+    #region -Declared Variables-
+    
     [Tab("Enemy Host")]
     [Header("Player")]
-    public Transform targetTransform;
-    public Transform focusTransform;
+    [SerializeField] protected Transform targetTransform;
+    [SerializeField] protected Transform focusTransform;
+    
+    public Transform TargetTransform { get => targetTransform; set => targetTransform = value; }
+    public Transform FocusTransform => focusTransform;
+
+    #region -Enemy Data-
     
     [Header("Data")]
-    public TurnData enemyTurnData;
-    public EnemyData enemyData;
+    [SerializeField] private TurnData turnData;
+    [SerializeField] protected EnemyData enemyData;
+    
+    public TurnData TurnData { get => turnData; set => turnData = value; }
+    public EnemyData EnemyData => enemyData;
 
     [Space(10)] 
     [Header("Stats")] 
-    public GameObject focusArrow;
-    public Animator enemyAnimator;
-    public int enemyMaxHealth;
-    public int enemyHealth;
-    public float enemySpeed;
-    public bool isDead;
-    public bool onImmortalObject;
+    [SerializeField] protected GameObject focusArrow;
+    [SerializeField] protected Animator animator;
+    [SerializeField] protected int maxHealth;
+    [SerializeField] protected int currentHealth;
+    [SerializeField] protected float speed;
+    [SerializeField] protected bool isDead;
+    [SerializeField] protected bool onImmortalObject;
+
+    public GameObject FocusArrow => focusArrow;
+    public Animator Animator => animator;
+    public int MaxHealth => maxHealth;
+    public int CurrentHealth => currentHealth;
+    public float Speed => speed;
+    public bool IsDead => isDead;
+    public bool OnImmortalObject => onImmortalObject;
 
     [Space(10)] 
     [Header("Curse Status")] 
-    public List<CurseData> curseHave;
-    public Transform curseCanvas;
-    public GameObject curseUiPrefab;
-    public Transform bombPrefab;
+    [SerializeField] protected List<CurseData> curseHave;
+    [SerializeField] protected Transform curseCanvas;
+    [SerializeField] protected GameObject curseUIPrefab;
+    [SerializeField] protected Transform bombPrefab;
 
 
     [Space(10)] 
     [Header("Turn")] 
-    public bool skipTurn;
-    public bool autoSkip;
-    public bool onTurn;
+    [SerializeField] protected bool skipTurn;
+    [SerializeField] protected bool autoSkip;
+    [SerializeField] protected bool onTurn;
+
+    public bool OnTurn { get => onTurn; set => onTurn = value; }
 
     [Space(10)] 
     [Header("Reward")]
-    public Image rewardImage;
-    public AbilityType abilityDrop;
-    public GameObject abilityOrbPrefab;
-    
+    [SerializeField] protected Image rewardImage;
+    [SerializeField] protected AbilityType abilityDrop;
+    [SerializeField] protected GameObject abilityOrbPrefab;
+
+    #endregion
+
     [Space(10)] 
     [Foldout("Skill Image")] 
-    public Sprite emptySkillImage;
-    public Sprite pawnSkillImage;
-    public Sprite rookSkillImage;
-    public Sprite knightSkillImage;
-    public Sprite bishopSkillImage;
-    public Sprite queenSkillImage;
-    public Sprite kingSkillImage;
+    [SerializeField] protected Sprite pawnSkillImage;
+    [SerializeField] protected Sprite rookSkillImage;
+    [SerializeField] protected Sprite knightSkillImage;
+    [SerializeField] protected Sprite bishopSkillImage;
+    [SerializeField] protected Sprite queenSkillImage;
+    [SerializeField] protected Sprite kingSkillImage;
+
+    #endregion
 
     private void Awake()
     {
         SetEnemyData();
     }
 
-    public void ActiveUnit()
+    private void SetEnemyData()
     {
-        TurnManager.Instance.AddUnit(false,transform,enemySpeed);
-        RewardUiHandle();
-    }
-    
-    public void StartTurn()
-    {
-        onTurn = true;
-        SetTurnDirection();
+        maxHealth = enemyData.enemyMaxHealth;
+        currentHealth = maxHealth;
+        speed = enemyData.enemySpeed;
     }
 
     private void SetTurnDirection()
     {
-        if (targetTransform.position.x < transform.position.x)
+        if (targetTransform.position.x < transform.position.x 
+            || targetTransform.position.z > transform.position.z)
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
-        else if (targetTransform.position.x > transform.position.x)
+        else if (targetTransform.position.x > transform.position.x
+                 || targetTransform.position.z < transform.position.z)
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
-        else if (targetTransform.position.z > transform.position.z)
-        {
-            transform.localScale = new Vector3(1, 1, 1);
-        }
-        else if (targetTransform.position.z < transform.position.z)
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
+    }
+
+    public void ActiveUnit()
+    {
+        TurnManager.Instance.AddUnit(false, transform, speed);
+        RewardUIHandle();
+    }
+
+    public void StartTurn()
+    {
+        onTurn = true;
+        SetTurnDirection();
     }
 
     public void EndTurn()
@@ -132,40 +139,52 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         EndTurnModify();
         GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().UpdateEmptyGrid();
         onTurn = false;
-        TurnManager.Instance.TurnSucces();
-        if (curseHave.Count != 0)
+        TurnManager.Instance.TurnSuccess();
+        if (curseHave.Count <= 0) return;
+        
+        foreach (var _curse in curseHave.ToList())
         {
-            foreach (CurseData curse in curseHave.ToList())
+            _curse.CurseTurn -= 1;
+            if (_curse.CurseTurn <= 0)
             {
-                curse.curseTurn -= 1;
-                if (curse.curseTurn <= 0 )
-                {
-                    Destroy(curse.curseUI.gameObject);
-                    curseHave.Remove(curse);
-                }
-                else
-                {
-                    CurseUiUpdate();
-                    curse.curseActivated = false;
-                }
+                Destroy(_curse.CurseUI.gameObject);
+                curseHave.Remove(_curse);
+            }
+            else
+            {
+                CurseUIUpdate();
+                _curse.CurseActivated = false;
             }
         }
     }
 
-    
-    public void CurseHandle()
+    #region #Cursed Function
+
+    public void AddCurseStatus(CurseType _curseType, int _turnTime)
     {
-        if (curseHave.Count == 0)
+        foreach (var _curseHave in curseHave.Where(_curse => _curse.CurseType == _curseType))
         {
+            _curseHave.CurseTurn = _turnTime;
+            CurseUIUpdate();
             return;
         }
-        foreach (CurseData curse in curseHave.ToList())
+        
+        var _curseGUI = Instantiate(curseUIPrefab, curseCanvas);
+        var _curseUI = _curseGUI.GetComponent<CurseUI>();
+        curseHave.Add(new CurseData(_curseType, _turnTime, _curseUI));
+        CurseUIUpdate();
+    }
+
+    public void CurseHandle()
+    {
+        if (curseHave.Count <= 0) return;
+        
+        foreach (var _curse in curseHave.ToList())
         {
-            if (curse.curseActivated)
-            {
+            if (_curse.CurseActivated)
                 continue;
-            }
-            switch (curse.curseType)
+            
+            switch (_curse.CurseType)
             {
                 case CurseType.Stun:
                     GridSpawnManager.Instance.ClearMover();
@@ -174,36 +193,60 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
                     break;
                 case CurseType.Blood:
                     //ลดเลือดไม่ติดเกราะ
-                    enemyHealth -= 1;
+                    currentHealth -= 1;
                     break;
                 case CurseType.Burn:
                     //ลดเลือดติดเกราะ
-                    enemyHealth -= 1;
+                    currentHealth -= 1;
                     break;
                 case CurseType.Provoke:
                     //เปลื่ยนเป้าหมายไปติดสิ่งยัวยุแทน
                     break;
             }
 
-            curse.curseActivated = true;
+            _curse.CurseActivated = true;
         }
         
     }
 
-    public void CurseUiUpdate()
+    #endregion
+
+    #region #Enemy UI Handle
+
+    public void CurseUIUpdate()
     {
-        foreach (CurseData curse in curseHave.ToList())
+        foreach (var _curse in curseHave.ToList())
         {
-            curse.curseUI.curseType = curse.curseType;
-            curse.curseUI.turnCount.text = curse.curseTurn.ToString();
+            _curse.CurseUI.curseType = _curse.CurseType;
+            _curse.CurseUI.turnCount.text = _curse.CurseTurn.ToString();
         }
     }
+
+    private void RewardUIHandle()
+    {
+        rewardImage.gameObject.SetActive(abilityDrop != AbilityType.Empty);
+
+        rewardImage.sprite = abilityDrop switch
+        {
+            AbilityType.Pawn => pawnSkillImage,
+            AbilityType.Rook => rookSkillImage,
+            AbilityType.Knight => knightSkillImage,
+            AbilityType.Bishop => bishopSkillImage,
+            AbilityType.Queen => queenSkillImage,
+            AbilityType.King => kingSkillImage,
+            _ => rewardImage.sprite
+        };
+    }
+
+    #endregion
+
     protected void EnemyDie()
     {
         VisualEffectManager.Instance.CallEffect(EffectName.EnemyDead,transform,1f);
         MouseSelectorManager.Instance.ClearSelector(this);
-        TurnManager.Instance.RemoveUnit(enemyTurnData);
+        TurnManager.Instance.RemoveUnit(turnData);
         isDead = true;
+        
         if (onTurn)
         {
             EndTurn();
@@ -212,63 +255,22 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
         if (abilityDrop != AbilityType.Empty)
         {
             TutorialManager.Instance.ActiveTutorial(TutorialName.HowToGetAbility);
-            GameObject abilityOrbItem =Instantiate(abilityOrbPrefab, new Vector3(transform.position.x,0,transform.position.z), Quaternion.identity);
-            abilityOrbItem.GetComponent<AbilityOrb>().SetOrbAbility(abilityDrop);
+            var _abilityOrbItem = Instantiate(abilityOrbPrefab, new Vector3(transform.position.x, 0, transform.position.z), Quaternion.identity);
+            _abilityOrbItem.GetComponent<AbilityOrb>().SetOrbAbility(abilityDrop);
         }
         
         gameObject.SetActive(false);
     }
-    
-    private void SetEnemyData()
-    {
-        enemyMaxHealth = enemyData.enemyMaxHealth;
-        enemyHealth = enemyData.enemyHealth;
-        enemySpeed = enemyData.enemySpeed;
-    }
 
-    private void RewardUiHandle()
-    {
-        switch (abilityDrop)
-        {
-            case AbilityType.Empty:
-                rewardImage.gameObject.SetActive(false);
-                break;
-            case AbilityType.Pawn:
-                rewardImage.gameObject.SetActive(true);
-                rewardImage.sprite = pawnSkillImage;
-                break;
-            case AbilityType.Rook:
-                rewardImage.gameObject.SetActive(true);
-                rewardImage.sprite = rookSkillImage;
-                break;
-            case AbilityType.Knight:
-                rewardImage.gameObject.SetActive(true);
-                rewardImage.sprite = knightSkillImage;
-                break;
-            case AbilityType.Bishop:
-                rewardImage.gameObject.SetActive(true);
-                rewardImage.sprite = bishopSkillImage;
-                break;
-            case AbilityType.Queen:
-                rewardImage.gameObject.SetActive(true);
-                rewardImage.sprite = queenSkillImage;
-                break;
-            case AbilityType.King:
-                rewardImage.gameObject.SetActive(true);
-                rewardImage.sprite = kingSkillImage;
-                break;
-        }
-    }
     public void TakeDamage(int damage)
     {
-        if (onImmortalObject)
-        {
-            return;
-        }
-        enemyAnimator.SetTrigger("TakeDamage");
+        if (onImmortalObject) return;
+        
+        animator.SetTrigger("TakeDamage");
         CameraManager.Instance.TriggerShake();
-        enemyHealth -= damage;
-        if (enemyHealth <= 0)
+        
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
             EnemyDie();
         }
@@ -278,27 +280,7 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     {
         GameObject bomb = Instantiate(bombPrefab.gameObject, transform);
         bomb.GetComponent<SkillAction>().ActiveSkill();
-    }
-
-    public void AddCurseStatus(CurseType curseType,int turnTime)
-    {
-        foreach (CurseData curse in curseHave)
-        {
-            if (curse.curseType == curseType)
-            {
-                curse.curseTurn = turnTime;
-                CurseUiUpdate();
-                return;
-            }
-        }
-        GameObject curseGUI = Instantiate(curseUiPrefab, curseCanvas);
-        curseHave.Add(new CurseData(curseType,turnTime,curseGUI.GetComponent<CurseUI>()));
-        CurseUiUpdate();
-    }
-
-    private void OnMouseOver()
-    {
-        Debug.Log("See Data");
+        print("bomb enemy activated");
     }
 
     protected virtual void EndTurnModify()

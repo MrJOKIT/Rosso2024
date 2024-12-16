@@ -30,7 +30,7 @@ public class TurnSlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         }
         else
         {
-            enemyOwner.focusArrow.SetActive(true);
+            enemyOwner.FocusArrow.SetActive(true);
             MouseSelectorManager.Instance.permanentActive = true;
             MouseSelectorManager.Instance.ShowEnemyData(enemyOwner);
         }
@@ -43,7 +43,7 @@ public class TurnSlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         {
             return;
         }
-        enemyOwner.focusArrow.SetActive(false);
+        enemyOwner.FocusArrow.SetActive(false);
         Debug.Log("Mouse Exit");
         MouseSelectorManager.Instance.permanentActive = false;
         MouseSelectorManager.Instance.uiCanvas.SetActive(false);

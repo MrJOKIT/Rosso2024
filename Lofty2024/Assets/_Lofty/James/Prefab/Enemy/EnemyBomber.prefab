@@ -5942,22 +5942,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 0}
   focusTransform: {fileID: 7643444251726099108}
-  enemyTurnData:
+  turnData:
     isPlayer: 0
     unitTransform: {fileID: 0}
     baseSpeed: 0
     turnSlot: {fileID: 0}
   enemyData: {fileID: 11400000, guid: 02545a27a4ad943488c88c1f003bc0f6, type: 2}
   focusArrow: {fileID: 5878005719407793062}
-  enemyAnimator: {fileID: 6484183459520965145}
-  enemyMaxHealth: 0
-  enemyHealth: 0
-  enemySpeed: 0
+  animator: {fileID: 6484183459520965145}
+  maxHealth: 2
+  currentHealth: 0
+  speed: 2
   isDead: 0
   onImmortalObject: 0
   curseHave: []
   curseCanvas: {fileID: 448169777976912810}
-  curseUiPrefab: {fileID: 3857760036129689616, guid: 3546fb8c5723e5446842ee4e515ea1e4,
+  curseUIPrefab: {fileID: 3857760036129689616, guid: 3546fb8c5723e5446842ee4e515ea1e4,
     type: 3}
   bombPrefab: {fileID: 4288998330290304896, guid: ac6df1eda54350c4994ee04131aea854,
     type: 3}

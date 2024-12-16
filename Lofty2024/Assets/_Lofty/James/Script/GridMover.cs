@@ -50,7 +50,7 @@ public class GridMover : MonoBehaviour
         selectedObject.SetActive(onHover);
         if (enemy != null)
         {
-            if (enemy.isDead)
+            if (enemy.IsDead)
             {
                 enemy = null;
                 enemyActive = false;

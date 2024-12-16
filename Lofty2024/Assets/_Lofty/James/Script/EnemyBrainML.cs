@@ -46,7 +46,7 @@ public class EnemyBrainML : Agent
 
     private void Update()
     {
-        onTurn = GetComponent<Enemy>().onTurn;
+        onTurn = GetComponent<Enemy>().OnTurn;
     }
 
     public override void OnEpisodeBegin()

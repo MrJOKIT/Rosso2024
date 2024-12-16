@@ -101,17 +101,17 @@ public class TurnManager : Singeleton<TurnManager>
     
     #region In Game Unit
 
-    public void AddUnit(bool isPlayer,Transform unitTransform,float baseSpeed)
+    public void AddUnit(bool isPlayer,Transform unitTransform, float baseSpeed)
     { 
         if (isPlayer)
         {
-            turnData.Add(new TurnData(isPlayer,unitTransform,baseSpeed,null));
+            turnData.Add(new TurnData(isPlayer, unitTransform, baseSpeed,null));
         }
         else
         {
             TurnData data = new TurnData(isPlayer, unitTransform, baseSpeed, null);
             turnData.Add(data);
-            data.unitTransform.GetComponent<Enemy>().enemyTurnData = data;
+            data.unitTransform.GetComponent<Enemy>().TurnData = data;
         }
 
         turnData.Sort(((data, data1) => data1.baseSpeed.CompareTo(data.baseSpeed)));
@@ -182,7 +182,7 @@ public class TurnManager : Singeleton<TurnManager>
             turnData[a].turnSlot.transform.position = queueTransform[a].transform.position;
             if (turnData[a].isPlayer == false)
             {
-                turnData[a].turnSlot.SetSlot(turnData[a].unitTransform.GetComponent<Enemy>(),turnData[a].unitTransform.GetComponent<Enemy>().enemyData.enemySprite);
+                turnData[a].turnSlot.SetSlot(turnData[a].unitTransform.GetComponent<Enemy>(),turnData[a].unitTransform.GetComponent<Enemy>().EnemyData.enemySprite);
             }
         }
     }
@@ -199,13 +199,13 @@ public class TurnManager : Singeleton<TurnManager>
         }
         else
         {
-            turnData[0].unitTransform.GetComponent<Enemy>().onTurn = false;
+            turnData[0].unitTransform.GetComponent<Enemy>().OnTurn = false;
         }
         
         UpdateTurnGUI();
     }
     [VInspector.Button("End Turn")] 
-    public void TurnSucces()
+    public void TurnSuccess()
     {
         NextQueueTurn();
         GridSpawnManager.Instance.ClearMover();

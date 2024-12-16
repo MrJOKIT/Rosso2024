@@ -205,7 +205,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         
         if (autoSkip) 
         {
-            TurnManager.Instance.TurnSucces();
+            TurnManager.Instance.TurnSuccess();
             onTurn = false;
             return;
         }
@@ -393,18 +393,18 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                     if (randomNumber <= 0.25f)
                     {
                         VisualEffectManager.Instance.CallEffect(EffectName.Critical, transform,1.5f);
-                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.CriticalAttack,true);
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.EnemyData.enemyName,LogList.CriticalAttack,true);
                         currentEnemy.TakeDamage(damage * 2);
                     }
                     else
                     { 
-                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Attacked,true);
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.EnemyData.enemyName,LogList.Attacked,true);
                         currentEnemy.TakeDamage(damage);
                     }
                 }
                 else 
                 { 
-                    TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Attacked,true);
+                    TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.EnemyData.enemyName,LogList.Attacked,true);
                     currentEnemy.TakeDamage(damage);
                 }
 
@@ -418,7 +418,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 }
                 break;
             case AttackType.SpecialAttack: 
-                TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.CriticalAttack,true);
+                TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.EnemyData.enemyName,LogList.CriticalAttack,true);
                 currentEnemy.TakeDamage(damage * 2); 
                 if (artifact.shootCasterPassiveOne)
                 {
@@ -430,7 +430,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 }
                 break;
             case AttackType.KnockBackAttack: 
-                TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.KnockBack,true);
+                TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.EnemyData.enemyName,LogList.KnockBack,true);
                 currentEnemy.TakeDamage(damage); 
                 currentEnemy.GetComponent<EnemyMovementGrid>().KnockBack(transform,knockBackRange); 
                 if (artifact.shootCasterPassiveOne)
@@ -446,17 +446,17 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 switch (effectiveType)
                 {
                     case CurseType.Burn:
-                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Burn,true);
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.EnemyData.enemyName,LogList.Burn,true);
                         break;
                     case CurseType.Stun:
-                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.enemyData.enemyName,LogList.Stunned,true);
+                        TurnManager.Instance.AddLog(GetComponent<Player>().playerName,currentEnemy.EnemyData.enemyName,LogList.Stunned,true);
                         break;
                 }
                 currentEnemy.TakeDamage(damage); 
                 currentEnemy.AddCurseStatus(effectiveType,effectiveTurnTime); 
                 break;
         }
-        if (currentEnemy.enemyHealth <= 0) 
+        if (currentEnemy.CurrentHealth <= 0) 
         { 
             if (artifact.GiftOfDeath) 
             { 
@@ -1257,7 +1257,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             if (movePoint <= 0)
             {
                 GetComponent<PlayerSkillHandle>().AddSkillPoint(1);
-                TurnManager.Instance.TurnSucces();
+                TurnManager.Instance.TurnSuccess();
                 inBattle = false;
             }
             else
@@ -1289,7 +1289,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         ClearPattern();
         onTurn = false;
         moveSuccess = false;
-        TurnManager.Instance.TurnSucces();
+        TurnManager.Instance.TurnSuccess();
         inBattle = false;
     }
 

@@ -38,7 +38,7 @@ public class MoveToPlayer : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         //เชื่อมกับ Heuristic
-        if (GetComponent<Enemy>().onTurn == false)
+        if (GetComponent<Enemy>().OnTurn == false)
         {
             return;
         }
@@ -145,9 +145,9 @@ public class MoveToPlayer : Agent
         if (transform.localPosition == targetPosition)
         {
             GridSpawnManager.Instance.ClearMover();
-            TurnManager.Instance.TurnSucces();
+            TurnManager.Instance.TurnSuccess();
             currentState = MovementState.Idle;
-            GetComponent<Enemy>().onTurn = false;
+            GetComponent<Enemy>().OnTurn = false;
         }
     }
     private void OnTriggerEnter(Collider other)

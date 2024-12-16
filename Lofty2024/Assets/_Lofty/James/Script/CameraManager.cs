@@ -173,7 +173,7 @@ public class CameraManager : Singeleton<CameraManager>
         }
         else
         {
-            SetCameraTarget(TurnManager.Instance.turnData[0].unitTransform.GetComponent<Enemy>().focusTransform);
+            SetCameraTarget(TurnManager.Instance.turnData[0].unitTransform.GetComponent<Enemy>().FocusTransform);
         }
         
         changingState = CameraChangingState.OnZooming;
