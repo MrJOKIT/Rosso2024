@@ -19,7 +19,8 @@ public enum EnemyMoveDirection
     BackwardRight,
 }
 public class EnemyMovementGrid : MonoBehaviour
-{  [Header("Move Setting")]
+{  [Header("Move Setting")] 
+    public Transform movePattern;
    public MovementState currentState;
    public float moveSpeed = 5;
    public float knockBackSpeed = 100f;
@@ -190,7 +191,10 @@ public class EnemyMovementGrid : MonoBehaviour
                    break;
            }
        }
-       private void SetTargetPosition(Vector3 direction)
+
+       #region OldMovement
+
+        private void SetTargetPosition(Vector3 direction)
        {
            Vector3 nextPosition;
    
@@ -276,6 +280,9 @@ public class EnemyMovementGrid : MonoBehaviour
                }
            GetComponent<Enemy>().enemyAnimator.SetBool("OnMove",true);
        }
+
+       #endregion
+      
        private void OnDrawGizmos()
        {
            //Forward Check

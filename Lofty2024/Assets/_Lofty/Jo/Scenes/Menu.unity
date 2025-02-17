@@ -929,6 +929,16 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.49019608
       objectReference: {fileID: 0}
+    - target: {fileID: 3440040307349961171, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499,
+        type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 3440040307349961171, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499,
+        type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3459702733664778706, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499,
         type: 3}
       propertyPath: m_fontAsset
@@ -1162,6 +1172,11 @@ PrefabInstance:
     - target: {fileID: 6238842338550958354, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499,
         type: 3}
       propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6580600677136673882, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6891975629729796063, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499,
@@ -1593,8 +1608,32 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9215624390518923438, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499,
+        type: 3}
+      propertyPath: m_text
+      value: '=========================================
+
+        Our Team
+
+
+        Nattakit
+        Namwong                    Game Programmer, Project Manager
+
+
+        Puwanat
+        Farungsang                Game designer, 2DArtist, Animator, uX-UI
+
+
+        ========================================='
+      objectReference: {fileID: 0}
+    - target: {fileID: 9215624390518923438, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499,
+        type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1912332716121255875, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3121661484173188199, guid: d5fb6ee50cb9f2d4c995ff25e4d8a499,
         type: 3}
