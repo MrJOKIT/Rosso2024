@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using ModelShark;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ArtifactUI : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
+public class ArtifactUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public TextMeshProUGUI artifactName;
     public Image artifactImage;
@@ -15,11 +11,11 @@ public class ArtifactUI : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     public GameObject hoverObject;
     public TextMeshProUGUI cardDetail;
 
-    public void SetArtifactUI(string artifactName,Sprite artifactSprite,string cardDetail)
+    public void SetArtifactUI(string name, Sprite sprite, string detail)
     {
-        this.artifactName.text = artifactName;
-        artifactImage.sprite = artifactSprite;
-        this.cardDetail.text = cardDetail;
+        artifactName.text = name ?? "Unknown Artifact";
+        artifactImage.sprite = sprite ?? defaultImage;
+        cardDetail.text = detail ?? string.Empty;
     }
 
     public void ClearArtifactSlot()
@@ -27,15 +23,14 @@ public class ArtifactUI : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         artifactName.text = "Empty";
         artifactImage.sprite = defaultImage;
     }
-    
-    
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        hoverObject.SetActive(true);
+        if (hoverObject) hoverObject.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        hoverObject.SetActive(false);
+        if (hoverObject) hoverObject.SetActive(false);
     }
 }
