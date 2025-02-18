@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 public class CrownLink : MonoBehaviour
 {
@@ -12,160 +9,88 @@ public class CrownLink : MonoBehaviour
     public Image iconImage;
     public bool crownComplete;
     public bool crownTwoComplete;
-    public Sprite swordImage;
-    public Sprite bladeImage;
-    public Sprite shootImage;
-    [Header("Card Image")]
-    public Image card1;
-    public Image card2;
-    public Image card3;
-    public Image card4;
-    public Image card5;
-
+    public Sprite swordImage, bladeImage, shootImage;
+    
+    [Header("Card Images")]
+    public Image[] cards;
+    
+    [Header("Character Models")]
     public GameObject swordKnightCharacter;
     public GameObject bladeMasterCharacter;
     public GameObject shootCasterCharacter;
+    
     public TextRevealer textRevealer;
-
+    
     private void Update()
     {
-        if (playerArtifact.swordKnightPassiveOne == false && playerArtifact.bladeMasterPassiveOne == false && playerArtifact.shootCasterPassiveOne == false)
-        {
-            return;
-        }
-
-        if (crownTwoComplete)
-        {
-            return;
-        }
-        if (playerArtifact.swordKnightPassiveTwo)
-        {
-            crownAnimator.SetBool("Yellow",true);
-            crownAnimator.SetBool("Red",false);
-            crownAnimator.SetBool("Blue",false);
-            iconImage.sprite = swordImage;
-            card4.gameObject.SetActive(true);
-            card5.gameObject.SetActive(true);
-            card1.sprite = playerArtifact.swordKnightType[0].artifactImage;
-            card2.sprite = playerArtifact.swordKnightType[1].artifactImage;
-            card3.sprite = playerArtifact.swordKnightType[2].artifactImage;
-            card4.sprite = playerArtifact.swordKnightType[3].artifactImage;
-            card5.sprite = playerArtifact.swordKnightType[4].artifactImage;
-            
-            crownTwoComplete = true;
-        }
-        if (playerArtifact.bladeMasterPassiveTwo)
-        {
-            crownAnimator.SetBool("Red",true);
-            crownAnimator.SetBool("Yellow",false);
-            crownAnimator.SetBool("Blue",false);
-            iconImage.sprite = bladeImage;
-            card4.gameObject.SetActive(true);
-            card5.gameObject.SetActive(true);
-            card1.sprite = playerArtifact.bladeMasterType[0].artifactImage;
-            card2.sprite = playerArtifact.bladeMasterType[1].artifactImage;
-            card3.sprite = playerArtifact.bladeMasterType[2].artifactImage;
-            card4.sprite = playerArtifact.bladeMasterType[3].artifactImage;
-            card5.sprite = playerArtifact.bladeMasterType[4].artifactImage;
-            
-            crownTwoComplete = true;
-        }
-        if (playerArtifact.shootCasterPassiveTwo)
-        {
-            crownAnimator.SetBool("Blue",true);
-            crownAnimator.SetBool("Red",false);
-            crownAnimator.SetBool("Yellow",false);
-            iconImage.sprite = shootImage;
-            card4.gameObject.SetActive(true);
-            card5.gameObject.SetActive(true);
-            card1.sprite = playerArtifact.shootCasterType[0].artifactImage;
-            card2.sprite = playerArtifact.shootCasterType[1].artifactImage;
-            card3.sprite = playerArtifact.shootCasterType[2].artifactImage;
-            card4.sprite = playerArtifact.shootCasterType[3].artifactImage;
-            card5.sprite = playerArtifact.shootCasterType[4].artifactImage;
-            
-            crownTwoComplete = true;
-        } 
-        if (crownComplete)
-        {
-            return;
-        }
-        if (playerArtifact.swordKnightPassiveOne)
-        {
-            swordKnightCharacter.SetActive(true);
-            bladeMasterCharacter.SetActive(false);
-            shootCasterCharacter.SetActive(false);
-            crownAnimator.SetBool("Red",true);
-            crownAnimator.SetBool("Yellow",false);
-            crownAnimator.SetBool("Blue",false);
-            iconImage.sprite = swordImage;
-            card4.gameObject.SetActive(false);
-            card5.gameObject.SetActive(false);
-            card1.sprite = playerArtifact.swordKnightType[0].artifactImage;
-            card2.sprite = playerArtifact.swordKnightType[1].artifactImage;
-            card3.sprite = playerArtifact.swordKnightType[2].artifactImage;
-            
-            crownComplete = true;
-        }
-        if (playerArtifact.bladeMasterPassiveOne)
-        {
-            bladeMasterCharacter.SetActive(true);
-            swordKnightCharacter.SetActive(false);
-            shootCasterCharacter.SetActive(false);
-            crownAnimator.SetBool("Red",true);
-            crownAnimator.SetBool("Yellow",false);
-            crownAnimator.SetBool("Blue",false);
-            iconImage.sprite = bladeImage;
-            card4.gameObject.SetActive(false);
-            card5.gameObject.SetActive(false);
-            card1.sprite = playerArtifact.bladeMasterType[0].artifactImage;
-            card2.sprite = playerArtifact.bladeMasterType[1].artifactImage;
-            card3.sprite = playerArtifact.bladeMasterType[2].artifactImage;
-            
-            crownComplete = true;
-        }
-        if (playerArtifact.shootCasterPassiveOne)
-        {
-            shootCasterCharacter.SetActive(true);
-            bladeMasterCharacter.SetActive(false);
-            swordKnightCharacter.SetActive(false);
-            crownAnimator.SetBool("Blue",true);
-            crownAnimator.SetBool("Red",false);
-            crownAnimator.SetBool("Yellow",false);
-            iconImage.sprite = shootImage;
-            card4.gameObject.SetActive(false);
-            card5.gameObject.SetActive(false);
-            card1.sprite = playerArtifact.shootCasterType[0].artifactImage;
-            card2.sprite = playerArtifact.shootCasterType[1].artifactImage;
-            card3.sprite = playerArtifact.shootCasterType[2].artifactImage;
-            
-            crownComplete = true;
-        }
+        if (!HasAnyPassive()) return;
+        if (!crownTwoComplete) CheckCrownTwoCompletion();
+        if (!crownComplete) CheckCrownOneCompletion();
     }
 
-    public void RevealTrack()
+    private bool HasAnyPassive() => 
+        playerArtifact.swordKnightPassiveOne || playerArtifact.bladeMasterPassiveOne || playerArtifact.shootCasterPassiveOne;
+
+    private void CheckCrownTwoCompletion()
     {
-        textRevealer.Reveal();
+        if (playerArtifact.swordKnightPassiveTwo) ActivateCrown("Yellow", swordImage, playerArtifact.swordKnightType.ToArray());
+        else if (playerArtifact.bladeMasterPassiveTwo) ActivateCrown("Red", bladeImage, playerArtifact.bladeMasterType.ToArray());
+        else if (playerArtifact.shootCasterPassiveTwo) ActivateCrown("Blue", shootImage, playerArtifact.shootCasterType.ToArray());
+        crownTwoComplete = true;
     }
+
+    private void CheckCrownOneCompletion()
+    {
+        if (playerArtifact.swordKnightPassiveOne) ActivateCharacter(swordKnightCharacter, "Red", swordImage, playerArtifact.swordKnightType.ToArray());
+        else if (playerArtifact.bladeMasterPassiveOne) ActivateCharacter(bladeMasterCharacter, "Red", bladeImage, playerArtifact.bladeMasterType.ToArray());
+        else if (playerArtifact.shootCasterPassiveOne) ActivateCharacter(shootCasterCharacter, "Blue", shootImage, playerArtifact.shootCasterType.ToArray());
+        crownComplete = true;
+    }
+
+    private void ActivateCrown(string color, Sprite icon, ArtifactData[] artifactTypes)
+    {
+        SetCrownColor(color);
+        iconImage.sprite = icon;
+        cards[3].gameObject.SetActive(true);
+        cards[4].gameObject.SetActive(true);
+        AssignCardSprites(artifactTypes);
+    }
+
+    private void ActivateCharacter(GameObject character, string color, Sprite icon, ArtifactData[] artifactTypes)
+    {
+        swordKnightCharacter.SetActive(character == swordKnightCharacter);
+        bladeMasterCharacter.SetActive(character == bladeMasterCharacter);
+        shootCasterCharacter.SetActive(character == shootCasterCharacter);
+        
+        SetCrownColor(color);
+        iconImage.sprite = icon;
+        cards[3].gameObject.SetActive(false);
+        cards[4].gameObject.SetActive(false);
+        AssignCardSprites(artifactTypes, true);
+    }
+
+    private void SetCrownColor(string color)
+    {
+        crownAnimator.SetBool("Red", color == "Red");
+        crownAnimator.SetBool("Yellow", color == "Yellow");
+        crownAnimator.SetBool("Blue", color == "Blue");
+    }
+
+    private void AssignCardSprites(ArtifactData[] artifactTypes, bool isCrownOne = false)
+    {
+        int cardCount = isCrownOne ? 3 : 5;
+        for (int i = 0; i < cardCount; i++)
+        {
+            cards[i].sprite = artifactTypes[i].artifactImage;
+        }
+    }
+
+    public void RevealTrack() => textRevealer.Reveal();
+    
     public void ShowCrown()
     {
-        if (playerArtifact.swordKnightPassiveOne)
-        {
-            crownAnimator.SetBool("Red",true);
-            crownAnimator.SetBool("Yellow",false);
-            crownAnimator.SetBool("Blue",false);
-        }
-        if (playerArtifact.bladeMasterPassiveOne)
-        {
-            crownAnimator.SetBool("Red",true);
-            crownAnimator.SetBool("Yellow",false);
-            crownAnimator.SetBool("Blue",false);
-        }
-        if (playerArtifact.shootCasterPassiveOne)
-        {
-            crownAnimator.SetBool("Blue",true);
-            crownAnimator.SetBool("Red",false);
-            crownAnimator.SetBool("Yellow",false);
-        }
+        if (playerArtifact.swordKnightPassiveOne) SetCrownColor("Red");
+        else if (playerArtifact.bladeMasterPassiveOne) SetCrownColor("Red");
+        else if (playerArtifact.shootCasterPassiveOne) SetCrownColor("Blue");
     }
 }

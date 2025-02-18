@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Febucci.UI;
 using TMPro;
@@ -7,70 +6,35 @@ using UnityEngine;
 
 public enum LogList
 {
-    Attacked,
-    CriticalAttack,
-    GodAttacked,
-    Stunned,
-    Burn,
-    Poison,
-    Evade,
-    KnockBack,
-    Bomb,
-    Block,
+    Attacked, CriticalAttack, GodAttacked, Stunned, Burn,
+    Poison, Evade, KnockBack, Bomb, Block
 }
+
 public class CombatLogSlot : MonoBehaviour
 {
     public TextAnimator_TMP logText;
-    public void SetLog(string ownerName,string oppositeName,LogList logList,bool isPlayer)
+    
+    private static readonly Dictionary<LogList, string> logMessages = new()
     {
-        if (isPlayer)
-        {
-            logText.SetText($"<color=green>{ownerName} <color=white>{GetLog(logList)} <color=red>{oppositeName}");
-        }
-        else
-        {
-            logText.SetText($"<color=red>{ownerName} <color=white>{GetLog(logList)} <color=green>{oppositeName}");
-        }
-        
-    }
+        { LogList.Attacked, "Attacked" },
+        { LogList.CriticalAttack, "Critical Attack" },
+        { LogList.GodAttacked, "God Attack" },
+        { LogList.KnockBack, "Knockback" },
+        { LogList.Stunned, "Stunned" },
+        { LogList.Evade, "Evade" },
+        { LogList.Burn, "Burn" },
+        { LogList.Poison, "Poisoned" },
+        { LogList.Bomb, "Bombed" },
+        { LogList.Block, "Blocked" }
+    };
 
-    private string GetLog(LogList logList)
+    public void SetLog(string ownerName, string oppositeName, LogList logList, bool isPlayer)
     {
-        string log = String.Empty;
-        switch (logList)
-        {
-            case LogList.Attacked:
-                log = "Attacked";
-                break;
-            case LogList.CriticalAttack:
-                log = "Critical Attack";
-                break;
-            case LogList.GodAttacked:
-                log = "God Attack";
-                break;
-            case LogList.KnockBack:
-                log = "Knockback";
-                break;
-            case LogList.Stunned:
-                log = "Stunned";
-                break;
-            case LogList.Evade:
-                log = "Evade";
-                break;
-            case LogList.Burn:
-                log = "Burn";
-                break;
-            case LogList.Poison:
-                log = "";
-                break;
-            case LogList.Bomb:
-                log = "Bombed";
-                break;
-            case LogList.Block:
-                log = "Blocked";
-                break;
-        }
+        if (logText == null || !logMessages.ContainsKey(logList)) return;
 
-        return log;
+        string colorOwner = isPlayer ? "green" : "red";
+        string colorOpposite = isPlayer ? "red" : "green";
+
+        logText.SetText($"<color={colorOwner}>{ownerName} <color=white>{logMessages[logList]} <color={colorOpposite}>{oppositeName}");
     }
 }
