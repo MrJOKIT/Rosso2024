@@ -94,7 +94,12 @@ public class EnemyAI : Enemy
         }
     }
 
+    #region EnemyNewMove
 
+    
+
+    #endregion
+    
     #region Enemy Move
     
     private void EnemyMoveToPlayer()

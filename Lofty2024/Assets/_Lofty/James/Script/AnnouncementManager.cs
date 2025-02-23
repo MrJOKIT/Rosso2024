@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -8,35 +6,29 @@ public class AnnouncementManager : Singeleton<AnnouncementManager>
 {
     public GameObject announcementCanvas;
     public TextMeshProUGUI announcementText;
-    public string currentText;
-    public float textTime;
+    
+    private Coroutine announcementCoroutine;
 
     public override void Awake()
     {
-        announcementText.text = String.Empty;
+        base.Awake();
         announcementCanvas.SetActive(false);
     }
 
-    private void Update()
+    public void ShowTextTimer(string text, float timeToShow)
     {
-        if (textTime > 0)
-        {
-            announcementText.text = currentText;
-            textTime -= Time.deltaTime;
-            if (textTime < 0)
-            {
-                currentText = String.Empty;
-                announcementText.text = String.Empty;
-                announcementCanvas.SetActive(false);
-                textTime = 0;
-            }
-        }
+        if (announcementCoroutine != null)
+            StopCoroutine(announcementCoroutine);
+
+        announcementCanvas.SetActive(true);
+        announcementCoroutine = StartCoroutine(DisplayAnnouncement(text, timeToShow));
     }
 
-    public void ShowTextTimer(string text,float timeToShow)
+    private IEnumerator DisplayAnnouncement(string text, float duration)
     {
-        announcementCanvas.SetActive(true);
-        currentText = text;
-        textTime = timeToShow;
+        announcementText.text = text;
+        yield return new WaitForSeconds(duration);
+        announcementText.text = string.Empty;
+        announcementCanvas.SetActive(false);
     }
 }

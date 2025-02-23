@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="D:\University Project\Rosso2024\Lofty2024\venv"
+VIRTUAL_ENV="E:\MyUnityProject\Rosso2024\Lofty2024\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
