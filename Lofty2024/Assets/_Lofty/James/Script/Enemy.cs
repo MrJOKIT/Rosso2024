@@ -90,8 +90,11 @@ public abstract class Enemy : MonoBehaviour,ITakeDamage,IUnit
     public Sprite queenSkillImage;
     public Sprite kingSkillImage;
 
+    protected EnemyMovementGrid enemyMovementGrid;
+
     private void Awake()
     {
+        enemyMovementGrid = GetComponent<EnemyMovementGrid>();
         SetEnemyData();
     }
 

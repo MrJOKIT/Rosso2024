@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using Febucci.UI;
-using TMPro;
 using UnityEngine;
 
 public enum LogList

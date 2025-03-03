@@ -29,28 +29,29 @@ public class GridSpawnManager : Singeleton<GridSpawnManager>
     
     public void AddGridList(GridMover gridObject)
     {
+        // print("add grid list");
         currentGrid.Add(gridObject);
     }
 
     public void RemoveGrid(GridMover grid)
     {
+        // print("remove grid");
         currentGrid.Remove(grid);
     }
 
     public IEnumerator WarpSelector()
     {
         yield return new WaitForSeconds(0.25f);
-        if (!useWarp)
+        
+        if (useWarp) yield break;
+        foreach (GridMover grid in currentGrid)
         {
-            foreach (GridMover grid in currentGrid)
+            if (grid.gridState == GridState.Empty)
             {
-                if (grid.gridState == GridState.Empty)
-                {
-                    grid.gridState = GridState.OnMove;
-                }
+                grid.gridState = GridState.OnMove;
             }
-
-            useWarp = true;
         }
+
+        useWarp = true;
     }
 }

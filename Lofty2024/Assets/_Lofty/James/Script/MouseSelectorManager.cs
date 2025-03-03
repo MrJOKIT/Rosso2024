@@ -22,7 +22,7 @@ public class MouseSelectorManager : Singeleton<MouseSelectorManager>
     
     void Update()
     {
-        if (permanentActive || GetComponent<GameManager>().OnLoad || GetComponent<SceneLoading>().loadSucces == false)
+        if (permanentActive || GetComponent<GameManager>().OnLoad || GetComponent<SceneLoading>().loadSuccess == false)
         {
             return;
         }

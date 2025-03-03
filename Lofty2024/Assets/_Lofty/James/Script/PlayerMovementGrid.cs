@@ -147,6 +147,12 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     [Tab("Timeline")] 
     public PlayableDirector playableDirector;
+
+    // just the component in the same object variables 
+    private Player player;
+    private PlayerInputHandle playerInputHandle;
+    private PlayerGridBattle playerGridBattle;
+    
     private void Awake()
     {
         
@@ -161,18 +167,21 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
     private void Start()
     {
+        player = GetComponent<Player>();
+        playerInputHandle = GetComponent<PlayerInputHandle>();
+        playerGridBattle = GetComponent<PlayerGridBattle>();
+        
         ResetPlayerTarget();
         TurnManager.Instance.AddUnit(true,transform,turnSpeed);
-        
     }
 
     private void Update()
     {
-        if (GetComponent<Player>().isDead)
+        if (player.isDead)
         {
             return;
         }
-        if (GameManager.Instance.GetComponent<SceneLoading>().loadSucces == false)
+        if (GameManager.Instance.SceneLoading.loadSuccess == false)
         {
             return;
         }
@@ -186,12 +195,14 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         {
             return;
         }
-        if (GameManager.Instance.GetComponent<RandomCardManager>().isRandom)
+        if (GameManager.Instance.RandomCardManager.isRandom)
         {
             return;
         }
+        
         MoveChecker();
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        
+        if (playerGridBattle.GetPlayerMode == PlayerMode.Combat)
         {
             if (!onTurn)
             {
@@ -236,14 +247,14 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                 switch (moveType)
                 {
                     case MoveType.Keyboard:
-                        GetComponent<PlayerInputHandle>().HandleInput();
+                        playerInputHandle.HandleInput();
                         break; 
                     case MoveType.Mouse:
                         HandleClickToMove();
                         break;
                     case MoveType.Both:
                         HandleClickToMove();
-                        GetComponent<PlayerInputHandle>().HandleInput();
+                        playerInputHandle.HandleInput();
                         break;
                 }
                 break;
@@ -298,18 +309,20 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, gridLayerMask))
             {
-                if (hit.collider.GetComponent<GridMover>() == null || moveSuccess)
+                var _gridMover = hit.collider.GetComponent<GridMover>();
+                
+                if (_gridMover == null || moveSuccess)
                 {
                     return;
                 }
-                switch (hit.collider.GetComponent<GridMover>().gridState)
+                switch (_gridMover.gridState)
                 {
                     case GridState.OnMove:
                         moveSuccess = true;
                         SetTargetPosition(hit.point);
                         break;
                     case GridState.OnEnemy:
-                        if (hit.collider.GetComponent<GridMover>().enemyActive == false)
+                        if (_gridMover.enemyActive == false)
                         {
                             return;
                         }
@@ -317,8 +330,8 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         currentState = MovementState.OnAttack;
                         float distance = Vector3.Distance(transform.position, hit.transform.position);
                         Debug.Log($"Player and Enemy distance = {distance}");
-                        currentEnemy = hit.collider.GetComponent<GridMover>().enemy;
-                        currentEnemyGrid = hit.collider.GetComponent<GridMover>();
+                        currentEnemy = _gridMover.enemy;
+                        currentEnemyGrid = _gridMover;
                         if (distance <= 1.5f)
                         {
                             if (hit.transform.position.x < transform.position.x)
@@ -363,7 +376,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
                         GetComponent<PlayerAbility>().CheckAbilityUse();
                         break;
                     case GridState.Empty:
-                        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+                        if (playerGridBattle.GetPlayerMode == PlayerMode.Combat)
                         {
                             return;
                         }
@@ -1145,7 +1158,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
     public IEnumerator SetMover()
     {
         yield return new WaitForSeconds(0.15f);
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        if (playerGridBattle.GetPlayerMode == PlayerMode.Combat)
         {
             currentPattern = Instantiate(patternDatas[(int)movePattern - 1].patternPrefab, parentPattern);
             currentPattern.GetComponent<MoverCheckerHost>().CheckMove();
@@ -1184,7 +1197,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         }
 
         GetComponent<Player>().CurseHandle();
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        if (playerGridBattle.GetPlayerMode == PlayerMode.Combat)
         {
             
             if (inBattle == false)
@@ -1242,7 +1255,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
         onTurn = false;
         moveSuccess = false;
         GetComponent<Player>().CurseEnd();
-        if (GetComponent<PlayerGridBattle>().GetPlayerMode == PlayerMode.Combat)
+        if (playerGridBattle.GetPlayerMode == PlayerMode.Combat)
         {
             if (rabbitPaws)
             {
@@ -1262,6 +1275,7 @@ public class PlayerMovementGrid : MonoBehaviour, IUnit
             }
             else
             {
+                print("Start turn in end");
                 StartTurn();
             }
             

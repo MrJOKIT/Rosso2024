@@ -137,7 +137,7 @@ public class TurnManager : Singeleton<TurnManager>
         {
             return;
         }
-        for (int a = 0; a < turnData.Count; a++)
+        foreach (var _turn in turnData)
         {
             if (queueTransform.Count == turnData.Count)
             {
@@ -145,15 +145,15 @@ public class TurnManager : Singeleton<TurnManager>
             }
             GameObject queue = Instantiate(queuePrefab, turnSlotCanvas);
             queueTransform.Add(queue);
-            if (turnData[a].isPlayer)
+            if (_turn.isPlayer)
             {
                 GameObject turnSlot = Instantiate(turnSlotAllyPrefab, queue.transform);
-                turnData[a].turnSlot = turnSlot.GetComponent<TurnSlot>();
+                _turn.turnSlot = turnSlot.GetComponent<TurnSlot>();
             }
             else
             {
                 GameObject turnSlot =Instantiate(turnSlotEnemyPrefab, queue.transform); 
-                turnData[a].turnSlot = turnSlot.GetComponent<TurnSlot>();
+                _turn.turnSlot = turnSlot.GetComponent<TurnSlot>();
             }
         }
         UpdateTurnGUI();

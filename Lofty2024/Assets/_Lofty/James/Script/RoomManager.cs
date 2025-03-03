@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum RoomType { Combat, Bonus, Boss, Clear }
+public enum RoomType { Combat, Bonus, Boss, Clear , Standby}
 
 public class RoomManager : MonoBehaviour
 {
@@ -27,7 +27,7 @@ public class RoomManager : MonoBehaviour
     
     [Header("Item In Room")]
     public List<GameObject> itemInRoom;
-    
+
     private void Start()
     {
         currentGrid.ForEach(grid => GridSpawnManager.Instance.AddGridList(grid));
@@ -41,8 +41,22 @@ public class RoomManager : MonoBehaviour
 
     public void StartRoom()
     {
-        if (roomType == RoomType.Clear || roomType == RoomType.Bonus) { RoomClearWithNoReward(); return; }
-        
+        if (roomType is RoomType.Clear or RoomType.Bonus) 
+        { 
+            print("start room and clear with no reward");
+            RoomClearWithNoReward(); 
+            return;
+        }
+        // else
+        // {
+        //     print("combat yay");
+        //     GameManager.Instance.StartTimer();
+        //     Invoke(nameof(SpawnObstacle), 0.1f);
+        //     Invoke(nameof(SpawnEnemy), 0.2f);
+        //     Invoke(nameof(SpawnTrap), 0.3f);
+        //     TurnManager.Instance.TurnStart();
+        // }
+        print("it's combat yay");
         GameManager.Instance.StartTimer();
         Invoke(nameof(SpawnObstacle), 0.1f);
         Invoke(nameof(SpawnEnemy), 0.2f);
@@ -52,7 +66,12 @@ public class RoomManager : MonoBehaviour
 
     private void SpawnObstacle()
     {
-        if (isBossRoom) { obstacleSpawnComplete = true; return; }
+        if (isBossRoom) 
+        { 
+            obstacleSpawnComplete = true; 
+            return; 
+        }
+        
         while (EnemySpawnManager.Instance.obstacleCost-- > 0)
         {
             Instantiate(EnemySpawnManager.Instance.GetObstacle(), CheckSpawnPoint(), Quaternion.identity, obstacleParent);
@@ -102,29 +121,35 @@ public class RoomManager : MonoBehaviour
 
     private void Update()
     {
-        if (!roomActive && enemySpawnComplete && obstacleSpawnComplete) roomActive = true;
-        if (!roomClear) RoomProgressCheck();
+        if (!roomActive && enemySpawnComplete && obstacleSpawnComplete) 
+            roomActive = true;
+        
+        if (!roomClear) 
+            RoomProgressCheck();
     }
 
     public Vector3 CheckSpawnPoint()
     {
-        int index = UnityEngine.Random.Range(0, emptyGrid.Count);
-        GridMover grid = emptyGrid[index];
+        var index = UnityEngine.Random.Range(0, emptyGrid.Count);
+        var grid = emptyGrid[index];
         emptyGrid.RemoveAt(index);
         return grid.transform.position + Vector3.up * 0.5f;
     }
 
     public void AddNewEnemyInRoom(GameObject newEnemyPrefab)
     {
-        GameObject enemy = Instantiate(newEnemyPrefab, CheckSpawnPoint(), Quaternion.identity, enemyParent);
+        var enemy = Instantiate(newEnemyPrefab, CheckSpawnPoint(), Quaternion.identity, enemyParent);
         SetupEnemy(enemy);
         TurnManager.Instance.AddNewQueue(enemy.transform);
     }
 
     private void RoomProgressCheck()
     {
-        if (!roomActive || roomClear) return;
-        if (enemyInRoom.TrueForAll(enemy => enemy.isDead)) RoomClear();
+        if (!roomActive || roomClear) 
+            return;
+        
+        if (enemyInRoom.TrueForAll(enemy => enemy.isDead)) 
+            RoomClear();
     }
 
     private void RoomClear()
@@ -137,14 +162,17 @@ public class RoomManager : MonoBehaviour
         
         if (isLastRoom)
         {
-            if (isBossRoom) GameManager.Instance.GameClearRevealer();
-            else GameManager.Instance.StageClear();
+            if (isBossRoom) 
+                GameManager.Instance.GameClearRevealer();
+            else 
+                GameManager.Instance.StageClear();
         }
         else
         {
             GameManager.Instance.RoomClear();
             PortalManager.Instance.SetUpNextRoom(portalLeft, portalRight, playerTrans);
         }
+        
         EnemySpawnManager.Instance.ResetSpawnList();
     }
 
@@ -159,21 +187,28 @@ public class RoomManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+        
+        print("Player enter");
         playerTrans = other.transform;
         stunAll = other.GetComponent<PlayerArtifact>().CreepingTerror;
         GameManager.Instance.UpdateCurrentRoom(transform);
         PortalManager.Instance.StartClearRoom();
         currentGrid.ForEach(grid => grid.gridActive = true);
-        if (!roomClear) Invoke(nameof(StartRoom), 2f);
+        
+        if(roomClear) return;
+        print("trigger enter what? " + this.name);
+        Invoke(nameof(StartRoom), 2f);
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+        print("rosso exit room");
         currentGrid.ForEach(grid => grid.gridActive = false);
         playerTrans = null;
         DestroyRoom();
     }
+    
     public void ClearSelectedGird()
     {
         currentGrid.ForEach(grid => grid.onHover = false);
@@ -186,6 +221,7 @@ public class RoomManager : MonoBehaviour
 
     public void DestroyRoom()
     {
+        print($"Destroy room {gameObject.name}");
         currentGrid.ForEach(grid => GridSpawnManager.Instance.RemoveGrid(grid));
         itemInRoom.ForEach(Destroy);
         itemInRoom.Clear();
