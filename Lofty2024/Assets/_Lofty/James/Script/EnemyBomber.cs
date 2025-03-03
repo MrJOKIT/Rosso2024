@@ -19,7 +19,6 @@ public class EnemyBomber : Enemy
     public Transform bombPos;
     public GameObject bomberArea;
     public BomberState bomberState;
-    private EnemyMovementGrid _enemyMovementGrid;
     [Space(10)]
     public bool playerInRange;
     public LayerMask gridLayer;
@@ -33,11 +32,6 @@ public class EnemyBomber : Enemy
     public bool enemyLeft;
     public bool enemyRight;
 
-    private void Start()
-    {
-        _enemyMovementGrid = GetComponent<EnemyMovementGrid>();
-    }
-
     private void Update()
     {
         //ChangeGridMoverUnder();
@@ -47,7 +41,7 @@ public class EnemyBomber : Enemy
         {
             return;
         }
-        switch (GetComponent<EnemyMovementGrid>().currentState)
+        switch (enemyMovementGrid.currentState)
         {
             case MovementState.Idle: 
                 CurseHandle();
@@ -84,7 +78,18 @@ public class EnemyBomber : Enemy
                 
                 break;
             case MovementState.Moving:
-                if (_enemyMovementGrid.forwardBlock && _enemyMovementGrid.backwardBlock && _enemyMovementGrid.leftBlock && _enemyMovementGrid.rightBlock && _enemyMovementGrid.forwardLeftBlock && _enemyMovementGrid.forwardRightBlock && _enemyMovementGrid.backwardLeftBlock && _enemyMovementGrid.backwardRightBlock)
+                // if (enemyMovementGrid.forwardBlock 
+                //     && enemyMovementGrid.backwardBlock 
+                //     && enemyMovementGrid.leftBlock 
+                //     && enemyMovementGrid.rightBlock 
+                //     && enemyMovementGrid.forwardLeftBlock 
+                //     && enemyMovementGrid.forwardRightBlock 
+                //     && enemyMovementGrid.backwardLeftBlock 
+                //     && enemyMovementGrid.backwardRightBlock)
+                // {
+                //     EndTurnModify();
+                // }
+                if (enemyMovementGrid.CheckIsMoving())
                 {
                     EndTurnModify();
                 }
@@ -99,7 +104,11 @@ public class EnemyBomber : Enemy
     
     private void NormalMoveToPlayer()
     {
-        if (_enemyMovementGrid.forwardBlock && _enemyMovementGrid.backwardBlock && _enemyMovementGrid.leftBlock && _enemyMovementGrid.rightBlock && _enemyMovementGrid.forwardLeftBlock && _enemyMovementGrid.forwardRightBlock && _enemyMovementGrid.backwardLeftBlock && _enemyMovementGrid.backwardRightBlock)
+        // if (enemyMovementGrid.forwardBlock && enemyMovementGrid.backwardBlock && enemyMovementGrid.leftBlock && enemyMovementGrid.rightBlock && enemyMovementGrid.forwardLeftBlock && enemyMovementGrid.forwardRightBlock && enemyMovementGrid.backwardLeftBlock && enemyMovementGrid.backwardRightBlock)
+        // {
+        //     EndTurnModify();
+        // }
+        if (enemyMovementGrid.CheckIsMoving())
         {
             EndTurnModify();
         }
@@ -108,45 +117,45 @@ public class EnemyBomber : Enemy
         {
             //Move Forward
             
-            if (!_enemyMovementGrid.forwardBlock)
+            if (!enemyMovementGrid.forwardBlock)
             {
-                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Forward);
+                enemyMovementGrid.MoveDirection(EnemyMoveDirection.Forward);
             }
             else
             {
-                if (!_enemyMovementGrid.forwardLeftBlock)
+                if (!enemyMovementGrid.forwardLeftBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardLeft);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardLeft);
                 }
-                else if (!_enemyMovementGrid.forwardRightBlock)
+                else if (!enemyMovementGrid.forwardRightBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardRight);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardRight);
                 }
                 else
                 {
-                    if (!_enemyMovementGrid.leftBlock)
+                    if (!enemyMovementGrid.leftBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Left);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.Left);
                     }
-                    else if (!_enemyMovementGrid.rightBlock)
+                    else if (!enemyMovementGrid.rightBlock)
                     {
                         GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Right);
                     }
                     else
                     {
-                        if (!_enemyMovementGrid.backwardLeftBlock)
+                        if (!enemyMovementGrid.backwardLeftBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardLeft);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardLeft);
                         }
-                        else if (!_enemyMovementGrid.backwardRightBlock)
+                        else if (!enemyMovementGrid.backwardRightBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardRight);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardRight);
                         }
                         else
                         {
-                            if (!_enemyMovementGrid.backwardBlock)
+                            if (!enemyMovementGrid.backwardBlock)
                             {
-                                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Backward);
+                                enemyMovementGrid.MoveDirection(EnemyMoveDirection.Backward);
                             }
                             else
                             {
@@ -160,45 +169,45 @@ public class EnemyBomber : Enemy
         }
         else if (transform.position.z < targetTransform.position.z && transform.position.x < targetTransform.position.x)
         {
-            if (!_enemyMovementGrid.forwardRightBlock)
+            if (!enemyMovementGrid.forwardRightBlock)
             {
-                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardRight);
+                enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardRight);
             }
             else
             {
-                if (!_enemyMovementGrid.forwardBlock)
+                if (!enemyMovementGrid.forwardBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Forward);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.Forward);
                 }
-                else if (!_enemyMovementGrid.rightBlock)
+                else if (!enemyMovementGrid.rightBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Right);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.Right);
                 }
                 else
                 {
-                    if (!_enemyMovementGrid.forwardLeftBlock)
+                    if (!enemyMovementGrid.forwardLeftBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardLeft);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardLeft);
                     }
-                    else if (!_enemyMovementGrid.backwardRightBlock)
+                    else if (!enemyMovementGrid.backwardRightBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardRight);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardRight);
                     }
                     else
                     {
-                        if (!_enemyMovementGrid.leftBlock)
+                        if (!enemyMovementGrid.leftBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Left);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.Left);
                         }
-                        else if (!_enemyMovementGrid.backwardBlock)
+                        else if (!enemyMovementGrid.backwardBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Backward);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.Backward);
                         }
                         else
                         {
-                            if (!_enemyMovementGrid.backwardLeftBlock)
+                            if (!enemyMovementGrid.backwardLeftBlock)
                             {
-                                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardLeft);
+                                enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardLeft);
                             }
                             else
                             {
@@ -211,45 +220,45 @@ public class EnemyBomber : Enemy
         }
         else if (transform.position.z < targetTransform.position.z && transform.position.x > targetTransform.position.x)
         {
-            if (!_enemyMovementGrid.forwardLeftBlock)
+            if (!enemyMovementGrid.forwardLeftBlock)
             {
-                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardLeft);
+                enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardLeft);
             }
             else
             {
-                if (!_enemyMovementGrid.forwardBlock)
+                if (!enemyMovementGrid.forwardBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Forward);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.Forward);
                 }
-                else if (!_enemyMovementGrid.leftBlock)
+                else if (!enemyMovementGrid.leftBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Left);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.Left);
                 }
                 else
                 {
-                    if (!_enemyMovementGrid.forwardRightBlock)
+                    if (!enemyMovementGrid.forwardRightBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardRight);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardRight);
                     }
-                    else if (!_enemyMovementGrid.backwardLeftBlock)
+                    else if (!enemyMovementGrid.backwardLeftBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardLeft);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardLeft);
                     }
                     else
                     {
-                        if (!_enemyMovementGrid.rightBlock)
+                        if (!enemyMovementGrid.rightBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Right);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.Right);
                         }
-                        else if (!_enemyMovementGrid.backwardBlock)
+                        else if (!enemyMovementGrid.backwardBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Backward);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.Backward);
                         }
                         else
                         {
-                            if (!_enemyMovementGrid.backwardRightBlock)
+                            if (!enemyMovementGrid.backwardRightBlock)
                             {
-                                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardRight);
+                                enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardRight);
                             }
                             else
                             {
@@ -264,45 +273,45 @@ public class EnemyBomber : Enemy
         if (transform.position.z > targetTransform.position.z && transform.position.x == targetTransform.position.x)
         {
             //Move Backward
-            if (!_enemyMovementGrid.backwardBlock)
+            if (!enemyMovementGrid.backwardBlock)
             {
-                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Backward);
+                enemyMovementGrid.MoveDirection(EnemyMoveDirection.Backward);
             }
             else
             {
-                if (!_enemyMovementGrid.backwardLeftBlock)
+                if (!enemyMovementGrid.backwardLeftBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardLeft);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardLeft);
                 }
-                else if (!_enemyMovementGrid.backwardRightBlock)
+                else if (!enemyMovementGrid.backwardRightBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardRight);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardRight);
                 }
                 else
                 {
-                    if (!_enemyMovementGrid.leftBlock)
+                    if (!enemyMovementGrid.leftBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Left);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.Left);
                     }
-                    else if (!_enemyMovementGrid.rightBlock)
+                    else if (!enemyMovementGrid.rightBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Right);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.Right);
                     }
                     else
                     {
-                        if (!_enemyMovementGrid.forwardLeftBlock)
+                        if (!enemyMovementGrid.forwardLeftBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardLeft);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardLeft);
                         }
-                        else if (!_enemyMovementGrid.forwardRightBlock)
+                        else if (!enemyMovementGrid.forwardRightBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardRight);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardRight);
                         }
                         else
                         {
-                            if (!_enemyMovementGrid.forwardBlock)
+                            if (!enemyMovementGrid.forwardBlock)
                             {
-                                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Forward);
+                                enemyMovementGrid.MoveDirection(EnemyMoveDirection.Forward);
                             }
                             else
                             {
@@ -317,45 +326,45 @@ public class EnemyBomber : Enemy
         }
         else if (transform.position.z > targetTransform.position.z && transform.position.x < targetTransform.position.x)
         {
-            if (!_enemyMovementGrid.backwardRightBlock)
+            if (!enemyMovementGrid.backwardRightBlock)
             {
-                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardRight);
+                enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardRight);
             }
             else
             {
-                if (!_enemyMovementGrid.rightBlock)
+                if (!enemyMovementGrid.rightBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Right);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.Right);
                 }
-                else if (!_enemyMovementGrid.backwardBlock)
+                else if (!enemyMovementGrid.backwardBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Backward);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.Backward);
                 }
                 else
                 {
-                    if (!_enemyMovementGrid.forwardRightBlock)
+                    if (!enemyMovementGrid.forwardRightBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardRight);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardRight);
                     }
-                    else if (!_enemyMovementGrid.backwardLeftBlock)
+                    else if (!enemyMovementGrid.backwardLeftBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardLeft);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardLeft);
                     }
                     else
                     {
-                        if (!_enemyMovementGrid.forwardBlock)
+                        if (!enemyMovementGrid.forwardBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Forward);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.Forward);
                         }
-                        else if (!_enemyMovementGrid.leftBlock)
+                        else if (!enemyMovementGrid.leftBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Left);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.Left);
                         }
                         else
                         {
-                            if (!_enemyMovementGrid.forwardLeftBlock)
+                            if (!enemyMovementGrid.forwardLeftBlock)
                             {
-                                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardLeft);
+                                enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardLeft);
                             }
                             else
                             {
@@ -368,45 +377,45 @@ public class EnemyBomber : Enemy
         }
         else if (transform.position.z > targetTransform.position.z && transform.position.x > targetTransform.position.x)
         {
-            if (!_enemyMovementGrid.backwardLeftBlock)
+            if (!enemyMovementGrid.backwardLeftBlock)
             {
-                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardLeft);
+                enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardLeft);
             }
             else
             {
-                if (!_enemyMovementGrid.leftBlock)
+                if (!enemyMovementGrid.leftBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Left);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.Left);
                 }
-                else if (!_enemyMovementGrid.backwardBlock)
+                else if (!enemyMovementGrid.backwardBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Backward);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.Backward);
                 }
                 else
                 {
-                    if (!_enemyMovementGrid.forwardLeftBlock)
+                    if (!enemyMovementGrid.forwardLeftBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardLeft);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardLeft);
                     }
-                    else if (!_enemyMovementGrid.backwardRightBlock)
+                    else if (!enemyMovementGrid.backwardRightBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardRight);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardRight);
                     }
                     else
                     {
-                        if (!_enemyMovementGrid.forwardBlock)
+                        if (!enemyMovementGrid.forwardBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Forward);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.Forward);
                         }
-                        else if (!_enemyMovementGrid.rightBlock)
+                        else if (!enemyMovementGrid.rightBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Right);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.Right);
                         }
                         else
                         {
-                                if (!_enemyMovementGrid.forwardRightBlock)
+                                if (!enemyMovementGrid.forwardRightBlock)
                                 {
-                                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardRight);
+                                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardRight);
                                 }
                                 else
                                 {
@@ -421,45 +430,45 @@ public class EnemyBomber : Enemy
         if (transform.position.x > targetTransform.position.x && transform.position.z == targetTransform.position.z)
         {
             //Move left
-            if (!_enemyMovementGrid.leftBlock)
+            if (!enemyMovementGrid.leftBlock)
             {
-                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Left);
+                enemyMovementGrid.MoveDirection(EnemyMoveDirection.Left);
             }
             else
             {
-                if (!_enemyMovementGrid.forwardLeftBlock)
+                if (!enemyMovementGrid.forwardLeftBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardLeft);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardLeft);
                 }
-                else if (!_enemyMovementGrid.backwardLeftBlock)
+                else if (!enemyMovementGrid.backwardLeftBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardLeft);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardLeft);
                 }
                 else
                 {
-                    if (!_enemyMovementGrid.forwardBlock)
+                    if (!enemyMovementGrid.forwardBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Forward);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.Forward);
                     }
-                    else if (!_enemyMovementGrid.backwardBlock)
+                    else if (!enemyMovementGrid.backwardBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Backward);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.Backward);
                     }
                     else
                     {
-                        if (!_enemyMovementGrid.forwardRightBlock)
+                        if (!enemyMovementGrid.forwardRightBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardRight);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardRight);
                         }
-                        else if (!_enemyMovementGrid.backwardRightBlock)
+                        else if (!enemyMovementGrid.backwardRightBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardRight);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardRight);
                         }
                         else
                         {
-                            if (!_enemyMovementGrid.rightBlock)
+                            if (!enemyMovementGrid.rightBlock)
                             {
-                                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Right);
+                                enemyMovementGrid.MoveDirection(EnemyMoveDirection.Right);
                             }
                             else
                             {
@@ -474,45 +483,45 @@ public class EnemyBomber : Enemy
         if (transform.position.x < targetTransform.position.x && transform.position.z == targetTransform.position.z)
         {
             //Move right
-            if (!_enemyMovementGrid.rightBlock)
+            if (!enemyMovementGrid.rightBlock)
             {
-                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Right);
+                enemyMovementGrid.MoveDirection(EnemyMoveDirection.Right);
             }
             else
             {
-                if (!_enemyMovementGrid.forwardRightBlock)
+                if (!enemyMovementGrid.forwardRightBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardRight);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardRight);
                 }
-                else if (!_enemyMovementGrid.backwardRightBlock)
+                else if (!enemyMovementGrid.backwardRightBlock)
                 {
-                    GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardRight);
+                    enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardRight);
                 }
                 else
                 {
-                    if (!_enemyMovementGrid.forwardBlock)
+                    if (!enemyMovementGrid.forwardBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Forward);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.Forward);
                     }
-                    else if (!_enemyMovementGrid.backwardBlock)
+                    else if (!enemyMovementGrid.backwardBlock)
                     {
-                        GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Backward);
+                        enemyMovementGrid.MoveDirection(EnemyMoveDirection.Backward);
                     }
                     else
                     {
-                        if (!_enemyMovementGrid.forwardLeftBlock)
+                        if (!enemyMovementGrid.forwardLeftBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.ForwardLeft);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.ForwardLeft);
                         }
-                        else if (!_enemyMovementGrid.backwardLeftBlock)
+                        else if (!enemyMovementGrid.backwardLeftBlock)
                         {
-                            GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.BackwardLeft);
+                            enemyMovementGrid.MoveDirection(EnemyMoveDirection.BackwardLeft);
                         }
                         else
                         {
-                            if (!_enemyMovementGrid.leftBlock)
+                            if (!enemyMovementGrid.leftBlock)
                             {
-                                GetComponent<EnemyMovementGrid>().MoveDirection(EnemyMoveDirection.Left);
+                                enemyMovementGrid.MoveDirection(EnemyMoveDirection.Left);
                             }
                             else
                             {

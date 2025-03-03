@@ -16,7 +16,7 @@ public enum ProgressState
 
 public class PortalManager : Singeleton<PortalManager>
 {
-
+    #region -Random Room Setting-
 
     [Tab("Random Room Setting")] 
     [SerializeField] private int gameLoopCount;
@@ -26,6 +26,11 @@ public class PortalManager : Singeleton<PortalManager>
     [Space(10)] 
     [SerializeField] private int maxFirstStage = 3;
     [SerializeField] private int roomCount;
+
+    #endregion
+
+    #region -Spawn Setting List-
+
     [Space(10)]
     [Header("Spawn List")]
     public List<GameObject> battleRoomModelList;
@@ -39,20 +44,26 @@ public class PortalManager : Singeleton<PortalManager>
     public List<GameObject> clearRoomModel;
     public List<GameObject> bossRoomModel;
     public Vector3 spawnPoint;
-    
+
+    #endregion
+
+    #region Left & Right Room
+
     [Space(20)]
-    [Header("Room One")]
+    [Header("Room One / Left Room")]
     public PortalToNextRoom portalLeft;
     public RoomManager leftRoom;
     public RoomType leftRoomType;
     public Vector3 leftRoomWarpPoint;
     
     [Space(10)]
-    [Header("Room Two")]
+    [Header("Room Two / Right Room")]
     public PortalToNextRoom portalRight;
     public RoomManager rightRoom;
     public RoomType rightRoomType;
     public Vector3 rightRoomWarpPoint;
+
+    #endregion
 
     [Space(20)] 
     [Header("Clear setting")] 
@@ -147,12 +158,9 @@ public class PortalManager : Singeleton<PortalManager>
     public void ShowStageNumber()
     {
         GetComponent<AnnouncementManager>().ShowTextTimer($"Stage {firstStageNumber} - {secondStageNumber}",5f);
-        
     }
     private Vector3 GetSpawnPoint()
     {
-        
-
         if (!checkForwardRoom)
         {
             spawnPoint = new Vector3(checkForwardRoomPos.position.x, 0, checkForwardRoomPos.position.z);
@@ -183,23 +191,20 @@ public class PortalManager : Singeleton<PortalManager>
             portalRight.DeActivePortal();
         }
         
-        
         roomCount -= 1;
 
         this.playerTransform = playerTransform;
         this.portalLeftPos = portalLeftPos;
         this.portalRightPos = portalRightPos;
-
-
         
         if (isBossRoom)
         {
-            Invoke("SpawnRoom",0.2f);
+            Invoke(nameof(SpawnRoom),0.2f);
         }
         else
         {
-            Invoke("SpawnRoom",0.2f);
-            Invoke("SpawnRoom",0.3f);
+            Invoke(nameof(SpawnRoom),0.2f);
+            Invoke(nameof(SpawnRoom),0.3f);
         }
 
         if (roomCount <= 0 && firstStageNumber >= maxFirstStage)
@@ -213,54 +218,41 @@ public class PortalManager : Singeleton<PortalManager>
         if (isBossRoom)
         {
             //show one portal
-            rightRoomType = RandomRoom();
-            GameObject rightRoomObject = Instantiate(GetRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
-            rightRoom = rightRoomObject.GetComponent<RoomManager>();
-            rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
-            portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform,rightRoom.iconAnimator);
-            portalRight.transform.position = portalRightPos.position;
-            portalRight.GetComponent<PortalToNextRoom>().ActivePortal();
-            if (roomCount == 0)
-            {
-                rightRoom.isLastRoom = true;
-            }
+            rightRoom = CreateRoomPortal(rightRoomType, rightRoom, rightRoomWarpPoint, portalRight, portalRightPos);
         }
         else
         {
             if (leftOrRight)
             {
-                leftRoomType = RandomRoom();
-                GameObject leftRoomObject = Instantiate(GetRoom(leftRoomType),GetSpawnPoint(),Quaternion.identity);
-                leftRoom = leftRoomObject.GetComponent<RoomManager>();
-                leftRoomWarpPoint = leftRoom.GetComponent<RoomManager>().startPoint.transform.position;
-                portalLeft.SetPortal(leftRoomType,leftRoomWarpPoint,leftRoom.transform,playerTransform,leftRoom.iconAnimator);
-                portalLeft.transform.position = portalLeftPos.position;
-                portalLeft.GetComponent<PortalToNextRoom>().ActivePortal();
-                if (roomCount == 0)
-                {
-                    leftRoom.isLastRoom = true;
-                }
-
+                leftRoom = CreateRoomPortal(leftRoomType, leftRoom, leftRoomWarpPoint, portalLeft, portalLeftPos);
+                
                 leftOrRight = false;
             }
             else
             {
-                rightRoomType = RandomRoom();
-                GameObject rightRoomObject = Instantiate(GetRoom(rightRoomType), GetSpawnPoint(), Quaternion.identity);
-                rightRoom = rightRoomObject.GetComponent<RoomManager>();
-                rightRoomWarpPoint = rightRoom.GetComponent<RoomManager>().startPoint.transform.position;
-                portalRight.SetPortal(rightRoomType,rightRoomWarpPoint,rightRoom.transform,playerTransform,rightRoom.iconAnimator);
-                portalRight.transform.position = portalRightPos.position;
-                portalRight.GetComponent<PortalToNextRoom>().ActivePortal();
-                if (roomCount == 0)
-                {
-                    rightRoom.isLastRoom = true;
-                }
-
+                rightRoom = CreateRoomPortal(rightRoomType, rightRoom, rightRoomWarpPoint, portalRight, portalRightPos);
+                
                 leftOrRight = true;
             }
         }
         
+    }
+
+    private RoomManager CreateRoomPortal(RoomType _roomType, RoomManager _roomManager, Vector3 _roomWarpPoint, PortalToNextRoom _portal, Transform _portalPos)
+    {
+        // เห็นใช้ซ้ำเยอะโดยวิธีเขียนเหมือนกันใน SpawnRoom() แต่แค่เปลี่ยนตัวแปรเลยเขียน Method อันนี้มาจะโค้ดจะได้คลีนขึ้นงับ
+        _roomType = RandomRoom();
+        var _roomObj = Instantiate(GetRoom(_roomType), GetSpawnPoint(), Quaternion.identity);
+        _roomManager = _roomObj.GetComponent<RoomManager>();
+        _roomWarpPoint = _roomManager.startPoint.transform.position;
+        _portal.SetPortal(_roomType, _roomWarpPoint,_roomManager.transform, playerTransform, _roomManager.iconAnimator);
+        _portal.transform.position = _portalPos.position;
+        _portal.ActivePortal();
+
+        if (roomCount == 0)
+            _roomManager.isLastRoom = true;
+
+        return _roomManager;
     }
     
 
@@ -268,6 +260,7 @@ public class PortalManager : Singeleton<PortalManager>
     {
         Invoke("ClearRoom",0.1f);
     }
+    
     private void ClearRoom()
     {
         if (leftRoom != null)
@@ -289,24 +282,19 @@ public class PortalManager : Singeleton<PortalManager>
             }*/
             if (leftRoom.playerTrans != null)
             {
-                if (currentRoom == null)
-                {
-                    currentRoom = leftRoom;
-                    leftRoom = null;
-                }
-                else
+                if (currentRoom != null)
                 {
                     currentRoom.DestroyRoom();
-                    currentRoom = leftRoom;
-                    leftRoom = null;
                 }
-                
+
+                currentRoom = leftRoom;
             }
             else
             {
                 leftRoom.DestroyRoom();
-                leftRoom = null;
             }
+
+            leftRoom = null;
         }
          
         if (rightRoom != null)
@@ -328,24 +316,19 @@ public class PortalManager : Singeleton<PortalManager>
             }*/
             if (rightRoom.playerTrans != null)
             {
-                if (currentRoom == null)
-                {
-                    currentRoom = rightRoom;
-                    rightRoom = null;
-                }
-                else
+                if (currentRoom != null)
                 {
                     currentRoom.DestroyRoom();
-                    currentRoom = rightRoom;
-                    rightRoom = null;
                 }
-                
+
+                currentRoom = rightRoom;
             }
             else
             {
                 rightRoom.DestroyRoom();
-                rightRoom = null;
             }
+
+            rightRoom = null;
         }
     }
     
@@ -474,7 +457,7 @@ public class PortalManager : Singeleton<PortalManager>
             yield return new WaitForSeconds(1f);
         }
         progressCanvas.SetActive(false);
-        switch (GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().roomType)
+        switch (GameManager.Instance.currentRoomPos.GetComponent<RoomManager>().roomType)
         {
             case RoomType.Combat:
                 SoundManager.instace.Play(SoundManager.SoundName.BattleBGM);

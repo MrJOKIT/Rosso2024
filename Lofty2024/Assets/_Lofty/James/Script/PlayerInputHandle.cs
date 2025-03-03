@@ -30,7 +30,7 @@ public class PlayerInputHandle : MonoBehaviour
     public void HandleInput()
     {
         if (TurnManager.Instance.turnData.Count > 1 ||
-            GameManager.Instance.GetComponent<SceneLoading>().loadSucces == false)
+            GameManager.Instance.GetComponent<SceneLoading>().loadSuccess == false)
         {
             return;
         }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum EnemyMoveDirection
@@ -9,6 +11,8 @@ public enum EnemyMoveDirection
 
 public class EnemyMovementGrid : MonoBehaviour
 {
+    private Enemy enemy;
+    
     [Header("Move Settings")] 
     public Transform movePattern;
     public MovementState currentState;
@@ -38,7 +42,12 @@ public class EnemyMovementGrid : MonoBehaviour
         new Vector3(-1, 0, 1), new Vector3(1, 0, 1),
         new Vector3(-1, 0, -1), new Vector3(1, 0, -1)
     };
-    
+
+    private void Start()
+    {
+        enemy = GetComponent<Enemy>();
+    }
+
     private void FixedUpdate()
     {
         CheckBlockHandle();
@@ -47,7 +56,7 @@ public class EnemyMovementGrid : MonoBehaviour
 
     public void KnockBack(Transform playerTrans, int gridDistance)
     {
-        if (GetComponent<Enemy>().enemyData.isBoss) return;
+        if (enemy.enemyData.isBoss) return;
         
         isKnockBack = true;
         enemyMoveDirection = GetBackDirection(playerTrans);
@@ -104,8 +113,8 @@ public class EnemyMovementGrid : MonoBehaviour
         {
             currentState = MovementState.Idle;
             isKnockBack = false;
-            GetComponent<Enemy>().enemyAnimator.SetBool("OnMove", false);
-            GetComponent<Enemy>().EndTurn();
+            enemy.enemyAnimator.SetBool("OnMove", false);
+            enemy.EndTurn();
         }
     }
     
@@ -114,7 +123,7 @@ public class EnemyMovementGrid : MonoBehaviour
         if (!IsBlocked(direction))
         {
             SetTargetPosition(transform.localPosition + Vector3.Scale(moveDirections[(int)direction], gridSize));
-            GetComponent<Enemy>().enemyAnimator.SetBool("OnMove", true);
+            enemy.enemyAnimator.SetBool("OnMove", true);
         }
     }
     
@@ -124,5 +133,23 @@ public class EnemyMovementGrid : MonoBehaviour
         {
             Debug.DrawRay(transform.position, dir, Color.green);
         }
+    }
+
+    public bool CheckIsMoving()
+    {
+        List<bool> _blocks = new List<bool>
+        {
+            forwardBlock,
+            forwardLeftBlock,
+            forwardRightBlock,
+            backwardBlock,
+            backwardLeftBlock,
+            backwardRightBlock,
+            leftBlock,
+            rightBlock
+        };
+
+        var isMoving = _blocks.All(value => value);
+        return isMoving;
     }
 }

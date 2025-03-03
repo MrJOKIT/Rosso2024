@@ -52,8 +52,17 @@ public class GameManager : Singeleton<GameManager>
 
     public Vector2 mouseCursorHotSpot;
 
+    private SceneLoading sceneLoading;
+    public SceneLoading SceneLoading => sceneLoading;
+
+    private RandomCardManager randomCardManager;
+    public RandomCardManager RandomCardManager => randomCardManager;
+
     private void Start()
     {
+        sceneLoading = GetComponent<SceneLoading>();
+        randomCardManager = GetComponent<RandomCardManager>();
+        
         SetCursorVisible(false);
         elapsedTime = ES3.Load<float>("TimeCount", 0f);
     }

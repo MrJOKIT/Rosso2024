@@ -41,14 +41,7 @@ public class PlayerGridBattle : MonoBehaviour
         _playerMode = TurnManager.Instance.currentRoomClear ? PlayerMode.Normal : PlayerMode.Combat;
         if (_playerMode == PlayerMode.Combat)
         {
-            if (GetComponent<PlayerMovementGrid>().onTurn == false)
-            {
-                AppearUI(false);
-            }
-            else
-            {
-                AppearUI(true);
-            }
+            AppearUI(GetComponent<PlayerMovementGrid>().onTurn);
         }
         if (oldMode == _playerMode)
         {
@@ -57,20 +50,20 @@ public class PlayerGridBattle : MonoBehaviour
         switch (_playerMode)
         {
             case PlayerMode.Normal:
-                if (oldMode == _playerMode)
-                {
-                    return;
-                }
+                // if (oldMode == _playerMode)
+                // {
+                //     return;
+                // }
                 Debug.Log("Normal");
                 GridSpawnManager.Instance.ClearMover();
                 AppearUI(false);
                 oldMode = _playerMode;
                 break;
             case PlayerMode.Combat:
-                if (oldMode == _playerMode)
-                {
-                    return;
-                }
+                // if (oldMode == _playerMode)
+                // {
+                //     return;
+                // }
                 Debug.Log("Grid Start");
                 GetComponent<PlayerSkillHandle>().ResetSkillPoint();
                 AppearUI(true);

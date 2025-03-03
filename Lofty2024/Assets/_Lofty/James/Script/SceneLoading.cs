@@ -3,19 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using TransitionsPlus;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SceneLoading : MonoBehaviour
 {
     public GameObject loadingScene;
     public GameObject tutorialConfirmCanvas;
     public float loadTime;
-    public bool loadSucces;
+    [FormerlySerializedAs("loadSucces")] public bool loadSuccess;
     public bool startLoad;
     public TransitionProfile loadSuccesProfile;
     
     private void Update()
     {
-        if (loadSucces || startLoad)
+        if (loadSuccess || startLoad)
         {
             return;
         }
@@ -27,7 +28,7 @@ public class SceneLoading : MonoBehaviour
             loadingScene.SetActive(false);
             SoundManager.instace.Play(SoundManager.SoundName.BonusBGM);
             TransitionAnimator animator = TransitionAnimator.Start(loadSuccesProfile);
-            animator.onTransitionEnd.AddListener(LoadSucces);
+            animator.onTransitionEnd.AddListener(LoadSuccess);
         }
         else
         {
@@ -35,11 +36,14 @@ public class SceneLoading : MonoBehaviour
         }
     }
 
-    private void LoadSucces()
+    private void LoadSuccess()
     {
+        print("Load Scene Success");
         loadTime = 0;
-        loadSucces = true;
-        GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().StartRoom();
+        loadSuccess = true;
+        // GetComponent<GameManager>().currentRoomPos.GetComponent<RoomManager>().StartRoom();
+        
+        TurnManager.Instance.CurrentRoomClear();
         GetComponent<GameManager>().StartTimer();
         GetComponent<GameManager>().SetCursorVisible(true);
         bool tutorialEnable = ES3.Load("TutorialPopUp", true);
@@ -48,10 +52,6 @@ public class SceneLoading : MonoBehaviour
             tutorialConfirmCanvas.SetActive(true);
             TutorialManager.Instance.tutorialState = TutorialState.OnProgress;
         }
-        
-
-
-
     }
     
 }

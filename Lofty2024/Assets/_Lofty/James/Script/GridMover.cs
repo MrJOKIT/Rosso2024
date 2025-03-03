@@ -36,10 +36,14 @@ public class GridMover : MonoBehaviour
     [Space(10)]
     [Header("Optional")]
     public bool enemyActive;
+
+    private MeshRenderer mesh;
     
 
     private void Awake()
     {
+        mesh = GetComponent<MeshRenderer>();
+        
         oldState = gridState;
         oldMat = GetComponent<MeshRenderer>().material;
     }
@@ -83,21 +87,21 @@ public class GridMover : MonoBehaviour
         switch (gridState)
         {
             case GridState.OnMove:
-                GetComponent<MeshRenderer>().enabled = true;
-                GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.movableMat;
+                mesh.enabled = true;
+                mesh.material = GridSpawnManager.Instance.movableMat;
                 oldState = gridState;
                 break;
             case GridState.OnEnemy:
-                GetComponent<MeshRenderer>().enabled = true;
+                mesh.enabled = true;
                 oldState = gridState;
                 break;
             case GridState.OnObstacle:
-                GetComponent<MeshRenderer>().enabled = false;
+                mesh.enabled = false;
                 oldState = gridState;
                 break;
             case GridState.Empty:
-                GetComponent<MeshRenderer>().enabled = true;
-                GetComponent<MeshRenderer>().material = oldMat;
+                mesh.enabled = true;
+                mesh.material = oldMat;
                 oldState = gridState;
                 enemyActive = false;
                 break;
@@ -114,14 +118,14 @@ public class GridMover : MonoBehaviour
             case GridState.OnPlayer:
                 break;
             case GridState.OnMove:
-                GetComponent<MeshRenderer>().material = oldMat;
+                mesh.material = oldMat;
                 gridState = GridState.Empty;
                 break;
             case GridState.OnEnemy:
-                GetComponent<MeshRenderer>().material = oldMat;
+                mesh.material = oldMat;
                 break;
             default:
-                GetComponent<MeshRenderer>().material = oldMat;
+                mesh.material = oldMat;
                 gridState = GridState.Empty;
                 break;
         }
@@ -130,7 +134,7 @@ public class GridMover : MonoBehaviour
 
     public void ActiveEnemy()
     {
-        GetComponent<MeshRenderer>().material = GridSpawnManager.Instance.attackMat;
+        mesh.material = GridSpawnManager.Instance.attackMat;
         enemyActive = true;
     }
     
